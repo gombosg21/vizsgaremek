@@ -1,0 +1,21 @@
+{
+  "name": "visualstory",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.6",
+    "debug": "~4.3.4",
+    "express": "^4.18.2npm ",
+    "http-errors": "~2.0.0",
+    "jade": "^0.29.0",
+    "morgan": "~1.10.0",
+    "sequelize": "^6.28.0"
+  },
+  "devDependencies": {
+    "npm-check-updates": "^16.6.2",
+    "sequelize-cli": "^6.5.2"
+  }
+}

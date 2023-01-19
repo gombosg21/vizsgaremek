@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "root",
+    "password": null,
+    "database": "VisualStory_development",
+    "host": "127.0.0.1",
+    "dialect": "innodb"
+  },
+  "test": {
+    "username": "root",
+    "password": null,
+    "database": "VisualStory_test",
+    "host": "127.0.0.1",
+    "dialect": "innodb"
+  },
+  "production": {
+    "username": "root",
+    "password": null,
+    "database": "VisualStory",
+    "host": "127.0.0.1",
+    "dialect": "innodb"
+  }
+}
