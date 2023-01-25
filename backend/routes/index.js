@@ -2,16 +2,12 @@ var express = require('express');
 var router = express.Router();
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
+router.get('/');
 
-// login
 
-// register
+router.get('/login', );
 
-// reset pass
 
-// view ToS
+// get view ToS
 
 module.exports = router;

@@ -3,8 +3,12 @@ var router = express.Router();
 
 module.exports = router;
 
-// get user
+// get view user
 
-// create user
+// post login
 
-// delete user
+// put reset password
+
+// post create user
+
+// delete delete user

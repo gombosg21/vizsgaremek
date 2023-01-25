@@ -3,18 +3,20 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "nodemon app.js"
   },
   "dependencies": {
     "cookie-parser": "~1.4.6",
     "debug": "~4.3.4",
     "express": "^4.18.2npm ",
+    "express-session": "^1.17.3",
     "http-errors": "~2.0.0",
     "jade": "^0.29.0",
     "morgan": "~1.10.0",
     "sequelize": "^6.28.0"
   },
   "devDependencies": {
+    "nodemon": "^2.0.20",
     "npm-check-updates": "^16.6.2",
     "sequelize-cli": "^6.5.2"
   }
