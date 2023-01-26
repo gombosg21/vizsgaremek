@@ -1,48 +1,53 @@
 'use strict';
+
+const { DataTypes } = require('sequelize');
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('media', {
-      id: {
+      ID: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      ID: {
-        type: Sequelize.INTEGER
-      },
       user_ID: {
+        allowNull: false,
+        references: {model:user,key:'ID'},
         type: Sequelize.INTEGER
       },
       data: {
+        allowNull:false,
         type: Sequelize.BLOB
       },
       deleted: {
+        allowNull:false,
+        defaultValue:false,
         type: Sequelize.BOOLEAN
       },
       uploaded: {
+        allowNull:false,
+        defaultValue: DataTypes.CURRENT_TIMESTAMP,
         type: Sequelize.DATE
       },
       last_edit: {
+        allowNull:false,
+        defaultValue: DataTypes.CURRENT_TIMESTAMP,
+        onUpdate: DataTypes.CURRENT_TIMESTAMP,
         type: Sequelize.DATE
       },
       descption: {
         type: Sequelize.TEXT
       },
       visibility: {
+        allowNull:false,
+        defaultValue: 0,
         type: Sequelize.INTEGER
       },
       placeholder_text: {
+        allowNull:false,
         type: Sequelize.TEXT
-      },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE
       }
     });
   },

@@ -14,15 +14,15 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   media.init({
-    ID: DataTypes.INTEGER,
-    user_ID: DataTypes.INTEGER,
-    data: DataTypes.BLOB,
-    deleted: DataTypes.BOOLEAN,
-    uploaded: DataTypes.DATE,
-    last_edit: DataTypes.DATE,
-    descption: DataTypes.TEXT,
-    visibility: DataTypes.INTEGER,
-    placeholder_text: DataTypes.TEXT
+    ID: {type:DataTypes.INTEGER, autoIncrement:true,primaryKey:true,allowNull:false},
+    user_ID: {type:DataTypes.INTEGER,allowNull:false,references:{model:user,key:'ID'}},
+    data: {type:DataTypes.BLOB,allowNull:false},
+    deleted: {type:DataTypes.BOOLEAN,allowNull:false,defaultValue:false},
+    uploaded: {type:DataTypes.DATE,allowNull:false,defaultValue:DataTypes.CURRENT_TIMESTAMP},
+    last_edit: {type:DataTypes.DATE,allowNull:false,defaultValue:DataTypes.CURRENT_TIMESTAMP,onUpdate:DataTypes.CURRENT_TIMESTAMP},
+    descption: {type:DataTypes.TEXT},
+    visibility: {type:DataTypes.INTEGER,allowNull:false,defaultValue:0},
+    placeholder_text: {type:DataTypes.TEXT,allowNull:false}
   }, {
     sequelize,
     modelName: 'media',
