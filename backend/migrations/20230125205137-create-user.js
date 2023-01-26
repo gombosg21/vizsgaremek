@@ -1,4 +1,7 @@
 'use strict';
+
+const media = require('../models/media');
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -62,6 +65,10 @@ module.exports = {
         allowNull: false,
         defaultValue: 0,
         type: Sequelize.INTEGER
+      },
+      profile_pic: {
+        type: Sequelize.INTEGER,
+        references:{model:media,key:'ID'}
       }
     });
   },
