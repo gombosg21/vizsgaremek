@@ -17,6 +17,7 @@
     "sequelize": "^6.28.0"
   },
   "devDependencies": {
+    "@faker-js/faker": "^7.6.0",
     "nodemon": "^2.0.20",
     "npm-check-updates": "^16.6.2",
     "sequelize-cli": "^6.5.2"
