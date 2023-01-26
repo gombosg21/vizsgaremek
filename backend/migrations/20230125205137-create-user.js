@@ -12,7 +12,7 @@ module.exports = {
       name: {
         allowNull: false,
         unique: true,
-        type: Sequelize.STRING
+        type: Sequelize.STRING + 'CHARSET utf8 COLLATE utf8_hungarian_ci'
       },
       deleted: {
         allowNull: false,
@@ -36,7 +36,7 @@ module.exports = {
       },
       password: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.STRING + 'CHARSET utf8 COLLATION utf8_binary_ci'
       },
       email_verified: {
         allowNull: false,
