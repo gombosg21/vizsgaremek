@@ -1,27 +1,33 @@
 const user = require("../models/user");
 const session = require("express-session");
+const userVerifier = require("../middlewares/validators/user");
 
 exports.getUser() = async (req,res,next) => 
 {
-    const Name = req.body.Name;
-    const User = await user.findOne({where:{name: Name}});
+    const ID = req.params.ID;
+
+    const User = await user.findOne({where:{id: ID}});
+
     if( User === null )
     {
         res.status(404)
         .redirect('/')
+        .json({"error":`user with id:${ID} does not exist`})
     }
     else
     {
         res.status(200)
-        .json(JSON.stringify(User))
+        .json(User)
     }
 };
 
-exports.getLogin() = async (req,res,next) => 
+exports.login() = async (req,res,next) => 
 {
-    const Name = req.body.Name;
+    const Name = req.params.Name;
     const Password = req.body.Password;
+
     const User = await user.findOne({where:{name: Name}});
+
         if( User === null )
         {
             res.status(404).send(error.noSuchUser)
@@ -30,8 +36,11 @@ exports.getLogin() = async (req,res,next) =>
         {
             if (User.password == Password)
             {
-                res.status(201)
-                .redirect('/user/' + User.ID + '/home')
+                res.status(200)
+                .cookie(session.Cookie(
+
+                ))
+                .redirect('/user/' + User.ID)
             }
             else 
             {
@@ -42,59 +51,62 @@ exports.getLogin() = async (req,res,next) =>
         }
 };
 
-exports.getResetPassword() = async (req,res,next) => 
+exports.resetPassword() = async (req,res,next) => 
 {
     const Name = req.body.Name;
+
     const User =  await user.findOne({where:{name: Name}}); 
+
         if( User === null )
         {
             res.status(404)
             .redirect('/')
-            .send(error.noSuchUser)
+            .json({"error" : `user with name:${Name} does not exist`})
         }
         else
         {
             res.status(200)
             .redirect('/')
-            .send(notify.resetEmailSent)
+            .json({"notificate" : "reset email sent"})
             sendResetEmail(User.Email)
         }
 };
 
-exports.postCreateUser() = async (req,res,next) => 
+exports.createUser() = async (req,res,next) => 
 {
     const UserName = req.body.Name;
     const UserPassword = req.body.Password;
     const UserEmail = req.body.Email;
     const UserAge = req.body.Age;
 
-    const User = new user({
+    const User = user.build({
             Name : UserName,
             Password : UserPassword,
             Age : UserAge,
             Email : UserEmail,
         });
-        User.save()
-        sendVerfyEmail(User.Email)
+        await User.save();
+        // sendVerfyEmail(User.Email)
         res.status(201)
-        .send(notify.confirmEmailSent)
-        .redirect('user/' +  User.ID + '/home')
+        .json({"notificate":"confirmation email sent"})
+        .redirect('user/' +  User.ID)
 };
 
-exports.deleteDeleteUser() = async (req,res,next) => 
+exports.deleteUser() = async (req,res,next) => 
 {
-    const Name = req.body.Name;
+    const ID = req.params.ID;
     const authCookie = req.body.cookie;
-    const User = await user.findOne({where:{name: Name}})
+    const User = await user.findOne({where:{id: ID}})
         if( User === null )
         {
-            res.status(404).send(error.noSuchUser)
+            res.status(404)
+            .json({"error":`user wiht id:${ID} does not exist`})
             .redirect('/')
         }
         else
         {
+            await user.Delete(User);
             res.status(200)
             .redirect('/')
-            user.Delete(User)
         }
 };
