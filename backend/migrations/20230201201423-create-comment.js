@@ -1,42 +1,55 @@
 'use strict';
+
+const { DataTypes } = require('sequelize');
+const thread = require('../models/thread');
+const user = require('../models/user');
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('comments', {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER
+      ID: {
+        type: Sequelize.INTEGER,
+        allowNull:false,
+        autoIncrement:true,
+        primaryKey:true
       },
       thread_ID: {
-        type: Sequelize.INTEGER
-      },
-      thread_ID: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull:false,
+        references:
+        {
+          model:thread,
+          key:'ID'
+        }
       },
       user_ID: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull:false,
+        references: 
+        {
+          model:user,
+          key:'ID'
+        }
       },
       content: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT,
+        allowNull:false
       },
       deleted: {
-        type: Sequelize.BOOLEAN
+        type: Sequelize.BOOLEAN,
+        allowNull:false,
+        defaultValue:false
       },
       created: {
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        allowNull:false,
+        defaultValue: Sequelize.NOW
       },
       last_edit: {
-        type: Sequelize.DATE
-      },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        allowNull:false,
+        defaultValue: Sequelize.NOW
       }
     });
   },

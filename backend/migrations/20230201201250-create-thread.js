@@ -1,44 +1,58 @@
 'use strict';
+
+const media = require('../models/media');
+const user = require('../models/user');
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('threads', {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER
-      },
-      thread_ID: {
-        type: Sequelize.INTEGER
+      ID: {
+        type: Sequelize.INTEGER,
+        allowNull:false,
+        autoIncrement:true,
+        primaryKey:true
       },
       media_ID: {
+        allowNull:false,
+        references: 
+        {
+          model:media,
+          key: 'ID'
+        },
         type: Sequelize.INTEGER
       },
       user_ID: {
+        allowNull:false,
+        references: 
+        {
+          model:user,
+          key: 'ID'
+        },
         type: Sequelize.INTEGER
       },
       name: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull:false
       },
       status: {
+        allowNull:false,
+        defaultValue: 0,
         type: Sequelize.INTEGER
       },
       deleted: {
+        allowNull:false,
+        defaultValue: false,
         type: Sequelize.BOOLEAN
       },
       created: {
+        allowNull:false,
+        defaultValue: Sequelize.NOW,
         type: Sequelize.DATE
       },
       last_activity: {
-        type: Sequelize.DATE
-      },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
-      updatedAt: {
-        allowNull: false,
+        allowNull:false,
+        defaultValue:Sequelize.NOW,
         type: Sequelize.DATE
       }
     });
