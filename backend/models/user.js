@@ -2,6 +2,9 @@
 const {
   Model
 } = require('sequelize');
+const comment = require('./comment');
+const media = require('./media')
+const comment = require('./comment')
 module.exports = (sequelize, DataTypes) => {
   class user extends Model {
     /**
@@ -10,7 +13,9 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      user.hasMany(media)
+      user.hasMany(thread)
+      user.hasMany(comment)
     }
   }
   user.init({
