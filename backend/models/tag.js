@@ -2,6 +2,8 @@
 const {
   Model
 } = require('sequelize');
+const media = require('./media')
+const media_taglist = require('./media_taglist')
 module.exports = (sequelize, DataTypes) => {
   class tag extends Model {
     /**
@@ -10,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      tag.belongsToMany(media,{through:media_taglist})
     }
   }
   tag.init({

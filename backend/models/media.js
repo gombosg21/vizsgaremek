@@ -2,6 +2,10 @@
 const {
   Model
 } = require('sequelize');
+const user = require('./user')
+const thread = require('./thread');
+const tag = require('./tag');
+const media_taglist = require('./media_taglist')
 module.exports = (sequelize, DataTypes) => {
   class media extends Model {
     /**
@@ -10,7 +14,9 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      media.belongsTo(user)
+      media.hasMany(thread)
+      media.belongsToMany(tag,{through:media_taglist})
     }
   }
   media.init({
