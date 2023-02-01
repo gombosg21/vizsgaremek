@@ -29,13 +29,13 @@ module.exports = {
       },
       uploaded: {
         allowNull:false,
-        defaultValue: DataTypes.CURRENT_TIMESTAMP,
+        defaultValue: Sequelize.NOW,
         type: Sequelize.DATE
       },
       last_edit: {
         allowNull:false,
-        defaultValue: DataTypes.CURRENT_TIMESTAMP,
-        onUpdate: DataTypes.CURRENT_TIMESTAMP,
+        defaultValue: Sequelize.NOW,
+        // onUpdate: Sequelize.NOW,
         type: Sequelize.DATE
       },
       descption: {
