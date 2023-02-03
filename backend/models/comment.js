@@ -22,11 +22,15 @@ module.exports = (sequelize, DataTypes) => {
     user_ID: {type:DataTypes.INTEGER,allowNull:false,references:{model:user,key:'ID'}},
     content: {type:DataTypes.TEXT,allowNull:false},
     deleted: {type:DataTypes.BOOLEAN,allowNull:false,defaultValue:false},
-    created: {type:DataTypes.DATE,allowNull:false,defaultValue:DataTypes.CURRENT_TIMESTAMP},
-    last_edit: {type:DataTypes.DATE,allowNull:false,defaultValue:DataTypes.CURRENT_TIMESTAMP,onUpdate:CURRENT_TIMESTAMP}
+    // created: {type:DataTypes.DATE,allowNull:false,defaultValue:DataTypes.CURRENT_TIMESTAMP},
+    // last_edit: {type:DataTypes.DATE,allowNull:false,defaultValue:DataTypes.CURRENT_TIMESTAMP,onUpdate:CURRENT_TIMESTAMP}
   }, {
     sequelize,
     modelName: 'comment',
+    paranoid:true,
+    timestamps:true,
+    createdAt: created,
+    updatedAt: last_edit,
   });
   return comment;
 };
