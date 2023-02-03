@@ -1,0 +1,17 @@
+.feed-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.username {
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.post-image {
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+}

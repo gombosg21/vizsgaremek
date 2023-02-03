@@ -1,0 +1,22 @@
+.container {
+    max-width: 600px;
+    background: linear-gradient(45deg, rgb(186, 230, 255), #e7eeff);
+    padding-top: 2em;
+    padding-left: 2em;
+    padding-right: 2em;
+    padding-bottom: 0.1em;
+    border-radius: 10px;
+}
+
+.form-group {
+    margin-bottom: 0.3em;
+}
+
+.haveRegister {
+    margin-top: 1em;
+}
+
+a {
+    color: #0079d5;
+    text-decoration: none;
+}

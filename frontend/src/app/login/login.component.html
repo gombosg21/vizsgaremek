@@ -1,0 +1,14 @@
+<div class="container mt-5">
+    <h2 class="text-center">Bejelentkezés</h2>
+    <form>
+        <div class="form-group">
+            <input type="text" class="form-control" id="username" placeholder="Felhasználónév" [(ngModel)]="username" name="username">
+        </div>
+        <div class="form-group">
+            <input type="password" class="form-control" id="password" placeholder="Jelszó" [(ngModel)]="password" name="password">
+        </div>
+        <button type="submit" class="btn btn-primary" [disabled]="!isFormValid()" (click)="login()">Bejelentkezés</button>
+    </form>
+    <div class="haveRegister">
+        <p>Nincs még fiókod? <a routerLink="/register">Regisztráció</a></p>
+    </div>
