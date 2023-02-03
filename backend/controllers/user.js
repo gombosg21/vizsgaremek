@@ -2,9 +2,10 @@ const user = require("../models/user");
 const session = require("express-session");
 const userVerifier = require("../middlewares/validators/user");
 
-exports.getUser() = async (req,res,next) => 
+exports.getUser = async (req,res,next) => 
 {
     const ID = req.params.ID;
+    const authCookie = req.body.cookie;
 
     const User = await user.findOne({where:{id: ID}});
 
@@ -12,7 +13,7 @@ exports.getUser() = async (req,res,next) =>
     {
         res.status(404)
         .redirect('/')
-        .json({"error":`user with id:${ID} does not exist`})
+        // .json({"error":`user with id:${ID} does not exist`})
     }
     else
     {
@@ -21,7 +22,7 @@ exports.getUser() = async (req,res,next) =>
     }
 };
 
-exports.login() = async (req,res,next) => 
+exports.login = async (req,res,next) => 
 {
     const Name = req.params.Name;
     const Password = req.body.Password;
@@ -30,28 +31,29 @@ exports.login() = async (req,res,next) =>
 
         if( User === null )
         {
-            res.status(404).send(error.noSuchUser)
+            res.status(404)
+            // .json({"error":`user with id:${Name} does not exist`})
         }
         else
         {
             if (User.password == Password)
             {
                 res.status(200)
-                .cookie(session.Cookie(
-
-                ))
+                // .cookie(session.Cookie(
+                //
+                // ))
                 .redirect('/user/' + User.ID)
             }
             else 
             {
                 res.status(401)
                 .redirect('/')
-                .send(error.wrongCredentials)
+                // .send(error.wrongCredentials)
             }
         }
 };
 
-exports.resetPassword() = async (req,res,next) => 
+exports.resetPassword = async (req,res,next) => 
 {
     const Name = req.body.Name;
 
@@ -61,18 +63,18 @@ exports.resetPassword() = async (req,res,next) =>
         {
             res.status(404)
             .redirect('/')
-            .json({"error" : `user with name:${Name} does not exist`})
+            // .json({"error" : `user with name:${Name} does not exist`})
         }
         else
         {
             res.status(200)
             .redirect('/')
-            .json({"notificate" : "reset email sent"})
-            sendResetEmail(User.Email)
+            // .json({"notificate" : "reset email sent"})
+            // sendResetEmail(User.Email)
         }
 };
 
-exports.createUser() = async (req,res,next) => 
+exports.createUser = async (req,res,next) => 
 {
     const UserName = req.body.Name;
     const UserPassword = req.body.Password;
@@ -88,11 +90,11 @@ exports.createUser() = async (req,res,next) =>
         await User.save();
         // sendVerfyEmail(User.Email)
         res.status(201)
-        .json({"notificate":"confirmation email sent"})
+        // .json({"notificate":"confirmation email sent"})
         .redirect('user/' +  User.ID)
 };
 
-exports.deleteUser() = async (req,res,next) => 
+exports.deleteUser = async (req,res,next) => 
 {
     const ID = req.params.ID;
     const authCookie = req.body.cookie;
@@ -100,12 +102,12 @@ exports.deleteUser() = async (req,res,next) =>
         if( User === null )
         {
             res.status(404)
-            .json({"error":`user wiht id:${ID} does not exist`})
+            // .json({"error":`user wiht id:${ID} does not exist`})
             .redirect('/')
         }
         else
         {
-            await user.Delete(User);
+            await user.destroy(User);
             res.status(200)
             .redirect('/')
         }
