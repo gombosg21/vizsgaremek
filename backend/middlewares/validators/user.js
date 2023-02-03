@@ -1,4 +1,5 @@
-const vailadtor = require('express-vailadtor');
+const vailadtor = require('express-validator');
+
 
 exports.validateEmail = (email) => {
    return vailadtor.check(email).isEmail();
@@ -6,7 +7,7 @@ exports.validateEmail = (email) => {
 
 exports.validatePassword = (password) => {
 
-    var regex = '/^[0-9a-zA-Z]+$/'
+    const regex = new RegExp("/^[0-9]+[a-z]+[A-Z]+$/")
     if(password.lenght() < 8 && password.lenght() > 32) 
     {
        if (password.test(regex)) 
