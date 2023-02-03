@@ -2,8 +2,8 @@
 const {
   Model
 } = require('sequelize');
-const comment = require('./comment');
 const media = require('./media')
+const thread = require('./thread')
 const comment = require('./comment')
 module.exports = (sequelize, DataTypes) => {
   class user extends Model {
@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
     deleted: {type:DataTypes.BOOLEAN,allowNull:false,defaultValue: false},
     banned:{type:DataTypes.BOOLEAN,allowNull:false,defaultValue: false},
     type:{type:DataTypes.INTEGER,allowNull:false,defaultValue:0},
-    register_date:{type:DataTypes.DATE,allowNull:false,defaultValue:DataTypes.CURRENT_TIMESTAMP},
+    // register_date:{type:DataTypes.DATE,allowNull:false,defaultValue:DataTypes.CURRENT_TIMESTAMP},
     password:{type:DataTypes.STRING,allowNull:false},
     email_verified:{type:DataTypes.BOOLEAN,allowNull:false,defaultValue: false},
     email:{type:DataTypes.STRING,allowNull:false},
@@ -34,6 +34,10 @@ module.exports = (sequelize, DataTypes) => {
     profile_visibility:{type:DataTypes.INTEGER,allowNull:false,defaultValue:0} 
   }, {
     sequelize,
+    timestamps: true,
+    createdAt: register_date,
+    updatedAt: false,
+    paranoid: true,
     modelName: 'user',
   });
   return user;
