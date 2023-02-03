@@ -12,25 +12,25 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      comment.belongsTo(thread)
-      comment.belongsTo(user)
+      this.belongsTo(models.thread)
+      this.belongsTo(models.user)
     }
-  }
+  };
   comment.init({
     ID: {type:DataTypes.INTEGER,allowNull:false,autoIncrement:true,primaryKey:true},
     thread_ID: {type:DataTypes.INTEGER,allowNull:false,references:{model:thread,key:'ID'}},
     user_ID: {type:DataTypes.INTEGER,allowNull:false,references:{model:user,key:'ID'}},
     content: {type:DataTypes.TEXT,allowNull:false},
     deleted: {type:DataTypes.BOOLEAN,allowNull:false,defaultValue:false},
-    // created: {type:DataTypes.DATE,allowNull:false,defaultValue:DataTypes.CURRENT_TIMESTAMP},
-    // last_edit: {type:DataTypes.DATE,allowNull:false,defaultValue:DataTypes.CURRENT_TIMESTAMP,onUpdate:CURRENT_TIMESTAMP}
+    created: {type:DataTypes.DATE,allowNull:false,defaultValue:DataTypes.NOW},
+    last_edit: {type:DataTypes.DATE,allowNull:false,defaultValue:DataTypes.NOW,onUpdate:DataTypes.NOW}
   }, {
     sequelize,
     modelName: 'comment',
     paranoid:true,
     timestamps:true,
-    createdAt: created,
-    updatedAt: last_edit,
+    createdAt:'created',
+    updatedAt:'last_edit',
   });
   return comment;
 };

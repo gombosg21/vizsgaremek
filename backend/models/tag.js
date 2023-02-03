@@ -12,15 +12,15 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      tag.belongsToMany(media,{through:media_taglist})
+      this.belongsToMany(models.media,{through:models.media_taglist})
     }
-  }
+  };
   tag.init({
     name: {
     type:DataTypes.STRING,
     unique: true,
     primaryKey: true,
-    allowNull:false
+    allowNull: false
   }
   }, {
     sequelize,

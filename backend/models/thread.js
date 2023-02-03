@@ -2,6 +2,9 @@
 const {
   Model
 } = require('sequelize');
+const user = require('./user')
+const media = require('./media')
+const comment = require('./comment')
 module.exports = (sequelize, DataTypes) => {
   class thread extends Model {
     /**
@@ -10,11 +13,11 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      thread.belongsTo(models.user)
-      thread.belongsTo(models.media)
-      thread.hasMany(models.comment)
+      this.belongsTo(models.user)
+      this.belongsTo(models.media)
+      this.hasMany(models.comment)
     }
-  }
+  };
   thread.init({
     ID:{type:DataTypes.INTEGER, autoIncrement:true,primaryKey:true,allowNull:false},
     media_ID:{type:DataTypes.INTEGER,allowNull:false,references:{model:media,key:'ID'}},
@@ -22,13 +25,14 @@ module.exports = (sequelize, DataTypes) => {
     name:{type:DataTypes.STRING,allowNull:false},
     status:{type:DataTypes.INTEGER,allowNull:false,defaultValue:0},
     deleted:{type:DataTypes.BOOLEAN,allowNull:false,defaultValue:false},
-    // created:{type:DataTypes.DATE,allowNull:false,defaultValue:DataTypes.CURRENT_TIMESTAMP},
-    last_activity:{type:DataTypes.DATE,allowNull:false,defaultValue:DataTypes.CURRENT_TIMESTAMP} 
+    created:{type:DataTypes.DATE,allowNull:false,defaultValue:DataTypes.NOW},
+    last_activity:{type:DataTypes.DATE,allowNull:false,defaultValue:DataTypes.NOW} 
   }, {
     sequelize,
     modelName: 'thread',
     paranoid: true,
-    timestamps:true,
+    timestamps: true,
+    createdAt: 'created',
     updatedAt: false,
   });
   return thread;
