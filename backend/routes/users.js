@@ -12,6 +12,10 @@ router.get('user/:ID',userController.getUser);
 
 router.get('user/:name/login',userController.login);
 
+//get logout
+
+router.get('user/:ID/logout',)
+
 // get reset password
 
 router.get('user/:name/password-reset',userController.resetPassword);
