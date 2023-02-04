@@ -15,7 +15,7 @@ module.exports = {
       },
       user_ID: {
         allowNull: false,
-        references: {model:user,key:'ID'},
+        references: {model:'users',key:'ID'},
         type: Sequelize.INTEGER
       },
       data: {

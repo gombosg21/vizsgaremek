@@ -17,7 +17,7 @@ module.exports = {
         allowNull:false,
         references: 
         {
-          model:media,
+          model:'media',
           key: 'ID'
         },
         type: Sequelize.INTEGER
@@ -26,7 +26,7 @@ module.exports = {
         allowNull:false,
         references: 
         {
-          model:user,
+          model:'users',
           key: 'ID'
         },
         type: Sequelize.INTEGER

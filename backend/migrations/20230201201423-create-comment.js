@@ -19,7 +19,7 @@ module.exports = {
         allowNull:false,
         references:
         {
-          model:thread,
+          model:'threads',
           key:'ID'
         }
       },
@@ -28,7 +28,7 @@ module.exports = {
         allowNull:false,
         references: 
         {
-          model:user,
+          model:'users',
           key:'ID'
         }
       },

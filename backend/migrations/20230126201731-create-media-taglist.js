@@ -10,21 +10,13 @@ module.exports = {
       tag_name: {
         allowNull: false,
         type: Sequelize.STRING,
-        references:{model:tag,key:'name'}
+        references:{model:'tags',key:'name'}
       },
       media_ID: {
         allowNull:false,
         type: Sequelize.INTEGER,
-        references: {model:media,key:'ID'}
+        references: {model:'media',key:'ID'}
       },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      }
     });
   },
   async down(queryInterface, Sequelize) {
