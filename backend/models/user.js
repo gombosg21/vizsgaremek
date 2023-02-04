@@ -2,9 +2,6 @@
 const {
   Model
 } = require('sequelize');
-const media = require('./media')
-const thread = require('./thread')
-const comment = require('./comment')
 module.exports = (sequelize, DataTypes) => {
   class user extends Model {
     /**

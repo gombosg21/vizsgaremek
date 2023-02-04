@@ -2,10 +2,6 @@
 const {
   Model
 } = require('sequelize');
-const user = require('./user')
-const thread = require('./thread');
-const tag = require('./tag');
-const media_taglist = require('./media_taglist')
 module.exports = (sequelize, DataTypes) => {
   class media extends Model {
     /**
@@ -21,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
   };
   media.init({
     ID: {type:DataTypes.INTEGER, autoIncrement:true,primaryKey:true,allowNull:false},
-    user_ID: {type:DataTypes.INTEGER,allowNull:false,references:{model:user,key:'ID'}},
+    user_ID: {type:DataTypes.INTEGER,allowNull:false,references:{model:'user',key:'ID'}},
     data: {type:DataTypes.BLOB,allowNull:false},
     deleted: {type:DataTypes.BOOLEAN,allowNull:false,defaultValue:false},
     uploaded: {type:DataTypes.DATE,allowNull:false,defaultValue:DataTypes.NOW},

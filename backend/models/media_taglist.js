@@ -2,8 +2,6 @@
 const {
   Model
 } = require('sequelize');
-const media = require('./media');
-const tag = require('./tag');
 module.exports = (sequelize, DataTypes) => {
   class media_taglist extends Model {
     /**
@@ -20,13 +18,13 @@ module.exports = (sequelize, DataTypes) => {
     {
       allowNull:false,
       type:DataTypes.STRING,
-      references:{model:tag,key:'name'}
+      references:{model:'tag',key:'name'}
     },
     media_ID: 
     {
       allowNull:false,
       type:DataTypes.INTEGER,
-      references:{model:media,key:'ID'}
+      references:{model:'media',key:'ID'}
     }
   }, 
   {

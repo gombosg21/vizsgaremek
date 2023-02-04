@@ -2,8 +2,6 @@
 const {
   Model
 } = require('sequelize');
-const thread = require('./thread');
-const user = require('./user');
 module.exports = (sequelize, DataTypes) => {
   class comment extends Model {
     /**
@@ -18,8 +16,8 @@ module.exports = (sequelize, DataTypes) => {
   };
   comment.init({
     ID: {type:DataTypes.INTEGER,allowNull:false,autoIncrement:true,primaryKey:true},
-    thread_ID: {type:DataTypes.INTEGER,allowNull:false,references:{model:thread,key:'ID'}},
-    user_ID: {type:DataTypes.INTEGER,allowNull:false,references:{model:user,key:'ID'}},
+    thread_ID: {type:DataTypes.INTEGER,allowNull:false,references:{model:'thread',key:'ID'}},
+    user_ID: {type:DataTypes.INTEGER,allowNull:false,references:{model:'user',key:'ID'}},
     content: {type:DataTypes.TEXT,allowNull:false},
     deleted: {type:DataTypes.BOOLEAN,allowNull:false,defaultValue:false},
     created: {type:DataTypes.DATE,allowNull:false,defaultValue:DataTypes.NOW},

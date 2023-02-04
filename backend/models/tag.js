@@ -2,8 +2,6 @@
 const {
   Model
 } = require('sequelize');
-const media = require('./media')
-const media_taglist = require('./media_taglist')
 module.exports = (sequelize, DataTypes) => {
   class tag extends Model {
     /**
