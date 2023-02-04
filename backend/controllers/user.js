@@ -1,5 +1,4 @@
 const user = require("../models/user");
-const session = require("express-session");
 const userVerifier = require("../middlewares/validators/user");
 
 exports.getUser = async (req,res,next) => 
