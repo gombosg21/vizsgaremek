@@ -24,7 +24,8 @@ module.exports = (sequelize, DataTypes) => {
     last_edit: {type:DataTypes.DATE,allowNull:false,defaultValue:DataTypes.NOW,onUpdate:DataTypes.NOW},
     descption: {type:DataTypes.TEXT},
     visibility: {type:DataTypes.INTEGER,allowNull:false,defaultValue:0},
-    placeholder_text: {type:DataTypes.TEXT,allowNull:false}
+    placeholder_text: {type:DataTypes.TEXT,allowNull:false},
+    deletedAt:{type:DataTypes.DATE,allowNull:true,defaultValue:null}
   }, {
     sequelize,
     modelName: 'media',

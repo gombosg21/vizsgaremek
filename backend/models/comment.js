@@ -21,7 +21,8 @@ module.exports = (sequelize, DataTypes) => {
     content: {type:DataTypes.TEXT,allowNull:false},
     deleted: {type:DataTypes.BOOLEAN,allowNull:false,defaultValue:false},
     created: {type:DataTypes.DATE,allowNull:false,defaultValue:DataTypes.NOW},
-    last_edit: {type:DataTypes.DATE,allowNull:false,defaultValue:DataTypes.NOW,onUpdate:DataTypes.NOW}
+    last_edit: {type:DataTypes.DATE,allowNull:false,defaultValue:DataTypes.NOW,onUpdate:DataTypes.NOW},
+    deletedAt:{type:DataTypes.DATE,allowNull:true,defaultValue:null}
   }, {
     sequelize,
     modelName: 'comment',

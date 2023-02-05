@@ -23,7 +23,8 @@ module.exports = (sequelize, DataTypes) => {
     status:{type:DataTypes.INTEGER,allowNull:false,defaultValue:0},
     deleted:{type:DataTypes.BOOLEAN,allowNull:false,defaultValue:false},
     created:{type:DataTypes.DATE,allowNull:false,defaultValue:DataTypes.NOW},
-    last_activity:{type:DataTypes.DATE,allowNull:false,defaultValue:DataTypes.NOW} 
+    last_activity:{type:DataTypes.DATE,allowNull:false,defaultValue:DataTypes.NOW} ,
+    deletedAt:{type:DataTypes.DATE,allowNull:true,defaultValue:null}
   }, {
     sequelize,
     modelName: 'thread',

@@ -30,7 +30,8 @@ module.exports = (sequelize, DataTypes) => {
     profile_description:{type:DataTypes.TEXT},
     profile_visibility:{type:DataTypes.INTEGER,allowNull:false,defaultValue:0},
     profile_picture: {type:DataTypes.INTEGER,allowNull:true,references:{model:'media',key:'ID',}},
-    gender:{type:DataTypes.INTEGER,allowNull:false}
+    gender:{type:DataTypes.INTEGER,allowNull:false},
+    deletedAt:{type:DataTypes.DATE,allowNull:true,defaultValue:null}
   }, {
     sequelize,
     timestamps: true,
