@@ -12,7 +12,7 @@ exports.init = async () => {
         user : username,
         password: password,
         port: port
-    });
+    }).catch(err => console.log(err));
 
     await connection.query(`CREATE DATABASE IF NOT EXISTS \`${database}\` CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_hungarian_ci' ;`)
 
