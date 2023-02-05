@@ -1,4 +1,4 @@
-const user = require("../models/user");
+const user = require("../models").user;
 const userVerifier = require("../middlewares/validators/user");
 
 exports.getUser = async (req,res,next) => 
@@ -6,7 +6,7 @@ exports.getUser = async (req,res,next) =>
     const ID = req.params.ID;
     const authCookie = req.body.cookie;
 
-    const User = await user.findOne({where:{id: ID}});
+    const User = await user.findOne({where:{ID: ID}});
 
     if( User === null )
     {
@@ -26,7 +26,7 @@ exports.login = async (req,res,next) =>
     const Name = req.params.Name;
     const Password = req.body.Password;
 
-    const User = await user.findOne({where:{name: Name}});
+    const User = await user.findOne({where:{Name: Name}});
 
         if( User === null )
         {
@@ -35,7 +35,7 @@ exports.login = async (req,res,next) =>
         }
         else
         {
-            if (User.password == Password)
+            if (User.Password == Password)
             {
                 res.status(200)
                 // .cookie(session.Cookie(
@@ -56,7 +56,7 @@ exports.resetPassword = async (req,res,next) =>
 {
     const Name = req.body.Name;
 
-    const User =  await user.findOne({where:{name: Name}}); 
+    const User =  await user.findOne({where:{Name: Name}}); 
 
         if( User === null )
         {
@@ -97,7 +97,7 @@ exports.deleteUser = async (req,res,next) =>
 {
     const ID = req.params.ID;
     const authCookie = req.body.cookie;
-    const User = await user.findOne({where:{id: ID}})
+    const User = await user.findOne({where:{ID: ID}})
         if( User === null )
         {
             res.status(404)
