@@ -1,7 +1,7 @@
 'use strict';
 
 const fake = require("@faker-js/faker");
-const migration = require("@sequelize-cli/migration")
+// const migration = require("@sequelize-cli/migration")
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -11,13 +11,14 @@ module.exports = {
     for (let i = 0; i < 10 ; i++) 
     {
       users.push({
-        name : `${fake.name.fullName()}`,
-        password: `${fake.internet.password((8 + Math.round(Math.random()*4)),false)}`,
-        email: `${fake.internet.email()}`,
-        birth_date:`${fake.date.birthdate()}`,
+        name : fake.faker.name.fullName(),
+        password: fake.faker.internet.password((8 + Math.round(Math.random()*4)),false),
+        email: fake.faker.internet.email(),
+        birth_date: fake.faker.date.birthdate(),
+        gender: Math.round(Math.random()*2)
       })
     }
-    await queryInterface.bulkInsert('user',users);
+    await queryInterface.bulkInsert('users',users);
     /**
      * Add seed commands here.
      *
@@ -30,13 +31,13 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
+
+    await queryInterface.bulkDelete('users',null,{});
     /**
      * Add commands to revert seed here.
      *
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
-
-    await queryInterface.bulkDelete('user');
   }
 };
