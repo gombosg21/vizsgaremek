@@ -429,6 +429,10 @@
                 },
                 "last_online": {
                     "allowNull": false,
+                    "defaultValue": {
+                        "internal": true,
+                        "value": "Sequelize.NOW"
+                    },
                     "field": "last_online",
                     "seqType": "Sequelize.DATE"
                 },
@@ -478,5 +482,5 @@
     "path": "C:\\Users\\smat3\\Desktop\\exam\\vizsgaremek\\backend\\migrations\\_current.json",
     "backupPath": "C:\\Users\\smat3\\Desktop\\exam\\vizsgaremek\\backend\\migrations\\_current_bak.json",
     "exists": true,
-    "revision": 3
+    "revision": 4
 }
