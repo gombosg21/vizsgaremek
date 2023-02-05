@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
     password:{type:DataTypes.STRING,allowNull:false},
     email_verified:{type:DataTypes.BOOLEAN,allowNull:false,defaultValue: false},
     email:{type:DataTypes.STRING,allowNull:false},
-    last_online:{type:DataTypes.DATE,allowNull:false},
+    last_online:{type:DataTypes.DATE,allowNull:false,defaultValue:DataTypes.NOW},
     birth_date:{type:DataTypes.DATEONLY,allowNull:false}, 
     profile_description:{type:DataTypes.TEXT},
     profile_visibility:{type:DataTypes.INTEGER,allowNull:false,defaultValue:0},
