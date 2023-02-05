@@ -1,10 +1,10 @@
-const thread = require("../models/thread_model");
-const comment = require("../models/comment_model");
+const thread = require("../models").thread;
+const comment = require("../models").comment;
 
 exports.getThread() = async (req,res,next) => {
     req.body.threadID = ID
     thread = await thread.findOne(ID)
-    const comments = await comment.findAll({where: {thread_ID : thread.ID}})
+    const comments = await comment.findAll({where: {thread_id : thread.ID}})
     res.status(200).json(comments)      
 }
 
