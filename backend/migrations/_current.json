@@ -60,6 +60,10 @@
                     "seqType": "Sequelize.DATE"
                 },
                 "deletedAt": {
+                    "allowNull": true,
+                    "defaultValue": {
+                        "value": null
+                    },
                     "field": "deletedAt",
                     "seqType": "Sequelize.DATE"
                 },
@@ -156,6 +160,10 @@
                     "seqType": "Sequelize.TEXT"
                 },
                 "deletedAt": {
+                    "allowNull": true,
+                    "defaultValue": {
+                        "value": null
+                    },
                     "field": "deletedAt",
                     "seqType": "Sequelize.DATE"
                 },
@@ -320,6 +328,10 @@
                     "seqType": "Sequelize.DATE"
                 },
                 "deletedAt": {
+                    "allowNull": true,
+                    "defaultValue": {
+                        "value": null
+                    },
                     "field": "deletedAt",
                     "seqType": "Sequelize.DATE"
                 },
@@ -452,6 +464,10 @@
                     "seqType": "Sequelize.INTEGER"
                 },
                 "deletedAt": {
+                    "allowNull": true,
+                    "defaultValue": {
+                        "value": null
+                    },
                     "field": "deletedAt",
                     "seqType": "Sequelize.DATE"
                 }
@@ -462,5 +478,5 @@
     "path": "C:\\Users\\smat3\\Desktop\\exam\\vizsgaremek\\backend\\migrations\\_current.json",
     "backupPath": "C:\\Users\\smat3\\Desktop\\exam\\vizsgaremek\\backend\\migrations\\_current_bak.json",
     "exists": true,
-    "revision": 2
+    "revision": 3
 }
