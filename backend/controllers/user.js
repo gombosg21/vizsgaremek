@@ -1,4 +1,5 @@
 const user = require("../models").user;
+const util = require('util');
 const userVerifier = require("../middlewares/validators/user");
 
 exports.getUser = async (req,res,next) => 
@@ -95,10 +96,11 @@ exports.createUser = async (req,res,next) =>
             gender : UserGender
         });
         await User.save().then(
-        // sendVerfyEmail(User.Email)
         res.status(201)
-        // .json({"notificate":"confirmation email sent"})
-            .redirect('/user/' +  User.ID)) 
+        // sendVerfyEmail(User.Email)
+        )
+       const NewUser = util.promisify(await user.findOne({where:{name : UserName}})).then(
+            res.redirect('/user/' +  NewUser.ID)) 
     }
 
 
