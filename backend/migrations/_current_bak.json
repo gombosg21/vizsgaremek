@@ -437,20 +437,6 @@
                     "field": "profile_visibility",
                     "seqType": "Sequelize.INTEGER"
                 },
-                "profile_picture": {
-                    "allowNull": true,
-                    "references": {
-                        "model": "media",
-                        "key": "ID"
-                    },
-                    "field": "profile_picture",
-                    "seqType": "Sequelize.INTEGER"
-                },
-                "gender": {
-                    "allowNull": false,
-                    "field": "gender",
-                    "seqType": "Sequelize.INTEGER"
-                },
                 "deletedAt": {
                     "field": "deletedAt",
                     "seqType": "Sequelize.DATE"
@@ -461,6 +447,6 @@
     },
     "path": "C:\\Users\\smat3\\Desktop\\exam\\vizsgaremek\\backend\\migrations\\_current.json",
     "backupPath": "C:\\Users\\smat3\\Desktop\\exam\\vizsgaremek\\backend\\migrations\\_current_bak.json",
-    "exists": true,
-    "revision": 2
+    "exists": false,
+    "revision": 1
 }
