@@ -28,7 +28,9 @@ module.exports = (sequelize, DataTypes) => {
     last_online:{type:DataTypes.DATE,allowNull:false},
     birth_date:{type:DataTypes.DATEONLY,allowNull:false}, 
     profile_description:{type:DataTypes.TEXT},
-    profile_visibility:{type:DataTypes.INTEGER,allowNull:false,defaultValue:0} 
+    profile_visibility:{type:DataTypes.INTEGER,allowNull:false,defaultValue:0},
+    profile_picture: {type:DataTypes.INTEGER,allowNull:true,references:{model:'media',key:'ID',}},
+    gender:{type:DataTypes.INTEGER,allowNull:false}
   }, {
     sequelize,
     timestamps: true,
