@@ -23,8 +23,8 @@ exports.getUser = async (req,res,next) =>
 
 exports.login = async (req,res,next) => 
 {
-    const Name = req.params.Name;
-    const Password = req.body.Password;
+    const Name = req.params.name;
+    const Password = req.body.password;
 
     const User = await user.findOne({where:{Name: Name}});
 
@@ -54,7 +54,7 @@ exports.login = async (req,res,next) =>
 
 exports.resetPassword = async (req,res,next) => 
 {
-    const Name = req.body.Name;
+    const Name = req.body.name;
 
     const User =  await user.findOne({where:{Name: Name}}); 
 
@@ -75,22 +75,33 @@ exports.resetPassword = async (req,res,next) =>
 
 exports.createUser = async (req,res,next) => 
 {
-    const UserName = req.body.Name;
-    const UserPassword = req.body.Password;
-    const UserEmail = req.body.Email;
-    const UserAge = req.body.Age;
+    const UserName = req.body.name;
+    const UserPassword = req.body.password;
+    const UserEmail = req.body.email;
+    const UserDate = req.body.birth_date;
+    const UserGender = req.body.gender;
 
-    const User = user.build({
-            Name : UserName,
-            Password : UserPassword,
-            Age : UserAge,
-            Email : UserEmail,
+    if ( await user.findOne({where:{name: UserName}}) != null) 
+    {
+        res.status(406).json({"error":"username already exists"})
+    } 
+    else 
+    {
+        const User = user.build({
+            name : UserName,
+            password : UserPassword,
+            birth_date : UserDate,
+            email : UserEmail,
+            gender : UserGender
         });
-        await User.save();
+        await User.save().then(
         // sendVerfyEmail(User.Email)
         res.status(201)
         // .json({"notificate":"confirmation email sent"})
-        .redirect('user/' +  User.ID)
+            .redirect('/user/' +  User.ID)) 
+    }
+
+
 };
 
 exports.deleteUser = async (req,res,next) => 
