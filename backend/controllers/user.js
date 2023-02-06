@@ -53,6 +53,10 @@ exports.login = async (req,res,next) =>
         }
 };
 
+exports.logout = async (req,res,next) => {
+    const authCookie = req.body.cookie;
+}
+
 exports.resetPassword = async (req,res,next) => 
 {
     const Name = req.body.name;
