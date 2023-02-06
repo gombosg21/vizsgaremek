@@ -1,58 +1,50 @@
-const vailadtor = require('express-vailadtor');
+const valiadtor = require('express-validator');
 const tags = require('../../models').tag;
+
+
+exports.uploadRules = () => 
+{
+    return [
+        valiadtor.body('imgData').notEmpty().withMessage("cannot upload, no image given"),
+        valiadtor.body('placeholder').notEmpty().withMessage("placeholder text cannot be empty")
+    ]
+}
+
+exports.editRules = () => 
+{
+    return [
+        valiadtor.body('placeholder').notEmpty().withMessage("placeholder text cannot be empty")
+    ]
+}
 
 exports.validateUpload = (req,res,next) => 
 {
-    const imgData = req.body.imgData;
-    const placeholder = req.body.placeholder;
-    const userID = req.session.userID;
+    const errors = validator.validationResult(req)
 
-    let msg = "";
-    var error = false;
+    if (errors.isEmpty()) 
+    {
+       return next();
+    }
 
-    switch (null)
-    {
-        case (imgData === null):
-            {
-                error = true;
-                msg + "no image selected "
-            };
-        case (placeholder == null):
-            {
-                error = true;
-                msg + "placeholder cannot be empty "
-            };
-        case (userID == null):
-            {
-                error = true;
-                msg + "user missing "
-            };
-    };
-    if (error) 
-    {
-        res.status(406)
-        .json({"error":`${msg}`})
-        return;
-    }
-    else 
-    {
-        next();
-    }
+    const errorList = [];
+    errors.array().map(err => errorList.push({[err.param]:err.msg}))
+
+    return res.status(422).json({error: errorList})
 };
 
 exports.valiadteEdit = (req,res,next) => 
 {
-    const placeholder = req.body.placeholder;
+    const errors = validator.validationResult(req)
 
-    if (placeholder == null) 
-    {  
-        res.status(406)
-        return;
-    }
-    else 
+    if (errors.isEmpty()) 
     {
-        next()
+       return next();
     }
+
+    const errorList = [];
+    errors.array().map(err => errorList.push({[err.param]:err.msg}))
+
+    return res.status(422).json({error: errorList})
 };
 
 exports.validateTags = async (req,res,next) => 
