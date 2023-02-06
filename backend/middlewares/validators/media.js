@@ -7,9 +7,31 @@ exports.validateUpload = (req,res,next) =>
     const placeholder = req.body.placeholder;
     const userID = req.session.userID;
 
-    if (imgData === null || placeholder == null || userID == null) 
+    let msg = "";
+    var error = false;
+
+    switch (null)
     {
-        res.status(406);
+        case (imgData === null):
+            {
+                error = true;
+                msg + "no image selected "
+            };
+        case (placeholder == null):
+            {
+                error = true;
+                msg + "placeholder cannot be empty "
+            };
+        case (userID == null):
+            {
+                error = true;
+                msg + "user missing "
+            };
+    };
+    if (error) 
+    {
+        res.status(406)
+        .json({"error":`${msg}`})
         return;
     }
     else 
