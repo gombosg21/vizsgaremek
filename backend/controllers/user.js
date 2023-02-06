@@ -49,7 +49,7 @@ exports.login = async (req,res,next) =>
 };
 
 exports.logout = async (req,res,next) => {
-    const authCookie = req.body.cookie;
+    res.redirect('/')
 }
 
 exports.resetPassword = async (req,res,next) => 
@@ -80,13 +80,6 @@ exports.createUser = async (req,res,next) =>
     const UserEmail = req.body.email;
     const UserDate = req.body.birth_date;
     const UserGender = req.body.gender;
-
-    if ( await user.findOne({where:{name: UserName}}) != null) 
-    {
-        res.status(406).json({"error":"username already exists"})
-    } 
-    else 
-    {
         const User = user.build({
             name : UserName,
             password : UserPassword,
@@ -99,10 +92,7 @@ exports.createUser = async (req,res,next) =>
         // sendVerfyEmail(User.Email)
         )
        const NewUser = util.promisify(await user.findOne({where:{name : UserName}})).then(
-            res.redirect('/user/' +  NewUser.ID)) 
-    }
-
-
+        res.redirect('/user/' +  NewUser.ID)) 
 };
 
 exports.deleteUser = async (req,res,next) => 
