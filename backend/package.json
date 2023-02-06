@@ -6,6 +6,7 @@
     "start": "nodemon app.js"
   },
   "dependencies": {
+    "connect-session-sequelize": "^7.1.5",
     "cookie-parser": "~1.4.6",
     "debug": "~4.3.4",
     "express": "^4.18.2npm ",
