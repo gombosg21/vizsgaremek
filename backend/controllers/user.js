@@ -1,11 +1,9 @@
 const user = require("../models").user;
 const util = require('util');
-const userVerifier = require("../middlewares/validators/user");
 
 exports.getUser = async (req,res,next) => 
 {
     const ID = req.params.ID;
-    const authCookie = req.body.cookie;
 
     const User = await user.findOne({where:{ID: ID}});
 
@@ -39,9 +37,6 @@ exports.login = async (req,res,next) =>
             if (User.Password == Password)
             {
                 res.status(200)
-                // .cookie(session.Cookie(
-                //
-                // ))
                 .redirect('/user/' + User.ID)
             }
             else 
