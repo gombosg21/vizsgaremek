@@ -24,8 +24,7 @@ exports.getAuth = (req,res) => {
         user : userId
     })
 
-    res.send()
-
+    res.send(cookie)
 }
 
 exports.isAuth = (req,res,next) => {
