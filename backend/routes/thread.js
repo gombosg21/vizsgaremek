@@ -1,22 +1,24 @@
-const express = require("express");
-const threadController = reuqire("../controllers/thread")
+const router = require('express').Router();
+const threadController = reuqire("../controllers/thread");
 
-// create thread on story_id
+// create on story_id
+router.post('/story/:ID/thread',)
 
-// create thread on profile_id
+// create on profile_id
+router.post('/user/:ID/thread',)
 
-// create thread on media_id
+// create on media_id
+router.post('/media/:ID/thread',)
 
-// edit thread on story_id
+// by thread ID
+// view
+// delete
+router.route('/thread/:ID')
+.get(threadController.getThread)
+.patch(threadController.editThread)
+.delete(threadController.deleteTread)
 
-// edit thread on profile_id
+// search threads by params name, creation date, creater name
+router.get('/thread/search/:name.:date.:user')
 
-// edit thread on media_id
-
-// delete thread on story_id
-
-// delete thread on profile_id
-
-// delete thread on media_id
-
-// get thread
+module.exports = router;
