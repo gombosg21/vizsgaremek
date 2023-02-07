@@ -12,11 +12,11 @@ exports.registerRules = () =>
     valiadtor.body('password').notEmpty().withMessage("password cannot be empty"),
     valiadtor.body('password').isLength({min: password_min,max:password_max}).withMessage(`password must be within ${password_min} and ${password_max} characters long`),
     valiadtor.body('password').isStrongPassword().withMessage("too weak password, try a different one"),
-    validator.body('re_password').equals(validator.body('password')).withMessage("password fields must match"),
+    valiadtor.body('re_password').custom((value,{req,loc,path}) => {if(value !== req.body.password) {throw new Error("password fields must match")}else{return value;}}),
     valiadtor.body('birth_date').notEmpty().withMessage("select a birth date"),
     valiadtor.body('birth_date').isDate().withMessage("invalid date format"),
     valiadtor.body('gender').notEmpty().withMessage("select a gender"),
-    validator.body('gender').isInt({min:0,max:2}).withMessage("unknown gender type")
+    valiadtor.body('gender').isInt({min:0,max:2}).withMessage("unknown gender type")
 ]
 }
 

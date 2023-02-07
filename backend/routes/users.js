@@ -20,7 +20,7 @@ router.get('/user/:userID/logout', userValidator.checkIfUserIDExsits, userContro
 router.get('/user/:name/password-reset', userValidator.checkIfNameExsist, userController.resetPassword);
 
 // post create user
-router.post('/user/register', userValidator.checkIfNameConflicts, userValidator.registerRules, userValidator.validateRegistration, userController.createUser);
+router.post('/user/register', userValidator.checkIfNameConflicts, userValidator.registerRules(), userValidator.validateRegistration, userController.createUser);
 
 // patch change password
 router.patch('/user/:userID/change-password', userValidator.checkIfUserIDExsits, userController.changePassword);
