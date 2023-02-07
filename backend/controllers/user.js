@@ -1,24 +1,60 @@
 const user = require("../models").user;
+const media = require("../models").media;
 const util = require('util');
 
 exports.getUser = async (req,res,next) => 
 {
-    const ID = req.params.ID;
+    const ID = req.params.userID;
 
-    const User = await user.findOne({where:{ID: ID}});
-
-    if( User === null )
-    {
-        res.status(404)
-        .redirect('/')
-        // .json({"error":`user with id:${ID} does not exist`})
-    }
-    else
-    {
+    const User = util.promisify(await user.findOne({where:{ID: ID}}))
+    .then(
         res.status(200)
         .json(User)
-    }
+        )
+        .catch(err => console.log(err));
 };
+
+exports.getProfile = async (req,res,next) => 
+{
+    const ID = req.params.userID
+
+    const UserProfile = util.promisify(await user.findOne(
+        {
+            where:{ID: ID},
+            attributes:['name','gender','birth_date','profile_description','profile_picture','type'],
+            include:{model:media}
+        }
+    ))
+    .then(
+        res.status(200)
+        .json(UserProfile)
+        )
+        .catch(err => console.log(err));
+}
+
+exports.editProfile = async (req,res,next) => 
+{
+    const ID = req.params.userID
+
+    const profilePicture = req.body.profile_picture;
+    const profileDescription = req.body.profile_description;
+    const profileVisibility = req.body.profile_visibility;
+
+    const User = util.promisify(await user.findOne({where:{ID: ID}}))
+        .then(
+            util.promisify(await User.update(
+                {
+                    profile_description: profileDescription,
+                    profile_visibility: profileVisibility,
+                    profile_picture: profilePicture
+                }
+            )
+            .then(res.send(201))
+    ))
+    .catch(err => console.log(err))
+    
+
+}
 
 exports.login = async (req,res,next) => 
 {
@@ -27,50 +63,48 @@ exports.login = async (req,res,next) =>
 
     const User = await user.findOne({where:{Name: Name}});
 
-        if( User === null )
-        {
-            res.status(404)
-            // .json({"error":`user with id:${Name} does not exist`})
-        }
-        else
-        {
-            if (User.Password == Password)
-            {
-                res.status(200)
-                .redirect('/user/' + User.ID)
-            }
-            else 
-            {
-                res.status(401)
-                .redirect('/')
-                // .send(error.wrongCredentials)
-            }
-        }
+    if (User.Password == Password) 
+    {
+        res.status(200)
+            .redirect('/user/' + User.ID)
+    }
+    else 
+    {
+        res.status(401)
+            .redirect('/')
+            .json("bad password")
+    }
 };
+
+exports.changePassword = async (req,res,next) => 
+{
+    const userNewPassword = req.body.password
+
+    const User = util.promisify(await user.findOne({where:{ID: ID}}))
+        .then(
+            util.promisify(await User.update({
+                password: userNewPassword
+            }))
+                .then(res.send(201))
+        )
+        .catch(err => console.log(err))
+}
 
 exports.logout = async (req,res,next) => {
     res.redirect('/')
-}
+};
 
 exports.resetPassword = async (req,res,next) => 
 {
     const Name = req.body.name;
 
-    const User =  await user.findOne({where:{Name: Name}}); 
-
-        if( User === null )
-        {
-            res.status(404)
-            .redirect('/')
-            // .json({"error" : `user with name:${Name} does not exist`})
-        }
-        else
-        {
-            res.status(200)
-            .redirect('/')
-            // .json({"notificate" : "reset email sent"})
-            // sendResetEmail(User.Email)
-        }
+    const User =  util.promisify(await user.findOne({where:{Name: Name}}))
+    .then(
+        res.status(200)
+        .redirect('/')
+        // .json({"notificate" : "reset email sent"})
+        // email.sendResetEmail(User.Email)
+        ).catch(err => console.log(err))
 };
 
 exports.createUser = async (req,res,next) => 
@@ -87,29 +121,26 @@ exports.createUser = async (req,res,next) =>
             email : UserEmail,
             gender : UserGender
         });
-        await User.save().then(
-        res.status(201)
-        // sendVerfyEmail(User.Email)
-        )
-       const NewUser = util.promisify(await user.findOne({where:{name : UserName}})).then(
-        res.redirect('/user/' +  NewUser.ID)) 
+        util.promisify(await User.save())
+        .then(
+            res.status(201)
+            // email.sendVerfyEmail(User.Email)
+            ).catch(err => console.log(err))
+       const NewUser = util.promisify(await user.findOne({where:{name : UserName}}))
+       .then(
+            res.redirect('/user/' +  NewUser.ID)
+            ) .catch(err => console.log(err))
 };
 
 exports.deleteUser = async (req,res,next) => 
 {
-    const ID = req.params.ID;
-    const authCookie = req.body.cookie;
+    const ID = req.params.userID;
     const User = await user.findOne({where:{ID: ID}})
-        if( User === null )
-        {
-            res.status(404)
-            // .json({"error":`user wiht id:${ID} does not exist`})
-            .redirect('/')
-        }
-        else
-        {
-            await user.destroy(User);
+    .then(
+        await user.destroy(User))
+        .then(
             res.status(200)
             .redirect('/')
-        }
+            ).catch(err => console.log(err))
+
 };
