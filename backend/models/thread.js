@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       this.belongsTo(models.user)
       this.belongsTo(models.media)
-      this.hasMany(models.comment)
+      this.hasMany(models.comment,{foreignKey:"thread_ID"})
     }
   };
   thread.init({

@@ -10,7 +10,8 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      this.hasMany(models.tag,{sourceKey:"tag_name",foreignKey:"tag"}),
+      this.hasMany(models.media,{sourceKey:"media_ID",foreignKey:"ID"})
     }
   }
   media_taglist.init({

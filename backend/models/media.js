@@ -10,9 +10,9 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      this.belongsTo(models.user)
-      this.hasMany(models.thread)
-      this.belongsToMany(models.tag,{through:models.media_taglist})
+      this.belongsTo(models.user,{foreignKey:"user_ID"})
+      this.hasMany(models.thread,{foreignKey:"media_ID"})
+      this.belongsToMany(models.tag,{through:models.media_taglist,foreignKey:"media_ID",sourceKey:"ID"})
     }
   };
   media.init({
