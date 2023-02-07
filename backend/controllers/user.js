@@ -1,35 +1,29 @@
 const user = require("../models").user;
 const media = require("../models").media;
-const util = require('util');
 
 exports.getUser = async (req,res,next) => 
 {
     const ID = req.params.userID;
 
-    const User = util.promisify(await user.findOne({where:{ID: ID}}))
-    .then(
+    const User = await user.findOne({where:{ID: ID}})
+
         res.status(200)
-        .json(User)
-        )
-        .catch(err => console.log(err));
+        .json(User);
 };
 
 exports.getProfile = async (req,res,next) => 
 {
     const ID = req.params.userID
 
-    const UserProfile = util.promisify(await user.findOne(
+    const UserProfile = await user.findOne(
         {
             where:{ID: ID},
             attributes:['name','gender','birth_date','profile_description','profile_picture','type'],
             include:{model:media}
         }
-    ))
-    .then(
-        res.status(200)
-        .json(UserProfile)
-        )
-        .catch(err => console.log(err));
+    )
+    res.status(200)
+    .json(UserProfile);
 }
 
 exports.editProfile = async (req,res,next) => 
@@ -40,20 +34,17 @@ exports.editProfile = async (req,res,next) =>
     const profileDescription = req.body.profile_description;
     const profileVisibility = req.body.profile_visibility;
 
-    const User = util.promisify(await user.findOne({where:{ID: ID}}))
-        .then(
-            util.promisify(await User.set(
+    const User = await user.findOne({where:{ID: ID}})
+            await User.set(
                 {
                     profile_description: profileDescription,
                     profile_visibility: profileVisibility,
                     profile_picture: profilePicture
                 }
-            ).then(util.promisify(User.save))
-            .then(res.send(201))
-    ))
-    .catch(err => console.log(err))
-    
-
+            );
+            await User.save().then(
+            res.send(201))
+            .catch(err => console.log(err))
 }
 
 exports.login = async (req,res,next) => 
@@ -80,13 +71,13 @@ exports.changePassword = async (req,res,next) =>
 {
     const userNewPassword = req.body.password
 
-    const User = util.promisify(await user.findOne({where:{ID: ID}}))
-        .then(
-            util.promisify(await User.set({
-                password: userNewPassword
-            })).then(util.promisify(User.save))
-                .then(res.send(201))
-        )
+    const User = await user.findOne({where:{ID: ID}})
+    await User.set(
+        {
+            password: userNewPassword
+        })
+    await User.save()
+        .then(res.send(201))
         .catch(err => console.log(err))
 }
 
@@ -98,13 +89,11 @@ exports.resetPassword = async (req,res,next) =>
 {
     const Name = req.body.name;
 
-    const User =  util.promisify(await user.findOne({where:{Name: Name}}))
-    .then(
+    const User =  await user.findOne({where:{Name: Name}});
         res.status(200)
         .redirect('/')
         // .json({"notificate" : "reset email sent"})
         // email.sendResetEmail(User.Email)
-        ).catch(err => console.log(err))
 };
 
 exports.createUser = async (req,res,next) => 
@@ -121,26 +110,20 @@ exports.createUser = async (req,res,next) =>
             email : UserEmail,
             gender : UserGender
         });
-        util.promisify(await User.save())
+        await User.save()
         .then(
             res.status(201)
             // email.sendVerfyEmail(User.Email)
             ).catch(err => console.log(err))
-       const NewUser = util.promisify(await user.findOne({where:{name : UserName}}))
-       .then(
-            res.redirect('/user/' +  NewUser.ID)
-            ) .catch(err => console.log(err))
+       const NewUser = await user.findOne({where:{name : UserName}})
+        res.redirect('/user/' +  NewUser.ID)
 };
 
 exports.deleteUser = async (req,res,next) => 
 {
     const ID = req.params.userID;
-    const User = await user.findOne({where:{ID: ID}})
-    .then(
-        await user.destroy(User))
-        .then(
-            res.status(200)
-            .redirect('/')
-            ).catch(err => console.log(err))
-
+    const User = await user.findOne({where:{ID: ID}});
+    await user.destroy(User);
+    res.status(200)
+    .redirect('/') 
 };
