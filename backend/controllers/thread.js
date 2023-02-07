@@ -1,5 +1,3 @@
-const { request } = require("../app");
-
 const thread = require("../models").thread;
 const comment = require("../models").comment;
 
