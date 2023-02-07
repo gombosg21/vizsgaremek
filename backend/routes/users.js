@@ -33,3 +33,5 @@ router.patch('/user/:userID/register/edit')
 router.delete('/user/:userID',userValidator.checkIfUserIDExsits,userController.deleteUser);
 
 // patch add reaction
+
+module.exports = router;

@@ -26,3 +26,5 @@ router.get('/media/by-tags',)
 
 // add tag
 router.patch('/media/:mediaID/tags',)
+
+module.exports = router;
