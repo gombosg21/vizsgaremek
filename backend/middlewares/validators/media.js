@@ -1,4 +1,5 @@
 const valiadtor = require('express-validator');
+const media = require('../../models').media;
 const tags = require('../../models').tag;
 
 
@@ -15,6 +16,20 @@ exports.editRules = () =>
     return [
         valiadtor.body('placeholder').notEmpty().withMessage("placeholder text cannot be empty")
     ]
+}
+
+exports.checkIfMediaIDExsist = async (req,res,next) => 
+{
+    const mediaID = req.params.mediaID;
+
+    if(await  media.findOne({where:{id : mediaID}}) == null) 
+    {
+        return res.status(404).json({"error":`media with id:${mediaID} does not exsist`});
+    } 
+    else 
+    {
+        return next();
+    }
 }
 
 exports.validateUpload = (req,res,next) => 
