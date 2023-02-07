@@ -1,37 +1,35 @@
-const express = require('express');
+const router = require('express').Router();
 const userController = require('../controllers/user');
-const router = express.Router();
-
-module.exports = router;
+const userValidator = require('../middlewares/validators/user');
 
 // get user, for testing now
-router.get('/user/:ID',userController.getUser);
+router.get('/user/:userID',userValidator.checkIfUserIDExsits,userController.getUser);
 
 //get profile
-router.get('/user/:ID/profile')
+router.get('/user/:userID/profile',userValidator.checkIfUserIDExsits,userController.getProfile)
 
 // get login
-router.get('/user/:name/login',userController.login);
+router.get('/user/:name/login',userValidator.checkIfNameExsist,userController.login);
 
 // get logout
-router.get('/user/:ID/logout',)
+router.get('/user/:userID/logout',userValidator.checkIfUserIDExsits,userController.logout)
 
 // get reset password
-router.get('/user/:name/password-reset',userController.resetPassword);
+router.get('/user/:name/password-reset',userValidator.checkIfNameExsist,userController.resetPassword);
 
 // post create user
-router.post('/user/register',userController.createUser);
+router.post('/user/register',userValidator.checkIfNameConflicts,userValidator.registerRules,userValidator.validateRegistration,userController.createUser);
 
 // patch edit profile
-router.patch('/user/:ID/profile/edit');
+router.patch('/user/:userID/profile/edit',userValidator.checkIfUserIDExsits,userController.editProfile);
 
 // patch change password
-router.patch('/user/:ID/change-password',);
+router.patch('/user/:userID/change-password',userValidator.checkIfUserIDExsits,userController.changePassword);
 
 // patch change user register data
-router.patch('/user/:ID/register/edit')
+router.patch('/user/:userID/register/edit')
 
 // delete delete user
-router.delete('/user/:ID',userController.deleteUser);
+router.delete('/user/:userID',userValidator.checkIfUserIDExsits,userController.deleteUser);
 
 // patch add reaction
