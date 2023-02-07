@@ -42,13 +42,13 @@ exports.editProfile = async (req,res,next) =>
 
     const User = util.promisify(await user.findOne({where:{ID: ID}}))
         .then(
-            util.promisify(await User.update(
+            util.promisify(await User.set(
                 {
                     profile_description: profileDescription,
                     profile_visibility: profileVisibility,
                     profile_picture: profilePicture
                 }
-            )
+            ).then(util.promisify(User.save))
             .then(res.send(201))
     ))
     .catch(err => console.log(err))
@@ -82,9 +82,9 @@ exports.changePassword = async (req,res,next) =>
 
     const User = util.promisify(await user.findOne({where:{ID: ID}}))
         .then(
-            util.promisify(await User.update({
+            util.promisify(await User.set({
                 password: userNewPassword
-            }))
+            })).then(util.promisify(User.save))
                 .then(res.send(201))
         )
         .catch(err => console.log(err))

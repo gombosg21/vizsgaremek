@@ -66,13 +66,15 @@ exports.editMedia  = async (req,res,next) =>
 
     const Media = await media.findOne({where:{id: ID}})
     .then(
-        Media.update(
+        Media.set(
             {       
                 description : req.body.description,
                 visibility : req.body.visibility,
                 placeholder_text : req.body.placeholder_text
             }
-        )).catch(err => console.log(err))
+        ))
+        .then(util.promisify(Media.save))
+        .catch(err => console.log(err))
 
     await Media.save()
     .then(res.status(200))
