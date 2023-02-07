@@ -3,79 +3,106 @@ const tag = require("../models").tag;
 const taglist = require("../models").taglist;
 const user = require("../models").user;
 
-exports.viewOneMediaFromUser = async (req,res,next) => 
-{
-    const ownerID = req.params.user_ID
+exports.viewOneMediaFromUser = async (req, res, next) => {
+    const ownerID = req.params.user_ID;
     const mediaID = req.params.media_ID;
 
-    const MediaData = await media.findOne({where:{id : mediaID, user_ID: ownerID},include:{model:tag}})
+    try {
+        const MediaData = await media.findOne({ where: { id: mediaID, user_ID: ownerID }, include: { model: tag } });
 
-    res.status(200).json(MediaData);
+        res.status(200).json(MediaData);
+    }
+    catch (error) {
+        console.log(error);
+        res.status(502);
+    }
+};
+
+exports.getAllMediaFromUser = async (req, res, next) => {
+    const ownerID = req.params.user_ID;
+
+    try {
+        const MediaList = await media.findAll({ where: { user_ID: ownerID }, include: { model: tag } });
+
+        res.status(200).json(MediaList);
+    }
+    catch (error) {
+        console.log(error);
+        res.status(502);
+    }
+};
+
+exports.getMediaByTags = async (req, res, next) => {
+    const tags = req.query.tags;
+
+    try {
+        const MediaList = await media.findAll({ where: { user_ID: ownerID }, include: { model: tag, thorough: { model: taglist }, include: [{ name: [tags] }] } });
+    }
+    catch (error) {
+        console.log(error);
+        res.status(502);
+    }
+
 }
 
-exports.getAllMediaFromUser = async (req,res,next) => 
-{
-    const ownerID = req.params.user_ID
-    
-    const MediaList = await media.findAll({where:{user_ID:ownerID},include:{model:tag}})
-    
-    res.status(200).json(MediaList);
+exports.uploadMedia = async (req, res, next) => {
 
+    try {
+        const Media = media.build(
+            {
+                user_ID: req.params.user_ID,
+                data: req.body.imgData,
+                description: req.body.description,
+                visibility: req.body.visibility,
+                placeholder_text: req.body.placeholder_text,
+                tags: req.body.tags
+            });
+
+        await Media.save();
+        res.status(200);
+
+    }
+    catch (error) {
+        console.log(error);
+        res.status(502);
+    }
 }
 
-exports.getMediaByTags = async (req,res,next) => 
-{
-    const tags = req.query.tags
-
-    const MediaList = await media.findAll({where:{user_ID:ownerID},include:{model:tag,thorough:{model:taglist},include:[{name:[tags]}]}})
-}
-
-exports.uploadMedia = async (req,res,next) => 
-{
-    const Media = media.build(
-        {
-        user_ID : req.params.ID,
-        data: req.body.imgData,
-        description: req.body.description,
-        visibility: req.body.visibility,
-        placeholder_text: req.body.placeholder_text,
-        tags: req.body.tags
-        }
-    )
-    .catch(err => console.log(err))
-
-    await Media.save()
-    .then(res.status(200));
-    ;
-}
-
-exports.deleteMedia  = async (req,res,next) => 
-{
+exports.deleteMedia = async (req, res, next) => {
     const ID = req.params.media_ID;
 
-    const Media = await media.findOne(ID);
+    try {
+        const Media = await media.findOne(ID);
 
-        await Media.destroy()
-        .then(
-        res.status(200))
+        await Media.destroy();
+
+        res.status(200)
+            .json(Media.ID);
+    }
+    catch (error) {
+        console.log(error);
+        res.status(502);
+    }
 }
 
-exports.editMedia  = async (req,res,next) => 
-{
-    const ID = req.params.media_ID
+exports.editMedia = async (req, res, next) => {
+    const ID = req.params.media_ID;
 
-    const Media = await media.findOne({where:{id: ID}})
-    .then(
-        Media.set(
-            {       
-                description : req.body.description,
-                visibility : req.body.visibility,
-                placeholder_text : req.body.placeholder_text
-            }
-        ))
-        .then(util.promisify(Media.save))
-        .catch(err => console.log(err))
+    try {
+        const Media = await media.findOne({ where: { id: ID } });
 
-    await Media.save()
-    .then(res.status(200))
+        Media.set({
+            description: req.body.description,
+            visibility: req.body.visibility,
+            placeholder_text: req.body.placeholder_text
+        }
+        );
+        await Media.save();
+        res.status(200)
+            .json(Media);
+    }
+    catch (error) {
+        console.log(error);
+        res.status(502);
+    }
 }
