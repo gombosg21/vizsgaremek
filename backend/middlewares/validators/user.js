@@ -1,4 +1,5 @@
 const valiadtor = require('express-validator');
+const user = require('../../models').user;
 
 const password_min = 8;
 const password_max = 32;
