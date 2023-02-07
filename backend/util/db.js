@@ -7,14 +7,21 @@
 exports.init = async () => {
     const {database,username,password,host,port,dialect} = config[mode]
     // console.log(`database:${database},username:${username},password:${password},host:${host},port:${port},dialect:${dialect}`)
+    try 
+    {
     const connection = await mysql.createConnection({
         host: host,
         user : username,
         password: password,
         port: port
-    }).catch(err => console.log(err));
-
+    });
     await connection.query(`CREATE DATABASE IF NOT EXISTS \`${database}\` CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_hungarian_ci' ;`)
+    }
+    catch (error) 
+    {
+        console.log(error);
+    }
+    
 
     // const sequelize = new Sequelize(database,username,password,{dialect: dialect})
 };
