@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       this.hasMany(models.media,{foreignKey:"user_ID"})
       this.hasMany(models.thread,{foreignKey:"user_ID"})
       this.hasMany(models.comment,{foreignKey:"user_ID"})
+      this.hasOne(models.session_store,{sourceKey:"ID"})
     }
   };
   user.init({
