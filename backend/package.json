@@ -6,12 +6,12 @@
     "start": "nodemon app.js"
   },
   "dependencies": {
-    "connect-session-sequelize": "^7.1.5",
     "cookie-parser": "~1.4.6",
     "cors": "^2.8.5",
     "debug": "~4.3.4",
     "dotenv": "^16.0.3",
     "express": "^4.18.2npm ",
+    "express-mysql-session": "^2.1.8",
     "express-session": "^1.17.3",
     "express-validator": "^6.14.3",
     "http-errors": "~2.0.0",
