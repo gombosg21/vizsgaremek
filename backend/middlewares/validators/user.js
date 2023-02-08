@@ -8,7 +8,7 @@ var date = new Date();
 var day = date.getDay();
 var month = date.getMonth();
 var year = date.getFullYear();
-var currdate = new Date(year,month,day).toJSON();
+var currdate = new Date(year,month,day).getTime();
 
 
 exports.registerRules = () => 
@@ -22,7 +22,7 @@ exports.registerRules = () =>
     valiadtor.body('re_password').custom((value,{req,loc,path}) => {if(value !== req.body.password) {throw new Error("password fields must match")}else{return value;}}),
     valiadtor.body('birth_date').notEmpty().withMessage("select a birth date"),
     valiadtor.body('birth_date').isDate().withMessage("invalid date format"),
-    valiadtor.body('birth_date').toDate().custom((value,{req,loc,path}) => {if(value.getTime() > currdate.getTime()){throw new Error("fo future dates allowed")}else{return value;}}),
+    valiadtor.body('birth_date').toDate().custom((value,{req,loc,path}) => {if(value.getTime() > currdate){throw new Error("fo future dates allowed")}else{return value;}}),
     valiadtor.body('gender').notEmpty().withMessage("select a gender"),
     valiadtor.body('gender').isInt({min:0,max:2}).withMessage("unknown gender type")
 ]
