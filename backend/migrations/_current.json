@@ -17,6 +17,9 @@
                         "key": "ID"
                     },
                     "field": "thread_ID",
+                    "name": "thread_ID",
+                    "onDelete": "NO ACTION",
+                    "onUpdate": "CASCADE",
                     "seqType": "Sequelize.INTEGER"
                 },
                 "user_ID": {
@@ -26,6 +29,9 @@
                         "key": "ID"
                     },
                     "field": "user_ID",
+                    "name": "user_ID",
+                    "onDelete": "NO ACTION",
+                    "onUpdate": "CASCADE",
                     "seqType": "Sequelize.INTEGER"
                 },
                 "content": {
@@ -66,28 +72,6 @@
                     },
                     "field": "deletedAt",
                     "seqType": "Sequelize.DATE"
-                },
-                "threadID": {
-                    "allowNull": true,
-                    "references": {
-                        "model": "threads",
-                        "key": "ID"
-                    },
-                    "onDelete": "SET NULL",
-                    "onUpdate": "CASCADE",
-                    "field": "threadID",
-                    "seqType": "Sequelize.INTEGER"
-                },
-                "userID": {
-                    "allowNull": true,
-                    "references": {
-                        "model": "users",
-                        "key": "ID"
-                    },
-                    "onDelete": "SET NULL",
-                    "onUpdate": "CASCADE",
-                    "field": "userID",
-                    "seqType": "Sequelize.INTEGER"
                 }
             },
             "indexes": []
@@ -109,6 +93,8 @@
                         "key": "ID"
                     },
                     "field": "user_ID",
+                    "onDelete": "NO ACTION",
+                    "onUpdate": "CASCADE",
                     "seqType": "Sequelize.INTEGER"
                 },
                 "data": {
@@ -166,17 +152,6 @@
                     },
                     "field": "deletedAt",
                     "seqType": "Sequelize.DATE"
-                },
-                "userID": {
-                    "allowNull": true,
-                    "references": {
-                        "model": "users",
-                        "key": "ID"
-                    },
-                    "onDelete": "SET NULL",
-                    "onUpdate": "CASCADE",
-                    "field": "userID",
-                    "seqType": "Sequelize.INTEGER"
                 }
             },
             "indexes": []
@@ -200,6 +175,9 @@
                         "key": "ID"
                     },
                     "field": "media_ID",
+                    "primaryKey": true,
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
                     "seqType": "Sequelize.INTEGER"
                 },
                 "createdAt": {
@@ -212,18 +190,7 @@
                     "field": "updatedAt",
                     "seqType": "Sequelize.DATE"
                 },
-                "mediumID": {
-                    "primaryKey": true,
-                    "references": {
-                        "model": "media",
-                        "key": "ID"
-                    },
-                    "onDelete": "CASCADE",
-                    "onUpdate": "CASCADE",
-                    "field": "mediumID",
-                    "seqType": "Sequelize.INTEGER"
-                },
-                "tagName": {
+                "tag": {
                     "primaryKey": true,
                     "references": {
                         "model": "tags",
@@ -231,8 +198,67 @@
                     },
                     "onDelete": "CASCADE",
                     "onUpdate": "CASCADE",
-                    "field": "tagName",
+                    "field": "tag",
                     "seqType": "Sequelize.STRING"
+                }
+            },
+            "indexes": []
+        },
+        "session_stores": {
+            "tableName": "session_stores",
+            "schema": {
+                "ID": {
+                    "allowNull": false,
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "field": "ID",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "user_ID": {
+                    "allowNull": false,
+                    "references": {
+                        "model": "user",
+                        "key": "ID"
+                    },
+                    "field": "user_ID",
+                    "onDelete": "NO ACTION",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "sid": {
+                    "allowNull": false,
+                    "field": "sid",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "data": {
+                    "field": "data",
+                    "seqType": "Sequelize.TEXT"
+                },
+                "created": {
+                    "allowNull": false,
+                    "field": "created",
+                    "seqType": "Sequelize.DATE"
+                },
+                "expires": {
+                    "allowNull": false,
+                    "field": "expires",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "userID": {
+                    "allowNull": true,
+                    "references": {
+                        "model": "users",
+                        "key": "ID"
+                    },
+                    "onDelete": "SET NULL",
+                    "onUpdate": "CASCADE",
+                    "field": "userID",
+                    "seqType": "Sequelize.INTEGER"
                 }
             },
             "indexes": []
@@ -256,6 +282,17 @@
                     "allowNull": false,
                     "field": "updatedAt",
                     "seqType": "Sequelize.DATE"
+                },
+                "tag": {
+                    "allowNull": true,
+                    "references": {
+                        "model": "media_taglists",
+                        "key": "tag_name"
+                    },
+                    "onDelete": "SET NULL",
+                    "onUpdate": "CASCADE",
+                    "field": "tag",
+                    "seqType": "Sequelize.STRING"
                 }
             },
             "indexes": []
@@ -277,6 +314,8 @@
                         "key": "ID"
                     },
                     "field": "media_ID",
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
                     "seqType": "Sequelize.INTEGER"
                 },
                 "user_ID": {
@@ -286,6 +325,8 @@
                         "key": "ID"
                     },
                     "field": "user_ID",
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
                     "seqType": "Sequelize.INTEGER"
                 },
                 "name": {
@@ -335,17 +376,6 @@
                     "field": "deletedAt",
                     "seqType": "Sequelize.DATE"
                 },
-                "mediumID": {
-                    "allowNull": true,
-                    "references": {
-                        "model": "media",
-                        "key": "ID"
-                    },
-                    "onDelete": "SET NULL",
-                    "onUpdate": "CASCADE",
-                    "field": "mediumID",
-                    "seqType": "Sequelize.INTEGER"
-                },
                 "userID": {
                     "allowNull": true,
                     "references": {
@@ -355,6 +385,17 @@
                     "onDelete": "SET NULL",
                     "onUpdate": "CASCADE",
                     "field": "userID",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "mediumID": {
+                    "allowNull": true,
+                    "references": {
+                        "model": "media",
+                        "key": "ID"
+                    },
+                    "onDelete": "SET NULL",
+                    "onUpdate": "CASCADE",
+                    "field": "mediumID",
                     "seqType": "Sequelize.INTEGER"
                 }
             },
@@ -481,6 +522,6 @@
     },
     "path": "C:\\Users\\smat3\\Desktop\\exam\\vizsgaremek\\backend\\migrations\\_current.json",
     "backupPath": "C:\\Users\\smat3\\Desktop\\exam\\vizsgaremek\\backend\\migrations\\_current_bak.json",
-    "exists": true,
-    "revision": 4
+    "exists": false,
+    "revision": 1
 }
