@@ -34,15 +34,18 @@ exports.registerRules = () => {
 }
 
 exports.searchRules = () => {
-    return [oneOf(
+    return [validator.oneOf([
+        validator.query('name').exists(),
+        validator.query('date_start').exists(),
+        validator.query('date_end').exists(),
+        validator.query('gender').exists()
+    ],"empty query"),
         [
-            validator.query('name').isAlphanumeric().withMessage('name cannot contain special characters'),
-            validator.query('date_start').exists().isDate().optional({ nullable: true }).withMessage("invalid date format"),
-            validator.query('date_end').exists().isDate().optional({ nullable: true }).withMessage("invalid date format"),
-            validator.query('gender').exists().isInt({ min: gender_start, max: gender_end }).optional({ nullable: true }).withMessage("unknown gender type")
-        ]
-    )
-    ]
+            validator.query('name').isAlphanumeric().optional({nullable:true,checkFalsy:true}).withMessage('name cannot contain special characters'),
+            validator.query('date_start').isDate().optional({nullable:true,checkFalsy:true}).withMessage("invalid date format"),
+            validator.query('date_end').isDate().optional({nullable:true,checkFalsy:true}).withMessage("invalid date format"),
+            validator.query('gender').isInt({ min: gender_start, max: gender_end }).optional({nullable:true,checkFalsy:true}).withMessage("unknown gender type")
+        ],]
 }
 
 exports.checkIfNameConflicts = async (req, res, next) => {
