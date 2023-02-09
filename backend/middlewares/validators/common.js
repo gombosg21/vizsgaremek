@@ -11,6 +11,13 @@ exports.validate = async (req,res,next) =>
 
     const errorList = [];
     errors.array().map(err => errorList.push({[err.param]:err.msg}))
+    try {
+    errors.array().flatMap(({nestedErrors}) => nestedErrors.map(err => errorList.push({[err.param]:err.msg})))
+    }
+    catch (err) 
+    {
+    console.log(err)
+    }
 
     return res.status(422).json({error: errorList})
 };
