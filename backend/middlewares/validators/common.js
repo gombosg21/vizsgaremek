@@ -1,8 +1,8 @@
-const valiadtor = require('express-validator');
+const validator = require('express-validator');
 
 exports.validate = async (req,res,next) => 
 {
-    const errors = valiadtor.validationResult(req);
+    const errors = validator.validationResult(req);
 
     if (errors.isEmpty()) 
     {

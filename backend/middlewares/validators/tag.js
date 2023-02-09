@@ -1,11 +1,11 @@
-const valiadtor = require('express-validator');
+const validator = require('express-validator');
 const tag = require('../../models').tag;
 
 exports.tagRules = () => {
     return[
-        valiadtor.body("tag_name").notEmpty().withMessage("tag must not be empty"),
-        valiadtor.body("tag_name").isAlpha().withMessage("tag can only contain letters"),
-        valiadtor.body("tag_name").isLength({max:50}).withMessage("tag can only be 50 characters long max")
+        validator.body("tag_name").notEmpty().withMessage("tag must not be empty"),
+        validator.body("tag_name").isAlpha().withMessage("tag can only contain letters"),
+        validator.body("tag_name").isLength({max:50}).withMessage("tag can only be 50 characters long max")
     ]
 };
 

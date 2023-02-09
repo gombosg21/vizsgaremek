@@ -1,4 +1,4 @@
-const valiadtor = require('express-validator');
+const validator = require('express-validator');
 const media = require('../../models').media;
 const tags = require('../../models').tag;
 
@@ -6,15 +6,15 @@ const tags = require('../../models').tag;
 exports.uploadRules = () => 
 {
     return [
-        valiadtor.body('imgData').notEmpty().withMessage("cannot upload, no image given"),
-        valiadtor.body('placeholder').notEmpty().withMessage("placeholder text cannot be empty")
+        validator.body('imgData').notEmpty().withMessage("cannot upload, no image given"),
+        validator.body('placeholder').notEmpty().withMessage("placeholder text cannot be empty")
     ]
 }
 
 exports.editRules = () => 
 {
     return [
-        valiadtor.body('placeholder').notEmpty().withMessage("placeholder text cannot be empty")
+        validator.body('placeholder').notEmpty().withMessage("placeholder text cannot be empty")
     ]
 }
 
