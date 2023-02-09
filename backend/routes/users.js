@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const userController = require('../controllers/user');
 const userValidator = require('../middlewares/validators/user');
+const commonValidation = require('../middlewares/validators/common');
 
 // get profile
 // edit profile
@@ -20,15 +21,15 @@ router.get('/user/:userID/logout', userValidator.checkIfUserIDExsits, userContro
 router.get('/user/:name/password-reset', userValidator.checkIfNameExsist, userController.resetPassword);
 
 // post create user
-router.post('/user/register', userValidator.checkIfNameConflicts, userValidator.registerRules(), userValidator.validate, userController.createUser);
+router.post('/user/register', userValidator.checkIfNameConflicts, userValidator.registerRules(), commonValidation.validate, userController.createUser);
 
 // patch change password
 router.patch('/user/:userID/change-password', userValidator.checkIfUserIDExsits, userController.changePassword);
 
 // patch change user register data
-router.patch('/user/:userID/register/edit')
+router.patch('/user/register/:userID')
 
 // get search user by params name, birthdate, gender
-router.get('/user/search/:name.:date.:gender')
+router.get('/user?',userValidator.searchRules,commonValidation.validate,userController.findUser)
 
 module.exports = router;
