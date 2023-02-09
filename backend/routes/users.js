@@ -30,6 +30,6 @@ router.patch('/user/:userID/change-password', userValidator.checkIfUserIDExsits,
 router.patch('/user/register/:userID')
 
 // get search user by params name, birthdate, gender
-router.get('/user?',userValidator.searchRules,commonValidation.validate,userController.findUser)
+router.get('/user',userValidator.searchRules(),commonValidation.validate,userController.findUser)
 
 module.exports = router;
