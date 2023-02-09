@@ -167,25 +167,21 @@ exports.deleteUser = async (req, res, next) => {
 };
 
 exports.findUser = async (req, res, next) => {
-    const Name = req.query.name;
-    var SDate = req.query.date_start;
-    var EDate = req.query.date_end;
-    var Gender = [req.query.gender];
-
-    try {
         var date = new Date();
         var day = date.getDay();
         var month = date.getMonth();
         var year = date.getFullYear();
         var currdate = new Date(year, month, day).toJSON();
 
-        switch (null) {
-            case (SDate): { SDate = "1000-01-01"; }
-            case (EDate): { EDate = currdate }
-            case (Gender): { Gender = [0, 1, 2] }
-        }
+    const Name =  req.query.name ?? "";
+    var SDate = req.query.date_start ?? "1000-01-01";
+    var EDate = req.query.date_end ?? currdate;
+    var Gender = [req.query.gender][0] == undefined ? [0,1,2] : [req.query.gender] ;
 
-        const UserList = await user.findAll({ where: { name: { [Op.like]: `%${Name}%` }, birth_date: { [Op.gt]: SDate, [Op.lt]: EDate }, gender: { [Op.in]: Gender } } });
+    console.log(Name,SDate,EDate,Gender)
+
+    try {
+        const UserList = await user.findAll({ where: { name: { [Op.like]: `%${Name}%` }, birth_date: { [Op.gt]: SDate, [Op.lt]: EDate }, gender: { [Op.in]: Gender } },attributes:['name','gender','birth_date'] });
         if (UserList === null) {
             res.status(404).json({ "msg": "couldnt find results matching query parameters, try a different search" })
         }
