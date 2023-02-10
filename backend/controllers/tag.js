@@ -29,7 +29,7 @@ exports.updateTag = async (req,res,next) =>
 
     try 
     {
-        const UpdateTag = await tag.findOne({where:{id :ID}});
+        const UpdateTag = await tag.findOne({where:{ID :ID}});
         UpdateTag.set({
             name: tagName
         });
@@ -37,7 +37,7 @@ exports.updateTag = async (req,res,next) =>
         await UpdateTag.save();
 
         res.status(200)
-        .json(UpdateTag);
+        .json(UpdateTag.name);
     }    
     catch (error) {
         console.log(error);
@@ -51,10 +51,10 @@ exports.deleteTag = async (req,res,next) =>
 
     try 
     {
-        const deleteTag = await tag.findOne({where:{id : ID}})
+        const deleteTag = await tag.findOne({ where: { ID: ID } });
         await deleteTag.destroy();
         res.status(200)
-        .json(deleteTag);
+        .json(deleteTag.ID);
     }    
     catch (error) {
         console.log(error);
