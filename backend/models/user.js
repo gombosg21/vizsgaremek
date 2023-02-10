@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
     birth_date:{type:DataTypes.DATEONLY,allowNull:false}, 
     profile_description:{type:DataTypes.TEXT},
     profile_visibility:{type:DataTypes.INTEGER,allowNull:false,defaultValue:0},
-    profile_picture: {type:DataTypes.INTEGER,allowNull:true,references:{model:'media',key:'ID',},onDelete:'set null',onUpdate:'cascade'},
+    profile_pic: {type:DataTypes.INTEGER,allowNull:true,references:{model:'media',key:'ID',},onDelete:'set null',onUpdate:'cascade'},
     gender:{type:DataTypes.INTEGER,allowNull:false},
     deletedAt:{type:DataTypes.DATE,allowNull:true,defaultValue:null}
   }, {
