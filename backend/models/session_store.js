@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsTo(models.user,{foreignKey:"user_ID"})
+      this.belongsTo(models.user,{foreignKey:"user_ID",targetKey:"ID"})
     }
   }
   session_store.init({
