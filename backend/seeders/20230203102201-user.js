@@ -10,12 +10,17 @@ module.exports = {
     var users = [];
     for (let i = 0; i < 10 ; i++) 
     {
+      var gender = Math.round(Math.random());
+      var genderString = gender ? "male" : "female" ;
+      var firstName = fake.faker.name.firstName(genderString).replace(/\s+/g, '');
+      var lastName = fake.faker.name.lastName(genderString).replace(/\s+/g, '');
+
       users.push({
-        name : fake.faker.name.fullName(),
+        name : firstName + lastName,
         password: fake.faker.internet.password((8 + Math.round(Math.random()*4)),false),
-        email: fake.faker.internet.email(),
+        email: fake.faker.internet.email(firstName,lastName),
         birth_date: fake.faker.date.birthdate(),
-        gender: Math.round(Math.random()*2)
+        gender: gender + Math.round(Math.random())
       })
     }
     await queryInterface.bulkInsert('users',users);
