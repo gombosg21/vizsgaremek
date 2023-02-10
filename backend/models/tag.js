@@ -21,8 +21,9 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'tag',
     timestamps: true,
+    updatedAt:false,
     createdAt: false,
-    deletedAt: false,
+    deletedAt: true,
     paranoid: true
   });
   return tag;
