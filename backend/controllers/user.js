@@ -10,7 +10,7 @@ exports.getProfile = async (req, res, next) => {
         const UserProfile = await user.findOne(
             {
                 where: { ID: ID },
-                attributes: ['name', 'register_date', 'gender', 'birth_date', 'profile_description', 'profile_picture', 'type'],
+                attributes: ['name', 'register_date', 'gender', 'birth_date', 'profile_description', 'profile_pic', 'type'],
                 include: { model: media }
             });
         res.status(200)
