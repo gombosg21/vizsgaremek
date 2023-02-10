@@ -1,4 +1,3 @@
-const { oneOf } = require('express-validator');
 const validator = require('express-validator');
 const user = require('../../models').user;
 
@@ -46,6 +45,29 @@ exports.searchRules = () => {
             validator.query('date_end').isDate().optional({nullable:true,checkFalsy:true}).withMessage("invalid date format"),
             validator.query('gender').isInt({ min: gender_start, max: gender_end }).optional({nullable:true,checkFalsy:true}).withMessage("unknown gender type")
         ],]
+}
+
+exports.updateProfileRules = () => {
+    return [validator.oneOf([
+        validator.body("profile_description").exists(),
+        validator.body("profile_visibility").exists(),
+        validator.body("profile_picture").exists()
+    ],"no changes, aborting"), 
+        [
+            validator.body("profile_description").isAscii().optional({nullable:true,checkFalsy:true}).withMessage("no advanced special characters allowed"),
+            validator.body("profile_visibility").isInt({min:0,max:3}).optional({nullable:true,checkFalsy:true}).withMessage("unknown visibility level"),
+            validator.body("profile_picture").isInt().optional({nullable:true,checkFalsy:true}).withMessage("profile picture must be a numeric ID")
+        ]
+    ]
+}
+
+exports.changePasswordRules = () => {
+    return [
+        validator.body('password').notEmpty().withMessage("password cannot be empty"),
+        validator.body('password').isLength({ min: password_min, max: password_max }).withMessage(`password must be within ${password_min} and ${password_max} characters long`),
+        validator.body('password').isStrongPassword().withMessage("too weak password, try a different one"),
+        validator.body('re_password').custom((value, { req, loc, path }) => { if (value !== req.body.password) { throw new Error("password fields must match") } else { return value; } }),
+    ]
 }
 
 exports.checkIfNameConflicts = async (req, res, next) => {
