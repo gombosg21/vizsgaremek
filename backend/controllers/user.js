@@ -66,7 +66,7 @@ exports.login = async (req, res, next) => {
     try {
         if (User.Password == Password) {
             res.status(200)
-                .redirect('/user/' + User.ID);
+                .redirect('/api/v/0.1/user/' + User.ID);
         }
         else {
             res.status(401)
@@ -142,7 +142,7 @@ exports.createUser = async (req, res, next) => {
         // email.sendVerfyEmail(User.Email)
 
         const NewUser = await user.findOne({ where: { name: UserName } });
-        res.redirect('/user/' + NewUser.ID);
+        res.redirect('/api/v/0.1/user/' + NewUser.ID);
     }
     catch (error) {
         console.log(error);
@@ -156,8 +156,11 @@ exports.deleteUser = async (req, res, next) => {
 
     try {
         const User = await user.findOne({ where: { ID: ID } });
+        User.set({
+            deleted: true
+        })
         await User.destroy();
-        res.status(200)
+        res.json(User.ID)
             .redirect('/');
     }
     catch (error) {
