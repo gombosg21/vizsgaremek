@@ -33,9 +33,11 @@ app.use(cors(corsOptions));
 
 app.use(session(auth.sessionData))
 
+const version = 0.1;
+
 // app.use('/', indexRouter);
-app.use(usersRouter);
-app.use(mediaRouter);
+app.use(`/api/v/${version}`,usersRouter);
+app.use(`/api/v/${version}`,mediaRouter);
 
 //catch 404 and forward to error handler
 app.use(function(req, res, next) {
