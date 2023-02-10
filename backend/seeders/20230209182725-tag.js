@@ -10,11 +10,11 @@ module.exports = {
     for (let i = 0; i < 10; i++) 
     {
       tags.push({
-        name : fake.faker.word()
+        name : fake.faker.word.noun()
       });
     };
 
-    await queryInterface.bulkInsert('tag',tags)
+    await queryInterface.bulkInsert('tags',tags)
     /**
      * Add seed commands here.
      *
@@ -33,6 +33,6 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
-    await queryInterface.bulkDelete('tag', null, {});
+    await queryInterface.bulkDelete('tags', null, {});
   }
 };
