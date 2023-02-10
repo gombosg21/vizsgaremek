@@ -234,6 +234,14 @@
                     "field": "data",
                     "seqType": "Sequelize.TEXT"
                 },
+                "logged_in": {
+                    "allowNull": false,
+                    "defaultValue": {
+                        "value": false
+                    },
+                    "field": "logged_in",
+                    "seqType": "Sequelize.BOOLEAN"
+                },
                 "created": {
                     "allowNull": false,
                     "field": "created",
@@ -522,6 +530,6 @@
     },
     "path": "C:\\Users\\smat3\\Desktop\\exam\\vizsgaremek\\backend\\migrations\\_current.json",
     "backupPath": "C:\\Users\\smat3\\Desktop\\exam\\vizsgaremek\\backend\\migrations\\_current_bak.json",
-    "exists": false,
-    "revision": 1
+    "exists": true,
+    "revision": 2
 }

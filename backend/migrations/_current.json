@@ -159,14 +159,14 @@
         "media_taglists": {
             "tableName": "media_taglists",
             "schema": {
-                "tag_name": {
+                "tag_ID": {
                     "allowNull": false,
                     "references": {
                         "model": "tag",
-                        "key": "name"
+                        "key": "ID"
                     },
-                    "field": "tag_name",
-                    "seqType": "Sequelize.STRING"
+                    "field": "tag_ID",
+                    "seqType": "Sequelize.INTEGER"
                 },
                 "media_ID": {
                     "allowNull": false,
@@ -190,16 +190,16 @@
                     "field": "updatedAt",
                     "seqType": "Sequelize.DATE"
                 },
-                "tag": {
+                "tagID": {
                     "primaryKey": true,
                     "references": {
                         "model": "tags",
-                        "key": "name"
+                        "key": "ID"
                     },
                     "onDelete": "CASCADE",
                     "onUpdate": "CASCADE",
-                    "field": "tag",
-                    "seqType": "Sequelize.STRING"
+                    "field": "tagID",
+                    "seqType": "Sequelize.INTEGER"
                 }
             },
             "indexes": []
@@ -274,33 +274,37 @@
         "tags": {
             "tableName": "tags",
             "schema": {
+                "ID": {
+                    "autoIncrement": true,
+                    "primaryKey": true,
+                    "allowNull": false,
+                    "field": "ID",
+                    "references": {
+                        "model": "media_taglists",
+                        "key": "tag_ID"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.INTEGER"
+                },
                 "name": {
                     "unique": true,
-                    "primaryKey": true,
                     "allowNull": false,
                     "field": "name",
                     "seqType": "Sequelize.STRING"
                 },
-                "createdAt": {
-                    "allowNull": false,
-                    "field": "createdAt",
+                "deletedAt": {
+                    "allowNull": true,
+                    "defaultValue": {
+                        "value": null
+                    },
+                    "field": "deletedAt",
                     "seqType": "Sequelize.DATE"
                 },
                 "updatedAt": {
                     "allowNull": false,
                     "field": "updatedAt",
                     "seqType": "Sequelize.DATE"
-                },
-                "tag": {
-                    "allowNull": true,
-                    "references": {
-                        "model": "media_taglists",
-                        "key": "tag_name"
-                    },
-                    "onDelete": "SET NULL",
-                    "onUpdate": "CASCADE",
-                    "field": "tag",
-                    "seqType": "Sequelize.STRING"
                 }
             },
             "indexes": []
@@ -531,5 +535,5 @@
     "path": "C:\\Users\\smat3\\Desktop\\exam\\vizsgaremek\\backend\\migrations\\_current.json",
     "backupPath": "C:\\Users\\smat3\\Desktop\\exam\\vizsgaremek\\backend\\migrations\\_current_bak.json",
     "exists": true,
-    "revision": 2
+    "revision": 3
 }
