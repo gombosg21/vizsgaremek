@@ -1,0 +1,35 @@
+{} represent values
+
+GET /api/v/0.1/user/{ID}
+returs one user by ID with fields: name,register_date,gender,birth_date,profile_description,profile_picture,profile_visibility,type
+later may be blocked if auth is not provided, depending on profile_visibility
+
+PATCH /api/v/0.1/user/{ID}
+updates one user identified by ID, fields: profile_description,profile_picture,profile_visibility, least one must be provided in body as json
+later will be only avalibe if auth is present
+
+DELETE /api/v/0.1/user/{ID}
+deletes one user identified by ID, returns ID. Non-prenament, yet irreversible for now.
+later will be only avalibe if auth is present
+
+GET /api/v/0.1/user?name={name}&date_start={date}&date_end={date}&gender={gender}
+one to all fields can be provided, gender must be ehiter 0,1 or 2
+returs all matching users by query params with fields: name,gender,birth_date
+
+GET /api/v/0.1/user/{NAME}/login
+requires password as body json, for now unencrypted, for now only redirects to /api/v/0.1/user/{ID} upon success, will serve auth cookie later
+
+GET /api/v/0.1/user/{ID}/logout
+for now only redirects to /, later will redirect to /api/v/0.1/index and destory auth cookie
+
+GET /api/v/0.1/{USER}/reset-password
+for now only redirects to /, later will send email w password reset schema
+
+POST /api/v/0.1/user/register
+requires name,gender,birth_date,email,password,re-password, upon success creates a new user.
+
+POST /api/v/0.1/user/:{ID}/change-password
+requires password,re-password, upon succes updates password. later will be protected by auth.
+
+
+
