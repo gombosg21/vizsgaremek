@@ -53,7 +53,8 @@ exports.deleteTag = async (req,res,next) =>
     {
         const deleteTag = await tag.findOne({where:{id : ID}})
         await deleteTag.destroy();
-        res.status(200).json(deleteTag);
+        res.status(200)
+        .json(deleteTag);
     }    
     catch (error) {
         console.log(error);
@@ -63,12 +64,12 @@ exports.deleteTag = async (req,res,next) =>
 
 exports.findTags = async (req,res,next) => 
 {
-    const tagName = req.params.tag_name;
+    const tagName = req.query.tag_name;
 
     try 
     {
-        const TagArray = await tag.findAll({where:{name:{[Op.like]:`%${tagName}%`}}})
-        if (TagArray === null) 
+        const TagArray = await tag.findAll({where:{name:{[Op.like]:`%${tagName}%`}},attributes:['name']})
+        if (TagArray == null) 
         {
             res.status(404).json({"msg":"couldnt find results matching query parameters, try a different search"})
         } else 
