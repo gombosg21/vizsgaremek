@@ -18,7 +18,7 @@ router.get('/user/:name/login', userValidator.checkIfNameExsist, userController.
 router.get('/user/:userID/logout', userValidator.checkIfUserIDExsits, userController.logout)
 
 // get reset password
-router.get('/user/:name/password-reset', userValidator.checkIfNameExsist, userController.resetPassword);
+router.get('/user/:name/reset-password', userValidator.checkIfNameExsist, userController.resetPassword);
 
 // post create user
 router.post('/user/register', userValidator.checkIfNameConflicts, userValidator.registerRules(), commonValidation.validate, userController.createUser);
