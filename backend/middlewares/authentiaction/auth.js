@@ -20,7 +20,7 @@ const sessionStore = new mysqlStore({
     port: port,
     createDatabaseTable: false,
     schema: {
-        tableName: 'session_store',
+        tableName: 'session_stores',
         columnNames: {
             session_id :'sid',
             expires: 'expires',
