@@ -15,20 +15,10 @@ module.exports = {
       },
       media_ID: {
         allowNull:false,
-        references: 
-        {
-          model:'media',
-          key: 'ID'
-        },
         type: Sequelize.INTEGER
       },
       user_ID: {
         allowNull:false,
-        references: 
-        {
-          model:'users',
-          key: 'ID'
-        },
         type: Sequelize.INTEGER
       },
       name: {

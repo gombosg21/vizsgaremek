@@ -16,21 +16,11 @@ module.exports = {
       },
       thread_ID: {
         type: Sequelize.INTEGER,
-        allowNull:false,
-        references:
-        {
-          model:'threads',
-          key:'ID'
-        }
+        allowNull:false
       },
       user_ID: {
         type: Sequelize.INTEGER,
-        allowNull:false,
-        references: 
-        {
-          model:'users',
-          key:'ID'
-        }
+        allowNull:false
       },
       content: {
         type: Sequelize.TEXT,

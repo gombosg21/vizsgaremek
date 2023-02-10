@@ -9,13 +9,11 @@ module.exports = {
     await queryInterface.createTable('media_taglists', {
       tag_name: {
         allowNull: false,
-        type: Sequelize.STRING,
-        references:{model:'tags',key:'name'}
+        type: Sequelize.STRING
       },
       media_ID: {
         allowNull:false,
-        type: Sequelize.INTEGER,
-        references: {model:'media',key:'ID'}
+        type: Sequelize.INTEGER
       },
     });
   },

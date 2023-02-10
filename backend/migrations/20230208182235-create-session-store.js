@@ -4,16 +4,24 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('session_stores', {
       ID: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        allowNull:false,
+        autoIncrement:true
       },
       user_ID: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull:true
       },
       session_ID: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        unique:true,
+        allowNull:false
       },
       created: {
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        allowNull:false,
+        defaultValue:Sequelize.NOW
       },
       expires: {
         type: Sequelize.DATE

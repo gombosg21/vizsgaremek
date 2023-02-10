@@ -66,10 +66,13 @@ module.exports = {
         defaultValue: 0,
         type: Sequelize.INTEGER
       },
-      // profile_pic: {
-      //   type: Sequelize.INTEGER,
-      //   references:{model:'media',key:'ID'}
-      // }
+      profile_pic: {
+      type: Sequelize.INTEGER
+      },
+      gender: {
+        allowNull:false,
+        type: Sequelize.INTEGER
+      }
     });
   },
   async down(queryInterface, Sequelize) {

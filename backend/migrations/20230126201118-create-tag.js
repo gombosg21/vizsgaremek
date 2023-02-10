@@ -3,8 +3,13 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('tags', {
-      name: {
+      ID: {
+        allowNull: false,
+        autoIncrement: true,
         primaryKey: true,
+        type: Sequelize.INTEGER
+      },
+      name: {
         allowNull: false,
         unique:true,
         type: Sequelize.STRING
