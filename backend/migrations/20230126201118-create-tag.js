@@ -13,6 +13,12 @@ module.exports = {
         allowNull: false,
         unique:true,
         type: Sequelize.STRING
+      },
+      deletedAt: 
+      {
+          allowNull:true,
+          defaultValue:null,
+          type:Sequelize.DATE
       }
     });
   },

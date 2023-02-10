@@ -13,10 +13,22 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull:true
       },
-      session_ID: {
+      sid: {
         type: Sequelize.INTEGER,
         unique:true,
         allowNull:false
+      },
+      data: 
+      {
+        allowNull:true,
+        defaultValue:null,
+        type:Sequelize.TEXT
+      },
+      logged_id: 
+      {
+        allowNull:false,
+        defaultValue:false,
+        type:Sequelize.BOOLEAN
       },
       created: {
         type: Sequelize.DATE,
@@ -24,6 +36,7 @@ module.exports = {
         defaultValue:Sequelize.NOW
       },
       expires: {
+        allowNull:false,
         type: Sequelize.DATE
       }
     });

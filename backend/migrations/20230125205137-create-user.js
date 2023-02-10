@@ -72,6 +72,11 @@ module.exports = {
       gender: {
         allowNull:false,
         type: Sequelize.INTEGER
+      },
+      deletedAt:{
+        allowNull:true,
+        defaultValue:null,
+        type:Sequelize.DATE
       }
     });
   },

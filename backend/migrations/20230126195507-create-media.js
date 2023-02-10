@@ -34,7 +34,6 @@ module.exports = {
       last_edit: {
         allowNull:false,
         defaultValue: Sequelize.NOW,
-        // onUpdate: Sequelize.NOW,
         type: Sequelize.DATE
       },
       descption: {
@@ -48,6 +47,12 @@ module.exports = {
       placeholder_text: {
         allowNull:false,
         type: Sequelize.TEXT
+      },
+      deletedAt:
+      {
+        allowNull:true,
+        defaultValue:null,
+        type: Sequelize.DATE
       }
     });
   },
