@@ -11,6 +11,7 @@ const DB = require('./util/db')
 // var indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const mediaRouter = require('./routes/media');
+const tagRouter = require('./routes/tag');
 
 const auth = require('./middlewares/authentiaction/auth')
 
@@ -38,6 +39,7 @@ const version = 0.1;
 // app.use('/', indexRouter);
 app.use(`/api/v/${version}`,usersRouter);
 app.use(`/api/v/${version}`,mediaRouter);
+app.use(`/api/v/${version}`,tagRouter)
 
 //catch 404 and forward to error handler
 app.use(function(req, res, next) {
