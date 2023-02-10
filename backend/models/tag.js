@@ -10,19 +10,20 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      this.belongsToMany(models.media,{through:models.media_taglist,foreignKey:"tag"})
+      this.belongsToMany(models.media,{through:models.media_taglist})
     }
   };
   tag.init({
-    name: {
-    type:DataTypes.STRING,
-    unique: true,
-    primaryKey: true,
-    allowNull: false
-  }
+    ID: {type:DataTypes.INTEGER, autoIncrement:true,primaryKey:true,allowNull:false},
+    name: {type:DataTypes.STRING,unique: true,allowNull: false },
+    deletedAt:{type:DataTypes.DATE,allowNull:true,defaultValue:null}
   }, {
     sequelize,
     modelName: 'tag',
+    timestamps: true,
+    createdAt: false,
+    deletedAt: false,
+    paranoid: true
   });
   return tag;
 };
