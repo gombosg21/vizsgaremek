@@ -176,9 +176,7 @@ exports.findUser = async (req, res, next) => {
     const Name =  req.query.name ?? "";
     var SDate = req.query.date_start ?? "1000-01-01";
     var EDate = req.query.date_end ?? currdate;
-    var Gender = [req.query.gender][0] == undefined ? [0,1,2] : [req.query.gender] ;
-
-    console.log(Name,SDate,EDate,Gender)
+    var Gender = [req.query.gender][0] == undefined ? [0,1,2] : [req.query.gender];
 
     try {
         const UserList = await user.findAll({ where: { name: { [Op.like]: `%${Name}%` }, birth_date: { [Op.gt]: SDate, [Op.lt]: EDate }, gender: { [Op.in]: Gender } },attributes:['name','gender','birth_date'] });
