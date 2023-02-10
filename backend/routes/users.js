@@ -8,7 +8,7 @@ const commonValidation = require('../middlewares/validators/common');
 // delete user
 router.route('/user/:userID')
     .get( userValidator.checkIfUserIDExsits, userController.getProfile)
-    .patch(userValidator.checkIfUserIDExsits, userController.editProfile)
+    .patch(userValidator.checkIfUserIDExsits,userValidator.updateProfileRules(),commonValidation.validate, userController.editProfile)
     .delete( userValidator.checkIfUserIDExsits, userController.deleteUser);
 
 // get login
@@ -24,7 +24,7 @@ router.get('/user/:name/password-reset', userValidator.checkIfNameExsist, userCo
 router.post('/user/register', userValidator.checkIfNameConflicts, userValidator.registerRules(), commonValidation.validate, userController.createUser);
 
 // patch change password
-router.patch('/user/:userID/change-password', userValidator.checkIfUserIDExsits, userController.changePassword);
+router.patch('/user/:userID/change-password', userValidator.checkIfUserIDExsits,userValidator.changePasswordRules() ,commonValidation.validate ,userController.changePassword);
 
 // patch change user register data
 router.patch('/user/register/:userID')
