@@ -9,14 +9,23 @@ exports.tagRules = () => {
     ]
 };
 
-exports.checkIfTagDoesNotExsist = async (req,res,next) => 
+exports.searchRules = () => 
+{
+    return[
+        validator.query("tag_name").notEmpty().withMessage("cannot process empty query"),
+        validator.query("tag_name").isAlpha().withMessage("tag can only contain letters"),
+        validator.query("tag_name").isLength({max:50}).withMessage("tag can only be 50 characters long max")
+    ]
+}
+
+exports.checkIfTagIDDoesNotExsits = async (req,res,next) => 
 {
 
-    const tagName = req.body.tag_name;
+    const ID = req.params.ID;
 
-    if (await tag.findOne({where:{name: tagName}} === null)) 
+    if (await tag.findOne({where:{id: ID}} === null)) 
     {
-        return res.status(406).json({"error":`${tagName} does not exsits`});
+        return res.status(406).json({"error":`tag with id:${ID} does not exsits`});
     } 
     else 
     {
@@ -24,7 +33,7 @@ exports.checkIfTagDoesNotExsist = async (req,res,next) =>
     }
 };
 
-exports.checkIfTagAlreadyExsits = async (req,res,next) => 
+exports.checkIfTagNameAlreadyExsits = async (req,res,next) => 
 {
 
     const tagName = req.body.tag_name;
