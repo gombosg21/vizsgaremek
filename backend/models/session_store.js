@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
     ID: {type:DataTypes.INTEGER,allowNull:false,primaryKey:true,autoIncrement:true},
     user_ID: {type:DataTypes.INTEGER,allowNull:false,references:{model:"user",key:"ID"}},
     sid: {type:DataTypes.INTEGER,allowNull:false},
-    data:{type:DataTypes.TEXT},
+    data:{type:DataTypes.TEXT,allowNull:true,defaultValue:null},
     logged_in:{type:DataTypes.BOOLEAN,allowNull:false,defaultValue:false},
     created: {type:DataTypes.DATE,allowNull:false},
     expires: {type:DataTypes.DATE,allowNull:false}
