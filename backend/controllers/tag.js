@@ -17,7 +17,7 @@ exports.createTag = async (req,res,next) =>
         .json(newTag);
     }    
     catch (error) {
-        console.log(error);
+        console.error(error);
         res.status(502);
     }
 }
@@ -40,7 +40,7 @@ exports.updateTag = async (req,res,next) =>
         .json(UpdateTag.name);
     }    
     catch (error) {
-        console.log(error);
+        console.error(error);
         res.status(502);
     }
 }
@@ -57,7 +57,7 @@ exports.deleteTag = async (req,res,next) =>
         .json(deleteTag.ID);
     }    
     catch (error) {
-        console.log(error);
+        console.error(error);
         res.status(502);
     }
 }
@@ -78,7 +78,7 @@ exports.findTags = async (req,res,next) =>
         }
     }    
     catch (error) {
-        console.log(error);
+        console.error(error);
         res.status(502);
     }
 }

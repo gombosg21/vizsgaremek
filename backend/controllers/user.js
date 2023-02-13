@@ -17,7 +17,7 @@ exports.getProfile = async (req, res, next) => {
             .json(UserProfile);
     }
     catch (error) {
-        console.log(error);
+        console.error(error);
         res.status(502);
     }
 };
@@ -51,7 +51,7 @@ exports.editProfile = async (req, res, next) => {
             .json(User.ID);
     }
     catch (error) {
-        console.log(error);
+        console.error(error);
         res.status(502);
     }
 };
@@ -75,7 +75,7 @@ exports.login = async (req, res, next) => {
         }
     }
     catch (error) {
-        console.log(error);
+        console.error(error);
         res.status(502);
     }
 };
@@ -94,7 +94,7 @@ exports.changePassword = async (req, res, next) => {
         res.status(200);
     }
     catch (error) {
-        console.log(error);
+        console.error(error);
         res.status(502);
     }
 
@@ -116,7 +116,7 @@ exports.resetPassword = async (req, res, next) => {
         // email.sendResetEmail(User.Email)
     }
     catch (error) {
-        console.log(error);
+        console.error(error);
         res.status(502);
     }
 };
@@ -145,7 +145,7 @@ exports.createUser = async (req, res, next) => {
         res.redirect('/api/v/0.1/user/' + NewUser.ID);
     }
     catch (error) {
-        console.log(error);
+        console.error(error);
         res.status(502);
     }
 };
@@ -164,7 +164,7 @@ exports.deleteUser = async (req, res, next) => {
             .redirect('/');
     }
     catch (error) {
-        console.log(error);
+        console.error(error);
         res.status(502);
     }
 };
@@ -192,7 +192,7 @@ exports.findUser = async (req, res, next) => {
         }
     }
     catch (error) {
-        console.log(error);
+        console.error(error);
         res.status(502);
     }
 }

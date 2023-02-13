@@ -12,7 +12,7 @@ exports.getThread = async (req, res, next) => {
     }
     catch
     (error) {
-        console.log(error);
+        console.error(error);
         res.status(502);
     }
 };
@@ -37,7 +37,7 @@ exports.CreateThread = async (req, res, next) => {
             .json(Thread);
     } catch
     (error) {
-        console.log(error);
+        console.error(error);
         res.status(502);
     }
 };
@@ -57,7 +57,7 @@ exports.editThread = async (req, res, next) => {
         res.status(200)
             .json(Thread);
     } catch (error) {
-        console.log(error);
+        console.error(error);
         res.status(502);
     }
 };
@@ -72,7 +72,7 @@ exports.deleteTread = async (req, res, next) => {
         res.send(200)
             .json(Thread.ID);
     } catch (error) {
-        console.log(error);
+        console.error(error);
         res.status(502);
     }
 };

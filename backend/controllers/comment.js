@@ -16,7 +16,7 @@ exports.createComment = async (req, res, next) => {
         res.status(200);
     }
     catch (error) {
-        console.log(error);
+        console.error(error);
         res.status(502);
     }
 }
@@ -37,7 +37,7 @@ exports.editComment = async (req, res, next) => {
             json(Comment);
     }
     catch (error) {
-        console.log(error);
+        console.error(error);
         res.status(502);
     }
 }
@@ -53,7 +53,7 @@ exports.deleteComment = async (req, res, next) => {
             .json(Comment.ID);
     }
     catch (error) {
-        console.log(error);
+        console.error(error);
         res.status(502);
     }
 }

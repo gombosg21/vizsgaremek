@@ -13,7 +13,7 @@ exports.viewOneMediaFromUser = async (req, res, next) => {
         res.status(200).json(MediaData);
     }
     catch (error) {
-        console.log(error);
+        console.error(error);
         res.status(502);
     }
 };
@@ -27,7 +27,7 @@ exports.getAllMediaFromUser = async (req, res, next) => {
         res.status(200).json(MediaList);
     }
     catch (error) {
-        console.log(error);
+        console.error(error);
         res.status(502);
     }
 };
@@ -39,7 +39,7 @@ exports.getMediaByTags = async (req, res, next) => {
         const MediaList = await media.findAll({ where: { user_ID: ownerID }, include: { model: tag, thorough: { model: taglist }, include: [{ name: [tags] }] } });
     }
     catch (error) {
-        console.log(error);
+        console.error(error);
         res.status(502);
     }
 
@@ -63,7 +63,7 @@ exports.uploadMedia = async (req, res, next) => {
 
     }
     catch (error) {
-        console.log(error);
+        console.error(error);
         res.status(502);
     }
 }
@@ -80,7 +80,7 @@ exports.deleteMedia = async (req, res, next) => {
             .json(Media.ID);
     }
     catch (error) {
-        console.log(error);
+        console.error(error);
         res.status(502);
     }
 }
@@ -102,7 +102,7 @@ exports.editMedia = async (req, res, next) => {
             .json(Media);
     }
     catch (error) {
-        console.log(error);
+        console.error(error);
         res.status(502);
     }
 }

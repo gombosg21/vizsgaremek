@@ -16,7 +16,7 @@ exports.validate = async (req,res,next) =>
     }
     catch (err) 
     {
-    console.log(err)
+    console.error(err)
     }
 
     return res.status(422).json({error: errorList})
