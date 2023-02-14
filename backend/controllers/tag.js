@@ -68,7 +68,7 @@ exports.findTags = async (req,res,next) =>
 
     try 
     {
-        const TagArray = await tag.findAll({where:{name:{[Op.like]:`%${tagName}%`}},attributes:['name']})
+        const TagArray = await tag.findAll({where:{name:{[Op.like]:`%${tagName}%`}},attributes:['name']});
         if (TagArray == null) 
         {
             res.status(404).json({"msg":"couldnt find results matching query parameters, try a different search"})
