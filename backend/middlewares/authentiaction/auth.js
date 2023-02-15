@@ -1,8 +1,11 @@
 const session = require("express-session");
+const express = require('express');
+const app = express();
 const crypto = require('crypto');
-const util = require('util');
 const mysqlStore = require("express-mysql-session")(session);
-const config = require("../../config/config.json")
+const config = require("../../config/config.json");
+const user = require('../../models').user;
+const sessionStorage = require("../../models").session_store;
 
 const mode = "development"
 
@@ -22,31 +25,54 @@ const sessionStore = new mysqlStore({
     schema: {
         tableName: 'session_stores',
         columnNames: {
-            session_id :'sid',
+            session_id: 'sid',
             expires: 'expires',
             data: 'data',
         }
     }
 })
 
-exports.sessionData = {
-        secret: secretKey,
-        resave: false,
-        saveUninitialized: false,
-        store: sessionStore,
+const sessionConfig = session({
+    name: "aaa",
+    secret: secretKey,
+    resave: false,
+    saveUninitialized: true,
+    store: sessionStore,
+    cookie: {
+        maxAge: (1000 * 60 * 60)
+    }
+});
+
+exports.getAuth = async (req, res, next) => {
+
+    const userName = req.params.name;
+    const password = req.body.password;
+
+    const UserPassword = await user.findOne({ where: { Name: userName }, attributes: ['password'] });
+
+    try {
+        if (UserPassword.password == password) {
+            const userID = await user.findOne({ where: { name: userName }, attributes: ['ID'] });
+            return sessionConfig(req,res,next);
+        }
+        else {
+            return res.status(401)
+                .redirect('/')
+                .json({ "msg": "bad password" });
+        }
+    }
+    catch (error) {
+        console.error(error);
+        return res.status(500);
+    }
 };
 
-exports.getAuth = (req, res, next) => {
-    var cookie = new session.Cookie();
-    res.send(cookie);
-    next();
-};
+exports.isAuth = async (req, res, next) => {
 
-exports.isAuth = (req, res, next) => {
+    const authDetails = req.session;
+    const user_ID = await sessionStorage.findOne({ where: { sid: authDetails.session_id }, attributes: ['user_ID'] })
 
-    const authDetails = req.session
-
-    if (authDetails.user == req.ID && authDetails.secret == secretKey) {
+    if (user_ID != null) {
         return next();
     }
     else {
@@ -56,6 +82,24 @@ exports.isAuth = (req, res, next) => {
 
 exports.revokeAuth = (req, res, next) => {
 
+    try {
+        if (req.connect.sid) {
+            req.connect.sid.destroy((err) => {
+                if (err) {
+                    console.error(err);
+                } else {
+                    return next();
+                }
+            })
+        }
+        else {
+            return res.status(409)
+                .json({ "error": "no login session was present" })
+        };
+    } catch (error) {
+        console.error(error);
+        return res.status(500);
+    }
 };
 
 exports.authChallenge = (req, res, next) => {

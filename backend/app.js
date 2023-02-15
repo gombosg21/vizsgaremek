@@ -4,7 +4,6 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
-const session = require("express-session");
 
 const DB = require('./util/db')
 
@@ -13,13 +12,12 @@ const usersRouter = require('./routes/users');
 const mediaRouter = require('./routes/media');
 const tagRouter = require('./routes/tag');
 
-const auth = require('./middlewares/authentiaction/auth')
-
 const app = express();
 
 const corsOptions = {
   origin : ['http://localhost/'],
   optionsSuccessStatus: 200,
+  preflightContinue: true
 };
 
 DB.connect();
@@ -31,8 +29,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors(corsOptions));
-
-app.use(session(auth.sessionData))
 
 const version = 0.1;
 
@@ -56,8 +52,6 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.json(err);
 });
-
-
 
 app.listen(3600)
 
