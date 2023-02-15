@@ -73,7 +73,7 @@ exports.changePasswordRules = () => {
 exports.checkIfNameConflicts = async (req, res, next) => {
     const UserName = req.body.name;
 
-    if (await user.findOne({ where: { name: UserName } }) != null) {
+    if (await user.findOne({ where: { name: UserName },attributes:['name'] }) != null) {
         return res.status(406)
             .json({ "error": `username ${UserName} already exists` });
     } else {
@@ -84,7 +84,7 @@ exports.checkIfNameConflicts = async (req, res, next) => {
 exports.checkIfUserIDExsits = async (req, res, next) => {
     const ID = req.params.userID;
 
-    if (await user.findOne({ where: { ID: ID } }) == null) {
+    if (await user.findOne({ where: { ID: ID },attributes:['ID'] }) == null) {
         return res.status(406)
             .json({ "error": `user with id:${ID} does not exist` });
     } else {
@@ -95,7 +95,7 @@ exports.checkIfUserIDExsits = async (req, res, next) => {
 exports.checkIfNameExsist = async (req, res, next) => {
     const Name = req.params.name;
 
-    if (await user.findOne({ where: { name: Name } }) == null) {
+    if (await user.findOne({ where: { name: Name },attributes:['name'] }) == null) {
         return res.status(406)
             .json({ "error": `username ${Name} does not exist` });
     } else {
