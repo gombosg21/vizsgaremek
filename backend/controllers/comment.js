@@ -17,7 +17,7 @@ exports.createComment = async (req, res, next) => {
     }
     catch (error) {
         console.error(error);
-        res.status(502);
+        res.status(500);
     }
 }
 
@@ -38,7 +38,7 @@ exports.editComment = async (req, res, next) => {
     }
     catch (error) {
         console.error(error);
-        res.status(502);
+        res.status(500);
     }
 }
 
@@ -54,6 +54,6 @@ exports.deleteComment = async (req, res, next) => {
     }
     catch (error) {
         console.error(error);
-        res.status(502);
+        res.status(500);
     }
 }

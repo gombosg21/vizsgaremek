@@ -11,7 +11,7 @@ exports.getProfile = async (req, res, next) => {
             {
                 where: { ID: ID },
                 attributes: ['name', 'register_date', 'gender', 'birth_date', 'profile_description', 'profile_pic', 'type'],
-                include: { model: media }
+                include: { model: media}
             });
         res.status(200)
             .json(UserProfile);
@@ -52,31 +52,22 @@ exports.editProfile = async (req, res, next) => {
     }
     catch (error) {
         console.error(error);
-        res.status(502);
+        res.status(500);
     }
 };
 
 exports.login = async (req, res, next) => {
 
     const Name = req.params.name;
-    const Password = req.body.password;
 
     const User = await user.findOne({ where: { Name: Name } });
 
     try {
-        if (User.Password == Password) {
-            res.status(200)
-                .redirect('/api/v/0.1/user/' + User.ID);
-        }
-        else {
-            res.status(401)
-                .redirect('/')
-                .json("bad password");
-        }
-    }
-    catch (error) {
+        res.status(200)
+            .redirect('/api/v/0.1/user/' + User.ID);
+    } catch (error) {
         console.error(error);
-        res.status(502);
+        res.status(500);
     }
 };
 
@@ -95,7 +86,7 @@ exports.changePassword = async (req, res, next) => {
     }
     catch (error) {
         console.error(error);
-        res.status(502);
+        res.status(500);
     }
 
 }
@@ -117,7 +108,7 @@ exports.resetPassword = async (req, res, next) => {
     }
     catch (error) {
         console.error(error);
-        res.status(502);
+        res.status(500);
     }
 };
 
@@ -146,7 +137,7 @@ exports.createUser = async (req, res, next) => {
     }
     catch (error) {
         console.error(error);
-        res.status(502);
+        res.status(500);
     }
 };
 
@@ -165,24 +156,24 @@ exports.deleteUser = async (req, res, next) => {
     }
     catch (error) {
         console.error(error);
-        res.status(502);
+        res.status(500);
     }
 };
 
 exports.findUser = async (req, res, next) => {
-        var date = new Date();
-        var day = date.getDay();
-        var month = date.getMonth();
-        var year = date.getFullYear();
-        var currdate = new Date(year, month, day).toJSON();
+    var date = new Date();
+    var day = date.getDay();
+    var month = date.getMonth();
+    var year = date.getFullYear();
+    var currdate = new Date(year, month, day).toJSON();
 
-    const Name =  req.query.name ?? "";
+    const Name = req.query.name ?? "";
     var SDate = req.query.date_start ?? "1000-01-01";
     var EDate = req.query.date_end ?? currdate;
-    var Gender = [req.query.gender][0] == undefined ? [0,1,2] : [req.query.gender];
+    var Gender = [req.query.gender][0] == undefined ? [0, 1, 2] : [req.query.gender];
 
     try {
-        const UserList = await user.findAll({ where: { name: { [Op.like]: `%${Name}%` }, birth_date: { [Op.gt]: SDate, [Op.lt]: EDate }, gender: { [Op.in]: Gender } },attributes:['name','gender','birth_date'] });
+        const UserList = await user.findAll({ where: { name: { [Op.like]: `%${Name}%` }, birth_date: { [Op.gt]: SDate, [Op.lt]: EDate }, gender: { [Op.in]: Gender } }, attributes: ['name', 'gender', 'birth_date'] });
         if (UserList === null) {
             res.status(404).json({ "msg": "couldnt find results matching query parameters, try a different search" })
         }
@@ -193,6 +184,6 @@ exports.findUser = async (req, res, next) => {
     }
     catch (error) {
         console.error(error);
-        res.status(502);
+        res.status(500);
     }
-}
+};

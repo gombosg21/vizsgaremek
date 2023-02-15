@@ -14,7 +14,7 @@ exports.viewOneMediaFromUser = async (req, res, next) => {
     }
     catch (error) {
         console.error(error);
-        res.status(502);
+        res.status(500);
     }
 };
 
@@ -28,7 +28,7 @@ exports.getAllMediaFromUser = async (req, res, next) => {
     }
     catch (error) {
         console.error(error);
-        res.status(502);
+        res.status(500);
     }
 };
 
@@ -40,7 +40,7 @@ exports.getMediaByTags = async (req, res, next) => {
     }
     catch (error) {
         console.error(error);
-        res.status(502);
+        res.status(500);
     }
 
 }
@@ -64,7 +64,7 @@ exports.uploadMedia = async (req, res, next) => {
     }
     catch (error) {
         console.error(error);
-        res.status(502);
+        res.status(500);
     }
 }
 
@@ -81,7 +81,7 @@ exports.deleteMedia = async (req, res, next) => {
     }
     catch (error) {
         console.error(error);
-        res.status(502);
+        res.status(500);
     }
 }
 
@@ -103,6 +103,6 @@ exports.editMedia = async (req, res, next) => {
     }
     catch (error) {
         console.error(error);
-        res.status(502);
+        res.status(500);
     }
 }
