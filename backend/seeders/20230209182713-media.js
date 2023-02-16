@@ -1,8 +1,15 @@
-'use strict';
+const fs = require('fs');
+const http = require('http');
+const fake = require('@faker-js/faker');
 
+'use strict';
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up (queryInterface, Sequelize) {
+  async up(queryInterface, Sequelize) {
+
+    
+
+    // await queryInterface.bulkInsert('media', mediaArray)
     /**
      * Add seed commands here.
      *
@@ -14,7 +21,7 @@ module.exports = {
     */
   },
 
-  async down (queryInterface, Sequelize) {
+  async down(queryInterface, Sequelize) {
     /**
      * Add commands to revert seed here.
      *
