@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
   session_store.init({
     ID: {type:DataTypes.INTEGER,allowNull:false,primaryKey:true,autoIncrement:true},
     user_ID: {type:DataTypes.INTEGER,allowNull:false,references:{model:"user",key:"ID"}},
-    sid: {type:DataTypes.INTEGER,allowNull:false},
+    sid: {type:DataTypes.STRING,allowNull:false},
     data:{type:DataTypes.TEXT,allowNull:true,defaultValue:null},
     logged_in:{type:DataTypes.BOOLEAN,allowNull:false,defaultValue:false},
     created: {type:DataTypes.DATE,allowNull:false},
