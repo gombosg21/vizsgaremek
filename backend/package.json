@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "nodemon app.js",
+    "init-db": "node ./util/init-db.js",
+    "wipe-db": "node ./util/destroy-db.js"
   },
   "dependencies": {
     "cookie-parser": "~1.4.6",

@@ -21,7 +21,6 @@ const corsOptions = {
 };
 
 DB.connect();
-DB.initDB();
 
 app.use(logger('dev'));
 app.use(express.json());

@@ -3,6 +3,8 @@
     "username": "root",
     "password": null,
     "database": "VisualStory_development",
+    "charset": "utf8mb4",
+    "collate":"utf8mb4_hungarian_ci",
     "host": "127.0.0.1",
     "dialect": "mysql",
     "port": 3306
@@ -11,6 +13,8 @@
     "username": "root",
     "password": null,
     "database": "VisualStory_test",
+    "charset": "utf8mb4",
+    "collate":"utf8mb4_hungarian_ci",
     "host": "127.0.0.1",
     "dialect": "mysql",
     "port": 3306
@@ -19,6 +23,8 @@
     "username": "root",
     "password": null,
     "database": "VisualStory",
+    "charset": "utf8mb4",
+    "collate":"utf8mb4_hungarian_ci",
     "host": "127.0.0.1",
     "dialect": "mysql",
     "port": 3306
