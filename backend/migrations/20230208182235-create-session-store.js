@@ -24,7 +24,7 @@ module.exports = {
         defaultValue:null,
         type:Sequelize.TEXT
       },
-      logged_id: 
+      logged_in: 
       {
         allowNull:false,
         defaultValue:false,
