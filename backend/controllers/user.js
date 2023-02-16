@@ -1,5 +1,6 @@
 const user = require("../models").user;
 const media = require("../models").media;
+const session = require("../models").session_store;
 const { Op } = require("sequelize");
 
 exports.getProfile = async (req, res, next) => {
@@ -59,12 +60,19 @@ exports.editProfile = async (req, res, next) => {
 exports.login = async (req, res, next) => {
 
     const Name = req.params.name;
-
-    const User = await user.findOne({ where: { Name: Name } });
-
+    const sessionID = req.sessionID;
     try {
-        res.status(200)
-            .redirect('/api/v/0.1/user/' + User.ID);
+        const User = await user.findOne({ where: { Name: Name } , attributes:['ID']});
+        const Session = await session.findOne({where :{sid: sessionID}});
+
+        console.log(Session)
+
+        Session.set({
+            user_ID : User.ID,
+            logged_in : true
+        })
+
+        res.redirect('/api/v/0.1/user/' + User.ID);
     } catch (error) {
         console.error(error);
         res.status(500);
