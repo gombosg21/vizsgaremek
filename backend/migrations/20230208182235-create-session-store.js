@@ -14,7 +14,7 @@ module.exports = {
         allowNull:true
       },
       sid: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         unique:true,
         allowNull:false
       },
