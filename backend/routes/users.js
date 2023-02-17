@@ -4,6 +4,12 @@ const userValidator = require('../middlewares/validators/user');
 const commonValidation = require('../middlewares/validators/common');
 const passport = require('passport');
 
+// get login
+router.get('/user/login', passport.authenticate('local'), userController.login);
+
+// get logout
+router.get('/user/logout', userController.logout);
+
 // get profile
 // edit profile
 // delete user
@@ -12,14 +18,8 @@ router.route('/user/:userID')
     .patch(userValidator.checkIfUserIDExsits, userValidator.updateProfileRules(), commonValidation.validate, userController.editProfile)
     .delete( userValidator.checkIfUserIDExsits, userController.deleteUser);
 
-// get login
-router.get('/user/login', passport.authenticate('local'), userController.login);
-
-// get logout
-router.get('/user/logout', userController.logout)
-
 // get reset password
-router.get('/user/reset-password', userController.resetPassword);
+router.get('/user/reset-password/', userController.resetPassword);
 
 // post create user
 router.post('/user/register', userValidator.checkIfNameConflicts, userValidator.registerRules(), commonValidation.validate, userController.createUser);

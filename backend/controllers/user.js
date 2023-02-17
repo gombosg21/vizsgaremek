@@ -61,12 +61,11 @@ exports.editProfile = async (req, res, next) => {
 exports.login = async (req, res, next) => {
 
     const Name = req.body.name;
-
+    
     try {
         const User = await user.findOne({ where: { Name: Name } , attributes:['ID']});
-        res.status(200);
-        console.log(User);
-        // .redirect('/api/v/0.1/user/' + User.ID);
+        res.status(200)
+        .redirect('/api/v/0.1/user/' + User.ID);
     } catch (error) {
         console.error(error);
         res.status(500);

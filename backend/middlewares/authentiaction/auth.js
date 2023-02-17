@@ -88,60 +88,60 @@ exports.sessionConfig = {
 };
 
 
-exports.getAuth = async (req, res, next) => {
+// exports.getAuth = async (req, res, next) => {
 
-    const userName = req.params.name;
-    const password = req.body.password;
+//     const userName = req.params.name;
+//     const password = req.body.password;
 
-    const UserPassword = await user.findOne({ where: { Name: userName }, attributes: ['password'] });
+//     const UserPassword = await user.findOne({ where: { Name: userName }, attributes: ['password'] });
 
-    try {
-        if (UserPassword.password == password) {
-            return next();
-        }
-        else {
-            return res.status(401)
-                .redirect('/')
-                .json({ "msg": "bad password" });
-        }
-    }
-    catch (error) {
-        console.error(error);
-        return res.status(500);
-    }
-};
+//     try {
+//         if (UserPassword.password == password) {
+//             return next();
+//         }
+//         else {
+//             return res.status(401)
+//                 .redirect('/')
+//                 .json({ "msg": "bad password" });
+//         }
+//     }
+//     catch (error) {
+//         console.error(error);
+//         return res.status(500);
+//     }
+// };
 
-exports.isAuth = async (req, res, next) => {
+// exports.isAuth = async (req, res, next) => {
 
-    const authDetails = req.session;
-    const user_ID = await sessionStorage.findOne({ where: { sid: authDetails.session_id }, attributes: ['user_ID'] })
+//     const authDetails = req.session;
+//     const user_ID = await sessionStorage.findOne({ where: { sid: authDetails.session_id }, attributes: ['user_ID'] })
 
-    if (user_ID != null) {
-        return next();
-    }
-    else {
-        return res.status(403).redirect('./'.json({ "error": "unauthorized request" }));
-    }
-}
+//     if (user_ID != null) {
+//         return next();
+//     }
+//     else {
+//         return res.status(403).redirect('./'.json({ "error": "unauthorized request" }));
+//     }
+// }
 
-exports.revokeAuth = (req, res, next) => {
-    console.log(req.session)
-    try {
-        if (req.sessionID) {
-            req.session.destroy((err) => {
-                if (err) {
-                    console.error(err);
-                } else {
-                    return next();
-                }
-            })
-        }
-        else {
-            return res.status(409)
-                .json({ "error": "no login session was present" })
-        };
-    } catch (error) {
-        console.error(error);
-        return res.status(500);
-    }
-};
+// exports.revokeAuth = (req, res, next) => {
+//     console.log(req.session)
+//     try {
+//         if (req.sessionID) {
+//             req.session.destroy((err) => {
+//                 if (err) {
+//                     console.error(err);
+//                 } else {
+//                     return next();
+//                 }
+//             })
+//         }
+//         else {
+//             return res.status(409)
+//                 .json({ "error": "no login session was present" })
+//         };
+//     } catch (error) {
+//         console.error(error);
+//         return res.status(500);
+//     }
+// };
