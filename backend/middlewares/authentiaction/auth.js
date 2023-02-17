@@ -3,12 +3,60 @@ const mysqlStore = require("express-mysql-session")(session);
 const config = require("../../config/config.json");
 const user = require('../../models').user;
 const sessionStorage = require("../../models").session_store;
-const path = require('path')
-require('dotenv').config({path:path.resolve('./.env')});
+const path = require('path');
+const passport = require('passport');
+const localPassport = require('passport-local').Strategy;
+const validatePassword = require('../../util/password').validatePassword;
+require('dotenv').config({ path: path.resolve('./.env') });
 
-const mode = "development"
+const mode = "development";
 
-const { database, username, password, host, port, dialect } = config[mode]
+const { database, username, password, host, port, dialect } = config[mode];
+
+const verifyCallback = async (username, password, done) => {
+    try {
+        const User = await user.findOne({ where: { Name: username } });
+
+        if (!User) {
+            { return done(null, false) };
+        };
+
+        const valid = validatePassword(password, User.password_hash, User.password_salt);
+
+        if (valid) {
+            { return done(null, User) };
+        }
+        else {
+            { return done(null, false) };
+        };
+    }
+    catch (error) {
+        done(error);
+        console.error(error);
+    };
+};
+
+const dataFields = {
+    usernameField: 'name',
+    passwordField: "password"
+};
+
+exports.strategy = new localPassport(dataFields, verifyCallback);
+
+passport.serializeUser((User, done) => {
+    done(null, User.ID)
+});
+
+passport.deserializeUser(async (userID, done) => {
+    try {
+        const User = await user.findByPk(userID);
+
+        done(null, User);
+    } catch (error) {
+        done(error);
+        console.error(error);
+    }
+});
 
 const sessionStore = new mysqlStore({
     connectionLimit: 10,
@@ -26,9 +74,9 @@ const sessionStore = new mysqlStore({
             data: 'data',
         }
     }
-})
+});
 
-const sessionInit = session({
+exports.sessionConfig = {
     name: "VSCookie",
     secret: process.env.COOKIE_SECRET,
     resave: true,
@@ -36,9 +84,9 @@ const sessionInit = session({
     store: sessionStore,
     cookie: {
         maxAge: (1000 * 60 * 60),
-        
     }
-});
+};
+
 
 exports.getAuth = async (req, res, next) => {
 
@@ -49,7 +97,6 @@ exports.getAuth = async (req, res, next) => {
 
     try {
         if (UserPassword.password == password) {
-            sessionInit(req,res,next);
             return next();
         }
         else {
@@ -97,8 +144,4 @@ exports.revokeAuth = (req, res, next) => {
         console.error(error);
         return res.status(500);
     }
-};
-
-exports.authChallenge = (req, res, next) => {
-
 };

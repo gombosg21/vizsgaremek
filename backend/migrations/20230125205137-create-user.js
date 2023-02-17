@@ -37,9 +37,13 @@ module.exports = {
         defaultValue: DataTypes.NOW,
         type: Sequelize.DATE,
       },
-      password: {
+      password_hash: {
         allowNull: false,
-        type: Sequelize.STRING.BINARY
+        type: Sequelize.STRING
+      },
+      password_salt:{
+        allowNull: false,
+        type: Sequelize.STRING
       },
       email_verified: {
         allowNull: false,

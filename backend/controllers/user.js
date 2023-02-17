@@ -1,6 +1,7 @@
 const user = require("../models").user;
 const media = require("../models").media;
 const session = require("../models").session_store;
+const generatePassword = require('../util/password').generatePassword;
 const { Op } = require("sequelize");
 
 exports.getProfile = async (req, res, next) => {
@@ -59,20 +60,13 @@ exports.editProfile = async (req, res, next) => {
 
 exports.login = async (req, res, next) => {
 
-    const Name = req.params.name;
-    const sessionID = req.sessionID;
+    const Name = req.body.name;
+
     try {
         const User = await user.findOne({ where: { Name: Name } , attributes:['ID']});
-        const Session = await session.findOne({where :{sid: sessionID}});
-
-        console.log(Session)
-
-        Session.set({
-            user_ID : User.ID,
-            logged_in : true
-        })
-
-        res.redirect('/api/v/0.1/user/' + User.ID);
+        res.status(200);
+        console.log(User);
+        // .redirect('/api/v/0.1/user/' + User.ID);
     } catch (error) {
         console.error(error);
         res.status(500);
@@ -81,13 +75,18 @@ exports.login = async (req, res, next) => {
 
 exports.changePassword = async (req, res, next) => {
 
-    const userNewPassword = req.body.password;
+    const userNewPassword = req.body.new_password;
+
+    const encryptedPassword = generatePassword(userNewPassword);
+    const passwordSalt = encryptedPassword.salt;
+    const passwordHash = encryptedPassword.hash;
 
     try {
         const User = await user.findOne({ where: { ID: ID } });
         await User.set(
             {
-                password: userNewPassword
+                password_hash: passwordHash,
+                password_salt: passwordSalt
             });
         await User.save();
         res.status(200);
@@ -128,10 +127,15 @@ exports.createUser = async (req, res, next) => {
     const UserDate = req.body.birth_date;
     const UserGender = req.body.gender;
 
+    const encryptedPassword = generatePassword(UserPassword);
+    const passwordSalt = encryptedPassword.salt;
+    const passwordHash = encryptedPassword.hash;
+
     try {
         const User = user.build({
             name: UserName,
-            password: UserPassword,
+            password_hash: passwordHash,
+            password_salt: passwordSalt,
             birth_date: UserDate,
             email: UserEmail,
             gender: UserGender
