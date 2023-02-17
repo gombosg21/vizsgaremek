@@ -33,6 +33,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors(corsOptions));
 app.use(session(auth.sessionConfig));
 passport.use(auth.strategy);
+app.use(passport.initialize());
+app.use(passport.session());
 
 const version = 0.1;
 
