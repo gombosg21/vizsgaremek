@@ -41,21 +41,28 @@ const dataFields = {
     passwordField: "password"
 };
 
+const roles = {
+    Admin: "admin",
+    Moderator: "mod",
+    User: "user"
+};
+
 exports.strategy = new localPassport(dataFields, verifyCallback);
 
 passport.serializeUser((User, done) => {
-    done(null, User.ID)
+    done(null, User.ID);
 });
 
 passport.deserializeUser(async (userID, done) => {
+
     try {
         const User = await user.findByPk(userID);
-
         done(null, User);
     } catch (error) {
+
         done(error);
         console.error(error);
-    }
+    };
 });
 
 const sessionStore = new mysqlStore({
@@ -88,41 +95,24 @@ exports.sessionConfig = {
 };
 
 
-// exports.getAuth = async (req, res, next) => {
 
-//     const userName = req.params.name;
-//     const password = req.body.password;
+exports.isAuth = (req, res, next) => {
 
-//     const UserPassword = await user.findOne({ where: { Name: userName }, attributes: ['password'] });
+    if (req.isAuthenticated()) {
+        return next();
+    }
+    else {
+        return res.status(401).redirect('/'.json({ "error": "unauthorized request" }));
+    }
+};
 
-//     try {
-//         if (UserPassword.password == password) {
-//             return next();
-//         }
-//         else {
-//             return res.status(401)
-//                 .redirect('/')
-//                 .json({ "msg": "bad password" });
-//         }
-//     }
-//     catch (error) {
-//         console.error(error);
-//         return res.status(500);
-//     }
-// };
+exports.isMod = (req, res, next) => {
 
-// exports.isAuth = async (req, res, next) => {
+};
 
-//     const authDetails = req.session;
-//     const user_ID = await sessionStorage.findOne({ where: { sid: authDetails.session_id }, attributes: ['user_ID'] })
+exports.isAdmin = (req, res, next) => {
 
-//     if (user_ID != null) {
-//         return next();
-//     }
-//     else {
-//         return res.status(403).redirect('./'.json({ "error": "unauthorized request" }));
-//     }
-// }
+};
 
 // exports.revokeAuth = (req, res, next) => {
 //     console.log(req.session)

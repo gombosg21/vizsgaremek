@@ -10,11 +10,10 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      this.hasMany(models.media,{foreignKey:"user_ID"})
-      this.hasMany(models.thread,{foreignKey:"user_ID"})
-      this.hasMany(models.comment,{foreignKey:"user_ID"})
-      this.hasMany(models.session_store,{foreignKey:"user_ID"})
-    }
+      this.hasMany(models.media,{foreignKey:"user_ID"});
+      this.hasMany(models.thread,{foreignKey:"user_ID"});
+      this.hasMany(models.comment,{foreignKey:"user_ID"});
+    };
   };
   user.init({
     ID: {type: DataTypes.INTEGER, allowNull:false, autoIncrement:true,primaryKey:true},

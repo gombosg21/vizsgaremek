@@ -1,45 +1,96 @@
 const user = require("../models").user;
 const media = require("../models").media;
-const session = require("../models").session_store;
 const generatePassword = require('../util/password').generatePassword;
 const { Op } = require("sequelize");
 
 exports.getProfile = async (req, res, next) => {
 
     const ID = req.params.userID;
-
     try {
-        const UserProfile = await user.findOne(
+        const User = await user.findOne(
             {
-                where: { ID: ID },
-                attributes: ['name', 'register_date', 'gender', 'birth_date', 'profile_description', 'profile_pic', 'type'],
-                include: { model: media}
+                where: { ID: ID }
             });
-        res.status(200)
-            .json(UserProfile);
+
+        const UserProfile = {
+            name: User.name,
+            register_date: User.register_date,
+            gender: User.gender,
+            birth_date: User.birth_date,
+            profile_description: User.profile_description,
+            profile_pic: User.profile_pic,
+            type: User.type
+        };
+
+        //
+        //  user profile visibility levels
+        //  0 = private
+        //  1 = friends only
+        //  2 = registered only
+        //  3 = public
+        //
+        const visibility = User.profile_visibility;
+        console.log(visibility)
+        switch (visibility) {
+            case (0): {
+                if (req.user.ID == User.ID) {
+                    res.status(200)
+                        .json(UserProfile);
+                } else {
+                    res.status(403).
+                        json({ "error": "this profile is private" });
+                };
+                break;
+            }
+            case (1): {
+                res.status(501)
+                    .json({ "msg": "on TODO" });
+                break;
+            }
+            case (2): {
+                if (req.user) {
+                    res.status(200)
+                        .json(UserProfile);
+                    break;
+                } else {
+                    res.status(401).
+                        json({ "error": "this profile is for registered members only" });
+                    break;
+                };
+            }
+            case (3): {
+                res.status(200)
+                    .json(UserProfile);
+                break;
+            }
+            default: {
+                res.status(500)
+                    .json({ "error": "error" })
+            }
+        };
     }
     catch (error) {
         console.error(error);
         res.status(502);
-    }
+    };
 };
 
 exports.editProfile = async (req, res, next) => {
 
-    const ID = req.params.userID;
+    const ID = req.user.ID;
 
     var profilePicture = req.body.profile_picture;
     var profileDescription = req.body.profile_description;
     var profileVisibility = req.body.profile_visibility;
 
     try {
-        const User = await user.findOne({ where: { ID: ID } });
+        const User = await user.findByPk(ID);
 
         switch (null) {
             case (profilePicture == null): { profilePicture = User.profile_picture };
             case (profileDescription == null): { profileDescription = User.profile_description };
             case (profileVisibility == null): { profileVisibility = User.profile_visibility };
-        }
+        };
 
         await User.set(
             {
@@ -61,19 +112,20 @@ exports.editProfile = async (req, res, next) => {
 exports.login = async (req, res, next) => {
 
     const Name = req.body.name;
-    
+
     try {
-        const User = await user.findOne({ where: { Name: Name } , attributes:['ID']});
+        const User = await user.findOne({ where: { Name: Name }, attributes: ['ID'] });
         res.status(200)
-        .redirect('/api/v/0.1/user/' + User.ID);
+            .redirect('/api/v/0.1/user/' + User.ID);
     } catch (error) {
         console.error(error);
         res.status(500);
-    }
+    };
 };
 
 exports.changePassword = async (req, res, next) => {
 
+    const ID = req.user.ID;
     const userNewPassword = req.body.new_password;
 
     const encryptedPassword = generatePassword(userNewPassword);
@@ -93,12 +145,20 @@ exports.changePassword = async (req, res, next) => {
     catch (error) {
         console.error(error);
         res.status(500);
-    }
-
-}
+    };
+};
 
 exports.logout = async (req, res, next) => {
-    res.redirect('/');
+
+    req.logout((error) => {
+        if (error) {
+            res.status(500);
+            console.error(error);
+        }
+        else {
+            res.redirect('/api/v/0.1/');
+        }
+    });
 };
 
 exports.resetPassword = async (req, res, next) => {
@@ -141,10 +201,16 @@ exports.createUser = async (req, res, next) => {
         });
         await User.save();
         res.status(201);
-        // email.sendVerfyEmail(User.Email)
-
         const NewUser = await user.findOne({ where: { name: UserName } });
-        res.redirect('/api/v/0.1/user/' + NewUser.ID);
+        // email.sendVerfyEmail(User.Email)
+        req.logIn(NewUser, async (error) => {
+            if (error) {
+                res.status(500);
+                console.error(error);
+            } else {
+                res.redirect('/api/v/0.1/user/' + NewUser.ID);
+            }
+        });
     }
     catch (error) {
         console.error(error);
@@ -172,11 +238,19 @@ exports.deleteUser = async (req, res, next) => {
 };
 
 exports.findUser = async (req, res, next) => {
+
     var date = new Date();
     var day = date.getDay();
     var month = date.getMonth();
     var year = date.getFullYear();
     var currdate = new Date(year, month, day).toJSON();
+
+    //
+    //  sex
+    //  0 = male
+    //  1 = female
+    //  2 = other/unspecified
+    //
 
     const Name = req.query.name ?? "";
     var SDate = req.query.date_start ?? "1000-01-01";
