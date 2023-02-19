@@ -9,10 +9,6 @@ module.exports = {
         allowNull:false,
         autoIncrement:true
       },
-      user_ID: {
-        type: Sequelize.INTEGER,
-        allowNull:true
-      },
       sid: {
         type: Sequelize.STRING,
         unique:true,
@@ -24,20 +20,11 @@ module.exports = {
         defaultValue:null,
         type:Sequelize.TEXT
       },
-      logged_in: 
+      expires:
       {
-        allowNull:false,
-        defaultValue:false,
-        type:Sequelize.BOOLEAN
-      },
-      created: {
-        type: Sequelize.DATE,
-        allowNull:false,
-        defaultValue:Sequelize.NOW
-      },
-      expires: {
-        allowNull:false,
-        type: Sequelize.DATE
+        allowNull:true,
+        defaultValue:null,
+        type:Sequelize.DATE
       }
     });
   },
