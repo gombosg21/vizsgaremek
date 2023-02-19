@@ -10,10 +10,10 @@ const passport = require('passport');
 const DB = require('./util/db');
 const auth = require('./middlewares/authentiaction/auth');
 
-// var indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const mediaRouter = require('./routes/media');
 const tagRouter = require('./routes/tag');
+const indexRouter = require('./routes/index');
 
 const app = express();
 
@@ -39,9 +39,10 @@ app.use(passport.session());
 const version = 0.1;
 
 // app.use('/', indexRouter);
+app.use(`/api/v/${version}`, indexRouter)
 app.use(`/api/v/${version}`, usersRouter);
 app.use(`/api/v/${version}`, mediaRouter);
-app.use(`/api/v/${version}`, tagRouter)
+app.use(`/api/v/${version}`, tagRouter);
 
 //catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -60,6 +61,6 @@ app.use(function (err, req, res, next) {
   console.error(err);
 });
 
-app.listen(3600)
+app.listen(3600);
 
 module.exports = app;

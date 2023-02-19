@@ -1,13 +1,12 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
+const indexController = require('../controllers/index');
 
 /* GET home page. */
-router.get('/');
+router.get('/',indexController.getIndex);
 
+router.get('/terms-of-service', indexController.getTOS);
 
-router.get('/login', );
-
-
-// get view ToS
+router.get('/faq',indexController.getFAQ);
 
 module.exports = router;
