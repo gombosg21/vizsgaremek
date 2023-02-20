@@ -18,11 +18,11 @@ module.exports = (sequelize, DataTypes) => {
   media.init({
     ID: {type:DataTypes.INTEGER, autoIncrement:true,primaryKey:true,allowNull:false},
     user_ID: {type:DataTypes.INTEGER,allowNull:false,references:{model:'user',key:'ID'}},
-    data: {type:DataTypes.BLOB,allowNull:false},
+    file_name: {type:DataTypes.STRING,allowNull:false},
     deleted: {type:DataTypes.BOOLEAN,allowNull:false,defaultValue:false},
     uploaded: {type:DataTypes.DATE,allowNull:false,defaultValue:DataTypes.NOW},
     last_edit: {type:DataTypes.DATE,allowNull:false,defaultValue:DataTypes.NOW,onUpdate:DataTypes.NOW},
-    descption: {type:DataTypes.TEXT},
+    description: {type:DataTypes.TEXT},
     visibility: {type:DataTypes.INTEGER,allowNull:false,defaultValue:0},
     placeholder_text: {type:DataTypes.TEXT,allowNull:false},
     deletedAt:{type:DataTypes.DATE,allowNull:true,defaultValue:null}

@@ -17,9 +17,9 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER
       },
-      data: {
+      file_name: {
         allowNull:false,
-        type: Sequelize.BLOB
+        type: Sequelize.STRING
       },
       deleted: {
         allowNull:false,
@@ -36,7 +36,7 @@ module.exports = {
         defaultValue: Sequelize.NOW,
         type: Sequelize.DATE
       },
-      descption: {
+      description: {
         type: Sequelize.TEXT
       },
       visibility: {
