@@ -17,9 +17,9 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER
       },
-      file_name: {
+      file_data: {
         allowNull:false,
-        type: Sequelize.STRING
+        type: Sequelize.BLOB
       },
       deleted: {
         allowNull:false,
