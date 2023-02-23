@@ -62,14 +62,19 @@ munkamenet és auth
     hátrányok:
         - tokenek alapból nincsenek böngésző által kezelve, frontend-nek extra figyelmet kell rájuk fordítania
 
-3. Auth0:
+3. google:
     előnyök:
         - felhasználói élmény: miért regisztrálj ha már meglévő fiókkal be tudsz jelentkezni
         - XSRF immunitás
     hátrányok:
         - bonyolultabb szerver oldali kód
-        - Auth0 fiókot igényel, korlátor méretű, felette előfizetős
         - token bázisú, frontend részéről úgyszint extra kódot igényel
         - adatszivárgás esetén dominóhatás van
+
+4. Auth0:
+    előnyök:
+        - egyszerű mint az 1x1
+    hátrányok:
+        - előfizetős
 
  döntés: Egyenlőre süti, egyszerű letisztult és gyors, mind kliens és szerver oldalon. Biztonság nem elsődleges szempont, csak munkamenet kell.      
