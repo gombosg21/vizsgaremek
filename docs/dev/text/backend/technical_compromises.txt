@@ -1,0 +1,75 @@
+Médiafáljok:
+
+1. tárolás DB-ben:
+    előnyök:
+        - elérés és verziókontrollt egy alkalommal kell csak megvalósítani
+    hátrányok:
+        - DB mérete gyorsan nő, lassabb lesz a rendszer
+
+2. tárolás helyi fáljrendszerben:
+    előnyök:
+        - DB csak utalást tárol, a mérete nem fut el a végtelenbe
+    hátrányok:
+        - extra modul kell a fáljrendszer beli fáljok elérésére, ill. megerősítésére
+        - elérés és verziókontrollt külön meg kell valósítani a fáljokra is
+
+3. tárolás távoli eszközön:
+    előnyök:
+        - helyi tároló nincs terhelve
+        - távoli tároló optionalizálható nagymennyiségű fáljtárolásra
+    hátrányok:
+        - egyedi kommunikációs protokoll és modul kell elérés és verziókontrollra
+        - egyszerre 2 szervert kell menedzselni és szinkronban tartani
+        - techninkai rémálom ???
+
+döntés: 
+Tárolás DB-ben. Egyszerű megvalósítás, techninkai értelemben DB-k adatok tömeges tárolására hivatottak, amibe fáljok is beletartoznak. 
+Kis demó melett a hátrányok nem érezhetők.
+
+
+Médiafáljok lekérdezése:
+
+1. base64 kódolt adatok JSON-ban:
+    előnyök:
+        - csak 1 API hívás és minden adat megvan
+    hátrányok:
+        - extra függvény kell a base64 kódoláshoz
+        - base64-el kódolt fáljok ~35%-al nagyobbak
+        - a kódolás extra processzoridőt foglal
+        - kliens oldalol dekódolni kell a tartalmat megjelenítés előtt
+
+2. dupla API hívás:
+    előnyök:
+        - gyors, egyszerű és letisztult mind kliens és szerver oldalon
+    hátrányok:
+        - a tartalom és tulajdonságok szétválasztása megnehezítik az elérési szabályozást
+        - 2 API hívás kell minden médiafáljnál kliens oldalon, extra retardáció
+
+döntés: ???
+
+
+munkamenet és auth
+
+1. süti:
+    előnyök:
+        - sütiket böngésző automatikusan kezeli
+    hátrányok:
+        - XSRF sebezhetőség
+
+2. token:
+    előnyök:
+        - XSRF immunitás
+    hátrányok:
+        - tokenek alapból nincsenek böngésző által kezelve, frontend-nek extra figyelmet kell rájuk fordítania
+
+3. Auth0:
+    előnyök:
+        - felhasználói élmény: miért regisztrálj ha már meglévő fiókkal be tudsz jelentkezni
+        - XSRF immunitás
+    hátrányok:
+        - bonyolultabb szerver oldali kód
+        - Auth0 fiókot igényel, korlátor méretű, felette előfizetős
+        - token bázisú, frontend részéről úgyszint extra kódot igényel
+        - adatszivárgás esetén dominóhatás van
+
+ döntés: Egyenlőre süti, egyszerű letisztult és gyors, mind kliens és szerver oldalon. Biztonság nem elsődleges szempont, csak munkamenet kell.      
