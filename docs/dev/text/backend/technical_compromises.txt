@@ -69,6 +69,7 @@ munkamenet és auth
     hátrányok:
         - bonyolultabb szerver oldali kód
         - token bázisú, frontend részéről úgyszint extra kódot igényel
+        - google fejlesztői fiókot igényel
         - adatszivárgás esetén dominóhatás van
 
 4. Auth0:
