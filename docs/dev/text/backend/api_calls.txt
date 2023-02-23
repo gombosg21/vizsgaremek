@@ -1,46 +1,61 @@
 {} represent values
 
 GET /api/v/0.1/user/{ID}
-returs one user by ID with fields: name,register_date,gender,birth_date,profile_description,profile_picture,profile_visibility,type
-later may be blocked if auth is not provided, depending on profile_visibility
+ID alapján visszad egy nézetet a felhasználótól: {name,register_date,gender,birth_date,profile_description,profile_picture,profile_visibility,type}
+ha profile_visibility nem publikus (3), akkor nem minden körülmény között érhető el.
+Visszatérési értéke egy JSON állomány
 
 PATCH /api/v/0.1/user/
-updates one user identified session, fields: profile_description,profile_picture,profile_visibility, least one must be provided in body as json
-later will be only avalibe if auth is present
+bejelentkezés után, ID alapján frissíti a profiladatokat : {profile_description,profile_picture,profile_visibility}
+JSON állományt vár el, a fent írt mezőkkel, opcionálisan.
 
 DELETE /api/v/0.1/user/
-deletes one user identified session, returns ID. Non-prenament, yet irreversible for now.
-later will be only avalibe if auth is present
+Eltöröli a felhasználót, bejelentkezés után.
+Az eltörölt profil ID-jét adja visszatérési értékként, JSON-ban.
+
 
 GET /api/v/0.1/user?name={name}&date_start={date}&date_end={date}&gender={gender}
-one to all fields can be provided, gender must be ehiter 0,1 or 2
-returs all matching users by query params with fields: name,gender,birth_date
+Felhasználót keres, név,szül.idő és nem alapján. Nem értéke 0,1 vagy 2 lehet (férfi,nő,x).
+Legalább egyik kulcs érték párt elvárja.
+Visszatérési értékként egy tömbös JSON-t küld a {name,gender,birth_date} mezőkkel, eredményenként.
 
 GET /api/v/0.1/user/login
-requires password and username as body json, for now unencrypted, redirects to /api/v/0.1/user/{ID} upon success and starts a session
+Beléptet a rendszerbe.
+JSON-ként kér {password,name} mezőket.
+Sikeres belépés esetén átirányít a: /api/v/0.1/user/{ID} -re és létrehoz egy sütis munkamenetet.
 
 GET /api/v/0.1/user/logout
-redirects to /, destorys session
+Kiléptet a rendszerből, megszünteti a munkamenetet és a /api/v/0.1/-re átirányít.
 
 GET /api/v/0.1/{USER}/reset-password
-for now only redirects to /, later will send email w password reset schema
+Egyenlőre nem mükszik
 
 POST /api/v/0.1/user/register
-requires name,gender,birth_date,email,password,re-password, upon success creates a new user, creates a session for said user and redirects to /api/v/0.1/user/{ID}
+Regisztrál egy felhasználót.
+A sikeres regisztrációhoz a {name,gender,birth_date,email,password,re-password} mezőket követeli.
+Sikeres regisztráció esetén beléptet és átirányít a /api/v/0.1/user/{ID} -ra.
 
 POST /api/v/0.1/user/change-password
-requires password,re-password, upon succes updates password, requires a valid session
+Belépés után elérhető.
+A {password,re-password} mezőket kéri.
+Siker esetén frissíti a jelszót a {password} értékére.
+
+
+Alábbiak még változni fognak, valsz. munkamenethez lesz legtöbbjük kötve.
 
 GET /api/v/0.1/tag?name={name}
-query searches for tags by name
+Cédulákat keres minimum részleges egybeeséssel, kulcs érték mező kötelező.
+Eredményt JSON tömbként visszaadja.
 
 POST /api/v/0.1/tag
-creates new tag, requires a tag_name json field
+Létrehoz egy új cédulát.
+A {tag_name} JSON mezőt követeli.
 
 PATCH /api/v/0.1/tag/{ID}
-updates a tags name identified by ID, requires a tag_name json field
+A cédula nevét átírja ID alapján.
+JSON-ba a {tag_name} mezőt követeli.
 
 DELETE /api/v/0.1/tag/{ID}
-deletes a tag by ID
+Eltöröl egy cédulát ID alapján.
 
 
