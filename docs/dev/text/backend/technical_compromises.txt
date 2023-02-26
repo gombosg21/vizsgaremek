@@ -62,14 +62,14 @@ munkamenet és auth
     hátrányok:
         - tokenek alapból nincsenek böngésző által kezelve, frontend-nek extra figyelmet kell rájuk fordítania
 
-3. google:
+3. google/facebook:
     előnyök:
         - felhasználói élmény: miért regisztrálj ha már meglévő fiókkal be tudsz jelentkezni
         - XSRF immunitás
     hátrányok:
         - bonyolultabb szerver oldali kód
         - token bázisú, frontend részéről úgyszint extra kódot igényel
-        - google fejlesztői fiókot igényel
+        - google/facebook fejlesztői fiókot igényel
         - adatszivárgás esetén dominóhatás van
 
 4. Auth0:
@@ -77,5 +77,21 @@ munkamenet és auth
         - egyszerű mint az 1x1
     hátrányok:
         - előfizetős
+        - auth mint külső szolgáltatás
 
- döntés: Egyenlőre süti, egyszerű letisztult és gyors, mind kliens és szerver oldalon. Biztonság nem elsődleges szempont, csak munkamenet kell.      
+5. OAuth:
+    előnyök:
+        - XSRF immunitás
+    hátrányok:
+        - bonyolultabb szerver oldali kód, provider séma kell
+        - dupla token bázisú, frontend részéről extra kódot igényel
+
+6. OpenID:
+    előnyök:
+        - felhasználó csak egy ID-t kell megadjon
+    hátrányok:
+        - bonyolultabb szerver oldali kód, provider séma kell
+        - nem hoz létre munkamenetet csak azonosításra használható önmagában
+
+ döntés: Egyenlőre süti, egyszerű letisztult és gyors, mind kliens és szerver oldalon. Biztonság nem elsődleges szempont, csak munkamenet kell.
+ Később lehet hogy OAuth v2, de ez egy messzi célpont. Előbb még http digest kell, basic nem eléggé biztonságos (a minimális követelményekkel szemben sem)  
