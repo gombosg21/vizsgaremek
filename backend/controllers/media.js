@@ -1,16 +1,38 @@
+const { Association } = require("sequelize");
+
 const media = require("../models").media;
 const tag = require("../models").tag;
 const taglist = require("../models").taglist;
-const user = require("../models").user;
+const Visibility = require('../middlewares/authentiaction/visibility').determineVisibility;
 
-exports.viewOneMediaFromUser = async (req, res, next) => {
-    const ownerID = req.params.user_ID;
+exports.getMediaByID = async (req, res, next) => {
     const mediaID = req.params.media_ID;
 
     try {
-        const MediaData = await media.findOne({ where: { id: mediaID, user_ID: ownerID }, include: { model: tag } });
+        const Media = await media.findOne({ where: { ID: mediaID }, include: { model: tag, thorough: { model: taglist }, model: user } });
 
-        res.status(200).json(MediaData);
+        if (Media == null) {
+            return res.status(404).json({ "error": "file is gone or never was" })
+        } else {
+            const MediaData = {
+                uploader: user.name,
+                file: Media.file,
+                uploaded: Media.uploaded,
+                description: Media.description,
+                placeholder_text: Media.placeholder_text
+            };
+
+            const itemVisibility = Media.visibility;
+            const mediaOwner = Media.User_ID;
+            const UserID = req.user.ID;
+
+            let results = {};
+
+            results = Visibility(UserID, mediaOwner, itemVisibility, MediaData);
+
+            res.status(results.status)
+                .json(results.data);
+        }
     }
     catch (error) {
         console.error(error);
@@ -19,45 +41,88 @@ exports.viewOneMediaFromUser = async (req, res, next) => {
 };
 
 exports.getAllMediaFromUser = async (req, res, next) => {
-    const ownerID = req.params.user_ID;
+    const mediaOwner = Media.User_ID;
 
     try {
-        const MediaList = await media.findAll({ where: { user_ID: ownerID }, include: { model: tag } });
+        const MediaList = await media.findAll({ where: { user_ID: mediaOwner }, include: { model: tag } });
+        if (MediaList == null) {
+            return res.status(404).json({ "error": "file is gone or never was" });
+        }
+        else {
+            const UserID = req.user.ID;
 
-        res.status(200).json(MediaList);
+            var MediaDataList = [];
+
+            MediaList.forEach(Media => {
+                var itemVisibility = Media.visibility;
+                var MediaData = {
+                    uploader: user.name,
+                    file: Media.file,
+                    uploaded: Media.uploaded,
+                    description: Media.description,
+                    placeholder_text: Media.placeholder_text
+                };
+                let results = {};
+
+                results = Visibility(UserID, mediaOwner, itemVisibility, MediaData);
+
+                if (results.status == 200) {
+                    MediaDataList.push(MediaData);
+                };
+            });
+            if (MediaDataList[0] != undefined) {
+                            res.status(200)
+                .json(MediaDataList);
+            } else {
+                res.status(403)
+                    .json({"error":"insufficient privilegdes"})
+            };
+        };
     }
     catch (error) {
         console.error(error);
         res.status(500);
-    }
+    };
 };
 
-exports.getMediaByTags = async (req, res, next) => {
-    const tags = req.query.tags;
+exports.getAllMediaByTags = async (req, res, next) => {
+
+    const tagList = req.query.tags;
 
     try {
-        const MediaList = await media.findAll({ where: { user_ID: ownerID }, include: { model: tag, thorough: { model: taglist }, include: [{ name: [tags] }] } });
+        const MediaList = await media.findAll({ include: { model: tag, thorough: { model: taglist }, include: [{ name: [tagName] }] } });
+
     }
     catch (error) {
         console.error(error);
         res.status(500);
-    }
+    };
+};
 
-}
 
 exports.uploadMedia = async (req, res, next) => {
+
+    const userID = req.user.ID
+    const data = req.files;
+    const description = req.body.description;
+    const visibility = req.body.visibility;
+    const placeholder_text = req.body.placeholder_text;
+    const tags = req.body.tags;
 
     try {
         const Media = media.build(
             {
-                user_ID: req.params.user_ID,
-                data: req.body.imgData,
-                description: req.body.description,
-                visibility: req.body.visibility,
-                placeholder_text: req.body.placeholder_text,
-                tags: req.body.tags
+                user_ID: userID,
+                data: data,
+                description: description,
+                visibility: visibility,
+                placeholder_text: placeholder_text,
+                tags: {
+                   name : tags
+                },include:[{
+                    association: media_taglist.media_ID,
+                }]
             });
-
         await Media.save();
         res.status(200);
 
@@ -65,8 +130,8 @@ exports.uploadMedia = async (req, res, next) => {
     catch (error) {
         console.error(error);
         res.status(500);
-    }
-}
+    };
+};
 
 exports.deleteMedia = async (req, res, next) => {
     const ID = req.params.media_ID;
@@ -82,8 +147,8 @@ exports.deleteMedia = async (req, res, next) => {
     catch (error) {
         console.error(error);
         res.status(500);
-    }
-}
+    };
+};
 
 exports.editMedia = async (req, res, next) => {
     const ID = req.params.media_ID;
@@ -104,5 +169,5 @@ exports.editMedia = async (req, res, next) => {
     catch (error) {
         console.error(error);
         res.status(500);
-    }
-}
+    };
+};
