@@ -2,15 +2,24 @@ const user = require("../models").user;
 const media = require("../models").media;
 const generatePassword = require('../util/password').generatePassword;
 const { Op } = require("sequelize");
+const Visibility = require('../middlewares/authentiaction/visibility').determineVisibility;
 
 exports.getProfile = async (req, res, next) => {
 
     const ID = req.params.userID;
+    const userID = req.user.ID;
     try {
         const User = await user.findOne(
             {
                 where: { ID: ID }
             });
+
+        const profilePicId = User.profile_pic;
+
+        let ProfilePic;
+            if (profilePicId != null ) {
+                ProfilePic = await media.findOne({where:{ID : profilePicId}, attributes:['file_data']})
+            };
 
         const UserProfile = {
             name: User.name,
@@ -18,60 +27,22 @@ exports.getProfile = async (req, res, next) => {
             gender: User.gender,
             birth_date: User.birth_date,
             profile_description: User.profile_description,
-            profile_pic: User.profile_pic,
+            profile_pic: ProfilePic,
             type: User.type
         };
 
-        //
-        //  user profile visibility levels
-        //  0 = private
-        //  1 = friends only
-        //  2 = registered only
-        //  3 = public
-        //
         const visibility = User.profile_visibility;
-        console.log(visibility)
-        switch (visibility) {
-            case (0): {
-                if (req.user.ID == User.ID) {
-                    res.status(200)
-                        .json(UserProfile);
-                } else {
-                    res.status(403).
-                        json({ "error": "this profile is private" });
-                };
-                break;
-            }
-            case (1): {
-                res.status(501)
-                    .json({ "msg": "on TODO" });
-                break;
-            }
-            case (2): {
-                if (req.user) {
-                    res.status(200)
-                        .json(UserProfile);
-                    break;
-                } else {
-                    res.status(401).
-                        json({ "error": "this profile is for registered members only" });
-                    break;
-                };
-            }
-            case (3): {
-                res.status(200)
-                    .json(UserProfile);
-                break;
-            }
-            default: {
-                res.status(500)
-                    .json({ "error": "error" })
-            }
-        };
+
+        let results = {};
+
+        results = Visibility(userID, User.ID, visibility, UserProfile);
+
+        res.status(results.status)
+            .json(results.data)
     }
     catch (error) {
         console.error(error);
-        res.status(502);
+        res.status(500);
     };
 };
 
@@ -92,13 +63,11 @@ exports.editProfile = async (req, res, next) => {
             case (profileVisibility == null): { profileVisibility = User.profile_visibility };
         };
 
-        await User.set(
-            {
+        await User.set({
                 profile_description: profileDescription,
                 profile_visibility: profileVisibility,
                 profile_picture: profilePicture
-            }
-        );
+            });
         await User.save();
         res.status(200)
             .json(User.ID);
@@ -106,7 +75,7 @@ exports.editProfile = async (req, res, next) => {
     catch (error) {
         console.error(error);
         res.status(500);
-    }
+    };
 };
 
 exports.login = async (req, res, next) => {
@@ -157,7 +126,7 @@ exports.logout = async (req, res, next) => {
         }
         else {
             res.redirect('/api/v/0.1/');
-        }
+        };
     });
 };
 
@@ -169,13 +138,13 @@ exports.resetPassword = async (req, res, next) => {
         const User = await user.findOne({ where: { Name: Name } });
         res.status(200)
             .redirect('/');
-        // .json({"notificate" : "reset email sent"})
-        // email.sendResetEmail(User.Email)
+        // .json({"notificate" : "reset email sent"});
+        // email.sendResetEmail(User.Email);
     }
     catch (error) {
         console.error(error);
         res.status(500);
-    }
+    };
 };
 
 exports.createUser = async (req, res, next) => {
@@ -202,20 +171,20 @@ exports.createUser = async (req, res, next) => {
         await User.save();
         res.status(201);
         const NewUser = await user.findOne({ where: { name: UserName } });
-        // email.sendVerfyEmail(User.Email)
+        // email.sendVerfyEmail(User.Email);
         req.logIn(NewUser, async (error) => {
             if (error) {
                 res.status(500);
                 console.error(error);
             } else {
                 res.redirect('/api/v/0.1/user/' + NewUser.ID);
-            }
+            };
         });
     }
     catch (error) {
         console.error(error);
         res.status(500);
-    }
+    };
 };
 
 exports.deleteUser = async (req, res, next) => {
@@ -227,14 +196,21 @@ exports.deleteUser = async (req, res, next) => {
         User.set({
             deleted: true
         })
-        await User.destroy();
-        res.json(User.ID)
-            .redirect('/');
+        req.logout(User, async (error) => {
+            if (error) {
+                res.status(500);
+                console.error(error);
+            } else {
+                await User.destroy();
+                res.json(User.ID)
+                    .redirect('/');
+            };
+        });
     }
     catch (error) {
         console.error(error);
         res.status(500);
-    }
+    };
 };
 
 exports.findUser = async (req, res, next) => {
@@ -270,5 +246,5 @@ exports.findUser = async (req, res, next) => {
     catch (error) {
         console.error(error);
         res.status(500);
-    }
+    };
 };
