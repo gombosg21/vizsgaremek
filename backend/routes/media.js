@@ -2,25 +2,26 @@ const router = require('express').Router();
 const mediaController = require('../controllers/media');
 const mediaValidator = require('../middlewares/validators/media')
 const userValidator = require('../middlewares/validators/user');
+const auth = require('../middlewares/authentiaction/auth');
 
 
 // create media with user_ID
-router.post('/media/:mediaID',mediaController.uploadMedia)
+router.post('/media/:mediaID',auth.isAuth,mediaController.uploadMedia)
 
 // edit media with media_ID
-router.patch('/media/:mediaID',mediaValidator.checkIfMediaIDExsist,mediaController.editMedia)
+router.patch('/media/:mediaID',auth.isAuth,mediaValidator.checkIfMediaIDExsist,mediaController.editMedia)
 
 // delete media with media_ID
-router.delete('/media/:mediaID',mediaValidator.checkIfMediaIDExsist,mediaController.deleteMedia)
+router.delete('/media/:mediaID',auth.isAuth,mediaValidator.checkIfMediaIDExsist,mediaController.deleteMedia)
 
 // view media with media_ID
-router.get('/media/:userID/:mediaID',userValidator.checkIfUserIDExsits,mediaValidator.checkIfMediaIDExsist,mediaController.viewOneMediaFromUser)
+router.get('/media/:mediaID',userValidator.checkIfUserIDExsits,mediaValidator.checkIfMediaIDExsist,mediaController.getMediaByID)
 
 // view ALL media with user_ID
-router.get('/media/:userID/all',userValidator.checkIfUserIDExsits,mediaController.getAllMediaFromUser)
+router.get('/media/all/:userID/',userValidator.checkIfUserIDExsits,mediaController.getAllMediaFromUser)
 
 // view media by tags, search function
-router.get('/media/by-tags',)
+router.get('/media/by-tags/',mediaController.getAllMediaByTags)
 
 // add reaction
 
