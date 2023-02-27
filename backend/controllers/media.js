@@ -1,15 +1,14 @@
-const { Association } = require("sequelize");
-
 const media = require("../models").media;
 const tag = require("../models").tag;
-const taglist = require("../models").taglist;
+const media_taglist = require("../models").media_taglist;
+const { Op } = require("sequelize");
 const Visibility = require('../middlewares/authentiaction/visibility').determineVisibility;
 
 exports.getMediaByID = async (req, res, next) => {
     const mediaID = req.params.media_ID;
 
     try {
-        const Media = await media.findOne({ where: { ID: mediaID }, include: { model: tag, thorough: { model: taglist }, model: user } });
+        const Media = await media.findOne({ where: { ID: mediaID }, include: { model: tag, model: user } });
 
         if (Media == null) {
             return res.status(404).json({ "error": "file is gone or never was" })
@@ -41,7 +40,7 @@ exports.getMediaByID = async (req, res, next) => {
 };
 
 exports.getAllMediaFromUser = async (req, res, next) => {
-    const mediaOwner = Media.User_ID;
+    const mediaOwner = req.params.user_ID;
 
     try {
         const MediaList = await media.findAll({ where: { user_ID: mediaOwner }, include: { model: tag } });
@@ -71,11 +70,11 @@ exports.getAllMediaFromUser = async (req, res, next) => {
                 };
             });
             if (MediaDataList[0] != undefined) {
-                            res.status(200)
-                .json(MediaDataList);
+                res.status(200)
+                    .json(MediaDataList);
             } else {
                 res.status(403)
-                    .json({"error":"insufficient privilegdes"})
+                    .json({ "error": "insufficient privilegdes" })
             };
         };
     }
@@ -87,11 +86,46 @@ exports.getAllMediaFromUser = async (req, res, next) => {
 
 exports.getAllMediaByTags = async (req, res, next) => {
 
-    const tagList = req.query.tags;
+    const tagNames = req.query.tags;
+
+    const tagIDs = [];
+
+    tagNames.forEach(async Tag => {
+        var TagID = await tag.findOne({ where: { name: Tag }, attributes: ['ID'] });
+        if (TagID != null) {
+            tagIDs.push(Tag);
+        };
+    });
 
     try {
-        const MediaList = await media.findAll({ include: { model: tag, thorough: { model: taglist }, include: [{ name: [tagName] }] } });
+        const MediaList = await media.findAll({ where: { [tag.ID]: [tagIDs] }, include: { model: tag, model: user }, thorough:{model: media_taglist} });
 
+        var MediaDataList = [];
+
+        MediaList.forEach(Media => {
+            var itemVisibility = Media.visibility;
+            var MediaData = {
+                uploader: user.name,
+                file: Media.file,
+                uploaded: Media.uploaded,
+                description: Media.description,
+                placeholder_text: Media.placeholder_text
+            };
+            let results = {};
+
+            results = Visibility(UserID, mediaOwner, itemVisibility, MediaData);
+
+            if (results.status == 200) {
+                MediaDataList.push(MediaData);
+            };
+        });
+        if (MediaDataList[0] != undefined) {
+            res.status(200)
+                .json(MediaDataList);
+        } else {
+            res.status(403)
+                .json({ "error": "insufficient privilegdes" })
+        };
     }
     catch (error) {
         console.error(error);
@@ -118,8 +152,8 @@ exports.uploadMedia = async (req, res, next) => {
                 visibility: visibility,
                 placeholder_text: placeholder_text,
                 tags: {
-                   name : tags
-                },include:[{
+                    name: tags
+                }, include: [{
                     association: media_taglist.media_ID,
                 }]
             });
