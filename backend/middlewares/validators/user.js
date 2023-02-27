@@ -89,8 +89,8 @@ exports.checkIfUserIDExsits = async (req, res, next) => {
             .json({ "error": `user with id:${ID} does not exist` });
     } else {
         return next();
-    }
-}
+    };
+};
 
 exports.checkIfNameExsist = async (req, res, next) => {
     const Name = req.params.name;
