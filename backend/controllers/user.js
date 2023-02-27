@@ -5,21 +5,21 @@ const { Op } = require("sequelize");
 const Visibility = require('../middlewares/authentiaction/visibility').determineVisibility;
 
 exports.getProfile = async (req, res, next) => {
-
     const ID = req.params.userID;
-    const userID = req.user.ID;
+    var userID = -1;
+    if(req.user) {
+        userID = req.user.ID;
+    };
+
     try {
-        const User = await user.findOne(
-            {
-                where: { ID: ID }
-            });
+        const User = await user.findOne({ where: { ID: ID } });
 
         const profilePicId = User.profile_pic;
 
         let ProfilePic;
-            if (profilePicId != null ) {
-                ProfilePic = await media.findOne({where:{ID : profilePicId}, attributes:['file_data']})
-            };
+        if (profilePicId != null) {
+            ProfilePic = await media.findOne({ where: { ID: profilePicId }, attributes: ['file_data'] })
+        };
 
         const UserProfile = {
             name: User.name,
@@ -64,10 +64,10 @@ exports.editProfile = async (req, res, next) => {
         };
 
         await User.set({
-                profile_description: profileDescription,
-                profile_visibility: profileVisibility,
-                profile_picture: profilePicture
-            });
+            profile_description: profileDescription,
+            profile_visibility: profileVisibility,
+            profile_picture: profilePicture
+        });
         await User.save();
         res.status(200)
             .json(User.ID);

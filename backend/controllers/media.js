@@ -23,7 +23,10 @@ exports.getMediaByID = async (req, res, next) => {
 
             const itemVisibility = Media.visibility;
             const mediaOwner = Media.User_ID;
-            const UserID = req.user.ID;
+            var userID = -1;
+            if(req.user) {
+                userID = req.user.ID;
+            };
 
             let results = {};
 
@@ -48,7 +51,10 @@ exports.getAllMediaFromUser = async (req, res, next) => {
             return res.status(404).json({ "error": "file is gone or never was" });
         }
         else {
-            const UserID = req.user.ID;
+            var userID = -1;
+            if(req.user) {
+                userID = req.user.ID;
+            };
 
             var MediaDataList = [];
 
@@ -112,8 +118,12 @@ exports.getAllMediaByTags = async (req, res, next) => {
                 placeholder_text: Media.placeholder_text
             };
             let results = {};
+            var userID = -1;
+            if(req.user) {
+                userID = req.user.ID;
+            };
 
-            results = Visibility(UserID, mediaOwner, itemVisibility, MediaData);
+            results = Visibility(userID, mediaOwner, itemVisibility, MediaData);
 
             if (results.status == 200) {
                 MediaDataList.push(MediaData);
