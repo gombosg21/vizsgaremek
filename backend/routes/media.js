@@ -3,10 +3,12 @@ const mediaController = require('../controllers/media');
 const mediaValidator = require('../middlewares/validators/media')
 const userValidator = require('../middlewares/validators/user');
 const auth = require('../middlewares/authentiaction/auth');
+const multer = require('multer');
+const upload = multer({storage: new multer.memoryStorage()});
 
 
 // create media with user_ID
-router.post('/media/:mediaID',auth.isAuth,mediaController.uploadMedia)
+router.post('/media/:mediaID',auth.isAuth,upload.single('image'),mediaController.uploadMedia)
 
 // edit media with media_ID
 router.patch('/media/:mediaID',auth.isAuth,mediaValidator.checkIfMediaIDExsist,mediaController.editMedia)

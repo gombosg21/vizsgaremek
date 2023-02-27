@@ -14,7 +14,6 @@ const usersRouter = require('./routes/users');
 const mediaRouter = require('./routes/media');
 const tagRouter = require('./routes/tag');
 const indexRouter = require('./routes/index');
-const multer = require('multer');
 
 const app = express();
 
@@ -36,7 +35,6 @@ app.use(session(auth.sessionConfig));
 passport.use(auth.strategy);
 app.use(passport.initialize());
 app.use(passport.session());
-//app.use(multer);
 
 const version = 0.1;
 
