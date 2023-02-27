@@ -6,13 +6,13 @@ exports.determineVisibility = (userContextID, dataOwnerID, visbilityFlag, data) 
     //  2 = registered only
     //  3 = public
     //
-    if (typeof userContextID != Number) {
+    if (typeof userContextID != "number") {
         throw new Error("userContextID must be an number");
     };
-    if (typeof dataOwnerID != Number) {
+    if (typeof dataOwnerID != "number") {
         throw new Error("dataOwnerID must be an number");
     };
-    if (typeof visbilityFlag != Number) {
+    if (typeof visbilityFlag != "number") {
         throw new Error("visbilityFlag must be an number");
     };
     if (data == undefined) {
@@ -25,29 +25,36 @@ exports.determineVisibility = (userContextID, dataOwnerID, visbilityFlag, data) 
     };
 
     switch (visbilityFlag) {
-        case (0): {
+        case 0: {
             if (userContextID == dataOwnerID) {
-                returnData.status = 403, returnData.data = { "error": "private" }
+                returnData.status = 403, returnData.data = { "error": "private" };
+                break;
             } else {
                 returnData.status = 200, returnData.data = data;
-            }
+                break;
+            };
         }
-        case (1): {
-            returnData.status = 501, returnData.data = { "msg": "not implemented" }
+        case 1: {
+            returnData.status = 501, returnData.data = { "msg": "not implemented" };
+            break;
         }
-        case (2): {
+        case 2: {
             if (userContextID != undefined) {
                 returnData.status = 200, returnData.data = data;
+                break;
             }
             else {
-                returnData.status = 401, returnData.data = { "error": "must log in to view" }
+                returnData.status = 401, returnData.data = { "error": "must log in to view" };
+                break;
             }
         }
-        case (3): {
+        case 3: {
             returnData.status = 200, returnData.data = data;
+            break;
         }
         default: {
             returnData.status = 500, returnData.data = { "error": "attribute visibility out of range" };
+            break;
         }
     };
     return returnData;
@@ -72,7 +79,7 @@ exports.determineArrayVisibility = (userContextID, dataOwnerID, visibiltyArray, 
         throw new Error("no data was given");
     };
 
-    if (visibiltyArray.every(item => { typeof item != Number })) {
+    if (visibiltyArray.every(item => { typeof item != "number" })) {
         throw new Error("visibiltyArray must only contain numbers");
     };
     if (visibiltyArray.length() != dataArray.length()) {
@@ -90,27 +97,34 @@ exports.determineArrayVisibility = (userContextID, dataOwnerID, visibiltyArray, 
         switch (visbilityFlag[i]) {
             case (0): {
                 if (userContextID == dataOwnerID) {
-                    returnData.status = 403, returnData.data = { "error": "private" }
+                    returnData.status = 403, returnData.data = { "error": "private" };
+                    break;
                 } else {
                     returnData.status = 200, returnData.data = dataArray[i];
+                    break;
                 }
             }
             case (1): {
-                returnData.status = 501, returnData.data = { "msg": "not implemented" }
+                returnData.status = 501, returnData.data = { "msg": "not implemented" };
+                break;
             }
             case (2): {
                 if (userContextID != undefined) {
                     returnData.status = 200, returnData.data = dataArray[i];
+                    break;
                 }
                 else {
-                    returnData.status = 401, returnData.data = { "error": "must log in to view" }
+                    returnData.status = 401, returnData.data = { "error": "must log in to view" };
+                    break;
                 }
             }
             case (3): {
                 returnData.status = 200, returnData.data = dataArray[i];
+                break;
             }
             default: {
                 returnData.status = 500, returnData.data = { "error": "attribute visibility out of range" };
+                break;
             }
         };
         returnDataArray.push(returnData);
