@@ -36,11 +36,10 @@ app.use(session(auth.sessionConfig));
 passport.use(auth.strategy);
 app.use(passport.initialize());
 app.use(passport.session());
-app.use('multer');
+//app.use(multer);
 
 const version = 0.1;
 
-// app.use('/', indexRouter);
 app.use(`/api/v/${version}`, indexRouter)
 app.use(`/api/v/${version}`, usersRouter);
 app.use(`/api/v/${version}`, mediaRouter);
