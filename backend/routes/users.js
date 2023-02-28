@@ -12,10 +12,10 @@ router.get('/user/login', passport.authenticate('local',{failureRedirect:'/api/v
 router.get('/user/logout', userController.logout);
 
 // post create user
-router.post('/user/register/', userValidator.checkIfNameConflicts, userValidator.registerRules(), commonValidation.validate,userController.createUser);
+router.post('/user/register', userValidator.checkIfNameConflicts, userValidator.registerRules(), commonValidation.validate,userController.createUser);
 
 // get profile
-router.get('/user/:userID',userValidator.checkIfUserIDExsits, userController.getProfile);
+router.get('/user/:userID', userValidator.checkIfUserIDExsits, userController.getProfile);
 
 // edit profile
 // delete user
