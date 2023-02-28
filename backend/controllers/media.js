@@ -3,6 +3,7 @@ const tag = require("../models").tag;
 const media_taglist = require("../models").media_taglist;
 const { Op } = require("sequelize");
 const Visibility = require('../middlewares/authentiaction/visibility').determineVisibility;
+const VisibilityArray = require('../middlewares/authentiaction/visibility').determineArrayVisibility;
 
 exports.getMediaByID = async (req, res, next) => {
     const mediaID = req.params.media_ID;
@@ -24,13 +25,13 @@ exports.getMediaByID = async (req, res, next) => {
             const itemVisibility = Media.visibility;
             const mediaOwner = Media.User_ID;
             var userID = -1;
-            if(req.user) {
+            if (req.user) {
                 userID = req.user.ID;
             };
 
             let results = {};
 
-            results = Visibility(UserID, mediaOwner, itemVisibility, MediaData);
+            results = Visibility(userID, mediaOwner, itemVisibility, MediaData);
 
             res.status(results.status)
                 .json(results.data);
@@ -49,32 +50,21 @@ exports.getAllMediaFromUser = async (req, res, next) => {
         const MediaList = await media.findAll({ where: { user_ID: mediaOwner }, include: { model: tag } });
         if (MediaList == null) {
             return res.status(404).json({ "error": "file is gone or never was" });
-        }
-        else {
+        } else {
             var userID = -1;
-            if(req.user) {
+            if (req.user) {
                 userID = req.user.ID;
             };
 
+            var VisibilityArray = [];
+            MediaList.forEach(Media => {
+                VisibilityArray.push(Media.visibility);
+            });
+
             var MediaDataList = [];
 
-            MediaList.forEach(Media => {
-                var itemVisibility = Media.visibility;
-                var MediaData = {
-                    uploader: user.name,
-                    file: Media.file,
-                    uploaded: Media.uploaded,
-                    description: Media.description,
-                    placeholder_text: Media.placeholder_text
-                };
-                let results = {};
+            MediaDataList = determineArrayVisibility(userID, mediaOwner, VisibilityArray, MediaList);
 
-                results = Visibility(UserID, mediaOwner, itemVisibility, MediaData);
-
-                if (results.status == 200) {
-                    MediaDataList.push(MediaData);
-                };
-            });
             if (MediaDataList[0] != undefined) {
                 res.status(200)
                     .json(MediaDataList);
@@ -104,7 +94,7 @@ exports.getAllMediaByTags = async (req, res, next) => {
     });
 
     try {
-        const MediaList = await media.findAll({ where: { [tag.ID]: [tagIDs] }, include: { model: tag, model: user }, thorough:{model: media_taglist} });
+        const MediaList = await media.findAll({ where: { [tag.ID]: [tagIDs] }, include: { model: tag, model: user }, thorough: { model: media_taglist } });
 
         var MediaDataList = [];
 
@@ -119,7 +109,7 @@ exports.getAllMediaByTags = async (req, res, next) => {
             };
             let results = {};
             var userID = -1;
-            if(req.user) {
+            if (req.user) {
                 userID = req.user.ID;
             };
 
