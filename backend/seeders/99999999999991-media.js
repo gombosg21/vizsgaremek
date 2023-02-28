@@ -17,16 +17,17 @@ module.exports = {
 
 
 
+
     userIDs.forEach(async userID => {
       var userUploadCount = Math.floor(Math.random() * 10);
 
       for (let i = 0; i < userUploadCount; i++) {
 
-        var uploadTagCount = Math.floor(Math.random() * tags.length());
+        var uploadTagCount = Math.floor(Math.random() * tags.length);
         var uploadTagIDList = [];
 
-        while (uploadTagIDList.length() < uploadTagCount) {
-          var randomTagID = tags[Math.round(Math.random() * tags.length())];
+        while (uploadTagIDList.length < uploadTagCount) {
+          var randomTagID = tags[Math.round(Math.random() * tags.length)];
           if (!uploadTagIDList.includes(randomTagID)) {
             uploadTagIDList.push({ID:randomTagID});
           };
@@ -34,7 +35,7 @@ module.exports = {
 
           var upload = await media.create({
             user_ID: userID,
-            file_data: mediaFiles[Math.floor(Math.random() * mediaFiles.length())],
+            file_data: mediaFiles[Math.floor(Math.random() * mediaFiles.length)],
             uploaded: Date.now(),
             description: fake.faker.lorem.lines(),
             visibility: Math.floor(Math.random() * 3),
@@ -53,6 +54,7 @@ module.exports = {
 
   async down(queryInterface, Sequelize) {
 
+    await queryInterface.bulkDelete('media-taglist');
     await queryInterface.bulkDelete('media');
   }
 };
