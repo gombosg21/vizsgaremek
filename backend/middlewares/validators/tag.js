@@ -1,6 +1,5 @@
 const validator = require('express-validator');
 const tag = require('../../models').tag;
-const DB = require('../../util/db');
 
 exports.tagRules = () => {
     return [
@@ -16,7 +15,7 @@ exports.searchRules = () => {
         validator.query("tag_name").isAlpha().withMessage("tag can only contain letters"),
         validator.query("tag_name").isLength({ max: 50 }).withMessage("tag can only be 50 characters long max")
     ]
-}
+};
 
 exports.checkIfTagIDDoesNotExsits = async (req, res, next) => {
 
@@ -24,10 +23,9 @@ exports.checkIfTagIDDoesNotExsits = async (req, res, next) => {
 
     if (await tag.findOne({ where: { id: ID } }) == null) {
         return res.status(406).json({ "error": `tag with id:${ID} does not exsits` });
-    }
-    else {
+    } else {
         return next();
-    }
+    };
 };
 
 exports.checkIfTagNameAlreadyExsits = async (req, res, next) => {
@@ -37,8 +35,7 @@ exports.checkIfTagNameAlreadyExsits = async (req, res, next) => {
     if (await tag.findOne({ where:{ name: tagName }})) {
         return res.status(406)
             .json({ "error": `${tagName} already exsits` });
-    }
-    else {
+    } else {
         return next();
-    }
+    };
 };
