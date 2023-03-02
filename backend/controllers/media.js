@@ -80,6 +80,26 @@ exports.getAllMediaFromUser = async (req, res, next) => {
     };
 };
 
+preProcessAndSequence = (propArray,AndKey) => {
+    const preProcessedAndSequence = [];
+    if (propArray.isArray() == false) {
+        throw new Error("propArray must be an array");
+    };
+    if (propArray.length == 0) {
+        throw new Error("propArray cannot be empty");
+    };
+    if(AndKey == undefined || null) {
+        throw new Error("argument AndKey missing");
+    };
+    if (typeof AndKey != "string") {
+        throw new Error("AndKey must be a string");
+    };
+    for(let i=0; i< propArray.length; i++) {
+        preProcessedAndSequence.push({[AndKey]:propArray[i]});
+    };
+    return preProcessedAndSequence;
+};
+
 exports.getAllMediaByTags = async (req, res, next) => {
 
     const tagNames = req.query.tags;
@@ -93,12 +113,14 @@ exports.getAllMediaByTags = async (req, res, next) => {
         };
     });
 
+    const tagIdAndArray = preProcessAndSequence(tagIDs,"tag_ID");
+
     try {
-        const MediaList = await media.findAll({ where: { [tag.ID]: [tagIDs] }, include: { model: tag, model: user }, thorough: { model: media_taglist } });
+        const MediaIDList = await media_taglist.findAll({ where: {[Op.and]:tagIdAndArray},attributes:['media_ID']});
 
-        var MediaDataList = [];
+        const MediaDataList = await media.findAll({where:{ID: {[Op.in]:MediaIDList}}});
 
-        MediaList.forEach(Media => {
+        MediaDataList.forEach(Media => {
             var itemVisibility = Media.visibility;
             var MediaData = {
                 uploader: user.name,
