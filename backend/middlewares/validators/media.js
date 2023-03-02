@@ -1,95 +1,85 @@
 const validator = require('express-validator');
 const media = require('../../models').media;
 const tags = require('../../models').tag;
+const streamSignature = require('stream-signature');
 
-
-exports.uploadRules = () => 
-{
-    return [
-        validator.body('imgData').notEmpty().withMessage("cannot upload, no image given"),
-        validator.body('placeholder').notEmpty().withMessage("placeholder text cannot be empty")
-    ]
-}
-
-exports.editRules = () => 
-{
+exports.uploadRules = () => {
     return [
         validator.body('placeholder').notEmpty().withMessage("placeholder text cannot be empty")
     ]
-}
+};
 
-exports.checkIfMediaIDExsist = async (req,res,next) => 
-{
+exports.editRules = () => {
+    return [
+        validator.body('placeholder').notEmpty().withMessage("placeholder text cannot be empty")
+    ]
+};
+
+exports.searchByTagRules = () => {
+    return [
+        validator.query().notEmpty().withMessage("cannot process empty query"),
+        validator.query().isAscii().withMessage("only text and simple characters are allowed in query")
+    ]
+};
+
+exports.checkIfMediaIDExsist = async (req, res, next) => {
     const mediaID = req.params.mediaID;
 
-    if(await  media.findOne({where:{id : mediaID}}) == null) 
-    {
-        return res.status(404).json({"error":`media with id:${mediaID} does not exsist`});
-    } 
-    else 
-    {
+    if (await media.findOne({ where: { id: mediaID } }) == null) {
+        return res.status(404)
+            .json({ "error": `media with id:${mediaID} does not exsist` });
+    } else {
         return next();
-    }
-}
-
-exports.validateUpload = (req,res,next) => 
-{
-    const errors = validator.validationResult(req)
-
-    if (errors.isEmpty()) 
-    {
-       return next();
-    }
-
-    const errorList = [];
-    errors.array().map(err => errorList.push({[err.param]:err.msg}))
-
-    return res.status(422).json({error: errorList})
+    };
 };
 
-exports.valiadteEdit = (req,res,next) => 
-{
-    const errors = validator.validationResult(req)
+exports.validateUploadFile = (req, res, next) => {
 
-    if (errors.isEmpty()) 
-    {
-       return next();
-    }
+    const mediaData = req.file;
 
-    const errorList = [];
-    errors.array().map(err => errorList.push({[err.param]:err.msg}))
+    if (mediaData == null || undefined) {
+        return res.status(406)
+            .json({ "error": "no file given" });
+    };
 
-    return res.status(422).json({error: errorList})
+    var signature = new streamSignature();
+    var fileSignature = {};
+    fileSignature = signature.on('signature', signature => {
+        console.log(JSON.stringify(signature, null, 2))
+      });
+    signature(mediaData);
+
+    if ( fileSignature.mime-type.startsWith("image")) {
+        return next();
+    } else {
+        return res.status(406)
+            .json({ "error": "invalid file format, must be an image only." });
+    };
 };
 
-exports.validateTags = async (req,res,next) => 
-{
-    const Tags = req.body.tags;
+exports.validateTags = async (req, res, next) => {
+    const tagNames = req.body.tags;
 
-    if( Tags === null) 
-    {
-        res.status(406);
-        return;
-    } 
-    else 
-    {
-        var badTag = false;
-        for(let i = 0; i < Tags.lenght(); i++)
-        {
-            var tag = await tags.findOne(Tags[i]);
-            if(tag === null) 
-            {
-                badTag = true;
-            }    
-        }
-        if (badTag == true) 
-        {
-            res.status(406);
-            return;
-        } 
-        else 
-        {
-            next();
-        }
+    if (tagNames[0] == undefined) {
+        return res.status(406)
+            .json({ "error": "tag list cannot be empty" });
+    };
+
+    var badTag = false;
+    const badTagList = [];
+    for (let i = 0; i < tagNames.lenght(); i++) {
+        var tag = await tags.findOne({ where: { name: tagNames[i] } });
+        if (tag == null) {
+            badTag = true;
+            badTagList.push(tag.name);
+        };
+    };
+
+    if (badTag == true) {
+        return res.status(406)
+            .json({ "error": `invalid tags: ${badTagList} in list of tags` });
     }
+    else {
+        return next();
+    };
 };
