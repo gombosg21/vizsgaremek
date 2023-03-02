@@ -30,7 +30,7 @@ exports.registerRules = () => {
         validator.body('gender').notEmpty().withMessage("select a gender"),
         validator.body('gender').isInt({ min: gender_start, max: gender_end }).withMessage("unknown gender type")
     ]
-}
+};
 
 exports.searchRules = () => {
     return [validator.oneOf([
@@ -45,7 +45,7 @@ exports.searchRules = () => {
             validator.query('date_end').isDate().optional({nullable:true,checkFalsy:true}).withMessage("invalid date format"),
             validator.query('gender').isInt({ min: gender_start, max: gender_end }).optional({nullable:true,checkFalsy:true}).withMessage("unknown gender type")
         ],]
-}
+};
 
 exports.updateProfileRules = () => {
     return [validator.oneOf([
@@ -59,7 +59,7 @@ exports.updateProfileRules = () => {
             validator.body("profile_picture").isInt().optional({nullable:true,checkFalsy:true}).withMessage("profile picture must be a numeric ID")
         ]
     ]
-}
+};
 
 exports.changePasswordRules = () => {
     return [
@@ -68,7 +68,7 @@ exports.changePasswordRules = () => {
         validator.body('password').isStrongPassword().withMessage("too weak password, try a different one"),
         validator.body('re_password').custom((value, { req, loc, path }) => { if (value !== req.body.password) { throw new Error("password fields must match") } else { return value; } }),
     ]
-}
+};
 
 exports.checkIfNameConflicts = async (req, res, next) => {
     const UserName = req.body.name;
@@ -78,8 +78,8 @@ exports.checkIfNameConflicts = async (req, res, next) => {
             .json({ "error": `username ${UserName} already exists` });
     } else {
         return next();
-    }
-}
+    };
+};
 
 exports.checkIfUserIDExsits = async (req, res, next) => {
     const ID = req.params.userID;
@@ -100,5 +100,5 @@ exports.checkIfNameExsist = async (req, res, next) => {
             .json({ "error": `username ${Name} does not exist` });
     } else {
         return next();
-    }
-}
+    };
+};
