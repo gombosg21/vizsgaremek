@@ -15,6 +15,11 @@ exports.determineVisibility = (userContextID, dataOwnerID, visbilityFlag, data) 
     if (typeof visbilityFlag != "number") {
         throw new Error("visbilityFlag must be an number");
     };
+
+    if (3 < visbilityFlag || visbilityFlag < 0) {
+        throw new Error("visbilityFlag must be in range of 0-3");
+    };
+
     if (data == undefined) {
         throw new Error("no data was given");
     };
