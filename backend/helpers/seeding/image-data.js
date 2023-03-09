@@ -81,7 +81,6 @@ async function testForImg(fileArray, desiredCount) {
         throw new Error("desiredCount must be an integer");
     };
 
-
     const imgBlobArray = [];
 
     for (file of fileArray) {
@@ -106,8 +105,19 @@ async function testForImg(fileArray, desiredCount) {
         return imgBlobArray;
     }
     else {
-        return await getIMG(desiredCount);
+        const files = await getIMG(desiredCount);
+        return files;
     };
 };
 
-module.exports = getTemp();
+
+const test = async () => {
+
+    const mediaBlobArray = await getTemp(10);
+
+    console.log(mediaBlobArray);
+};
+
+test();
+
+module.exports.getTemp = getTemp;
