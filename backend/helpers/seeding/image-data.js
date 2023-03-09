@@ -49,15 +49,16 @@ async function getTemp(desiredCount) {
     try {
         const files = await fs.readdir(temp);
         if (files.length < desiredCount) {
-            await getIMG(desiredCount)
+            return await getIMG(desiredCount)
         }
         else {
             const fileList = await listTemp();
-            await testForImg(fileList, desiredCount);
+            return await testForImg(fileList, desiredCount);
         };
     } catch (error) {
         await fs.mkdir(temp, { recursive: false });
-        await getIMG(desiredCount);
+         
+        return await getIMG(desiredCount);
     };
 };
 
@@ -109,15 +110,5 @@ async function testForImg(fileArray, desiredCount) {
         return files;
     };
 };
-
-
-const test = async () => {
-
-    const mediaBlobArray = await getTemp(10);
-
-    console.log(mediaBlobArray);
-};
-
-test();
 
 module.exports.getTemp = getTemp;
