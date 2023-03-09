@@ -11,45 +11,48 @@ const mediaData = require('../helpers/seeding/image-data');
 module.exports = {
   async up(queryInterface, Sequelize) {
 
-    const mediaArray = [];
     const userIDs = await user.findAll({ attributes: ['ID'] });
-    const tags = await tag.findAll({ attributes: ['ID'] });
+    const tag_list = await tag.findAll({ attributes: ['ID'] });
     const mediaFiles = await mediaData.getTemp(10);
-
     if (mediaFiles) {
 
-      userIDs.forEach(async userID => {
+      for (userID of userIDs) {
         var userUploadCount = Math.floor(Math.random() * 10);
 
         for (let i = 0; i < userUploadCount; i++) {
 
-          var uploadTagCount = Math.floor(Math.random() * tags.length);
+          var uploadTagCount = Math.floor(Math.random() * tag_list.length);
           const uploadTagIDList = [];
 
           while (uploadTagIDList.length < uploadTagCount) {
-            var randomTagID = tags[Math.round(Math.random() * tags.length)];
+            var randomTagID = tag_list[Math.round(Math.random() * tag_list.length)].ID;
             if (!uploadTagIDList.includes(randomTagID)) {
               uploadTagIDList.push({ ID: randomTagID });
             };
           };
 
+          console.log(uploadTagIDList);
           var upload = await media.create({
-            user_ID: userID,
+            user_ID: userID.ID,
             file_data: mediaFiles[Math.floor(Math.random() * mediaFiles.length)],
             uploaded: Date.now(),
             description: fake.faker.lorem.lines(),
             visibility: Math.floor(Math.random() * 3),
             placeholder_text: fake.faker.lorem.word(),
-            tag: uploadTagIDList,
-            include: [{
-              association: tag
-            }]
           });
-          mediaArray.push(upload);
-        };
-      });
 
-      await queryInterface.bulkInsert('media', mediaArray);
+          if (uploadTagIDList.length > 0) {
+
+            await upload.set({
+              tags: uploadTagIDList
+            },
+              {
+                include: [tag]
+              });
+          };
+        };
+      };
+
     } else {
       throw new Error("mediadata missing");
     };
