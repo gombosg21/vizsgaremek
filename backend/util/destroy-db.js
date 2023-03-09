@@ -1,4 +1,5 @@
 const db = require('./db');
+const process = require('process');
 
 db.connect();
 db.destroyDB();
