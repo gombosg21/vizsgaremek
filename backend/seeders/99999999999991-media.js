@@ -16,24 +16,28 @@ module.exports = {
     const mediaFiles = await mediaData.getTemp(10);
     if (mediaFiles) {
 
-      for (userID of userIDs) {
+      for (let i = 0; i< userIDs.length; i++) {
         var userUploadCount = Math.floor(Math.random() * 10);
 
+        var userID = userIDs[i].ID;
+        
         for (let i = 0; i < userUploadCount; i++) {
-
           var uploadTagCount = Math.floor(Math.random() * tag_list.length);
-          const uploadTagIDList = [];
+          var uploadTagIDList = [];
 
+          console.log(uploadTagCount)
+
+          if ( uploadTagCount > 0) {
           while (uploadTagIDList.length < uploadTagCount) {
-            var randomTagID = tag_list[Math.round(Math.random() * tag_list.length)].ID;
+            var randomTagID = tag_list[Math.floor(Math.random() * tag_list.length)].ID;
             if (!uploadTagIDList.includes(randomTagID)) {
               uploadTagIDList.push({ ID: randomTagID });
             };
           };
-
-          console.log(uploadTagIDList);
-          var upload = await media.create({
-            user_ID: userID.ID,
+        };
+          
+          var upload = await media.build({
+            user_ID: userID,
             file_data: mediaFiles[Math.floor(Math.random() * mediaFiles.length)],
             uploaded: Date.now(),
             description: fake.faker.lorem.lines(),
@@ -49,6 +53,8 @@ module.exports = {
               {
                 include: [tag]
               });
+
+              await upload.save();
           };
         };
       };
