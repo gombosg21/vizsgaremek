@@ -1,0 +1,23 @@
+<div class="overlay" *ngIf="upload"></div>
+
+
+<div class="row mt-3">
+    <div class="col-md-6 offset-md-3">
+        <div class="card" id="uploadForm">
+            <div class="card-body">
+                <form (submit)="onSubmit($event)">
+                    <div class="mb-3">
+                        <label for="imageInput" class="form-label">Select Image</label>
+                        <input type="file" class="form-control" id="imageInput" accept="image/*" (change)="onFileSelected($event)">
+                    </div>
+                    <div class="mb-3">
+                        <label for="descriptionInput" class="form-label">Description</label>
+                        <input type="text" class="form-control" id="descriptionInput" placeholder="Enter a description" [(ngModel)]="newPost.description">
+                    </div>
+                    <button type="submit" class="btn btn-secondary">Submit</button>
+                    <button type="button" id="cancelButton" class="btn btn-secondary" (click)="cancel()">Cancel</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
