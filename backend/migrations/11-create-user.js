@@ -1,6 +1,6 @@
 'use strict';
 
-const media = require('../models/media');
+const { DataTypes } = require('sequelize');
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -15,7 +15,7 @@ module.exports = {
       name: {
         allowNull: false,
         unique: true,
-        type: Sequelize.STRING + 'CHARSET utf8 COLLATE utf8_hungarian_ci'
+        type: Sequelize.STRING
       },
       deleted: {
         allowNull: false,
@@ -34,12 +34,16 @@ module.exports = {
       },
       register_date: {
         allowNull: false,
-        defaultValue: Sequelize.literal('CURRRENT_TIMESTAMP'),
+        defaultValue: DataTypes.NOW,
         type: Sequelize.DATE,
       },
-      password: {
+      password_hash: {
         allowNull: false,
-        type: Sequelize.STRING + 'CHARSET utf8 COLLATION utf8_binary_ci'
+        type: Sequelize.STRING
+      },
+      password_salt:{
+        allowNull: false,
+        type: Sequelize.STRING
       },
       email_verified: {
         allowNull: false,
@@ -67,8 +71,16 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       profile_pic: {
-        type: Sequelize.INTEGER,
-        references:{model:media,key:'ID'}
+      type: Sequelize.INTEGER
+      },
+      gender: {
+        allowNull:false,
+        type: Sequelize.INTEGER
+      },
+      deletedAt:{
+        allowNull:true,
+        defaultValue:null,
+        type:Sequelize.DATE
       }
     });
   },

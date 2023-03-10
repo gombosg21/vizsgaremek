@@ -1,0 +1,61 @@
+{} represent values
+
+GET /api/v/0.1/user/{ID}
+ID alapján visszad egy nézetet a felhasználótól: {name,register_date,gender,birth_date,profile_description,profile_picture,profile_visibility,type}
+ha profile_visibility nem publikus (3), akkor nem minden körülmény között érhető el.
+Visszatérési értéke egy JSON állomány
+
+PATCH /api/v/0.1/user/
+bejelentkezés után, ID alapján frissíti a profiladatokat : {profile_description,profile_picture,profile_visibility}
+JSON állományt vár el, a fent írt mezőkkel, opcionálisan.
+
+DELETE /api/v/0.1/user/
+Eltöröli a felhasználót, bejelentkezés után.
+Az eltörölt profil ID-jét adja visszatérési értékként, JSON-ban.
+
+
+GET /api/v/0.1/user?name={name}&date_start={date}&date_end={date}&gender={gender}
+Felhasználót keres, név,szül.idő és nem alapján. Nem értéke 0,1 vagy 2 lehet (férfi,nő,x).
+Legalább egyik kulcs érték párt elvárja.
+Visszatérési értékként egy tömbös JSON-t küld a {name,gender,birth_date} mezőkkel, eredményenként.
+
+GET /api/v/0.1/user/login
+Beléptet a rendszerbe.
+JSON-ként kér {password,name} mezőket.
+Sikeres belépés esetén átirányít a: /api/v/0.1/user/{ID} -re és létrehoz egy sütis munkamenetet.
+
+GET /api/v/0.1/user/logout
+Kiléptet a rendszerből, megszünteti a munkamenetet és a /api/v/0.1/-re átirányít.
+
+GET /api/v/0.1/{USER}/reset-password
+Egyenlőre nem mükszik
+
+POST /api/v/0.1/user/register
+Regisztrál egy felhasználót.
+A sikeres regisztrációhoz a {name,gender,birth_date,email,password,re-password} mezőket követeli.
+Sikeres regisztráció esetén beléptet és átirányít a /api/v/0.1/user/{ID} -ra.
+
+POST /api/v/0.1/user/change-password
+Belépés után elérhető.
+A {password,re-password} mezőket kéri.
+Siker esetén frissíti a jelszót a {password} értékére.
+
+
+Alábbiak még változni fognak, valsz. munkamenethez lesz legtöbbjük kötve.
+
+GET /api/v/0.1/tag?name={name}
+Cédulákat keres minimum részleges egybeeséssel, kulcs érték mező kötelező.
+Eredményt JSON tömbként visszaadja.
+
+POST /api/v/0.1/tag
+Létrehoz egy új cédulát.
+A {tag_name} JSON mezőt követeli.
+
+PATCH /api/v/0.1/tag/{ID}
+A cédula nevét átírja ID alapján.
+JSON-ba a {tag_name} mezőt követeli.
+
+DELETE /api/v/0.1/tag/{ID}
+Eltöröl egy cédulát ID alapján.
+
+

@@ -2,8 +2,6 @@
 const {
   Model
 } = require('sequelize');
-const media = require('./media');
-const tag = require('./tag');
 module.exports = (sequelize, DataTypes) => {
   class media_taglist extends Model {
     /**
@@ -12,21 +10,22 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      this.hasMany(models.tag,{sourceKey:"tag_ID",foreignKey:"ID"}),
+      this.hasMany(models.media,{sourceKey:"media_ID",foreignKey:"ID"})
     }
   }
   media_taglist.init({
-    tag_name: 
+    tag_ID: 
     {
       allowNull:false,
-      type:DataTypes.STRING,
-      references:{model:tag,key:'name'}
+      type:DataTypes.INTEGER,
+      references:{model:'tag',key:'ID'}
     },
     media_ID: 
     {
       allowNull:false,
       type:DataTypes.INTEGER,
-      references:{model:media,key:'ID'}
+      references:{model:'media',key:'ID'}
     }
   }, 
   {

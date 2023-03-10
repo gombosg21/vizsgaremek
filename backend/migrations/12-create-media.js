@@ -15,10 +15,9 @@ module.exports = {
       },
       user_ID: {
         allowNull: false,
-        references: {model:user,key:'ID'},
         type: Sequelize.INTEGER
       },
-      data: {
+      file_data: {
         allowNull:false,
         type: Sequelize.BLOB
       },
@@ -35,10 +34,9 @@ module.exports = {
       last_edit: {
         allowNull:false,
         defaultValue: Sequelize.NOW,
-        // onUpdate: Sequelize.NOW,
         type: Sequelize.DATE
       },
-      descption: {
+      description: {
         type: Sequelize.TEXT
       },
       visibility: {
@@ -49,6 +47,12 @@ module.exports = {
       placeholder_text: {
         allowNull:false,
         type: Sequelize.TEXT
+      },
+      deletedAt:
+      {
+        allowNull:true,
+        defaultValue:null,
+        type: Sequelize.DATE
       }
     });
   },

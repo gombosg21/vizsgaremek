@@ -16,21 +16,11 @@ module.exports = {
       },
       thread_ID: {
         type: Sequelize.INTEGER,
-        allowNull:false,
-        references:
-        {
-          model:thread,
-          key:'ID'
-        }
+        allowNull:false
       },
       user_ID: {
         type: Sequelize.INTEGER,
-        allowNull:false,
-        references: 
-        {
-          model:user,
-          key:'ID'
-        }
+        allowNull:false
       },
       content: {
         type: Sequelize.TEXT,
@@ -50,6 +40,12 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull:false,
         defaultValue: Sequelize.NOW
+      },
+      deletedAt:
+      {
+        allowNull:true,
+        defaultValue:null,
+        type:Sequelize.DATE
       }
     });
   },

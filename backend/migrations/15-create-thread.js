@@ -15,20 +15,10 @@ module.exports = {
       },
       media_ID: {
         allowNull:false,
-        references: 
-        {
-          model:media,
-          key: 'ID'
-        },
         type: Sequelize.INTEGER
       },
       user_ID: {
         allowNull:false,
-        references: 
-        {
-          model:user,
-          key: 'ID'
-        },
         type: Sequelize.INTEGER
       },
       name: {
@@ -54,6 +44,12 @@ module.exports = {
         allowNull:false,
         defaultValue:Sequelize.NOW,
         type: Sequelize.DATE
+      },
+      deletedAt:
+      {
+        allowNull:true,
+        defaultValue:null,
+        type:Sequelize.DATE
       }
     });
   },

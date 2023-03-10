@@ -7,24 +7,14 @@ const tag = require('../models/tag')
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('media_taglists', {
-      tag_name: {
+      tag_ID: {
         allowNull: false,
-        type: Sequelize.STRING,
-        references:{model:tag,key:'name'}
+        type: Sequelize.INTEGER
       },
       media_ID: {
         allowNull:false,
-        type: Sequelize.INTEGER,
-        references: {model:media,key:'ID'}
+        type: Sequelize.INTEGER
       },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      }
     });
   },
   async down(queryInterface, Sequelize) {
