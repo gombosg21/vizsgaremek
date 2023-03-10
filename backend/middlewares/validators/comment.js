@@ -7,7 +7,7 @@ exports.commentRules = () => {
         validator.body('comment_text').isAscii().withMessage("only letters and numbers and simple special characters are allowed"),
         validator.body('comment_text').isLength({max:5000}).withMessage("no more than 5000 characters allowed")
     ]
-}
+};
 
 exports.checkIfCommentExsist = async (req,res,next) => {
 
@@ -15,10 +15,10 @@ exports.checkIfCommentExsist = async (req,res,next) => {
 
     if(await comment.findOne({where:{ID: commentID}}) === null) 
     {
-        return res.status(406).json({"error":`comment with id:${commentID} does not exsist`})
+        return res.status(400).json({"error":`comment with id:${commentID} does not exsist`});
     }
     else
     {
         return next();
-    }
-}
+    };
+};

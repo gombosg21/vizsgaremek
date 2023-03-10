@@ -38,7 +38,7 @@ exports.validateUploadFile = (req, res, next) => {
     const mediaData = req.file;
 
     if (mediaData == null || undefined) {
-        return res.status(406)
+        return res.status(400)
             .json({ "error": "no file given" });
     };
 
@@ -52,7 +52,7 @@ exports.validateUploadFile = (req, res, next) => {
     if ( fileSignature.mime-type.startsWith("image")) {
         return next();
     } else {
-        return res.status(406)
+        return res.status(400)
             .json({ "error": "invalid file format, must be an image only." });
     };
 };
@@ -61,7 +61,7 @@ exports.validateTags = async (req, res, next) => {
     const tagNames = req.body.tags;
 
     if (tagNames[0] == undefined) {
-        return res.status(406)
+        return res.status(400)
             .json({ "error": "tag list cannot be empty" });
     };
 
@@ -76,7 +76,7 @@ exports.validateTags = async (req, res, next) => {
     };
 
     if (badTag == true) {
-        return res.status(406)
+        return res.status(400)
             .json({ "error": `invalid tags: ${badTagList} in list of tags` });
     }
     else {

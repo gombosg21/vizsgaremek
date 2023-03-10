@@ -23,7 +23,7 @@ exports.checkIfThreadExsits = async (req,res,next) => {
     const threadID = req.params.thread_ID;
 
     if(await thread.findOne({where:{ID : threadID}}) === null) {
-        return res.status(406)
+        return res.status(404)
             .json({"error":`thread with id:${threadID} does not exsits`});
     } else {
        return next(); 

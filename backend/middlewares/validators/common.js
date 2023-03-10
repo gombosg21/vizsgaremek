@@ -12,6 +12,6 @@ exports.validate = async (req,res,next) => {
     errors.array().flatMap(({nestedErrors}) => nestedErrors.map(err => errorList.push({[err.param]:err.msg})));
     } catch (err) { console.error(err) };
 
-    return res.status(422)
+    return res.status(400)
         .json({error: errorList});
 };

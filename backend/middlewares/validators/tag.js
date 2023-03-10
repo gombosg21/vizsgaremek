@@ -22,7 +22,8 @@ exports.checkIfTagIDDoesNotExsits = async (req, res, next) => {
     const ID = req.params.ID;
 
     if (await tag.findOne({ where: { id: ID } }) == null) {
-        return res.status(406).json({ "error": `tag with id:${ID} does not exsits` });
+        return res.status(406)
+            .json({ "error": `tag with id:${ID} does not exsits` });
     } else {
         return next();
     };
