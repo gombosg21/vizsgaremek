@@ -14,29 +14,31 @@ module.exports = {
     const userIDs = await user.findAll({ attributes: ['ID'] });
     const tag_list = await tag.findAll({ attributes: ['ID'] });
     const mediaFiles = await mediaData.getTemp(10);
+
+    const uploadList = [];
+
     if (mediaFiles) {
 
-      for (let i = 0; i< userIDs.length; i++) {
+      for (let i = 0; i < userIDs.length; i++) {
         var userUploadCount = Math.floor(Math.random() * 10);
 
         var userID = userIDs[i].ID;
-        
+
         for (let i = 0; i < userUploadCount; i++) {
           var uploadTagCount = Math.floor(Math.random() * tag_list.length);
           var uploadTagIDList = [];
 
           console.log(uploadTagCount)
 
-          if ( uploadTagCount > 0) {
+
           while (uploadTagIDList.length < uploadTagCount) {
             var randomTagID = tag_list[Math.floor(Math.random() * tag_list.length)].ID;
             if (!uploadTagIDList.includes(randomTagID)) {
-              uploadTagIDList.push({ ID: randomTagID });
+              uploadTagIDList.push(randomTagID);
             };
           };
-        };
-          
-          var upload = await media.build({
+
+          var upload = await media.create({
             user_ID: userID,
             file_data: mediaFiles[Math.floor(Math.random() * mediaFiles.length)],
             uploaded: Date.now(),
@@ -45,17 +47,9 @@ module.exports = {
             placeholder_text: fake.faker.lorem.word(),
           });
 
-          if (uploadTagIDList.length > 0) {
+          await upload.setTags(uploadTagIDList);
 
-            await upload.set({
-              tags: uploadTagIDList
-            },
-              {
-                include: [tag]
-              });
-
-              await upload.save();
-          };
+          uploadList.push(upload);
         };
       };
 
