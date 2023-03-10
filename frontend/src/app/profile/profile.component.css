@@ -1,0 +1,85 @@
+@import '~@fortawesome/fontawesome-free/css/all.css';
+.container {
+    padding: 100px;
+}
+
+.post-image {
+    height: 300px;
+    width: 300px;
+    object-fit: cover;
+}
+
+.card-body {
+    padding: 0px !important;
+}
+
+.card {
+    border: none;
+}
+
+.mb-3 {
+    margin-bottom: 1.4rem !important;
+}
+
+.crop-container {
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%;
+    overflow: hidden;
+}
+
+.crop-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    border-radius: 6px;
+    object-fit: cover;
+    transition: 200ms;
+}
+
+.crop-image:hover {
+    cursor: pointer;
+    filter: brightness(0.8);
+}
+
+.like-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    color: white;
+    font-weight: bold;
+    background-color: rgba(0, 0, 0, 0.5);
+    transition: opacity 0.5s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 6px;
+}
+
+.card-body:hover .like-overlay {
+    opacity: 1;
+}
+
+.text-muted {
+    color: #dededebb !important;
+}
+
+#uploadForm {
+    background-color: #dededebb;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+#cancelButton {
+    margin-left: 10px;
+}
+
+#uploadButton {
+    position: relative;
+    margin: auto;
+}
