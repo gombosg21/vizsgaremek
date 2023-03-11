@@ -17,7 +17,7 @@ Az eltörölt profil ID-jét adja visszatérési értékként, JSON-ban.
 GET /api/v/0.1/user?name={name}&date_start={date}&date_end={date}&gender={gender}
 Felhasználót keres, név,szül.idő és nem alapján. Nem értéke 0,1 vagy 2 lehet (férfi,nő,x).
 Legalább egyik kulcs érték párt elvárja.
-Visszatérési értékként egy tömbös JSON-t küld a {name,gender,birth_date} mezőkkel, eredményenként.
+Visszatérési értékként egy tömbös JSON-t küld a {ID,name,gender,birth_date} mezőkkel, eredményenként.
 
 GET /api/v/0.1/user/login
 Beléptet a rendszerbe.
@@ -57,5 +57,8 @@ JSON-ba a {tag_name} mezőt követeli.
 
 DELETE /api/v/0.1/tag/{ID}
 Eltöröl egy cédulát ID alapján.
+
+GET /api/v/0.1/media/{ID}
+Visszaad egy képet base64-es kódolással, asszociált adatokkal : {uploader,file,uploaded,description,placeholder_text,tags[]}
 
 
