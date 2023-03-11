@@ -1,7 +1,7 @@
 const validator = require('express-validator');
 const media = require('../../models').media;
 const tags = require('../../models').tag;
-const streamSignature = require('stream-signature');
+const filetype = require('magic-bytes.js');
 
 exports.uploadRules = () => {
     return [
@@ -42,14 +42,9 @@ exports.validateUploadFile = (req, res, next) => {
             .json({ "error": "no file given" });
     };
 
-    var signature = new streamSignature();
-    var fileSignature = {};
-    fileSignature = signature.on('signature', signature => {
-        console.log(JSON.stringify(signature, null, 2))
-      });
-    signature(mediaData);
+    var type = filetype.filetypemime(mediaData);
 
-    if ( fileSignature.mime-type.startsWith("image")) {
+    if (type[0].match(/image/gi)) {
         return next();
     } else {
         return res.status(400)
