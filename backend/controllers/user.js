@@ -56,17 +56,11 @@ exports.editProfile = async (req, res, next) => {
 
     try {
         const User = await user.findByPk(ID);
-
-        switch (null) {
-            case (profilePicture == null): { profilePicture = User.profile_picture };
-            case (profileDescription == null): { profileDescription = User.profile_description };
-            case (profileVisibility == null): { profileVisibility = User.profile_visibility };
-        };
-
+        
         await User.set({
-            profile_description: profileDescription,
-            profile_visibility: profileVisibility,
-            profile_picture: profilePicture
+            profile_description: profileDescription ?? User.profile_picture,
+            profile_visibility:  profileVisibility ?? User.profile_visibility,
+            profile_picture:  profilePicture ?? User.profilePicture
         });
         await User.save();
         res.status(200)
