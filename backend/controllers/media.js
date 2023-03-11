@@ -11,17 +11,18 @@ exports.getMediaByID = async (req, res, next) => {
     const mediaID = req.params.media_ID;
 
     try {
-        const Media = await media.findOne({ where: { ID: mediaID }, include: { model: tag, model: user } });
+        const Media = await media.findOne({ where: { ID: mediaID }, include: [{model:user},{model:tag}] });
 
         if (Media == null) {
             return res.status(404).json({ "error": "file is gone or never was" })
         } else {
             const MediaData = {
                 uploader: Media.user.name,
-                file: await toBase64(Media.file_data),
+                file: Media.file_data,
                 uploaded: Media.uploaded,
                 description: Media.description,
-                placeholder_text: Media.placeholder_text
+                placeholder_text: Media.placeholder_text,
+                tags: Media.tags
             };
 
             const itemVisibility = Media.visibility;
@@ -49,7 +50,7 @@ exports.getAllMediaFromUser = async (req, res, next) => {
     const mediaOwner = req.params.user_ID;
 
     try {
-        const MediaList = await media.findAll({ where: { user_ID: mediaOwner }, include: { model: tag } });
+        const MediaList = await media.findAll({ where: { user_ID: mediaOwner }, include: [{model:user},{model:tag}] });
         if (MediaList == null) {
             return res.status(404).json({ "error": "file is gone or never was" });
         } else {
@@ -63,7 +64,7 @@ exports.getAllMediaFromUser = async (req, res, next) => {
             for (Media of MediaList) {
                 var MediaData = {
                     uploader: Media.user.name,
-                    file: toBase64(Media.file_data),
+                    file: Media.file_data,
                     uploaded: Media.uploaded,
                     description: Media.description,
                     placeholder_text: Media.placeholder_text
@@ -137,7 +138,7 @@ exports.getAllMediaByTags = async (req, res, next) => {
             var itemVisibility = Media.visibility;
             var MediaData = {
                 uploader: user.name,
-                file: Media.file,
+                file: Media.file_data,
                 uploaded: Media.uploaded,
                 description: Media.description,
                 placeholder_text: Media.placeholder_text
@@ -182,7 +183,7 @@ exports.uploadMedia = async (req, res, next) => {
         const Media = media.build(
             {
                 user_ID: userID,
-                data: data,
+                file_data: await toBase64(data),
                 description: description,
                 visibility: visibility,
                 placeholder_text: placeholder_text,
@@ -229,8 +230,8 @@ exports.editMedia = async (req, res, next) => {
             description: req.body.description,
             visibility: req.body.visibility,
             placeholder_text: req.body.placeholder_text
-        }
-        );
+        });
+
         await Media.save();
         res.status(200)
             .json(Media);
