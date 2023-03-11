@@ -63,7 +63,7 @@ exports.getAllMediaFromUser = async (req, res, next) => {
 
             var MediaDataList = [];
 
-            MediaDataList = determineArrayVisibility(userID, mediaOwner, VisibilityArray, MediaList);
+            MediaDataList = VisibilityArray(userID, mediaOwner, VisibilityArray, MediaList);
 
             if (MediaDataList[0] != undefined) {
                 res.status(200)
