@@ -228,14 +228,14 @@ exports.findUser = async (req, res, next) => {
     var Gender = [req.query.gender][0] == undefined ? [0, 1, 2] : [req.query.gender];
 
     try {
-        const UserList = await user.findAll({ where: { name: { [Op.substring]: Name }, birth_date: { [Op.gt]: SDate, [Op.lt]: EDate }, gender: { [Op.in]: Gender } }, attributes: ['name', 'gender', 'birth_date'] });
+        const UserList = await user.findAll({ where: { name: { [Op.substring]: Name }, birth_date: { [Op.gt]: SDate, [Op.lt]: EDate }, gender: { [Op.in]: Gender } }, attributes: ['ID','name', 'gender', 'birth_date'] });
         if (UserList === null) {
-            res.status(404).json({ "msg": "couldnt find results matching query parameters, try a different search" })
+            res.status(404).json({ "msg": "couldnt find results matching query parameters, try a different search" });
         }
         else {
             res.status(200)
                 .json(UserList);
-        }
+        };
     }
     catch (error) {
         console.error(error);
