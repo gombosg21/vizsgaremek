@@ -11,18 +11,20 @@ exports.getMediaByID = async (req, res, next) => {
     const mediaID = req.params.mediaID;
 
     try {
-        const Media = await media.findOne({ where: { ID: mediaID }, include: [{ model: user }, { model: tag }] });
+        const Media = await media.findOne({ where: { ID: mediaID }, include: [{ model: user, attributes: ["name"] }, { model: tag, attributes: ["name"] }] });
 
         if (Media == null) {
             return res.status(404).json({ "error": "file is gone or never was" })
         } else {
+            const mediaTagList = [];
+            Media.tags.forEach(tag => { mediaTagList.push({ "name": tag.name }) });
             const MediaData = {
                 uploader: Media.user.name,
                 file: Media.file_data,
                 uploaded: Media.uploaded,
                 description: Media.description,
                 placeholder_text: Media.placeholder_text,
-                tags: Media.tags
+                tags: mediaTagList
             };
 
             const itemVisibility = Media.visibility;
@@ -63,13 +65,15 @@ exports.getAllMediaFromUser = async (req, res, next) => {
             const visibilityFlagArray = [];
 
             MediaList.forEach(Media => {
+                const mediaTagList = [];
+                Media.tags.forEach(tag => { mediaTagList.push({ "name": tag.name }) });
                 var MediaData = {
                     uploader: Media.user.name,
                     file: Media.file_data,
                     uploaded: Media.uploaded,
                     description: Media.description,
                     placeholder_text: Media.placeholder_text,
-                    tags: Media.tags
+                    tags: mediaTagList
                 };
                 MediaDataList.push(MediaData);
                 visibilityFlagArray.push(Media.visibility);
