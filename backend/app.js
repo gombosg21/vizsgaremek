@@ -50,9 +50,10 @@ app.use(function (req, res, next) {
 
 //error handler
 app.use(function (err, req, res, next) {
+  const mode = process.env.MODE.toLowerCase();
   // set locals, only providing error in development
   res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+  res.locals.error = req.app.get('env') === mode ? err : {};
 
   // send error state and message
   res.status(err.status || 500)
@@ -60,6 +61,8 @@ app.use(function (err, req, res, next) {
   console.error(err);
 });
 
-app.listen(3600,()=> { console.log(`listening on port: ${3600}`)});
+const port = process.env.APP_PORT;
+
+app.listen(port,()=> { console.log(`listening on port: ${port}`)});
 
 module.exports = app;
