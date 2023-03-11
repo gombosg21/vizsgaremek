@@ -1,9 +1,11 @@
 const media = require("../models").media;
 const tag = require("../models").tag;
 const media_taglist = require("../models").media_taglist;
+const user = require("../models").user;
 const { Op } = require("sequelize");
 const Visibility = require('../middlewares/authentiaction/visibility').determineVisibility;
 const VisibilityArray = require('../middlewares/authentiaction/visibility').determineArrayVisibility;
+const toBase64 = require("../util/serialize-file").getBase64;
 
 exports.getMediaByID = async (req, res, next) => {
     const mediaID = req.params.media_ID;
@@ -15,15 +17,15 @@ exports.getMediaByID = async (req, res, next) => {
             return res.status(404).json({ "error": "file is gone or never was" })
         } else {
             const MediaData = {
-                uploader: user.name,
-                file: Media.file,
+                uploader: Media.user.name,
+                file: await toBase64(Media.file_data),
                 uploaded: Media.uploaded,
                 description: Media.description,
                 placeholder_text: Media.placeholder_text
             };
 
             const itemVisibility = Media.visibility;
-            const mediaOwner = Media.User_ID;
+            const mediaOwner = Media.user_ID;
             var userID = -1;
             if (req.user) {
                 userID = req.user.ID;
@@ -56,18 +58,29 @@ exports.getAllMediaFromUser = async (req, res, next) => {
                 userID = req.user.ID;
             };
 
-            var VisibilityArray = [];
+            const MediaDataList = [];
+
+            for (Media of MediaList) {
+                var MediaData = {
+                    uploader: Media.user.name,
+                    file: toBase64(Media.file_data),
+                    uploaded: Media.uploaded,
+                    description: Media.description,
+                    placeholder_text: Media.placeholder_text
+                };
+                MediaDataList.push(MediaData);
+            };
+
+            var visibilityFlagArray = [];
             MediaList.forEach(Media => {
-                VisibilityArray.push(Media.visibility);
+                visibilityFlagArray.push(Media.visibility);
             });
 
-            var MediaDataList = [];
+            result = VisibilityArray(userID, mediaOwner, visibilityFlagArray, MediaDataList);
 
-            MediaDataList = VisibilityArray(userID, mediaOwner, VisibilityArray, MediaList);
-
-            if (MediaDataList[0] != undefined) {
+            if (result[0] != undefined) {
                 res.status(200)
-                    .json(MediaDataList);
+                    .json(result);
             } else {
                 res.status(403)
                     .json({ "error": "insufficient privilegdes" })
@@ -80,7 +93,7 @@ exports.getAllMediaFromUser = async (req, res, next) => {
     };
 };
 
-preProcessAndSequence = (propArray,AndKey) => {
+preProcessAndSequence = (propArray, AndKey) => {
     const preProcessedAndSequence = [];
     if (propArray.isArray() == false) {
         throw new Error("propArray must be an array");
@@ -88,14 +101,14 @@ preProcessAndSequence = (propArray,AndKey) => {
     if (propArray.length == 0) {
         throw new Error("propArray cannot be empty");
     };
-    if(AndKey == undefined || null) {
+    if (AndKey == undefined || null) {
         throw new Error("argument AndKey missing");
     };
     if (typeof AndKey != "string") {
         throw new Error("AndKey must be a string");
     };
-    for(let i=0; i< propArray.length; i++) {
-        preProcessedAndSequence.push({[AndKey]:propArray[i]});
+    for (let i = 0; i < propArray.length; i++) {
+        preProcessedAndSequence.push({ [AndKey]: propArray[i] });
     };
     return preProcessedAndSequence;
 };
@@ -113,12 +126,12 @@ exports.getAllMediaByTags = async (req, res, next) => {
         };
     });
 
-    const tagIdAndArray = preProcessAndSequence(tagIDs,"tag_ID");
+    const tagIdAndArray = preProcessAndSequence(tagIDs, "tag_ID");
 
     try {
-        const MediaIDList = await media_taglist.findAll({ where: {[Op.and]:tagIdAndArray},attributes:['media_ID']});
+        const MediaIDList = await media_taglist.findAll({ where: { [Op.and]: tagIdAndArray }, attributes: ['media_ID'] });
 
-        const MediaDataList = await media.findAll({where:{ID: {[Op.in]:MediaIDList}}});
+        const MediaDataList = await media.findAll({ where: { ID: { [Op.in]: MediaIDList } } });
 
         MediaDataList.forEach(Media => {
             var itemVisibility = Media.visibility;
