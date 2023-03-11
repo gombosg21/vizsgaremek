@@ -67,7 +67,8 @@ exports.getAllMediaFromUser = async (req, res, next) => {
                     file: Media.file_data,
                     uploaded: Media.uploaded,
                     description: Media.description,
-                    placeholder_text: Media.placeholder_text
+                    placeholder_text: Media.placeholder_text,
+                    tags: Media.tags
                 };
                 MediaDataList.push(MediaData);
             };
