@@ -23,7 +23,7 @@ exports.searchByTagRules = () => {
 };
 
 exports.checkIfMediaIDExsist = async (req, res, next) => {
-    const mediaID = req.params.mediaID;
+    const mediaID = req.params.media_ID;
 
     if (await media.findOne({ where: { id: mediaID } }) == null) {
         return res.status(404)
