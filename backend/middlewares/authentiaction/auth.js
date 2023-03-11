@@ -9,7 +9,8 @@ const localPassport = require('passport-local').Strategy;
 const validatePassword = require('../../util/password').validatePassword;
 require('dotenv').config({ path: path.resolve('./.env') });
 
-const mode = "development";
+const mode = process.env.MODE.toLowerCase();
+
 
 const { database, username, password, host, port, dialect } = config[mode];
 
@@ -20,7 +21,7 @@ const verifyCallback = async (username, password, done) => {
         if (!User) {
             { return done(null, false) };
         };
-
+               
         const valid = validatePassword(password, User.password_hash, User.password_salt);
 
         if (valid) {
