@@ -1,3 +1,5 @@
+const { Op } = require("sequelize");
+
 'use strict';
 const {
   Model
@@ -14,11 +16,16 @@ module.exports = (sequelize, DataTypes) => {
       this.hasMany(models.thread,{foreignKey:"media_ID"})
       this.belongsToMany(models.tag,{through:models.media_taglist,foreignKey:"media_ID",sourceKey:"ID"})
     }
+
+    removeTags(tagArray) {
+      this.tags.delete({where:{[Op.in]:tagArray}});
+    };
+
   };
   media.init({
     ID: {type:DataTypes.INTEGER, autoIncrement:true,primaryKey:true,allowNull:false},
     user_ID: {type:DataTypes.INTEGER,allowNull:false,references:{model:'user',key:'ID'}},
-    file_data: {type:DataTypes.BLOB,allowNull:false},
+    file_data: {type:DataTypes.TEXT('long'),allowNull:false},
     deleted: {type:DataTypes.BOOLEAN,allowNull:false,defaultValue:false},
     uploaded: {type:DataTypes.DATE,allowNull:false,defaultValue:DataTypes.NOW},
     last_edit: {type:DataTypes.DATE,allowNull:false,defaultValue:DataTypes.NOW,onUpdate:DataTypes.NOW},

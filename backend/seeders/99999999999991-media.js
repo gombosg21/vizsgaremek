@@ -1,10 +1,9 @@
-const fs = require('fs');
-const http = require('http');
 const fake = require('@faker-js/faker');
 const user = require('../models').user;
 const media = require('../models').media;
 const tag = require('../models').tag;
 const mediaData = require('../helpers/seeding/image-data');
+const toBase64 = require('../util/serialize-file').getBase64;
 
 'use strict';
 /** @type {import('sequelize-cli').Migration} */
@@ -13,7 +12,13 @@ module.exports = {
 
     const userIDs = await user.findAll({ attributes: ['ID'] });
     const tag_list = await tag.findAll({ attributes: ['ID'] });
-    const mediaFiles = await mediaData.getTemp(10);
+    const rawMediaFiles = await mediaData.getTemp(10);
+    const mediaFiles = []
+
+    for (Media of rawMediaFiles) {
+      base64Media = await toBase64(Buffer.from(await Media.arrayBuffer()));
+      mediaFiles.push(base64Media);
+    };
 
     const uploadList = [];
 

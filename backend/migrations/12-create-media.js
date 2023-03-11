@@ -19,7 +19,7 @@ module.exports = {
       },
       file_data: {
         allowNull:false,
-        type: Sequelize.BLOB
+        type: Sequelize.TEXT('long')
       },
       deleted: {
         allowNull:false,
