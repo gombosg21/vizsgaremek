@@ -60,6 +60,6 @@ app.use(function (err, req, res, next) {
   console.error(err);
 });
 
-app.listen(3600);
+app.listen(3600,()=> { console.log(`listening on port: ${3600}`)});
 
 module.exports = app;
