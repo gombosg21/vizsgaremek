@@ -67,8 +67,6 @@ exports.determineVisibility = (userContextID, dataOwnerID, visbilityFlag, data) 
 
 exports.determineArrayVisibility = (userContextID, dataOwnerID, visibiltyArray, dataArray) => {
 
-    var visibiltyArray = [];
-    var dataArray = [];
     //
     //  visibility levels
     //  0 = private
@@ -76,30 +74,30 @@ exports.determineArrayVisibility = (userContextID, dataOwnerID, visibiltyArray, 
     //  2 = registered only
     //  3 = public
     //
-    if (visibiltyArray.length() == 0) {
+    if (visibiltyArray.length == 0) {
         throw new Error("no visibility data was given");
     };
 
-    if (dataArray.length() == 0) {
+    if (dataArray.length == 0) {
         throw new Error("no data was given");
     };
 
     if (visibiltyArray.every(item => { typeof item != "number" })) {
         throw new Error("visibiltyArray must only contain numbers");
     };
-    if (visibiltyArray.length() != dataArray.length()) {
+    if (visibiltyArray.length != dataArray.length) {
         throw new Error("visibiltyArray must be as long as dataArray, not more nor less");
     };
 
     var returnDataArray = [];
 
-    for (let i = 0; i < visibiltyArray.length(); i++) {
+    for (let i = 0; i < visibiltyArray.length; i++) {
         var returnData = {
             status: 0,
             data: ""
         };
 
-        switch (visbilityFlag[i]) {
+        switch (visibiltyArray[i]) {
             case (0): {
                 if (userContextID == dataOwnerID) {
                     returnData.status = 403, returnData.data = { "error": "private" };
