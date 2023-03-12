@@ -1,12 +1,10 @@
-
-
 exports.getBase64 = async (fileBuffer) => {
 
     if (!fileBuffer) {
-        throw new Error("argument fileBlob missing")
+        throw new Error("argument fileBuffer missing")
     };
     if (!(fileBuffer instanceof Buffer)) {
-        throw new Error("fileBlob must be a buffer")
+        throw new Error("fileBuffer must be a buffer")
     };
 
     if (fileBuffer.byteLength == 0) { 
