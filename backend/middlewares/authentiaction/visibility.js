@@ -31,7 +31,7 @@ exports.determineVisibility = (userContextID, dataOwnerID, visbilityFlag, data) 
 
     switch (visbilityFlag) {
         case 0: {
-            if (userContextID == dataOwnerID) {
+            if (userContextID != dataOwnerID) {
                 returnData.status = 403, returnData.data = { "error": "private" };
                 break;
             } else {
