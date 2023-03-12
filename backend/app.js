@@ -36,12 +36,14 @@ passport.use(auth.strategy);
 app.use(passport.initialize());
 app.use(passport.session());
 
-const version = 0.1;
+const version = process.env.VERSION ?? 0.1;
 
-app.use(`/api/v/${version}`, indexRouter)
-app.use(`/api/v/${version}`, usersRouter);
-app.use(`/api/v/${version}`, mediaRouter);
-app.use(`/api/v/${version}`, tagRouter);
+const routePrefix = '/api/v/' + version;
+
+app.use(routePrefix, indexRouter)
+app.use(routePrefix, usersRouter);
+app.use(routePrefix, mediaRouter);
+app.use(routePrefix, tagRouter);
 
 //catch 404 and forward to error handler
 app.use(function (req, res, next) {
