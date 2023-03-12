@@ -113,13 +113,19 @@ exports.changePassword = async (req, res, next) => {
 
 exports.logout = async (req, res, next) => {
     try {
-        req.logOut();
-        res.status(200).clearCookie('connect.sid', {
-            path: '/'
+        req.logOut((error) => {
+            if (error) {
+                return res.status(500).json({ "error": error.message })
+            } else {
+                req.session.destroy((error) => {
+                    if (error) {
+                        return res.status(500).json({ "error": error.message })
+                    } else {
+                        res.redirect('/api/v/0.1/');
+                    };
+                });
+            };
         });
-        req.session.destroy(function (err) {
-            res.redirect('/api/v/0.2/');
-        })
     }
     catch (error) {
         console.error(error);
