@@ -1,16 +1,16 @@
 <div class="container mt-5">
-    <h2 class="text-center">Bejelentkezés</h2>
+    <h2 class="text-center">Log in</h2>
     <form>
         <div class="form-group">
-            <input type="text" class="form-control" id="username" placeholder="Felhasználónév" [(ngModel)]="username" name="username">
+            <input type="text" class="form-control" id="username" placeholder="Username" [(ngModel)]="username" name="username">
         </div>
         <div class="form-group">
-            <input type="password" class="form-control" id="password" placeholder="Jelszó" [(ngModel)]="password" name="password">
+            <input type="password" class="form-control" id="password" placeholder="Password" [(ngModel)]="password" name="password">
         </div>
-        <button type="submit" class="btn btn-primary" [disabled]="!isFormValid()" (click)="login()">Bejelentkezés</button>
+        <button type="submit" class="btn btn-primary" [disabled]="!isFormValid()" (click)="login()">Log in</button>
     </form>
     <div class="haveRegister">
-        <p>Nincs még fiókod? <a routerLink="/register">Regisztráció</a></p>
+        <p>Don't have an account? <a routerLink="/register">Sign up</a></p>
     </div>
 
 </div>
