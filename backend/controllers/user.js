@@ -7,7 +7,7 @@ const Visibility = require('../middlewares/authentiaction/visibility').determine
 exports.getProfile = async (req, res, next) => {
     const ID = req.params.userID;
     var userID = -1;
-    if(req.user) {
+    if (req.user) {
         userID = req.user.ID;
     };
 
@@ -56,11 +56,11 @@ exports.editProfile = async (req, res, next) => {
 
     try {
         const User = await user.findByPk(ID);
-        
+
         await User.set({
             profile_description: profileDescription ?? User.profile_picture,
-            profile_visibility:  profileVisibility ?? User.profile_visibility,
-            profile_picture:  profilePicture ?? User.profilePicture
+            profile_visibility: profileVisibility ?? User.profile_visibility,
+            profile_picture: profilePicture ?? User.profilePicture
         });
         await User.save();
         res.status(200)
@@ -112,16 +112,19 @@ exports.changePassword = async (req, res, next) => {
 };
 
 exports.logout = async (req, res, next) => {
-
-    req.logout((error) => {
-        if (error) {
-            res.status(500);
-            console.error(error);
-        }
-        else {
-            res.redirect('/api/v/0.1/');
-        };
-    });
+    try {
+        req.logOut();
+        res.status(200).clearCookie('connect.sid', {
+            path: '/'
+        });
+        req.session.destroy(function (err) {
+            res.redirect('/api/v/0.2/');
+        })
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500);
+    };
 };
 
 exports.resetPassword = async (req, res, next) => {
@@ -131,7 +134,7 @@ exports.resetPassword = async (req, res, next) => {
     try {
         const User = await user.findOne({ where: { Name: Name } });
         res.status(200)
-            .redirect('/');
+            .redirect('/api/v/0.2/');
         // .json({"notificate" : "reset email sent"});
         // email.sendResetEmail(User.Email);
     }
@@ -189,7 +192,7 @@ exports.deleteUser = async (req, res, next) => {
         const User = await user.findOne({ where: { ID: ID } });
         User.set({
             deleted: true
-        })
+        });
         req.logout(User, async (error) => {
             if (error) {
                 res.status(500);
@@ -228,7 +231,7 @@ exports.findUser = async (req, res, next) => {
     var Gender = [req.query.gender][0] == undefined ? [0, 1, 2] : [req.query.gender];
 
     try {
-        const UserList = await user.findAll({ where: { name: { [Op.substring]: Name }, birth_date: { [Op.gt]: SDate, [Op.lt]: EDate }, gender: { [Op.in]: Gender } }, attributes: ['ID','name', 'gender', 'birth_date'] });
+        const UserList = await user.findAll({ where: { name: { [Op.substring]: Name }, birth_date: { [Op.gt]: SDate, [Op.lt]: EDate }, gender: { [Op.in]: Gender } }, attributes: ['ID', 'name', 'gender', 'birth_date'] });
         if (UserList === null) {
             res.status(404).json({ "msg": "couldnt find results matching query parameters, try a different search" });
         }
