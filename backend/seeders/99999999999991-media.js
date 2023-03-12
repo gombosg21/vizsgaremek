@@ -15,12 +15,10 @@ module.exports = {
     const rawMediaFiles = await mediaData.getTemp(10);
     const mediaFiles = []
 
-    for (Media of rawMediaFiles) {
+    for (var Media of rawMediaFiles) {
       base64Media = await toBase64(Buffer.from(await Media.arrayBuffer()));
       mediaFiles.push(base64Media);
     };
-
-    const uploadList = [];
 
     if (mediaFiles) {
 
@@ -54,7 +52,6 @@ module.exports = {
 
           await upload.setTags(uploadTagIDList);
 
-          uploadList.push(upload);
         };
       };
 
