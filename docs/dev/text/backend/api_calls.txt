@@ -1,9 +1,10 @@
 {} represent values
 
 GET /api/v/0.1/user/{ID}
-ID alapján visszad egy nézetet a felhasználótól: {name,register_date,gender,birth_date,profile_description,profile_picture,profile_visibility,type}
+ID alapján visszad egy nézetet a felhasználótól: {name,register_date,gender,birth_date,profile_description,profile_pic,profile_visibility,type}
 ha profile_visibility nem publikus (3), akkor nem minden körülmény között érhető el.
-Visszatérési értéke egy JSON állomány
+ha a felhasználó kiválasztott egy profilképet, a profile_pic egy base64 kódolású kép egyébként meg üres.
+Visszatérési értéke egy JSON állomány.
 
 PATCH /api/v/0.1/user/
 bejelentkezés után, ID alapján frissíti a profiladatokat : {profile_description,profile_picture,profile_visibility}
@@ -11,28 +12,34 @@ JSON állományt vár el, a fent írt mezőkkel, opcionálisan.
 
 DELETE /api/v/0.1/user/
 Eltöröli a felhasználót, bejelentkezés után.
-Az eltörölt profil ID-jét adja visszatérési értékként, JSON-ban.
-
+Az eltörölt profil ID-jét adja visszatérési értékként.
 
 GET /api/v/0.1/user?name={name}&date_start={date}&date_end={date}&gender={gender}
 Felhasználót keres, név,szül.idő és nem alapján. Nem értéke 0,1 vagy 2 lehet (férfi,nő,x).
 Legalább egyik kulcs érték párt elvárja.
 Visszatérési értékként egy tömbös JSON-t küld a {ID,name,gender,birth_date} mezőkkel, eredményenként.
 
+munkamenet jelenleg sütis megoldású, jövőben lehet hogy JSWT token lesz.
+
 GET /api/v/0.1/user/login
 Beléptet a rendszerbe.
 JSON-ként kér {password,name} mezőket.
-Sikeres belépés esetén átirányít a: /api/v/0.1/user/{ID} -re és létrehoz egy sütis munkamenetet.
+Sikeres belépés esetén átirányít a: /api/v/0.1/user/{ID} -re és létrehoz egy munkamenetet.
+Sikertelen belépés esetén átirányít a: /api/v/0.1/-ra.
 
 GET /api/v/0.1/user/logout
 Kiléptet a rendszerből, megszünteti a munkamenetet és a /api/v/0.1/-re átirányít.
+Egyenlőre sajnos süti kliens oldalon marad...
 
 GET /api/v/0.1/{USER}/reset-password
-Egyenlőre nem mükszik
+Egyenlőre nem mükszik.
 
 POST /api/v/0.1/user/register
 Regisztrál egy felhasználót.
 A sikeres regisztrációhoz a {name,gender,birth_date,email,password,re-password} mezőket követeli.
+A gender mező értéke 0 , 1 és 2 lehet (férfi,nő,x)
+A birth_date mezőt yyyy-mm-dd formában vár, nem lehet jövőbeli dátum.
+A password ill re-password csak erős jelszó lehet, min 8 karakter, max 32, kis és nagybetű és ASCII speciális karakterek.
 Sikeres regisztráció esetén beléptet és átirányít a /api/v/0.1/user/{ID} -ra.
 
 POST /api/v/0.1/user/change-password
@@ -44,11 +51,11 @@ Siker esetén frissíti a jelszót a {password} értékére.
 Alábbiak még változni fognak, valsz. munkamenethez lesz legtöbbjük kötve.
 
 GET /api/v/0.1/tag/all
-visszaadja az összes cédulát, értékek ID,name
+Visszaadja az összes cédulát, értékek {ID,name}.
 
 GET /api/v/0.1/tag?name={name}
-Cédulákat keres minimum részleges egybeeséssel, kulcs érték mező kötelező.
-Eredményt JSON tömbként visszaadja, értékek ID,name.
+Cédulát keres minimum részleges egybeeséssel, kulcs érték mező kötelező.
+Eredményt JSON tömbként visszaadja, értékek {ID,name}.
 
 POST /api/v/0.1/tag
 Létrehoz egy új cédulát.
@@ -62,19 +69,20 @@ DELETE /api/v/0.1/tag/{ID}
 Eltöröl egy cédulát ID alapján.
 
 GET /api/v/0.1/media/{ID}
-Visszaad egy képet base64-es kódolással, asszociált adatokkal : {uploader,file,uploaded,description,placeholder_text,tags[name]}
+Visszaad egy képet base64-es kódolással, asszociált adatokkal : 
+{uploader,file,uploaded,description,placeholder_text,tags[name]},
+csak a file van base64-ben.
 
 GET /api/v/0.1/media/all/{ID}
-Visszaadja az adott ID-jű user összes képét base64-es kódolással, asszociált adatokkal:
-{uploader,file,uploaded,description,placeholder_text,tags[name]}
+Visszaadja az adott ID-jű user összes képét listaként base64-es kódolással, asszociált adatokkal:
+{uploader,file,uploaded,description,placeholder_text,tags[name]},
+csak a file van base64-ben.
 
 POST /api/v/0.1/media
-
-munkamenethez kötött
-feltölt egy képet
-form/multipart-data-t használ
-kéri a következő mezőket {image,description,placeholder_text,visibility,tags}
-az image egy BLOB típus (képfálj) kell hogy legyen
-a tags vesszőkkel elválasztott számok kell hogy legyen
-a visibility szám kell hogy legyen 0 és 3 között
-a többi szöveges
+Belépés után elérhető.
+Egy képet form/multipart-data-val feltölt.
+A következő mezőket kéri: {image,description,placeholder_text,visibility,tags}
+Az image egy BLOB típus (képfálj) kell hogy legyen.
+A tags vesszőkkel elválasztott számok kell hogy legyen, semmi más, még space sem.
+A visibility szám kell hogy legyen 0 és 3 között, 0 privát, 1 csak barátok, 2 csak regisztráltak, 3 nyilvános láthatóság.
+A többi mező szöveges.
