@@ -1,6 +1,6 @@
 const validator = require('express-validator');
 const media = require('../../models').media;
-const tags = require('../../models').tag;
+const tag = require('../../models').tag;
 const filetype = require('magic-bytes.js');
 
 exports.uploadRules = () => {
@@ -18,7 +18,7 @@ exports.editRules = () => {
 exports.searchByTagRules = () => {
     return [
         validator.query().notEmpty().withMessage("cannot process empty query"),
-        validator.query().isAscii().withMessage("only text and simple characters are allowed in query")
+        validator.query().isAscii().withMessage("only text and simple characters are allowed in search query")
     ]
 };
 
@@ -33,8 +33,24 @@ exports.checkIfMediaIDExsist = async (req, res, next) => {
     };
 };
 
-exports.validateUploadFile = (req, res, next) => {
+exports.preProrcessQueryTags = async (req, res, next) => {
+    const tagNames = req.query.tags;
+    const tagIDs = [];
+    const validTagNames = [];
 
+    for (var tagName of tagNames) {
+        var singleTag = await tag.findOne({ where: { name: tagName }, attributes: ['ID'] });
+        if (singleTag != null) {
+            tagIDs.push(singleTag.ID);
+            validTagNames.push(singleTag.name);
+        };
+    };
+    req.query.tagIDs = tagIDs;
+    req.query.tagNames = validTagNames;
+    next();
+};
+
+exports.validateUploadFile = (req, res, next) => {
     const mediaData = req.file;
 
     if (mediaData == null || undefined) {
@@ -48,33 +64,40 @@ exports.validateUploadFile = (req, res, next) => {
         return next();
     } else {
         return res.status(400)
-            .json({ "error": "invalid file format, must be an image only." });
+            .json({ "error": "invalid file format, must be type of image." });
     };
 };
 
-exports.validateTags = async (req, res, next) => {
+exports.validateBodyTags = async (req, res, next) => {
     const tagNames = req.body.tags;
 
-    if (tagNames[0] == undefined) {
+    const tagIDs = [];
+    const validTagNames = [];
+
+    if (tagNames[0] == undefined || null) {
         return res.status(400)
             .json({ "error": "tag list cannot be empty" });
     };
 
-    var badTag = false;
+    const badTag = false;
     const badTagList = [];
-    for (let i = 0; i < tagNames.lenght(); i++) {
-        var tag = await tags.findOne({ where: { name: tagNames[i] } });
-        if (tag == null) {
+    for (var tagName of tagNames) {
+        var singleTag = await tag.findOne({ where: { name: tagName } });
+        if (singleTag == null || undefined) {
             badTag = true;
             badTagList.push(tag.name);
+        } else {
+            tagIDs.push(singleTag.ID);
+            validTagNames.push(singleTag.name);
         };
     };
 
-    if (badTag == true) {
+    if (badTag) {
         return res.status(400)
             .json({ "error": `invalid tags: ${badTagList} in list of tags` });
-    }
-    else {
+    } else {
+        req.body.tagIDs = tagIDs;
+        req.body.tagNames = validTagNames;
         return next();
     };
 };
