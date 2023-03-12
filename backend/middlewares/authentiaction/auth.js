@@ -103,8 +103,8 @@ exports.isAuth = (req, res, next) => {
         return next();
     }
     else {
-        return res.status(401).redirect('/'.json({ "error": "unauthorized request" }));
-    }
+        return res.status(401).json({ "error": "unauthorized request" });
+    };
 };
 
 exports.isMod = (req, res, next) => {
