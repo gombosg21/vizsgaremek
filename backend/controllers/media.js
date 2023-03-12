@@ -96,7 +96,7 @@ exports.getAllMediaFromUser = async (req, res, next) => {
     };
 };
 
-preProcessAndSequence = (propArray, AndKey) => {
+const preProcessAndSequence = (propArray, AndKey) => {
     const preProcessedAndSequence = [];
     if (propArray.isArray() == false) {
         throw new Error("propArray must be an array");
@@ -117,17 +117,6 @@ preProcessAndSequence = (propArray, AndKey) => {
 };
 
 exports.getAllMediaByTags = async (req, res, next) => {
-
-    const tagNames = req.query.tags;
-
-    const tagIDs = [];
-
-    tagNames.forEach(async Tag => {
-        var TagID = await tag.findOne({ where: { name: Tag }, attributes: ['ID'] });
-        if (TagID != null) {
-            tagIDs.push(Tag);
-        };
-    });
 
     const tagIdAndArray = preProcessAndSequence(tagIDs, "tag_ID");
 
@@ -157,7 +146,7 @@ exports.getAllMediaByTags = async (req, res, next) => {
                 MediaDataList.push(MediaData);
             };
         });
-        if (MediaDataList[0] != undefined) {
+        if (MediaDataList.length != 0) {
             res.status(200)
                 .json(MediaDataList);
         } else {
@@ -175,28 +164,30 @@ exports.getAllMediaByTags = async (req, res, next) => {
 exports.uploadMedia = async (req, res, next) => {
 
     const userID = req.user.ID
-    const data = req.files;
+    const data = req.file.buffer;
     const description = req.body.description;
     const visibility = req.body.visibility;
     const placeholder_text = req.body.placeholder_text;
     const tags = req.body.tags;
 
     try {
-        const Media = media.build(
+        const upload = await media.create(
             {
                 user_ID: userID,
                 file_data: await toBase64(data),
                 description: description,
                 visibility: visibility,
-                placeholder_text: placeholder_text,
-                tags: {
-                    name: tags
-                }, include: [{
-                    association: media_taglist.media_ID,
-                }]
+                placeholder_text: placeholder_text
             });
-        await Media.save();
-        res.status(200);
+
+        if (tags) {
+            tagArray = tags.split(",")
+
+            await upload.setTags(tagArray);
+        };
+
+        res.status(200)
+            .json(upload.ID);
 
     }
     catch (error) {
@@ -207,10 +198,15 @@ exports.uploadMedia = async (req, res, next) => {
 
 exports.deleteMedia = async (req, res, next) => {
     const ID = req.params.mediaID;
+    const userID = req.user.ID;
 
     try {
         const Media = await media.findOne(ID);
 
+        Media.set({
+            deleted: true
+        });
+        await Media.save();
         await Media.destroy();
 
         res.status(200)
@@ -243,3 +239,22 @@ exports.editMedia = async (req, res, next) => {
         res.status(500);
     };
 };
+
+exports.addMediaTags = async (req, res, next) => {
+    const ID = req.params.mediaID;
+    const tagList = req.body.taglist;
+
+    try {
+        const Media = await media.findOne({ where: { id: ID } });
+        Media.addTags(tagList);
+
+        await Media.save();
+        res.status(200)
+            .json(Media);
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500);
+    };
+};
+
