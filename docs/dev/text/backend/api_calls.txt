@@ -59,6 +59,7 @@ DELETE /api/v/0.1/tag/{ID}
 Eltöröl egy cédulát ID alapján.
 
 GET /api/v/0.1/media/{ID}
-Visszaad egy képet base64-es kódolással, asszociált adatokkal : {uploader,file,uploaded,description,placeholder_text,tags[]}
+Visszaad egy képet base64-es kódolással, asszociált adatokkal : {uploader,file,uploaded,description,placeholder_text,tags[name]}
 
-
+GET /api/v/0.1/media/all/{ID}
+Visszaadja az adott ID-jű user összes képét base64-es kódolással, asszociált adatokkal : {uploader,file,uploaded,description,placeholder_text,tags[name]}
