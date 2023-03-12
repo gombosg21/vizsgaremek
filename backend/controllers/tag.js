@@ -1,35 +1,32 @@
 const tag = require("../models").tag;
 const { Op } = require("sequelize");
 
-exports.createTag = async (req,res,next) => 
-{
+exports.createTag = async (req, res, next) => {
     const tagName = req.body.tag_name;
 
-    try 
-    {
+    try {
         const newTag = await tag.build({
-            name : tagName
+            name: tagName
         });
 
         await newTag.save();
 
         res.status(201)
-        .json(newTag);
-    }    
-    catch (error) {
+            .json(newTag);
+
+    } catch (error) {
         console.error(error);
         res.status(500);
-    }
-}
+    };
+};
 
-exports.updateTag = async (req,res,next) => 
-{
+exports.updateTag = async (req, res, next) => {
     const ID = req.params.ID;
     const tagName = req.body.tag_name;
 
-    try 
-    {
-        const UpdateTag = await tag.findOne({where:{ID :ID}});
+    try {
+        const UpdateTag = await tag.findOne({ where: { ID: ID } });
+
         UpdateTag.set({
             name: tagName
         });
@@ -37,48 +34,53 @@ exports.updateTag = async (req,res,next) =>
         await UpdateTag.save();
 
         res.status(200)
-        .json(UpdateTag.name);
-    }    
-    catch (error) {
+            .json(UpdateTag.name);
+    } catch (error) {
         console.error(error);
         res.status(500);
-    }
-}
+    };
+};
 
-exports.deleteTag = async (req,res,next) => 
-{
+exports.deleteTag = async (req, res, next) => {
     const ID = req.params.ID;
 
-    try 
-    {
+    try {
         const deleteTag = await tag.findOne({ where: { ID: ID } });
+
         await deleteTag.destroy();
         res.status(200)
-        .json(deleteTag.ID);
-    }    
-    catch (error) {
+            .json(deleteTag.ID);
+
+    } catch (error) {
         console.error(error);
         res.status(500);
-    }
-}
+    };
+};
 
-exports.findTags = async (req,res,next) => 
-{
+exports.findTags = async (req, res, next) => {
     const tagName = req.query.tag_name;
 
-    try 
-    {
-        const TagArray = await tag.findAll({where:{name:{[Op.like]:`%${tagName}%`}},attributes:['name']});
-        if (TagArray == null) 
-        {
-            res.status(404).json({"msg":"couldnt find results matching query parameters, try a different search"})
-        } else 
-        {
+    try {
+        const TagArray = await tag.findAll({ where: { name: { [Op.like]: `%${tagName}%` } }, attributes: ['ID','name'] });
+        if (TagArray == null) {
+            res.status(404).json({ "msg": "couldnt find results matching query parameters, try a different search" })
+        } else {
             res.status(200).json(TagArray);
-        }
-    }    
+        };
+    }
     catch (error) {
         console.error(error);
         res.status(500);
-    }
-}
+    };
+};
+
+exports.getAllTags = async (req, res, next) => {
+    try {
+        const tagList = await tag.findAll({attributes:['ID','name']});
+
+        res.status(200).json(tagList);
+    } catch (error) {
+        console.error(error);
+        res.status(500);
+    };
+};
