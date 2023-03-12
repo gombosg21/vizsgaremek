@@ -43,9 +43,12 @@ Siker esetén frissíti a jelszót a {password} értékére.
 
 Alábbiak még változni fognak, valsz. munkamenethez lesz legtöbbjük kötve.
 
+GET /api/v/0.1/tag/all
+visszaadja az összes cédulát, értékek ID,name
+
 GET /api/v/0.1/tag?name={name}
 Cédulákat keres minimum részleges egybeeséssel, kulcs érték mező kötelező.
-Eredményt JSON tömbként visszaadja.
+Eredményt JSON tömbként visszaadja, értékek ID,name.
 
 POST /api/v/0.1/tag
 Létrehoz egy új cédulát.
@@ -62,4 +65,16 @@ GET /api/v/0.1/media/{ID}
 Visszaad egy képet base64-es kódolással, asszociált adatokkal : {uploader,file,uploaded,description,placeholder_text,tags[name]}
 
 GET /api/v/0.1/media/all/{ID}
-Visszaadja az adott ID-jű user összes képét base64-es kódolással, asszociált adatokkal : {uploader,file,uploaded,description,placeholder_text,tags[name]}
+Visszaadja az adott ID-jű user összes képét base64-es kódolással, asszociált adatokkal:
+{uploader,file,uploaded,description,placeholder_text,tags[name]}
+
+POST /api/v/0.1/media
+
+munkamenethez kötött
+feltölt egy képet
+form/multipart-data-t használ
+kéri a következő mezőket {image,description,placeholder_text,visibility,tags}
+az image egy BLOB típus (képfálj) kell hogy legyen
+a tags vesszőkkel elválasztott számok kell hogy legyen
+a visibility szám kell hogy legyen 0 és 3 között
+a többi szöveges
