@@ -86,3 +86,9 @@ Az image egy BLOB típus (képfálj) kell hogy legyen.
 A tags vesszőkkel elválasztott számok kell hogy legyen, semmi más, még space sem.
 A visibility szám kell hogy legyen 0 és 3 között, 0 privát, 1 csak barátok, 2 csak regisztráltak, 3 nyilvános láthatóság.
 A többi mező szöveges.
+
+GET /api/v/0.1/media/search/tags?tagids={ID}
+Képet keres cédula ID alapján, több id-t is elfogad
+az extra id-ket &tagids={ID}&tagids={ID}... kéri
+Siker esetén visszaad egy listát amibe az alábbi értékek vannak: {uploader,file,uploaded,description,placeholder_text,tags[name]},
+csak a file van base64-ben.
