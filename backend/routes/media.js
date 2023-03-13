@@ -23,7 +23,7 @@ router.get('/media/:mediaID',mediaValidator.checkIfMediaIDExsist,mediaController
 router.get('/media/all/:userID',userValidator.checkIfUserIDExsits,mediaController.getAllMediaFromUser)
 
 // view media by tags, search function
-router.get('/media/by-tags/',mediaController.getAllMediaByTags)
+router.get('/media/search/tags',mediaController.getAllMediaByTags)
 
 // add reaction
 
