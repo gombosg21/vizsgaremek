@@ -99,3 +99,18 @@ ID alapján felfrissíti a tag-ok listáját.
 Egy tagidlist tömböt kér, mely tartalma csakis szám lehet
 Pl: {"tagidlist":[1,2,3]}
 Siker esetén visszaadja az id-k tömbjét
+
+POST /api/v/0.1/media/{ID}/thread
+Belépés után elérhető...
+Media ID-re létrehoz egy beszédszálat.
+Body-ba kéri a {name} mezőt.
+Siker esetén visszaadja a beszédszál ID-jét JSON-ban.
+
+GET /api/v/0.1/thread/{ID}
+Lekérdez egy beszédszálat ID alapján.
+Siker esetén visszatér egy JSON-nal:
+{media_ID,name,user:{ID,name},created,last_activity,comments:[{content,ID,created,last_edit,user:{ID,name}}]}
+
+GET /api/v/0.1/thread/all
+Kilistázza az összes beszédszálat.
+Visszatérése egy tömb az [{ID,name,status,created,last_activity,user:{ID,name}}] értékekkel.
