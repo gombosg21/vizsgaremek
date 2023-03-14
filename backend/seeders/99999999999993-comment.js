@@ -10,7 +10,7 @@ module.exports = {
 
     const comments = [];
 
-    const threadIDsraw = await thread.findAll({ include: ['ID'] });
+    const threadIDsraw = await thread.findAll({ attributes: ['ID'] });
     const threadIDs = [];
 
     threadIDsraw.forEach(thread => {
@@ -50,7 +50,7 @@ module.exports = {
       };
     };
 
-    await queryInterface.bulkInsert();
+    await queryInterface.bulkInsert('comments',comments);
 
   },
 
