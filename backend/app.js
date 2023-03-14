@@ -14,6 +14,7 @@ const usersRouter = require('./routes/users');
 const mediaRouter = require('./routes/media');
 const tagRouter = require('./routes/tag');
 const indexRouter = require('./routes/index');
+const threadRouter = require('./routes/thread');
 
 const app = express();
 
@@ -44,6 +45,8 @@ app.use(routePrefix, indexRouter)
 app.use(routePrefix, usersRouter);
 app.use(routePrefix, mediaRouter);
 app.use(routePrefix, tagRouter);
+app.use(routePrefix,threadRouter);
+
 
 //catch 404 and forward to error handler
 app.use(function (req, res, next) {
