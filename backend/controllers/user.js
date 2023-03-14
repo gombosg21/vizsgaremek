@@ -2,7 +2,7 @@ const user = require("../models").user;
 const media = require("../models").media;
 const generatePassword = require('../util/password').generatePassword;
 const { Op } = require("sequelize");
-const Visibility = require('../middlewares/authentiaction/visibility').determineVisibility;
+const Visibility = require('../helpers/authorization/visibility').determineVisibility;
 
 exports.getProfile = async (req, res, next) => {
     const ID = req.params.userID;
@@ -22,6 +22,7 @@ exports.getProfile = async (req, res, next) => {
         };
 
         const UserProfile = {
+            ID : user.ID,
             name: User.name,
             register_date: User.register_date,
             gender: User.gender,
@@ -35,7 +36,7 @@ exports.getProfile = async (req, res, next) => {
 
         let results = {};
 
-        results = Visibility(userID, User.ID, visibility, UserProfile);
+        results = await Visibility(userID, User.ID, visibility, UserProfile);
 
         res.status(results.status)
             .json(results.data)
@@ -157,6 +158,13 @@ exports.createUser = async (req, res, next) => {
     const UserEmail = req.body.email;
     const UserDate = req.body.birth_date;
     const UserGender = req.body.gender;
+
+    //
+    //  sex
+    //  0 = male
+    //  1 = female
+    //  2 = other/unspecified
+    //
 
     const encryptedPassword = generatePassword(UserPassword);
     const passwordSalt = encryptedPassword.salt;
