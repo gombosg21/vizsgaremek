@@ -9,7 +9,7 @@ exports.getThread = async (req, res, next) => {
     const threadID = req.params.ID;
 
     try {
-        const data = await thread.findOne({ where: { ID: threadID }, include: [{ model: comment,attributes:['content','ID','created','last_edit'],include:[{model:user,attributes:['ID','name']}] }, { model: user, attributes: ['ID', 'name'] }] });
+        const data = await thread.findOne({ where: { ID: threadID }, attributes:['media_ID','name','created','last_activity'],include: [{ model: comment,attributes:['content','ID','created','last_edit'],include:[{model:user,attributes:['ID','name']}] }, { model: user, attributes: ['ID', 'name'] }] });
         res.status(200)
             .json(data);
     }
