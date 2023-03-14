@@ -94,7 +94,8 @@ Siker esetén visszaad egy listát amibe az alábbi értékek vannak: {uploader,
 csak a file van base64-ben.
 
 PATCH /api/v/0.1/media/{ID}/tags
-ID alapján felfrissíti a tag-ok listáját
-egy tagidlist tömböt kér, mely tartalma csakis szám lehet
-ex: {"tagidlist":[1,2,3]}
-siker esetén visszaadja az id-k tömbjét
+Belépés után elérhető..
+ID alapján felfrissíti a tag-ok listáját.
+Egy tagidlist tömböt kér, mely tartalma csakis szám lehet
+Pl: {"tagidlist":[1,2,3]}
+Siker esetén visszaadja az id-k tömbjét
