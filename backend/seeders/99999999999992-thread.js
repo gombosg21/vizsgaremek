@@ -1,5 +1,4 @@
 const fake = require('@faker-js/faker');
-const thread = require('../models').thread;
 const user = require('../models').user;
 const media = require('../models').media;
 
@@ -21,14 +20,12 @@ module.exports = {
     mediaIDsraw.forEach(media => {
       mediaIDs.push(media.ID)
     });
-
     const mediaThreadCounts = [];
 
     mediaIDs.forEach(mediaID => {
       var threadCount = Math.floor(Math.random() * 10);
       mediaThreadCounts.push({ [mediaID]: threadCount });
     });
-
 
     for (let i = 0; i < mediaThreadCounts.length; i++) {
 
@@ -37,17 +34,20 @@ module.exports = {
       const threadCount = mediaThreadCounts[i][mediaID];
 
       if (threadCount > 0) {
-        const uploaderID = userIDs[Math.floor(Math.random() * userIDs.length)];
-        const newThread = {
-          media_ID: mediaID,
-          user_ID: uploaderID,
-          name: fake.faker.lorem.sentence()
+        var a = 0;
+        while ( a < threadCount){
+          const uploaderID = userIDs[Math.floor(Math.random() * userIDs.length)];
+          const newThread = {
+            media_ID: mediaID,
+            user_ID: uploaderID,
+            name: fake.faker.lorem.sentence()
+          };
+          a++;
+          Threads.push(newThread);
         };
-        console.log(newThread)
-        Threads.push(newThread);
       };
     };
-    await queryInterface.bulkInsert('threads',Threads);
+    await queryInterface.bulkInsert('threads', Threads);
   },
 
 
