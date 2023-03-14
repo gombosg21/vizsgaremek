@@ -92,3 +92,9 @@ Képet keres cédula ID alapján, több id-t is elfogad
 az extra id-ket &tagids={ID}&tagids={ID}... kéri
 Siker esetén visszaad egy listát amibe az alábbi értékek vannak: {uploader,file,uploaded,description,placeholder_text,tags[name]},
 csak a file van base64-ben.
+
+PATCH /api/v/0.1/media/{ID}/tags
+ID alapján felfrissíti a tag-ok listáját
+egy tagidlist tömböt kér, mely tartalma csakis szám lehet
+ex: {"tagidlist":[1,2,3]}
+siker esetén visszaadja az id-k tömbjét
