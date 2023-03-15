@@ -87,21 +87,6 @@ exports.getAllMediaFromUser = async (req, res, next) => {
     };
 };
 
-const preProcessAndSequence = (propArray, AndKey) => {
-    if (propArray == undefined || null) { throw new Error("argument propArray missing"); };
-    if (!(propArray) instanceof Array) { throw new Error("propArray must be an array"); };
-    if (propArray.length == 0) { throw new Error("propArray cannot be empty"); };
-
-    if (AndKey == undefined || null) { throw new Error("argument AndKey missing"); };
-    if (typeof AndKey != "string") { throw new Error("AndKey must be a string"); };
-
-    const preProcessedAndSequence = [];
-
-    for (let i = 0; i < propArray.length; i++) {
-        preProcessedAndSequence.push({ [AndKey]: propArray[i] });
-    };
-    return preProcessedAndSequence;
-};
 
 exports.getAllMediaByTags = async (req, res, next) => {
     const tagIDs = req.query.tagids;
@@ -113,7 +98,6 @@ exports.getAllMediaByTags = async (req, res, next) => {
         var MediaList = []
         var MediaAssocList = [];
         if (tagIDs.length > 1) {
-            const tagIdAndArray = preProcessAndSequence(tagIDs, "tag_ID");
 
             MediaAssocList = await media_taglist.findAll({
                 where: { tag_ID: { [Op.in]: tagIDs } },
@@ -209,10 +193,9 @@ exports.uploadMedia = async (req, res, next) => {
 
 exports.deleteMedia = async (req, res, next) => {
     const ID = req.params.mediaID;
-    const userID = req.user.ID;
 
     try {
-        const Media = await media.findOne(ID);
+        const Media = await media.findByPk(ID);
 
         Media.set({
             deleted: true
