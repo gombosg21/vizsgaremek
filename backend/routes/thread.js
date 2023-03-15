@@ -10,13 +10,13 @@ const mediaValidator = require("../middlewares/validators/media");
 const commonValidator = require("../middlewares/validators/common");
 
 // create on story_id
-router.post('/story/:story_D/thread', auth.isAuth, threadValidator.createThreadRules(), commonValidator.validate, preporcess.setCreateTargetType("story"), threadController.CreateThread)
+router.post('/story/:storyID/thread', auth.isAuth, threadValidator.createThreadRules(), commonValidator.validate, preporcess.setCreateTargetType("story"), threadController.CreateThread)
 
 // create on profile_id
 router.post('/user/:userID/thread', auth.isAuth, userValidator.checkIfUserIDExsits, threadValidator.createThreadRules(), commonValidator.validate, preporcess.setCreateTargetType("user"), threadController.CreateThread)
 
 // create on media_id
-router.post('/media/:media_D/thread', auth.isAuth, mediaValidator.checkIfMediaIDExsist, threadValidator.createThreadRules(), commonValidator.validate, preporcess.setCreateTargetType("media"), threadController.CreateThread)
+router.post('/media/:mediaID/thread', auth.isAuth, mediaValidator.checkIfMediaIDExsist, threadValidator.createThreadRules(), commonValidator.validate, preporcess.setCreateTargetType("media"), threadController.CreateThread)
 
 router.get('/thread/all', threadController.getAllThreads)
 
