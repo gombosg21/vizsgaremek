@@ -38,7 +38,7 @@ exports.searchRules = () => {
         validator.query('date_start').exists(),
         validator.query('date_end').exists(),
         validator.query('gender').exists()
-    ],"empty query"),
+    ],"empty query, aborting"),
         [
             validator.query('name').isAlphanumeric().optional({nullable:true,checkFalsy:true}).withMessage('name cannot contain special characters'),
             validator.query('date_start').isDate().optional({nullable:true,checkFalsy:true}).withMessage("invalid date format"),
