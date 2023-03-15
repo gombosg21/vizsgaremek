@@ -65,7 +65,7 @@ exports.editProfile = async (req, res, next) => {
         });
         await User.save();
         res.status(200)
-            .json(User.ID);
+            .json({ID:User.ID});
     }
     catch (error) {
         console.error(error);
@@ -104,7 +104,8 @@ exports.changePassword = async (req, res, next) => {
                 password_salt: passwordSalt
             });
         await User.save();
-        res.status(200);
+        res.status(200)
+            .json({ID:User.ID});;
     }
     catch (error) {
         console.error(error);
@@ -200,7 +201,7 @@ exports.createUser = async (req, res, next) => {
 
 exports.deleteUser = async (req, res, next) => {
 
-    const ID = req.params.userID;
+    const ID = req.user.ID;
 
     try {
         const User = await user.findOne({ where: { ID: ID } });
@@ -213,8 +214,7 @@ exports.deleteUser = async (req, res, next) => {
                 console.error(error);
             } else {
                 await User.destroy();
-                res.json(User.ID)
-                    .redirect('/');
+                res.json({ID:User.ID});
             };
         });
     }
