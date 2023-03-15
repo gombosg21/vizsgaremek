@@ -12,7 +12,10 @@ exports.createTag = async (req, res, next) => {
         await newTag.save();
 
         res.status(201)
-            .json(newTag);
+            .json({
+                ID: newTag.ID,
+                name: newTag.name
+            });
 
     } catch (error) {
         console.error(error);
@@ -25,7 +28,7 @@ exports.updateTag = async (req, res, next) => {
     const tagName = req.body.tag_name;
 
     try {
-        const UpdateTag = await tag.findOne({ where: { ID: ID } });
+        const UpdateTag = await tag.findByPk(ID, { attributes: ['name', 'ID'] });
 
         UpdateTag.set({
             name: tagName
@@ -34,7 +37,7 @@ exports.updateTag = async (req, res, next) => {
         await UpdateTag.save();
 
         res.status(200)
-            .json(UpdateTag.name);
+            .json(UpdateTag);
     } catch (error) {
         console.error(error);
         res.status(500);
@@ -45,11 +48,11 @@ exports.deleteTag = async (req, res, next) => {
     const ID = req.params.ID;
 
     try {
-        const deleteTag = await tag.findOne({ where: { ID: ID } });
+        const deleteTag = await tag.findByPk(ID);
 
         await deleteTag.destroy();
         res.status(200)
-            .json(deleteTag.ID);
+            .json({ ID: deleteTag.ID });
 
     } catch (error) {
         console.error(error);
@@ -61,11 +64,11 @@ exports.findTags = async (req, res, next) => {
     const tagName = req.query.tag_name;
 
     try {
-        const TagArray = await tag.findAll({ where: { name: { [Op.like]: `%${tagName}%` } }, attributes: ['ID','name'] });
+        const TagArray = await tag.findAll({ where: { name: { [Op.substring]: tagName } }, attributes: ['ID', 'name'] });
         if (TagArray == null) {
-            res.status(404).json({ "msg": "couldnt find results matching query parameters, try a different search" })
+            res.status(200).json({ "msg": "mo matching tags found, try a different search" })
         } else {
-            res.status(200).json(TagArray);
+            res.status(200).json({ results: TagArray });
         };
     }
     catch (error) {
@@ -76,9 +79,9 @@ exports.findTags = async (req, res, next) => {
 
 exports.getAllTags = async (req, res, next) => {
     try {
-        const tagList = await tag.findAll({attributes:['ID','name']});
+        const tagList = await tag.findAll({ attributes: ['ID', 'name'] });
 
-        res.status(200).json(tagList);
+        res.status(200).json({ tags: tagList });
     } catch (error) {
         console.error(error);
         res.status(500);
