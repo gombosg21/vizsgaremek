@@ -6,7 +6,8 @@
     "dev-start": "nodemon app.js",
     "start": "node app.js",
     "init-db": "node ./util/init-db.js",
-    "wipe-db": "node ./util/destroy-db.js"
+    "wipe-db": "node ./util/destroy-db.js",
+    "test": "jest"
   },
   "dependencies": {
     "cookie-parser": "~1.4.6",
