@@ -30,7 +30,9 @@ module.exports = {
         password_hash: passwordHash,
         email: fake.faker.internet.email(firstName, lastName),
         birth_date: fake.faker.date.birthdate(),
-        gender: gender + Math.round(Math.random())
+        gender: gender + Math.round(Math.random()),
+        profile_visibility: Math.floor(Math.random() * 3),
+        profile_description: fake.faker.lorem.sentence()
       });
 
       testPasswords.push({
