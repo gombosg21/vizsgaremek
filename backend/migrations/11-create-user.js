@@ -45,16 +45,16 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
-      password_salt:{
+      password_salt: {
         allowNull: false,
         type: Sequelize.STRING
       },
-      password_reset_token:{
+      password_reset_token: {
         allowNull: true,
         defaultValue: null,
         type: Sequelize.STRING
       },
-      password_reset_token_date:{
+      password_reset_token_date: {
         allowNull: true,
         defaultValue: null,
         type: Sequelize.DATE
@@ -75,7 +75,7 @@ module.exports = {
       },
       last_online: {
         allowNull: false,
-        defaultValue:Sequelize.NOW,
+        defaultValue: Sequelize.NOW,
         type: Sequelize.DATE
       },
       birth_date: {
@@ -91,16 +91,21 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       profile_pic: {
-      type: Sequelize.INTEGER
-      },
-      gender: {
-        allowNull:false,
+        allowNull: true,
         type: Sequelize.INTEGER
       },
-      deletedAt:{
-        allowNull:true,
-        defaultValue:null,
-        type:Sequelize.DATE
+      profile_thread: {
+        allowNull: true,
+        type: Sequelize.INTEGER
+      },
+      gender: {
+        allowNull: false,
+        type: Sequelize.INTEGER
+      },
+      deletedAt: {
+        allowNull: true,
+        defaultValue: null,
+        type: Sequelize.DATE
       }
     });
   },
