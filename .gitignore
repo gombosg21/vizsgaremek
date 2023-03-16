@@ -7,3 +7,4 @@ temp/
 coverage/
 jest.config.js
 *.bkp
+*.dtmp
