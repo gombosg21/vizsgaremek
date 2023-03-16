@@ -1,0 +1,106 @@
+@import '~@fortawesome/fontawesome-free/css/all.css';
+.post {
+    margin-bottom: 20px;
+    max-width: 50vh;
+    margin: auto;
+    margin-bottom: 30px;
+}
+
+.post-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.profile-picture {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.post-image-container {
+    width: 50vh;
+    height: 50vh;
+    overflow: hidden;
+    position: relative;
+    border-radius: 5px;
+}
+
+.profile-name {
+    font-weight: 500;
+}
+
+.post-time {
+    color: #999;
+    margin-left: 10px;
+    font-size: 14px;
+}
+
+a {
+    text-decoration: none;
+    color: rgb(0, 103, 187);
+}
+
+.post-image {
+    width: auto;
+    height: auto;
+    min-width: 100%;
+    min-height: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.post-actions {
+    display: flex;
+    align-items: center;
+    margin-top: 3px;
+    margin-left: 3px;
+}
+
+.reaction-button {
+    position: relative;
+    margin-right: 10px;
+    cursor: pointer;
+    transition-duration: 200ms;
+    color: rgb(0, 103, 187);
+}
+
+.reactions {
+    display: flex;
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 5px;
+    border-bottom-right-radius: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    margin-left: -3px;
+}
+
+.love,
+.angry,
+.haha,
+.sad {
+    margin-right: 5px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    transition: 0.1s;
+}
+
+.love:hover,
+.angry:hover,
+.haha:hover,
+.sad:hover {
+    transform: scale(1.10);
+}
+
+.post-description {
+    margin-top: 3px;
+}

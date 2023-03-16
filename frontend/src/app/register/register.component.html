@@ -1,29 +1,29 @@
 <div class="container mt-5">
-    <h2 class="text-center">Regisztráció</h2>
+    <h2 class="text-center">Register</h2>
     <form>
         <div class="form-group">
-            <input type="text" class="form-control" id="username" placeholder="Felhasználónév" [(ngModel)]="username" name="username" [ngClass]="usernameClass" (input)="validateUsername()" />
+            <input type="text" class="form-control" id="username" placeholder="Username" [(ngModel)]="username" name="username" [ngClass]="usernameClass" (input)="validateUsername()" />
             <div *ngIf="usernameClass === 'is-invalid'" [ngClass]="usernameClass" class="invalid-feedback">
-                Kérlek adj meg egy felhasználónevet ami legalább 4 karakter hosszú.
+                Please enter a valid username (min. 3 characters).
             </div>
         </div>
         <div class="form-group">
             <input type="email" class="form-control" id="email" placeholder="Email" [(ngModel)]="email" name="email" [ngClass]="emailClass" (input)="validateEmail()" />
             <div *ngIf="emailClass === 'is-invalid'" [ngClass]="emailClass" class="invalid-feedback">
-                Kérlek adj meg egy valós email címet.
+                Please enter a valid email address.
             </div>
         </div>
         <div class="form-group">
-            <input type="password" class="form-control" placeholder="Jelszó" [(ngModel)]="password" name="password" [ngClass]="passwordClass" (input)="validatePassword()" />
+            <input type="password" class="form-control" placeholder="Password" [(ngModel)]="password" name="password" [ngClass]="passwordClass" (input)="validatePassword()" />
             <div *ngIf="passwordClass === 'is-invalid'" [ngClass]="passwordClass" class="invalid-feedback">
-                Kérlek adj meg egy jelszót ami legalább 6 karakter hosszú.
+                Please enter a valid password (min. 6 characters).
             </div>
         </div>
 
         <div class="form-group">
-            <input type="password" class="form-control" placeholder="Jelszó megerősítése" name="confirmPassword" [(ngModel)]="passwordConfirm" [ngClass]="passwordConfirmClass" (input)="validatePasswordConfirm()" />
+            <input type="password" class="form-control" placeholder="Confirm password" name="confirmPassword" [(ngModel)]="passwordConfirm" [ngClass]="passwordConfirmClass" (input)="validatePasswordConfirm()" />
             <div *ngIf="passwordConfirmClass === 'is-invalid'" class="invalid-feedback">
-                A két jelszó nem egyezik.
+                Please enter the same password as above.
             </div>
         </div>
 
@@ -36,21 +36,21 @@
 
         <div class="form-group">
             <div class="form-check-inline">
-                <label class="form-check-label" id="pickGender">Válassz nemet:</label>
+                <label class="form-check-label" id="pickGender">Pick gender</label>
             </div>
             <div class="form-check-inline">
                 <input class="form-check-input" type="radio" id="male" name="gender" [(ngModel)]="selectedGender" value="male" checked="checked">
-                <label class="form-check-label" for="male">Férfi</label>
+                <label class="form-check-label" for="male">Male</label>
             </div>
             <div class="form-check-inline">
                 <input class="form-check-input" type="radio" id="female" name="gender" [(ngModel)]="selectedGender" value="female">
-                <label class="form-check-label" for="female">Nő</label>
+                <label class="form-check-label" for="female">Female</label>
             </div>
         </div>
-        <button type="submit" class="btn btn-primary" [disabled]="!isFormValid()" (click)="register()">Regisztráció</button>
+        <button type="submit" class="btn btn-primary" [disabled]="!isFormValid()" (click)="register()">Register</button>
     </form>
 
     <div class="haveLogin">
-        <p>Már van fiókod? <a routerLink="/login">Bejelentkezés</a></p>
+        <p>Have an account? <a routerLink="/login">Log in</a></p>
     </div>
 </div>

@@ -1,0 +1,23 @@
+<div class="post" *ngFor="let post of posts">
+    <div class="post-header">
+        <img class="profile-picture" [src]="post.profilePicture" alt="Profile Picture">
+        <a class="profile-name" [routerLink]="['/profile', post.username]">{{ post.username }}</a>
+        <div class="post-time">{{ post.time }}</div>
+    </div>
+    <div class="post-image-container">
+        <img class="post-image" [src]="post.image" alt="Post Image">
+    </div>
+    <div class="post-actions">
+        <div class="reaction-button" (mouseenter)="showReactions = true" (mouseleave)="showReactions = false">
+            <div class="reactions" *ngIf="showReactions">
+                <button class="love" (click)="lovePost(post)"><i class="fa-regular fa-heart"></i></button>
+                <button class="angry" (click)="angryPost(post)"><i class="fa-regular fa-face-angry"></i></button>
+                <button class="haha" (click)="hahaPost(post)"><i class="fa-regular fa-face-grin-squint-tears"></i></button>
+                <button class="sad" (click)="sadPost(post)"><i class="fa-sharp fa-regular fa-face-frown-open"></i></button>
+            </div>
+            <i class="fa-regular fa-thumbs-up"></i>
+        </div>
+        <div class="like-counter">{{ post.likes }} likes</div>
+    </div>
+    <div class="post-description">{{ post.description }}</div>
+</div>
