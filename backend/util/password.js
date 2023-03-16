@@ -1,17 +1,29 @@
 const crypto = require('crypto');
- 
-exports.generatePassword = (password) => 
-{
-    var salt = crypto.randomBytes(32).toString('hex');
-    var genHash = crypto.pbkdf2Sync(password,salt,10000,64,'sha512').toString('hex');
-    return {
-        salt: salt,
-        hash : genHash
-    }
+
+exports.generatePassword = async (password) => {
+    const salt = crypto.randomBytes(64).toString('hex');
+
+    return new Promise((resolve, rejects) => {
+        crypto.scrypt(password, salt, 128, (error, derivedKey) => {
+            if (error) {
+                rejects(error);
+            };
+            resolve({
+                salt: salt,
+                hash: derivedKey.toString('hex')
+            });
+        });
+    });
 };
 
-exports.validatePassword = (password,hash,salt) => 
-{
-    var hashVerify = crypto.pbkdf2Sync(password,salt,10000,64,'sha512').toString('hex');
-    return hash === hashVerify;
+exports.validatePassword = (password, salt, hash) => {
+
+    return new Promise((resolve, rejects) => {
+        crypto.scrypt(password, salt, 128, (error, derivedKey) => {
+            if (error) {
+                rejects(error);
+            };
+            resolve(hash == derivedKey.toString('hex'));
+        });
+    });
 };
