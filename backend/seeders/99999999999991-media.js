@@ -31,9 +31,6 @@ module.exports = {
           var uploadTagCount = Math.floor(Math.random() * tag_list.length);
           var uploadTagIDList = [];
 
-          console.log(uploadTagCount)
-
-
           while (uploadTagIDList.length < uploadTagCount) {
             var randomTagID = tag_list[Math.floor(Math.random() * tag_list.length)].ID;
             if (!uploadTagIDList.includes(randomTagID)) {
