@@ -80,4 +80,19 @@ test('password hashing retruns different outputs w different inputs, hash field'
     expect(returnData.hash).not.toStrictEqual(secondReturnData.hash);
 });
 
+test('password cheker returns', async () => {
+    expect(await password.validatePassword("asdafaweger", returnData.salt, returnData.hash)).toBeTruthy();
+});
+
+test('password cheker returns with type boolean', async () => {
+    expect(typeof (await password.validatePassword("asdafaweger", returnData.salt, returnData.hash))).toBe("boolean");
+});
+
+test('password cheker returns true on matching password', async () => {
+    expect(await password.validatePassword("asdafaweger", returnData.salt, returnData.hash)).toBe(true);
+});
+
+test('password cheker returns false on mismatching password', async () => {
+    expect(await password.validatePassword("asdager", returnData.salt, returnData.hash)).toBe(false);
+});
 
