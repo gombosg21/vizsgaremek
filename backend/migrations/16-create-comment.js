@@ -1,9 +1,4 @@
 'use strict';
-
-const { DataTypes } = require('sequelize');
-const thread = require('../models/thread');
-const user = require('../models/user');
-
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {

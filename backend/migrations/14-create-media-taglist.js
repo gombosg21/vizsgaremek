@@ -1,8 +1,4 @@
 'use strict';
-
-const media = require('../models/media');
-const tag = require('../models/tag')
-
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
