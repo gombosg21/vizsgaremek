@@ -14,6 +14,8 @@ import { SearchComponent } from './search/search.component';
 import { UploadComponent } from './upload/upload.component';
 import { ImageModalComponent } from './image-modal/image-modal.component';
 import { QueryComponent } from './query/query.component';
+import { HttpClientModule } from '@angular/common/http';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -31,6 +33,7 @@ import { QueryComponent } from './query/query.component';
     BrowserModule,
     AppRoutingModule,
     FormsModule,
+    HttpClientModule,
 
   ],
   providers: [],

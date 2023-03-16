@@ -6,15 +6,53 @@ import { Component } from '@angular/core';
   styleUrls: ['./feed.component.css']
 })
 export class FeedComponent {
-  posts = [
-    { username: 'user1', image: 'https://via.placeholder.com/500x500', likes: 100 },
-    { username: 'user2', image: 'https://via.placeholder.com/500x500', likes: 5 },
-    { username: 'user3', image: 'https://via.placeholder.com/500x500', likes: 15 },
-    { username: 'user4', image: 'https://via.placeholder.com/500x500', likes: 20 },
-    { username: 'user5', image: 'https://via.placeholder.com/500x500', likes: 25 }
-  ];
+  posts = [{
+    id: 1,
+    username: "johndoe",
+    profilePicture: "https://via.placeholder.com/150x150",
+    image: "https://images.pexels.com/photos/3680219/pexels-photo-3680219.jpeg?cs=srgb&dl=pexels-lukas-rodriguez-3680219.jpg&fm=jpg",
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    likes: 50,
+    time: "12 minutes ago"
+},
+{
+    id: 2,
+    username: "janedoe",
+    profilePicture: "https://via.placeholder.com/150x150",
+    image: "https://images.unsplash.com/photo-1554080353-a576cf803bda?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8cGhvdG98ZW58MHx8MHx8&w=1000&q=80",
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent malesuada libero ac enim fringilla, non pellentesque mauris pulvinar.",
+    likes: 30,
+    time: "2 hours ago"
+},
+{
+    id: 3,
+    username: "jimmydoe",
+    profilePicture: "https://via.placeholder.com/150x150",
+    image: "https://irisphoto.art/web/image/76796/22-3-404-Maximilian.jpg",
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent malesuada libero ac enim fringilla, non pellentesque mauris pulvinar.",
+    likes: 20,
+    time: "2 days ago"
+}
+];
 
-  like(post: any) {
-    post.likes++;
+  showReactions = false;
+
+  
+
+  lovePost(post: any) {
+    // logic later
+    console.log('Loved', post);
+  }
+  angryPost(post: any) {
+    // logic later
+    console.log('Angry', post);
+  }
+  hahaPost(post: any) {
+    // logic later
+    console.log('Haha', post);
+  }
+  sadPost(post: any) {
+    // logic later
+    console.log('Sad', post);
   }
 }
