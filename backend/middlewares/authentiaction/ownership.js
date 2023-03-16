@@ -5,11 +5,11 @@ const media = require('../../models').media;
 
 
 exports.isMyMedia = async (req, res, next) => {
-    const userID = req.user.ID ?? -1;
+    const userID = req.user.ID;
     const mediaID = req.params.mediaID;
     try {
-        const mediaOwner = await media.findOne({where:{[Op.and]:[{user_ID : userID},{ID:mediaID}]},atrributes:['user_ID']}).user_ID;
-        if (userID != mediaOwner) {
+        const mediaOwner = await media.findOne({where:{[Op.and]:[{user_ID : userID},{ID:mediaID}]}});
+        if (!mediaOwner) {
             return res.status(403).json({ "error": "insufficienct privilegdes" });
         } else {
             return next();
@@ -21,11 +21,14 @@ exports.isMyMedia = async (req, res, next) => {
 };
 
 exports.isMyComment = async (req, res, next) => {
-    const userID = req.user.ID ?? -1;
+    const userID = req.user.ID;
     const commentID = req.params.commentID;
+
+    console.log(userID)
+    
     try {
-        const commentOwner = await comment.findOne({where:{[Op.and]:[{user_ID:userID},{ID:commentID}],atrributes:['user_ID']}}).user_ID;
-        if (userID != commentOwner) {
+        const commentOwner = await comment.findOne({where:{[Op.and]:[{user_ID:userID},{ID:commentID}]}});
+       if (!commentOwner) {
             return res.status(403).json({ "error": "insufficienct privilegdes" });
         } else {
             return next();
@@ -37,11 +40,11 @@ exports.isMyComment = async (req, res, next) => {
 };
 
 exports.isMyThread = async (req, res, next) => {
-    const userID = req.user.ID ?? -1;
+    const userID = req.user.ID;
     const threadID = req.params.threadID;
     try {
-        const threadOwner = await thread.findOne({where:{[Op.and]:[{user_ID:userID},{ID:threadID}],atrributes:['user_ID']}}).user_ID;
-        if (userID) {
+        const threadOwner = await thread.findOne({where:{[Op.and]:[{user_ID:userID},{ID:threadID}]}}).user_ID;
+        if (!threadOwner) {
             return res.status(403).json({ "error": "insufficienct privilegdes" });
         } else {
             return next();

@@ -32,8 +32,8 @@ exports.checkIfTagIDDoesNotExsits = async (req, res, next) => {
 exports.checkIfTagNameAlreadyExsits = async (req, res, next) => {
 
     const tagName = req.body.tag_name;
-
-    if (await tag.findOne({ where:{ name: tagName }})) {
+    const conflictObject = await tag.findOne({ where:{ name: tagName }});
+    if (conflictObject) {
         return res.status(406)
             .json({ "error": `${tagName} already exsits` });
     } else {

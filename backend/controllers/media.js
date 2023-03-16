@@ -87,21 +87,6 @@ exports.getAllMediaFromUser = async (req, res, next) => {
     };
 };
 
-const preProcessAndSequence = (propArray, AndKey) => {
-    if (propArray == undefined || null) { throw new Error("argument propArray missing"); };
-    if (!(propArray) instanceof Array) { throw new Error("propArray must be an array"); };
-    if (propArray.length == 0) { throw new Error("propArray cannot be empty"); };
-
-    if (AndKey == undefined || null) { throw new Error("argument AndKey missing"); };
-    if (typeof AndKey != "string") { throw new Error("AndKey must be a string"); };
-
-    const preProcessedAndSequence = [];
-
-    for (let i = 0; i < propArray.length; i++) {
-        preProcessedAndSequence.push({ [AndKey]: propArray[i] });
-    };
-    return preProcessedAndSequence;
-};
 
 exports.getAllMediaByTags = async (req, res, next) => {
     const tagIDs = req.query.tagids;
@@ -113,16 +98,16 @@ exports.getAllMediaByTags = async (req, res, next) => {
         var MediaList = []
         var MediaAssocList = [];
         if (tagIDs.length > 1) {
-            const tagIdAndArray = preProcessAndSequence(tagIDs, "tag_ID");
 
             MediaAssocList = await media_taglist.findAll({
                 where: { tag_ID: { [Op.in]: tagIDs } },
                 attributes: { include: [[fn('COUNT', 'tag_ID'), 'tagIDs']] },
-                group:['media_ID'],
-                having:{tagIDs:{[Op.gte]:tagIDs.length}}});
+                group: ['media_ID'],
+                having: { tagIDs: { [Op.gte]: tagIDs.length } }
+            });
 
         } else {
-           const tagID = tagIDs
+            const tagID = tagIDs
             MediaAssocList = await media_taglist.findAll({ where: { tag_ID: tagID } });
         };
 
@@ -133,7 +118,7 @@ exports.getAllMediaByTags = async (req, res, next) => {
 
         console.log(MediaIDList)
 
-        MediaList = await media.findAll({ where: { ID:{[Op.in]: MediaIDList }}, include: [{ model: user, attributes: ["name", "ID"] }, { model: tag, attributes: ["name"] }] });
+        MediaList = await media.findAll({ where: { ID: { [Op.in]: MediaIDList } }, include: [{ model: user, attributes: ["name", "ID"] }, { model: tag, attributes: ["name"] }] });
 
         if (MediaList == null || undefined || MediaList.lenght == 0) {
             return res.status(200).json({ "msg": "no matches found" });
@@ -208,10 +193,9 @@ exports.uploadMedia = async (req, res, next) => {
 
 exports.deleteMedia = async (req, res, next) => {
     const ID = req.params.mediaID;
-    const userID = req.user.ID;
 
     try {
-        const Media = await media.findOne(ID);
+        const Media = await media.findByPk(ID);
 
         Media.set({
             deleted: true
@@ -250,17 +234,24 @@ exports.editMedia = async (req, res, next) => {
     };
 };
 
-exports.addMediaTags = async (req, res, next) => {
+exports.editMediaTags = async (req, res, next) => {
     const ID = req.params.mediaID;
-    const tagList = req.body.taglist;
+    const tagIDList = req.body.tagidlist;
+
+    console.log(tagIDList)
 
     try {
-        const Media = await media.findOne({ where: { id: ID } });
-        Media.addTags(tagList);
+        const Media = await media.findOne({ where: { id: ID }, include: [{ model: tag, attributes: ["ID"] }] });
+        await Media.setTags(tagIDList);
+        const updatedMedia = await media.findOne({ where: { id: ID }, include: [{ model: tag, attributes: ["ID"] }] });
 
-        await Media.save();
+        const tagList = updatedMedia.tags;
+        const returnList = [];
+
+        for (var Tag of tagList) { returnList.push(Tag.ID) };
+
         res.status(200)
-            .json(Media);
+            .json(returnList);
     }
     catch (error) {
         console.error(error);

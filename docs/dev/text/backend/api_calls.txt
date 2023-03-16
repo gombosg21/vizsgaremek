@@ -13,6 +13,7 @@ JSON állományt vár el, a fent írt mezőkkel, opcionálisan.
 DELETE /api/v/0.1/user/
 Eltöröli a felhasználót, bejelentkezés után.
 Az eltörölt profil ID-jét adja visszatérési értékként.
+Igen, ez megszünteti a munkamenetet is!
 
 GET /api/v/0.1/user?name={name}&date_start={date}&date_end={date}&gender={gender}
 Felhasználót keres, név,szül.idő és nem alapján. Nem értéke 0,1 vagy 2 lehet (férfi,nő,x).
@@ -58,14 +59,17 @@ Cédulát keres minimum részleges egybeeséssel, kulcs érték mező kötelező
 Eredményt JSON tömbként visszaadja, értékek {ID,name}.
 
 POST /api/v/0.1/tag
+Belépés után elérhető...
 Létrehoz egy új cédulát.
 A {tag_name} JSON mezőt követeli.
 
 PATCH /api/v/0.1/tag/{ID}
+Belépés után elérhető...
 A cédula nevét átírja ID alapján.
 JSON-ba a {tag_name} mezőt követeli.
 
 DELETE /api/v/0.1/tag/{ID}
+Belépés után elérhető...
 Eltöröl egy cédulát ID alapján.
 
 GET /api/v/0.1/media/{ID}
@@ -79,7 +83,7 @@ Visszaadja az adott ID-jű user összes képét listaként base64-es kódolássa
 csak a file van base64-ben.
 
 POST /api/v/0.1/media
-Belépés után elérhető.
+Belépés után elérhető...
 Egy képet form/multipart-data-val feltölt.
 A következő mezőket kéri: {image,description,placeholder_text,visibility,tags}
 Az image egy BLOB típus (képfálj) kell hogy legyen.
@@ -92,3 +96,48 @@ Képet keres cédula ID alapján, több id-t is elfogad
 az extra id-ket &tagids={ID}&tagids={ID}... kéri
 Siker esetén visszaad egy listát amibe az alábbi értékek vannak: {uploader,file,uploaded,description,placeholder_text,tags[name]},
 csak a file van base64-ben.
+
+PATCH /api/v/0.1/media/{ID}/tags
+Belépés után elérhető..
+ID alapján felfrissíti a tag-ok listáját.
+Egy tagidlist tömböt kér, mely tartalma csakis szám lehet
+Pl: {"tagidlist":[1,2,3]}
+Siker esetén visszaadja az id-k tömbjét
+
+POST /api/v/0.1/media/{ID}/thread
+Belépés után elérhető...
+Media ID-re létrehoz egy beszédszálat.
+Body-ba kéri a {name} mezőt.
+Siker esetén visszaadja a beszédszál ID-jét JSON-ban.
+
+GET /api/v/0.1/thread/{ID}
+Lekérdez egy beszédszálat ID alapján.
+Siker esetén visszatér egy JSON-nal:
+{media_ID,name,user:{ID,name},created,last_activity,comments:[{content,ID,created,last_edit,user:{ID,name}}]}
+
+GET /api/v/0.1/thread/all
+Kilistázza az összes beszédszálat.
+Visszatérése egy tömb az [{ID,name,status,created,last_activity,user:{ID,name}}] értékekkel.
+
+GET /api/v/0.1/comment/{ID}
+Visszaad egy kommentet ID alapján.
+Visszaadott értékek: {ID,content,user:{ID,name},thread:{ID,name}}
+
+POST /api/v/0.1/thread/{ID}/comment
+Belépés után elérhető...
+Létrehoz egy kommentet az ID azonosítójú beszédszálon.
+A content JSON mezőt kéri, ASCII karakterek megengedettek.
+Siker esetén visszaadja a komment ID-jét.
+
+PATCH /api/v/0.1/comment/{ID}
+Belépés után elérhető...
+Csak akkor működik ha a felhasználó a komment létrehozója.
+Szerkeszt egy kommentet ID alapján.
+A content JSON mezőt kéri, ASCII karakterek megengedettek.
+Siker esetén visszadja a {ID,content,last_edit} mezőket.
+
+DELETE /api/v/0.1/comment/{ID}
+Belépés után elérhető...
+Csak akkor működik ha a felhasználó a komment létrehozója.
+Eltöröl egy kommentet ID alapján.
+Siker esetén visszaadja a komment ID-jét.

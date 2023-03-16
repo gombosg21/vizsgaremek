@@ -4,3 +4,6 @@ test_accounts_credentials.json
 temp/
 .vscode/extensions.json
 .angular/
+coverage/
+jest.config.js
+*.bkp

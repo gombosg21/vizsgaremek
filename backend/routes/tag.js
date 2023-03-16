@@ -2,23 +2,24 @@ const router = require('express').Router();
 const tagController = require("../controllers/tag");
 const tagValidator = require("../middlewares/validators/tag");
 const commonValidator = require("../middlewares/validators/common");
+const auth = require("../middlewares/authentiaction/auth");
 
 
 //by ID
 //change tagname
 //delete tag
 router.route("/tag/:ID")
-    .patch(tagValidator.checkIfTagIDDoesNotExsits,tagValidator.tagRules(),commonValidator.validate,tagController.updateTag)
-    .delete(tagValidator.checkIfTagIDDoesNotExsits,tagController.deleteTag);
+    .patch(auth.isAuth, tagValidator.checkIfTagIDDoesNotExsits, tagValidator.tagRules(), commonValidator.validate, tagController.updateTag)
+    .delete(auth.isAuth, tagValidator.checkIfTagIDDoesNotExsits, tagController.deleteTag);
 
 // get all tags   
-router.get("/tag/all",tagController.getAllTags);
-    
+router.get("/tag/all", tagController.getAllTags);
+
 // search tag by name    
-router.get("/tag",tagValidator.searchRules(),commonValidator.validate,tagController.findTags);
+router.get("/tag", tagValidator.searchRules(), commonValidator.validate, tagController.findTags);
 
 //create new tag
-router.post("/tag",tagValidator.tagRules(),commonValidator.validate,tagValidator.checkIfTagNameAlreadyExsits,tagController.deleteTag);
+router.post("/tag", auth.isAuth, tagValidator.tagRules(), commonValidator.validate, tagValidator.checkIfTagNameAlreadyExsits, tagController.createTag);
 
 
 module.exports = router;
