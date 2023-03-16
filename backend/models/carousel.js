@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       this.belongsTo(models.user, { foreignKey: 'user_ID' })
+      this.belongsToMany(models.media,{through:models.media_taglist,foreignKey:"carousel_ID",sourceKey:"ID"})
     }
   }
   carousel.init({
