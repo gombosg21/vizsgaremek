@@ -6,3 +6,4 @@ temp/
 .angular/
 coverage/
 jest.config.js
+.bkp
