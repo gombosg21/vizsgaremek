@@ -17,6 +17,10 @@ module.exports = {
         unique: true,
         type: Sequelize.STRING
       },
+      alias: {
+        allowNull: true,
+        type: Sequelize.STRING
+      },
       deleted: {
         allowNull: false,
         defaultValue: false,
@@ -45,10 +49,25 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
-      email_verified: {
-        allowNull: false,
-        defaultValue: false,
-        type: Sequelize.BOOLEAN
+      password_reset_token:{
+        allowNull: true,
+        defaultValue: null,
+        type: Sequelize.STRING
+      },
+      password_reset_token_date:{
+        allowNull: true,
+        defaultValue: null,
+        type: Sequelize.DATE
+      },
+      email_token: {
+        allowNull: true,
+        defaultValue: null,
+        type: Sequelize.STRING
+      },
+      email_token_date: {
+        allowNull: true,
+        defaultValue: null,
+        type: Sequelize.DATE
       },
       email: {
         allowNull: false,
@@ -56,6 +75,7 @@ module.exports = {
       },
       last_online: {
         allowNull: false,
+        defaultValue:Sequelize.NOW,
         type: Sequelize.DATE
       },
       birth_date: {
