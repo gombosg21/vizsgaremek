@@ -40,16 +40,16 @@ module.exports = {
       },
       password_hash: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       password_salt: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       password_reset_token: {
         allowNull: true,
         defaultValue: null,
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       password_reset_token_date: {
         allowNull: true,
@@ -59,7 +59,7 @@ module.exports = {
       email_token: {
         allowNull: true,
         defaultValue: null,
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       email_token_date: {
         allowNull: true,
