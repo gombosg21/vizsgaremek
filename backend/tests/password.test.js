@@ -3,12 +3,18 @@ const password = require("../util/password");
 
 let returnData;
 let secondReturnData;
+let validateData;
+let badPassword;
 
 beforeAll(async () => {
     returnData = await password.generatePassword("asdafaweger");
-    secondReturnData = await password.generatePassword("hsndjsbgnhasb")
+    secondReturnData = await password.generatePassword("hsndjsbgnhasb");
 });
 
+beforeAll(async () => {
+    validateData = await password.validatePassword("asdafaweger", returnData.salt, returnData.hash);
+    badPassword = await password.validatePassword("asdager", returnData.salt, returnData.hash);
+});
 
 test('password hashing callable', async () => {
     expect(password.generatePassword instanceof Function).toBe(true);
@@ -17,6 +23,20 @@ test('password hashing callable', async () => {
 test('password hashing is an async function', async () => {
     const AsyncFunction = (async () => { }).constructor;
     expect(password.generatePassword instanceof AsyncFunction).toBe(true);
+});
+
+test('password hashing requires input', async () => {
+    try {
+        expect(await password.generatePassword()).toThrow(Error);
+    } catch (error) {
+    };
+});
+
+test('password hashing requires specific input', async () => {
+    try {
+        expect(await password.generatePassword(31535)).toThrow(TypeError);
+    } catch (error) {
+    };
 });
 
 test('password hashing returns something', async () => {
@@ -81,18 +101,18 @@ test('password hashing retruns different outputs w different inputs, hash field'
 });
 
 test('password cheker returns', async () => {
-    expect(await password.validatePassword("asdafaweger", returnData.salt, returnData.hash)).toBeTruthy();
+    expect(validateData).toBeTruthy();
 });
 
 test('password cheker returns with type boolean', async () => {
-    expect(typeof (await password.validatePassword("asdafaweger", returnData.salt, returnData.hash))).toBe("boolean");
+    expect(typeof validateData).toBe("boolean");
 });
 
 test('password cheker returns true on matching password', async () => {
-    expect(await password.validatePassword("asdafaweger", returnData.salt, returnData.hash)).toBe(true);
+    expect(await validateData).toBe(true);
 });
 
 test('password cheker returns false on mismatching password', async () => {
-    expect(await password.validatePassword("asdager", returnData.salt, returnData.hash)).toBe(false);
+    expect(badPassword).toBe(false);
 });
 
