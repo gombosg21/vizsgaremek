@@ -7,7 +7,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER
       },
-      media_ID: {
+      reaction_ID: {
         allowNull:false,
         type: Sequelize.INTEGER
       },
