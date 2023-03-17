@@ -64,11 +64,11 @@ test('password hashings field salt is hexadecimal', async () => {
 
 
 
-test('password hashings salt field is 128 long', async () => {
-    expect(returnData.salt.length).toBe(128);
+test('password hashings salt field is 512 long', async () => {
+    expect(returnData.salt.length).toBe(512);
 });
-test('password hashings hash field is 256 long', async () => {
-    expect(returnData.hash.length).toBe(256);
+test('password hashings hash field is 512 long', async () => {
+    expect(returnData.hash.length).toBe(512);
 });
 
 
