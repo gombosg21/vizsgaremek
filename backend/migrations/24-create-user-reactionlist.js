@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('comment_reactionlists', {
+    await queryInterface.createTable('user_reactionlists', {
       user_ID: {
         allowNull: false,
         type: Sequelize.INTEGER
@@ -23,6 +23,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('comment_reactionlists');
+    await queryInterface.dropTable('user_reactionlists');
   }
 };
