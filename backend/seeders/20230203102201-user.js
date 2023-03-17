@@ -20,7 +20,7 @@ module.exports = {
       var userName = firstName + lastName;
       var passwordUnencryprted = fake.faker.internet.password((8 + Math.round(Math.random() * 4)), false);
 
-      var passwordEncrypted = generatePassword(passwordUnencryprted);
+      var passwordEncrypted = await generatePassword(passwordUnencryprted);
       var passowrdSalt = passwordEncrypted.salt;
       var passwordHash = passwordEncrypted.hash;
 

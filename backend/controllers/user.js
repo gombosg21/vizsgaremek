@@ -167,7 +167,7 @@ exports.createUser = async (req, res, next) => {
     //  2 = other/unspecified
     //
 
-    const encryptedPassword = generatePassword(UserPassword);
+    const encryptedPassword = await generatePassword(UserPassword);
     const passwordSalt = encryptedPassword.salt;
     const passwordHash = encryptedPassword.hash;
 
