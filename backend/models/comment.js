@@ -10,8 +10,9 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      this.belongsTo(models.thread,{foreignKey:{name:"thread_ID"}})
-      this.belongsTo(models.user,{foreignKey:{name:"user_ID"}})
+      this.belongsTo(models.thread,{foreignKey:{name:"thread_ID"}});
+      this.belongsTo(models.user,{foreignKey:{name:"user_ID"}});
+      this.belongsToMany(models.reaction, { through: models.comment_reactionlist, foreignKey: "reaction_ID", sourceKey: "ID" });
     }
   };
   comment.init({

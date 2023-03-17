@@ -6,20 +6,16 @@ const {
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class media extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
-      this.belongsTo(models.user, { foreignKey: "user_ID" })
-      this.hasMany(models.thread, { foreignKey: "media_ID" })
-      this.belongsToMany(models.tag, { through: models.media_taglist, foreignKey: "media_ID", sourceKey: "ID" })
-      this.belongsToMany(models.carousel, { through: models.carousel_medialist, foreignKey: "media_ID", sourceKey: "ID" })
+      this.belongsTo(models.user, { foreignKey: "user_ID" });
+      this.hasMany(models.thread, { foreignKey: "media_ID" });
+      this.belongsToMany(models.tag, { through: models.media_taglist, foreignKey: "media_ID", sourceKey: "ID" });
+      this.belongsToMany(models.carousel, { through: models.carousel_medialist, foreignKey: "media_ID", sourceKey: "ID" });
+      this.belongsToMany(models.reaction, { through: models.carousel_reactionlist, foreignKey: "reaction_ID", sourceKey: "ID" });
     }
 
-    removeTags(tagArray) {
-      this.tags.delete({ where: { ID: { [Op.in]: tagArray } } });
+    removeTags(tagIDArray) {
+      this.tags.delete({ where: { ID: { [Op.in]: tagIDArray } } });
     };
 
   };

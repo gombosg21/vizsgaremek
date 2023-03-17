@@ -6,16 +6,12 @@ const {
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class user extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
       this.hasMany(models.media, { foreignKey: "user_ID" });
       this.hasMany(models.thread, { foreignKey: "user_ID" });
       this.hasMany(models.comment, { foreignKey: "user_ID" });
-      this.hasMany(models.carousel, { foreignKey: "user_ID" })
+      this.hasMany(models.carousel, { foreignKey: "user_ID" });
+      this.belongsToMany(models.reaction, { through: models.user_reactionlist, foreignKey: "reaction_ID", sourceKey: "ID" });
     };
 
     getView() {
@@ -70,7 +66,6 @@ module.exports = (sequelize, DataTypes) => {
     profile_description: { type: DataTypes.TEXT },
     profile_visibility: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 0 },
     profile_pic: { type: DataTypes.INTEGER, allowNull: true, references: { model: 'media', key: 'ID', }, onDelete: 'set null', onUpdate: 'cascade' },
-    profile_thread: { type: DataTypes.INTEGER, allowNull: true, references: { model: 'thread', key: 'ID' } },
     gender: { type: DataTypes.INTEGER, allowNull: false },
     deletedAt: { type: DataTypes.DATE, allowNull: true, defaultValue: null }
   }, {

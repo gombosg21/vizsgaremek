@@ -4,13 +4,12 @@ const {
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class reaction extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
-      // define association here
+      this.belongsToMany(models.media, { through: models.media_reactionlist, foreignKey: 'reaction_ID', sourceKey: 'ID' });
+      this.belongsToMany(models.carousel, { through: models.carousel_reactionlist, foreignKey: 'reaction_ID', sourceKey: 'ID' });
+      this.belongsToMany(models.user, { through: models.user_reactionlist, foreignKey: 'reaction_ID', sourceKey: 'ID' });
+      this.belongsToMany(models.thread, { through: models.thread_reactionlist, foreignKey: 'reaction_ID', sourceKey: 'ID' });
+      this.belongsToMany(models.comment, { through: models.comment_reactionlist, foreignKey: 'reaction_ID', sourceKey: 'ID' });
     }
   }
   reaction.init({
