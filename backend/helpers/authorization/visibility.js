@@ -40,6 +40,11 @@ exports.determineVisibility = async (userContextID, dataOwnerID, visbilityFlag, 
             };
         }
         case 1: {
+            if (userContextID == dataOwnerID) {
+                returnData.status = 200, returnData.data = data;
+                break;
+            };
+
             returnData.status = 501, returnData.data = { "ID": data.ID, "msg": "not implemented" };
             break;
         }
@@ -118,6 +123,10 @@ exports.determineArrayVisibility = async (userContextID, dataOwnerID, visibiltyA
                 }
             }
             case (1): {
+                if (userContextID == dataOwnerID) {
+                    returnDataArray.push(dataArray[i]);
+                    break;
+                };
                 returnDataArray.push({ "ID": dataArray[i].ID, "msg": "not implemented" });
                 break;
             }
@@ -201,6 +210,10 @@ exports.determineMixedArrayVisibility = async (userContextID, dataOwnerIDArray, 
                 };
             }
             case (1): {
+                if (userContextID == dataOwnerIDArray[i]) {
+                    returnDataArray.push(dataArray[i]);
+                    break;
+                };
                 returnDataArray.push({ "ID": dataArray[i].ID, "msg": "not implemented" });
                 break;
             }
