@@ -17,7 +17,7 @@ module.exports = {
         allowNull: true,
         type: Sequelize.INTEGER
       },
-      thread_ID: {
+      profile_ID: {
         allowNull: true,
         type: Sequelize.INTEGER
       },
