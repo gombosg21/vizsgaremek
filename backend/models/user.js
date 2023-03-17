@@ -63,7 +63,7 @@ module.exports = (sequelize, DataTypes) => {
     password_reset_token: { type: DataTypes.STRING, allowNull: true, defaultValue: null },
     password_reset_token_date: { type: DataTypes.DATE, allowNull: true, defaultValue: null },
     email_token_date: { type: DataTypes.DATE, allowNull: true, defaultValue: null },
-    email_token: { type: DataTypes.STRIN, allowNull: true, defaultValue: null },
+    email_token: { type: DataTypes.STRING, allowNull: true, defaultValue: null },
     email: { type: DataTypes.STRING, allowNull: false },
     last_online: { type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW },
     birth_date: { type: DataTypes.DATEONLY, allowNull: false },
