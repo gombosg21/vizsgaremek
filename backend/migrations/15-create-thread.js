@@ -5,47 +5,55 @@ module.exports = {
     await queryInterface.createTable('threads', {
       ID: {
         type: Sequelize.INTEGER,
-        allowNull:false,
-        autoIncrement:true,
-        primaryKey:true
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true
       },
       media_ID: {
-        allowNull:false,
+        allowNull: true,
+        type: Sequelize.INTEGER
+      },
+      carousel_ID: {
+        allowNull: true,
+        type: Sequelize.INTEGER
+      },
+      thread_ID: {
+        allowNull: true,
         type: Sequelize.INTEGER
       },
       user_ID: {
-        allowNull:false,
+        allowNull: false,
         type: Sequelize.INTEGER
       },
       name: {
         type: Sequelize.STRING,
-        allowNull:false
+        allowNull: false
       },
       status: {
-        allowNull:false,
+        allowNull: false,
         defaultValue: 0,
         type: Sequelize.INTEGER
       },
       deleted: {
-        allowNull:false,
+        allowNull: false,
         defaultValue: false,
         type: Sequelize.BOOLEAN
       },
       created: {
-        allowNull:false,
+        allowNull: false,
         defaultValue: Sequelize.NOW,
         type: Sequelize.DATE
       },
       last_activity: {
-        allowNull:false,
-        defaultValue:Sequelize.NOW,
+        allowNull: false,
+        defaultValue: Sequelize.NOW,
         type: Sequelize.DATE
       },
       deletedAt:
       {
-        allowNull:true,
-        defaultValue:null,
-        type:Sequelize.DATE
+        allowNull: true,
+        defaultValue: null,
+        type: Sequelize.DATE
       }
     });
   },
