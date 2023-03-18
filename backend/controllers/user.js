@@ -22,7 +22,7 @@ exports.getProfile = async (req, res, next) => {
         };
 
         const UserProfile = {
-            ID : user.ID,
+            ID: user.ID,
             name: User.name,
             register_date: User.register_date,
             gender: User.gender,
@@ -34,16 +34,14 @@ exports.getProfile = async (req, res, next) => {
 
         const visibility = User.profile_visibility;
 
-        let results = {};
+        const results = await Visibility(userID, User.ID, visibility, UserProfile);
 
-        results = await Visibility(userID, User.ID, visibility, UserProfile);
-
-        res.status(results.status)
+        return res.status(results.status)
             .json(results.data)
     }
     catch (error) {
         console.error(error);
-        res.status(500);
+        return res.status(500);
     };
 };
 
@@ -64,31 +62,30 @@ exports.editProfile = async (req, res, next) => {
             profile_picture: profilePicture ?? User.profilePicture
         });
         await User.save();
-        res.status(200)
-            .json({ID:User.ID});
+
+        return res.status(200)
+            .json({ ID: User.ID });
     }
     catch (error) {
         console.error(error);
-        res.status(500);
+        return res.status(500);
     };
 };
 
 exports.login = async (req, res, next) => {
-
     const Name = req.body.name;
 
     try {
         const User = await user.findOne({ where: { Name: Name }, attributes: ['ID'] });
-        res.status(200)
+        return res.status(200)
             .redirect('/api/v/0.1/user/' + User.ID);
     } catch (error) {
         console.error(error);
-        res.status(500);
+        return res.status(500);
     };
 };
 
 exports.changePassword = async (req, res, next) => {
-
     const ID = req.user.ID;
     const userNewPassword = req.body.new_password;
 
@@ -104,12 +101,13 @@ exports.changePassword = async (req, res, next) => {
                 password_salt: passwordSalt
             });
         await User.save();
-        res.status(200)
-            .json({ID:User.ID});;
+
+        return res.status(200)
+            .json({ ID: User.ID });;
     }
     catch (error) {
         console.error(error);
-        res.status(500);
+        return res.status(500);
     };
 };
 
@@ -123,7 +121,7 @@ exports.logout = async (req, res, next) => {
                     if (error) {
                         return res.status(500).json({ "error": error.message })
                     } else {
-                        res.redirect('/api/v/0.1/');
+                        return res.redirect('/api/v/0.1/');
                     };
                 });
             };
@@ -131,29 +129,27 @@ exports.logout = async (req, res, next) => {
     }
     catch (error) {
         console.error(error);
-        res.status(500);
+        return res.status(500);
     };
 };
 
 exports.resetPassword = async (req, res, next) => {
-
     const Name = req.body.name;
 
     try {
-        const User = await user.findOne({ where: { Name: Name } });
-        res.status(200)
+        const UserID = await user.findOne({ where: { Name: Name } }).ID;
+        return res.status(200)
             .redirect('/api/v/0.2/');
-        // .json({"notificate" : "reset email sent"});
-        // email.sendResetEmail(User.Email);
+        // .json({"message" : "reset email sent"});
+        // email.sendResetEmail();
     }
     catch (error) {
         console.error(error);
-        res.status(500);
+        return res.status(500);
     };
 };
 
 exports.createUser = async (req, res, next) => {
-
     const UserName = req.body.name;
     const UserPassword = req.body.password;
     const UserEmail = req.body.email;
@@ -166,12 +162,11 @@ exports.createUser = async (req, res, next) => {
     //  1 = female
     //  2 = other/unspecified
     //
-
-    const encryptedPassword = await generatePassword(UserPassword);
-    const passwordSalt = encryptedPassword.salt;
-    const passwordHash = encryptedPassword.hash;
-
     try {
+        const encryptedPassword = await generatePassword(UserPassword);
+        const passwordSalt = encryptedPassword.salt;
+        const passwordHash = encryptedPassword.hash;
+
         const User = user.build({
             name: UserName,
             password_hash: passwordHash,
@@ -186,21 +181,20 @@ exports.createUser = async (req, res, next) => {
         // email.sendVerfyEmail(User.Email);
         req.logIn(NewUser, async (error) => {
             if (error) {
-                res.status(500);
                 console.error(error);
+                return res.status(500);
             } else {
-                res.redirect('/api/v/0.1/user/' + NewUser.ID);
+                return res.redirect('/api/v/0.1/user/' + NewUser.ID);
             };
         });
     }
     catch (error) {
         console.error(error);
-        res.status(500);
+        return res.status(500);
     };
 };
 
 exports.deleteUser = async (req, res, next) => {
-
     const ID = req.user.ID;
 
     try {
@@ -210,17 +204,17 @@ exports.deleteUser = async (req, res, next) => {
         });
         req.logout(User, async (error) => {
             if (error) {
-                res.status(500);
                 console.error(error);
+                return res.status(500);
             } else {
                 await User.destroy();
-                res.json({ID:User.ID});
+                return res.json({ ID: User.ID });
             };
         });
     }
     catch (error) {
         console.error(error);
-        res.status(500);
+        return res.status(500);
     };
 };
 
@@ -247,15 +241,15 @@ exports.findUser = async (req, res, next) => {
     try {
         const UserList = await user.findAll({ where: { name: { [Op.substring]: Name }, birth_date: { [Op.gt]: SDate, [Op.lt]: EDate }, gender: { [Op.in]: Gender } }, attributes: ['ID', 'name', 'gender', 'birth_date'] });
         if (UserList === null) {
-            res.status(404).json({ "msg": "couldnt find results matching query parameters, try a different search" });
+            return res.status(404).json({ "msg": "couldnt find results matching query parameters, try a different search" });
         }
         else {
-            res.status(200)
+            return res.status(200)
                 .json(UserList);
         };
     }
     catch (error) {
         console.error(error);
-        res.status(500);
+        return res.status(500);
     };
 };

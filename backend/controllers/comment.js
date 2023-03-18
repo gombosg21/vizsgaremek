@@ -4,15 +4,15 @@ const thread = require('../models').thread;
 
 exports.getComment = async (req, res, next) => {
     const commentID = req.params.commentID;
-    try {
-        const Comment = await comment.findByPk(commentID,
-            { attributes: ['ID', 'content'], include: [{ model: user, attributes: ['ID', 'name'] }, { model: thread, attributes: ['ID', 'name'] }] });
 
-        res.status(200)
+    try {
+        const Comment = await comment.findByPk(commentID, { attributes: ['ID', 'content'], include: [{ model: user, attributes: ['ID', 'name'] }, { model: thread, attributes: ['ID', 'name'] }] });
+
+        return res.status(200)
             .json(Comment);
     } catch (error) {
         console.error(error);
-        res.status(500);
+        return res.status(500);
     };
 };
 
@@ -28,11 +28,11 @@ exports.createComment = async (req, res, next) => {
             content: commentData
         });
         await Comment.save();
-        res.status(200).json({ ID: Comment.ID });
+        return res.status(200).json({ ID: Comment.ID });
     }
     catch (error) {
         console.error(error);
-        res.status(500);
+        return res.status(500);
     };
 };
 
@@ -43,12 +43,12 @@ exports.editComment = async (req, res, next) => {
     try {
         const Comment = await comment.findByPk(commentID);
 
-        Comment.set({
+        Comment.update({
             content: commentData,
             last_edit: Date.now()
         });
         Comment.save();
-        res.status(200).
+        return res.status(200).
             json({
                 ID: Comment.ID,
                 content: Comment.content,
@@ -57,22 +57,21 @@ exports.editComment = async (req, res, next) => {
     }
     catch (error) {
         console.error(error);
-        res.status(500);
+        return res.status(500);
     };
 };
 
 exports.deleteComment = async (req, res, next) => {
-
     const commentID = req.params.commentID;
 
     try {
         const Comment = await comment.findByPk(commentID);
         await Comment.destroy();
-        res.status(200)
+        return res.status(200)
             .json({ ID: Comment.ID });
     }
     catch (error) {
         console.error(error);
-        res.status(500);
+        return res.status(500);
     };
 };

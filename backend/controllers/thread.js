@@ -30,13 +30,13 @@ exports.getThread = async (req, res, next) => {
                 }]
         });
 
-        res.status(200)
+        return res.status(200)
             .json(threadData);
     }
     catch
     (error) {
         console.error(error);
-        res.status(500);
+        return res.status(500);
     };
 };
 
@@ -48,10 +48,10 @@ exports.getAllThreads = async (req, res, next) => {
             include: [{ model: user, attributes: ['ID', 'name'] }]
         });
 
-        res.status(200).json(threadList);
+        return res.status(200).json(threadList);
     } catch (error) {
         console.error(error);
-        res.status(500);
+        return res.status(500);
     };
 };
 
@@ -66,8 +66,7 @@ exports.CreateThread = async (req, res, next) => {
     try {
         switch (parentType) {
             case ("user"): {
-                res.status(501).json({ msg: "not implemented" });
-                break;
+                return res.status(501).json({ msg: "not implemented" });
             }
             case ("media"): {
                 const Thread = await thread.create({
@@ -75,23 +74,20 @@ exports.CreateThread = async (req, res, next) => {
                     user_ID: userID,
                     media_ID: parentID
                 });
-                res.status(200)
+                return res.status(200)
                     .json({ "ID": Thread.ID });
-                break;
             }
             case ("story"): {
-                res.status(501).json({ msg: "not implemented" });
-                break;
+                return res.status(501).json({ msg: "not implemented" });
             }
             default: {
-                res.status(500).json({ error: "server-side error" });
-                break;
+                return res.status(500).json({ error: "server-side error" });
             };
         };
     } catch
     (error) {
         console.error(error);
-        res.status(500);
+        return res.status(500);
     };
 };
 
@@ -107,11 +103,11 @@ exports.editThread = async (req, res, next) => {
             name: threadName,
             status: threadStatus
         });
-        res.status(200)
+        return res.status(200)
             .json(Thread);
     } catch (error) {
         console.error(error);
-        res.status(500);
+        return res.status(500);
     };
 };
 
@@ -122,11 +118,11 @@ exports.deleteTread = async (req, res, next) => {
     try {
         const Thread = await thread.findByPk(threadID);
         await Thread.destory();
-        res.send(200)
+        return res.send(200)
             .json({ ID: Thread.ID });
     } catch (error) {
         console.error(error);
-        res.status(500);
+        return res.status(500);
     };
 };
 
@@ -191,10 +187,10 @@ exports.searchThreads = async (req, res, next) => {
 
         const threadList = await thread.findAll(query);
 
-        res.status(200).json({results: threadList})
+        return res.status(200).json({ results: threadList })
 
     } catch (error) {
         console.error(error);
-        res.status(500);
+        return res.status(500);
     };
 };
