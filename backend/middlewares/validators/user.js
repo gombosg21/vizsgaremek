@@ -38,13 +38,13 @@ exports.searchRules = () => {
         validator.query('date_start').exists(),
         validator.query('date_end').exists(),
         validator.query('gender').exists()
-    ],"empty query, aborting"),
-        [
-            validator.query('name').isAlphanumeric().optional({nullable:true,checkFalsy:true}).withMessage('name cannot contain special characters'),
-            validator.query('date_start').isDate().optional({nullable:true,checkFalsy:true}).withMessage("invalid date format"),
-            validator.query('date_end').isDate().optional({nullable:true,checkFalsy:true}).withMessage("invalid date format"),
-            validator.query('gender').isInt({ min: gender_start, max: gender_end }).optional({nullable:true,checkFalsy:true}).withMessage("unknown gender type")
-        ],]
+    ], "empty query, aborting"),
+    [
+        validator.query('name').isAlphanumeric().optional({ nullable: true, checkFalsy: true }).withMessage('name cannot contain special characters'),
+        validator.query('date_start').isDate().optional({ nullable: true, checkFalsy: true }).withMessage("invalid date format"),
+        validator.query('date_end').isDate().optional({ nullable: true, checkFalsy: true }).withMessage("invalid date format"),
+        validator.query('gender').isInt({ min: gender_start, max: gender_end }).optional({ nullable: true, checkFalsy: true }).withMessage("unknown gender type")
+    ],]
 };
 
 exports.updateProfileRules = () => {
@@ -52,12 +52,12 @@ exports.updateProfileRules = () => {
         validator.body("profile_description").exists(),
         validator.body("profile_visibility").exists(),
         validator.body("profile_picture").exists()
-    ],"no changes, aborting"), 
-        [
-            validator.body("profile_description").isAscii().optional({nullable:true,checkFalsy:true}).withMessage("no advanced special characters allowed"),
-            validator.body("profile_visibility").isInt({min:0,max:3}).optional({nullable:true,checkFalsy:true}).withMessage("unknown visibility level"),
-            validator.body("profile_picture").isInt().optional({nullable:true,checkFalsy:true}).withMessage("profile picture must be a numeric ID")
-        ]
+    ], "no changes, aborting"),
+    [
+        validator.body("profile_description").isAscii().optional({ nullable: true, checkFalsy: true }).withMessage("no advanced special characters allowed"),
+        validator.body("profile_visibility").isInt({ min: 0, max: 3 }).optional({ nullable: true, checkFalsy: true }).withMessage("unknown visibility level"),
+        validator.body("profile_picture").isInt().optional({ nullable: true, checkFalsy: true }).withMessage("profile picture must be a numeric ID")
+    ]
     ]
 };
 
@@ -73,32 +73,50 @@ exports.changePasswordRules = () => {
 exports.checkIfNameConflicts = async (req, res, next) => {
     const UserName = req.body.name;
 
-    if (await user.findOne({ where: { name: UserName },attributes:['name'] }) != null) {
-        return res.status(400)
-            .json({ "error": `username ${UserName} already exists` });
-    } else {
-        return next();
+    try {
+        const User = await user.findOne({ where: { name: UserName } })
+        if (User) {
+            return res.status(400)
+                .json({ "error": `username ${UserName} already exists` });
+        } else {
+            return next();
+        };
+    } catch (error) {
+        console.error(error);
+        res.status(500);
     };
 };
 
 exports.checkIfUserIDExsits = async (req, res, next) => {
     const ID = req.params.userID;
 
-    if (await user.findOne({ where: { ID: ID },attributes:['ID'] }) == null) {
-        return res.status(404)
-            .json({ "error": `user with id:${ID} does not exist` });
-    } else {
-        return next();
+    try {
+        const User = await user.findByPk(ID);
+        if (!User) {
+            return res.status(404)
+                .json({ "error": `user with id:${ID} does not exist` });
+        } else {
+            return next();
+        };
+    } catch (error) {
+        console.error(error);
+        res.status(500);
     };
 };
 
 exports.checkIfNameExsist = async (req, res, next) => {
     const Name = req.params.name;
 
-    if (await user.findOne({ where: { name: Name },attributes:['name'] }) == null) {
-        return res.status(404)
-            .json({ "error": `username ${Name} does not exist` });
-    } else {
-        return next();
+    try {
+        const User = await user.findOne({ where: { name: Name }});
+        if (!User) {
+            return res.status(404)
+                .json({ "error": `username ${Name} does not exist` });
+        } else {
+            return next();
+        };
+    } catch (error) {
+        console.error(error);
+        res.status(500);
     };
 };
