@@ -65,8 +65,14 @@ exports.CreateThread = async (req, res, next) => {
 
     try {
         switch (parentType) {
-            case ("user"): {
-                return res.status(501).json({ msg: "not implemented" });
+            case ("profile"): {
+                const Thread = await thread.create({
+                    name: threadName,
+                    user_ID: userID,
+                    profile_ID: parentID
+                });
+                return res.status(200)
+                    .json({ "ID": Thread.ID });
             }
             case ("media"): {
                 const Thread = await thread.create({
@@ -78,7 +84,13 @@ exports.CreateThread = async (req, res, next) => {
                     .json({ "ID": Thread.ID });
             }
             case ("story"): {
-                return res.status(501).json({ msg: "not implemented" });
+                const Thread = await thread.create({
+                    name: threadName,
+                    user_ID: userID,
+                    carousel_ID: parentID
+                });
+                return res.status(200)
+                    .json({ "ID": Thread.ID });
             }
             default: {
                 return res.status(500).json({ error: "server-side error" });
@@ -141,6 +153,7 @@ exports.searchThreads = async (req, res, next) => {
         const lastActivityEnd = req.query.activity_end ?? currDate;
         const createrID = req.params.creater_id;
         const parentType = req.query.parent;
+        const threadContent = req.query.content;
 
         const query = {
             where:
