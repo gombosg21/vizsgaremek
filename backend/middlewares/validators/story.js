@@ -1,5 +1,5 @@
 const validator = require('express-validator');
-const carousel = require('../models').carousel;
+const carousel = require('../../models').carousel;
 
 exports.checkIfStoryIDExsits = async (req,res,next) => {
     const ID = req.params.storyID;
@@ -18,6 +18,8 @@ exports.checkIfStoryIDExsits = async (req,res,next) => {
 
 exports.storyRules = () => {
     return [
-
+        validator.body('name').isAscii().withMessage("name must be letters numbers and special characters only"),
+        validator.body('description').isAscii().withMessage('description must be letters numbers and special characters only'),
+        validator.body('visibility').isNumeric({min:0,max:3}).withMessage('visibility must be a whole positive number in range of 0-3')
     ];
 };
