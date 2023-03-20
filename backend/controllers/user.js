@@ -18,7 +18,7 @@ exports.getProfile = async (req, res, next) => {
 
         let ProfilePic;
         if (profilePicId != null) {
-            ProfilePic = await media.findOne({ where: { ID: profilePicId }, attributes: ['file_data'] })
+            ProfilePic = await media.findOne({ where: { ID: profilePicId }, attributes: ['file_data'] });
         };
 
         const UserProfile = {
@@ -37,7 +37,7 @@ exports.getProfile = async (req, res, next) => {
         const results = await Visibility(userID, User.ID, visibility, UserProfile);
 
         return res.status(results.status)
-            .json(results.data)
+            .json(results.data);
     }
     catch (error) {
         console.error(error);
@@ -56,11 +56,12 @@ exports.editProfile = async (req, res, next) => {
     try {
         const User = await user.findByPk(ID);
 
-        await User.set({
+        await User.update({
             profile_description: profileDescription ?? User.profile_picture,
             profile_visibility: profileVisibility ?? User.profile_visibility,
             profile_picture: profilePicture ?? User.profilePicture
         });
+
         await User.save();
 
         return res.status(200)
@@ -89,21 +90,22 @@ exports.changePassword = async (req, res, next) => {
     const ID = req.user.ID;
     const userNewPassword = req.body.new_password;
 
-    const encryptedPassword = generatePassword(userNewPassword);
+    const encryptedPassword = await generatePassword(userNewPassword);
     const passwordSalt = encryptedPassword.salt;
     const passwordHash = encryptedPassword.hash;
 
     try {
         const User = await user.findOne({ where: { ID: ID } });
-        await User.set(
-            {
-                password_hash: passwordHash,
-                password_salt: passwordSalt
-            });
+
+        await User.update({
+            password_hash: passwordHash,
+            password_salt: passwordSalt
+        });
+
         await User.save();
 
         return res.status(200)
-            .json({ ID: User.ID });;
+            .json({ ID: User.ID });
     }
     catch (error) {
         console.error(error);
@@ -115,19 +117,18 @@ exports.logout = async (req, res, next) => {
     try {
         req.logOut((error) => {
             if (error) {
-                return res.status(500).json({ "error": error.message })
+                return res.status(500).json({ "error": error.message });
             } else {
                 req.session.destroy((error) => {
                     if (error) {
-                        return res.status(500).json({ "error": error.message })
+                        return res.status(500).json({ "error": error.message });
                     } else {
                         return res.redirect('/api/v/0.1/');
                     };
                 });
             };
         });
-    }
-    catch (error) {
+    } catch (error) {
         console.error(error);
         return res.status(500);
     };
@@ -142,8 +143,7 @@ exports.resetPassword = async (req, res, next) => {
             .redirect('/api/v/0.2/');
         // .json({"message" : "reset email sent"});
         // email.sendResetEmail();
-    }
-    catch (error) {
+    } catch (error) {
         console.error(error);
         return res.status(500);
     };
@@ -164,19 +164,20 @@ exports.createUser = async (req, res, next) => {
     //
     try {
         const encryptedPassword = await generatePassword(UserPassword);
-        const passwordSalt = encryptedPassword.salt;
-        const passwordHash = encryptedPassword.hash;
 
-        const User = user.build({
+        console.log(encryptedPassword.salt)
+
+        const User = await user.create({
             name: UserName,
-            password_hash: passwordHash,
-            password_salt: passwordSalt,
+            password_hash: encryptedPassword.hash,
+            password_salt: encryptedPassword.salt,
             birth_date: UserDate,
             email: UserEmail,
             gender: UserGender
         });
-        await User.save();
-        res.status(201);
+
+        console.log(User);
+
         const NewUser = await user.findOne({ where: { name: UserName } });
         // email.sendVerfyEmail(User.Email);
         req.logIn(NewUser, async (error) => {
