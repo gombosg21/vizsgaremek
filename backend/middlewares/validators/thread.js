@@ -30,15 +30,17 @@ exports.searchThreadRules = () => {
             validator.query('activity_start').exists(),
             validator.query('activity_end').exists(),
             validator.query('creater_id').exists(),
-            validator.query('parent').exists()
+            validator.query('parent').exists(),
+            validator.query('content').exists()
         ], "empty query, aborting"),
-        validator.query('name').optional({ nullable: true, checkFalsy: true }),
-        validator.query('created_start').optional({ nullable: true, checkFalsy: true }),
-        validator.query('created_end').optional({ nullable: true, checkFalsy: true }),
-        validator.query('activity_start').optional({ nullable: true, checkFalsy: true }),
-        validator.query('activity_end').optional({ nullable: true, checkFalsy: true }),
-        validator.query('creater_id').optional({ nullable: true, checkFalsy: true }),
-        validator.query('parent').optional({ nullable: true, checkFalsy: true }).isAlpha().withMessage('parent type can only be a string of letters')
+        validator.query('name').optional({ nullable: true, checkFalsy: true }).isAlpha().withMessage('name can only be a string of letters'),
+        validator.query('created_start').optional({ nullable: true, checkFalsy: true }).isDate().withMessage('created_start must be a valid date'),
+        validator.query('created_end').optional({ nullable: true, checkFalsy: true }).isDate().withMessage('created_end must be a valid date'),
+        validator.query('activity_start').optional({ nullable: true, checkFalsy: true }).isDate().withMessage('activity_start must be a valid date'),
+        validator.query('activity_end').optional({ nullable: true, checkFalsy: true }).isDate().withMessage('activity_end must be a valid date'),
+        validator.query('creater_id').optional({ nullable: true, checkFalsy: true }).isNumeric({min:1}).withMessage('creater_id must be a whole number, abowe 0'),
+        validator.query('parent').optional({ nullable: true, checkFalsy: true }).isAlpha().withMessage('parent type can only be a string of letters'),
+        validator.query('content').optional({ nullable: true, checkFalsy: true }).isAscii().withMessage('content can only be a letters numbers and special characters')
     ]
 };
 
