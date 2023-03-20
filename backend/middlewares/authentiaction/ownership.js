@@ -2,7 +2,7 @@ const { Op } = require("sequelize");
 const thread = require('../../models').thread;
 const comment = require('../../models').comment;
 const media = require('../../models').media;
-const carousel = require('../models').carousel;
+const carousel = require('../../models').carousel;
 
 
 exports.isMyMedia = async (req, res, next) => {
