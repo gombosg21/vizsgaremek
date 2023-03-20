@@ -23,7 +23,7 @@ exports.registerRules = () => {
         validator.body('password').notEmpty().withMessage("password cannot be empty"),
         validator.body('password').isLength({ min: password_min, max: password_max }).withMessage(`password must be within ${password_min} and ${password_max} characters long`),
         validator.body('password').isStrongPassword().withMessage("too weak password, try a different one"),
-        validator.body('re_password').custom((value, { req, loc, path }) => { if (value !== req.body.password) { throw new Error("password fields must match") } else { return value; } }),
+        validator.body('re_password').custom((value, { req, loc, path }) => { if (value !== req.body.password) { throw new Error("password and re_password fields must match") } else { return value; } }),
         validator.body('birth_date').notEmpty().withMessage("select a birth date"),
         validator.body('birth_date').isDate().withMessage("invalid date format"),
         validator.body('birth_date').toDate().custom((value, { req, loc, path }) => { if (value.getTime() > currdate) { throw new Error("no future dates allowed") } else { return value; } }),
