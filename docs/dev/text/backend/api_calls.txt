@@ -37,15 +37,15 @@ Egyenlőre nem mükszik.
 
 POST /api/v/0.1/user/register
 Regisztrál egy felhasználót.
-A sikeres regisztrációhoz a {name,gender,birth_date,email,password,re-password} mezőket követeli.
+A sikeres regisztrációhoz a {name,gender,birth_date,email,password,re_password} mezőket követeli.
 A gender mező értéke 0 , 1 és 2 lehet (férfi,nő,x)
 A birth_date mezőt yyyy-mm-dd formában vár, nem lehet jövőbeli dátum.
-A password ill re-password csak erős jelszó lehet, min 8 karakter, max 32, kis és nagybetű és ASCII speciális karakterek.
+A password ill re_password csak erős jelszó lehet, min 8 karakter, max 32, kis és nagybetű és ASCII speciális karakterek.
 Sikeres regisztráció esetén beléptet és átirányít a /api/v/0.1/user/{ID} -ra.
 
 POST /api/v/0.1/user/change-password
 Belépés után elérhető.
-A {password,re-password} mezőket kéri.
+A {password,re_password} mezőket kéri.
 Siker esetén frissíti a jelszót a {password} értékére.
 
 
