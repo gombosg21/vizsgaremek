@@ -72,22 +72,34 @@ module.exports = (sequelize, DataTypes) => {
       beforeCreate: [
         async (User) => {
           User.password = await encryptPassword(User.password);
-        }
+        },
+        (User) => {
+          if (User.alias == null) { User.alias = User.name }
+        },
       ],
       beforeBulkCreate: [
         async (User) => {
           User.password_hash = await encryptPassword(User.password);
-        }
+        },
+        (User) => {
+          if (User.alias == null) { User.alias = User.name }
+        },
       ],
-      beforeUpdate : [
-        async (User) => {
-        User.password = await encryptPassword(User.password);
-      }
-      ],
-      beforeBulkUpdate:[
+      beforeUpdate: [
         async (User) => {
           User.password = await encryptPassword(User.password);
-        }
+        },
+        (User) => {
+          if (User.alias == null) { User.alias = User.name }
+        },
+      ],
+      beforeBulkUpdate: [
+        async (User) => {
+          User.password = await encryptPassword(User.password);
+        },
+        (User) => {
+          if (User.alias == null) { User.alias = User.name }
+        },
       ]
     },
     sequelize,
