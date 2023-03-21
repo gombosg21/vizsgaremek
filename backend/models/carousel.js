@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
   class carousel extends Model {
     static associate(models) {
       this.belongsTo(models.user, { foreignKey: 'user_ID' });
-      this.belongsToMany(models.media, { through: models.media_taglist, foreignKey: "carousel_ID", sourceKey: "ID" });
+      this.belongsToMany(models.media, { through: models.carousel_medialist, foreignKey: "carousel_ID", sourceKey: "ID" });
       this.belongsToMany(models.reaction, { through: models.media_reactionlist, foreignKey: "carousel_ID", sourceKey: "ID" })
     }
   }
