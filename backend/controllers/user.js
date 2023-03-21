@@ -1,6 +1,5 @@
 const user = require("../models").user;
 const media = require("../models").media;
-const generatePassword = require('../util/password').generatePassword;
 const { Op } = require("sequelize");
 const Visibility = require('../helpers/authorization/visibility').determineVisibility;
 
@@ -90,16 +89,11 @@ exports.changePassword = async (req, res, next) => {
     const ID = req.user.ID;
     const userNewPassword = req.body.new_password;
 
-    const encryptedPassword = await generatePassword(userNewPassword);
-    const passwordSalt = encryptedPassword.salt;
-    const passwordHash = encryptedPassword.hash;
-
     try {
         const User = await user.findOne({ where: { ID: ID } });
 
         await User.update({
-            password_hash: passwordHash,
-            password_salt: passwordSalt
+            password: userNewPassword,
         });
 
         await User.save();
@@ -163,14 +157,10 @@ exports.createUser = async (req, res, next) => {
     //  2 = other/unspecified
     //
     try {
-        const encryptedPassword = await generatePassword(UserPassword);
-
-        console.log(encryptedPassword.salt)
 
         const User = await user.create({
             name: UserName,
-            password_hash: encryptedPassword.hash,
-            password_salt: encryptedPassword.salt,
+            password: UserPassword,
             birth_date: UserDate,
             email: UserEmail,
             gender: UserGender

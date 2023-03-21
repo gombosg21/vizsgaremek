@@ -1,33 +1,27 @@
 'use strict';
 
 const fake = require("@faker-js/faker");
-const generatePassword = require('../util/password').generatePassword;
 const fs = require('fs');
-// const migration = require("@sequelize-cli/migration")
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
 
-    var testPasswords = [];
+    const testPasswords = [];
 
-    var users = [];
+    const users = [];
     for (let i = 0; i < 10; i++) {
       var gender = Math.round(Math.random());
       var genderString = gender ? "male" : "female";
       var firstName = fake.faker.name.firstName(genderString).replace(/\s+/g, '');
       var lastName = fake.faker.name.lastName(genderString).replace(/\s+/g, '');
       var userName = firstName + lastName;
-      var passwordUnencryprted = fake.faker.internet.password((8 + Math.round(Math.random() * 4)), false);
-
-      var passwordEncrypted = await generatePassword(passwordUnencryprted);
-      var passowrdSalt = passwordEncrypted.salt;
-      var passwordHash = passwordEncrypted.hash;
+      var password = fake.faker.internet.password((8 + Math.round(Math.random() * 4)), false);
+;
 
       users.push({
         name: userName,
-        password_salt: passowrdSalt,
-        password_hash: passwordHash,
+        password: password,
         email: fake.faker.internet.email(firstName, lastName),
         birth_date: fake.faker.date.birthdate(),
         gender: gender + Math.round(Math.random()),
@@ -36,8 +30,8 @@ module.exports = {
       });
 
       testPasswords.push({
-        user: userName,
-        password: passwordUnencryprted
+        name: userName,
+        password: password
       });
     }
 
