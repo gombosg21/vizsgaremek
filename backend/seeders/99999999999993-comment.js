@@ -50,11 +50,11 @@ module.exports = {
       };
     };
 
-    await queryInterface.bulkInsert('comments',comments);
+    await queryInterface.bulkInsert('comments', comments);
 
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.bulkDelete();
+    await queryInterface.bulkDelete('comments');
   }
 };

@@ -59,7 +59,7 @@ module.exports = {
 
   async down(queryInterface, Sequelize) {
 
-    await queryInterface.bulkDelete('media-taglist');
+    await queryInterface.bulkDelete('media_taglists');
     await queryInterface.bulkDelete('media');
   }
 };
