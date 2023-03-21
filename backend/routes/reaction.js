@@ -9,10 +9,12 @@ const commonValidator = require("../middlewares/validators/common");
 const reactionValidator = require("../middlewares/validators/reaction");
 const commentValidator = require("../middlewares/validators/comment");
 const reactionsController = require("../controllers/reactions");
+const multer = require('multer');
+const upload = multer({ storage: new multer.memoryStorage() });
 
 //create new reaction type, TODO: admin only
 //list all avalibe reaction types
-router.route('/reaction').post(auth.isAuth, reactionValidator.reactionCheckIfNameConflicts, reactionValidator.createRules(), commonValidator.validate, reactionsController.createReaction)
+router.route('/reaction').post(auth.isAuth, reactionValidator.reactionCheckIfNameConflicts, upload.single('image'), reactionValidator.validateNewReactionData, reactionValidator.createRules(), commonValidator.validate, reactionsController.createReaction)
     .get(reactionsController.getAllReactions);
 
 //delete a reaction type ,TODO: admin only  
