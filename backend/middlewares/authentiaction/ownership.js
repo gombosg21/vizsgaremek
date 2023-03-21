@@ -8,6 +8,7 @@ const carousel = require('../../models').carousel;
 exports.isMyMedia = async (req, res, next) => {
     const userID = req.user.ID;
     const mediaID = req.params.mediaID;
+    
     try {
         const mediaOwner = await media.findOne({ where: { [Op.and]: [{ user_ID: userID }, { ID: mediaID }] } });
         if (!mediaOwner) {
@@ -17,15 +18,13 @@ exports.isMyMedia = async (req, res, next) => {
         };
     } catch (error) {
         console.error(error);
-        res.status(500);
+        return res.status(500);
     };
 };
 
 exports.isMyComment = async (req, res, next) => {
     const userID = req.user.ID;
     const commentID = req.params.commentID;
-
-    console.log(userID)
 
     try {
         const commentOwner = await comment.findOne({ where: { [Op.and]: [{ user_ID: userID }, { ID: commentID }] } });
@@ -36,13 +35,14 @@ exports.isMyComment = async (req, res, next) => {
         };
     } catch (error) {
         console.error(error);
-        res.status(500);
+        return res.status(500);
     };
 };
 
 exports.isMyThread = async (req, res, next) => {
     const userID = req.user.ID;
     const threadID = req.params.threadID;
+
     try {
         const threadOwner = await thread.findOne({ where: { [Op.and]: [{ user_ID: userID }, { ID: threadID }] } }).user_ID;
         if (!threadOwner) {
@@ -52,7 +52,7 @@ exports.isMyThread = async (req, res, next) => {
         };
     } catch (error) {
         console.error(error);
-        res.status(500);
+        return res.status(500);
     };
 };
 
@@ -68,6 +68,6 @@ exports.isMyStory = async (req, res, next) => {
         };
     } catch (error) {
         console.error(error);
-        res.status(500);
+        return res.status(500);
     };
 };
