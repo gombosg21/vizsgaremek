@@ -11,7 +11,7 @@ exports.createRules = () => {
 };
 
 exports.validateNewReactionData = () => {
-    const reactionData = req.file;
+    const reactionData =  req.file.buffer;
 
     try {
         if (!reactionData) {
