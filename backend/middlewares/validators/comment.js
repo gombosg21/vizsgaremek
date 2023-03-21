@@ -4,8 +4,8 @@ const comment = require('../../models').comment;
 exports.commentRules = () => {
     return [
         validator.body('content').notEmpty().withMessage("comment text cannot be empty"),
-        validator.body('content').isAscii().withMessage("only letters and numbers and simple special characters are allowed"),
-        validator.body('content').isLength({ max: 5000 }).withMessage("no more than 5000 characters allowed")
+        validator.body('content').isAscii().withMessage("comment can only contain letters, numbers and special characters"),
+        validator.body('content').isLength({ max: 5000 }).withMessage("comment can be max 5000 characters long")
     ]
 };
 
@@ -16,12 +16,11 @@ exports.checkIfCommentIDExsist = async (req, res, next) => {
         const Comment = await comment.findByPk(ID);
         if (!Comment) {
             return res.status(400).json({ "error": `comment with id:${ID} does not exsist` });
-        }
-        else {
+        } else {
             return next();
         };
     } catch (error) {
         console.error(error);
-        res.status(500);
+        return res.status(500);
     };
 };
