@@ -1,4 +1,4 @@
-const password = require('../util/password');
+const encryptPassword = require('../util/password').generatePassword;
 
 'use strict';
 const {
@@ -54,8 +54,7 @@ module.exports = (sequelize, DataTypes) => {
     banned: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
     type: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 0 },
     register_date: { type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW },
-    password_hash: { type: DataTypes.TEXT, allowNull: false },
-    password_salt: { type: DataTypes.TEXT, allowNull: false },
+    password: { type: DataTypes.TEXT, allowNull: false },
     password_reset_token: { type: DataTypes.TEXT, allowNull: true, defaultValue: null },
     password_reset_token_date: { type: DataTypes.DATE, allowNull: true, defaultValue: null },
     email_token_date: { type: DataTypes.DATE, allowNull: true, defaultValue: null },
@@ -71,15 +70,23 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     hooks: {
       beforeCreate: [
-        (User) => {
-          User.password_hash = password.generatePassword(User.password).hash;
-          User.password_salt = password.generatePassword(User.password).salt;
+        async (User) => {
+          User.password = await encryptPassword(User.password);
         }
       ],
       beforeBulkCreate: [
-        (User) => {
-          User.password_hash = password.generatePassword(User.password).hash;
-          User.password_salt = password.generatePassword(User.password).salt;
+        async (User) => {
+          User.password_hash = await encryptPassword(User.password);
+        }
+      ],
+      beforeUpdate : [
+        async (User) => {
+        User.password = await encryptPassword(User.password);
+      }
+      ],
+      beforeBulkUpdate:[
+        async (User) => {
+          User.password = await encryptPassword(User.password);
         }
       ]
     },
