@@ -4,7 +4,7 @@ const ownership = require("../middlewares/authentiaction/ownership");
 const threadController = require("../controllers/thread");
 const preporcess = require("../middlewares/preprocessors/common");
 const threadValidator = require("../middlewares/validators/thread");
-const userValidator = require("../middlewares/validators/user");
+// const userValidator = require("../middlewares/validators/user");
 const mediaValidator = require("../middlewares/validators/media");
 const storyValidator = require("../middlewares/validators/story");
 const commonValidator = require("../middlewares/validators/common");
@@ -13,7 +13,8 @@ const commonValidator = require("../middlewares/validators/common");
 router.post('/story/:storyID/thread', auth.isAuth, storyValidator.checkIfStoryIDExsits, threadValidator.createThreadRules(), commonValidator.validate, preporcess.setTargetType("story"), threadController.CreateThread);
 
 // create on profile_id
-router.post('/user/:userID/thread', auth.isAuth, userValidator.checkIfUserIDExsits, threadValidator.createThreadRules(), commonValidator.validate, preporcess.setTargetType("profile"), threadController.CreateThread);
+// not used
+// router.post('/user/:userID/thread', auth.isAuth, userValidator.checkIfUserIDExsits, threadValidator.createThreadRules(), commonValidator.validate, preporcess.setTargetType("profile"), threadController.CreateThread);
 
 // create on media_id
 router.post('/media/:mediaID/thread', auth.isAuth, mediaValidator.checkIfMediaIDExsist, threadValidator.createThreadRules(), commonValidator.validate, preporcess.setTargetType("media"), threadController.CreateThread);
