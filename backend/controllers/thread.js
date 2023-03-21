@@ -65,15 +65,16 @@ exports.CreateThread = async (req, res, next) => {
 
     try {
         switch (parentType) {
-            case ("profile"): {
-                const Thread = await thread.create({
-                    name: threadName,
-                    user_ID: userID,
-                    profile_ID: parentID
-                });
-                return res.status(200)
-                    .json({ "ID": Thread.ID });
-            }
+            // not used
+            // case ("profile"): {
+            //     const Thread = await thread.create({
+            //         name: threadName,
+            //         user_ID: userID,
+            //         profile_ID: parentID
+            //     });
+            //     return res.status(200)
+            //         .json({ "ID": Thread.ID });
+            // }
             case ("media"): {
                 const Thread = await thread.create({
                     name: threadName,
@@ -96,8 +97,7 @@ exports.CreateThread = async (req, res, next) => {
                 return res.status(500).json({ error: "server-side error" });
             };
         };
-    } catch
-    (error) {
+    } catch (error) {
         console.error(error);
         return res.status(500);
     };
@@ -172,6 +172,10 @@ exports.searchThreads = async (req, res, next) => {
 
         if (createrID) {
             query.where.user_ID = createrID;
+        };
+        if (threadContent) {
+            query.include.push({ model: comment, attributes: ['ID', 'content'] });
+            query.where.comment = { [Op.substring]: threadContent };
         };
 
         switch (parentType) {
