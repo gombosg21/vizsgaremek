@@ -19,7 +19,8 @@ router.post('/story/:storyID/thread', auth.isAuth, storyValidator.checkIfStoryID
 // create on media_id
 router.post('/media/:mediaID/thread', auth.isAuth, mediaValidator.checkIfMediaIDExsist, threadValidator.createThreadRules(), commonValidator.validate, preporcess.setTargetType("media"), threadController.CreateThread);
 
-router.get('/thread/all', threadController.getAllThreads)
+//list all threads
+router.get('/thread/all', threadController.getAllThreads);
 
 // by thread ID
 // view
@@ -29,7 +30,7 @@ router.route('/thread/:threadID')
     .patch(threadValidator.checkIfThreadExsits, auth.isAuth, ownership.isMyThread, threadValidator.editThreadRules(), commonValidator.validate, threadController.editThread)
     .delete(threadValidator.checkIfThreadExsits, auth.isAuth, ownership.isMyThread, threadController.deleteTread);
 
-// search threads by params name, creation date, creater name
+// search threads by params name, creation date, creater name and thread comment contents
 router.get('/thread/search', threadValidator.searchThreadRules(), commonValidator.validate, threadController.searchThreads);
 
 module.exports = router;
