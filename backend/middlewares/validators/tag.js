@@ -18,8 +18,8 @@ exports.searchRules = () => {
 };
 
 exports.checkIfTagIDDoesNotExsits = async (req, res, next) => {
-
     const ID = req.params.ID;
+
     try {
         const Tag = await tag.findByPk(ID);
         if (!Tag) {
@@ -30,13 +30,13 @@ exports.checkIfTagIDDoesNotExsits = async (req, res, next) => {
         };
     } catch (error) {
         console.error(error);
-        res.status(500);
+        return res.status(500);
     };
 };
 
 exports.checkIfTagNameAlreadyExsits = async (req, res, next) => {
-
     const tagName = req.body.tag_name;
+    
     try {
         const conflictObject = await tag.findOne({ where: { name: tagName } });
         if (conflictObject) {
@@ -47,6 +47,6 @@ exports.checkIfTagNameAlreadyExsits = async (req, res, next) => {
         };
     } catch (error) {
         console.error(error);
-        res.status(500);
+        return res.status(500);
     };
 };
