@@ -16,8 +16,8 @@ var currdate = new Date(year, month, day).getTime();
 exports.registerRules = () => {
     return [
         validator.body('name').notEmpty().withMessage('name cannot be empty'),
-        validator.body('name').isLength({ max: 50 }).withMessage('nam must be no more than 50 characters'),
         validator.body('name').isAlphanumeric().withMessage('name cannot contain special characters'),
+        validator.body('name').isLength({ max: 50 }).withMessage('nam must be no more than 50 characters'),
         validator.body('email').notEmpty().withMessage("email cannot be empty"),
         validator.body('email').isEmail().withMessage("Invalid email format"),
         validator.body('password').notEmpty().withMessage("password cannot be empty"),
