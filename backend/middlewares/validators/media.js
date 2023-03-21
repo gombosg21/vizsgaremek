@@ -35,7 +35,7 @@ exports.checkIfMediaIDExsist = async (req, res, next) => {
         };
     } catch (error) {
         console.error(error);
-        res.status(500);
+        return res.status(500);
     };
 };
 
@@ -57,7 +57,7 @@ exports.validateUploadFile = (req, res, next) => {
         };
     } catch (error) {
         console.error(error);
-        res.status(500);
+        return res.status(500);
     };
 };
 
@@ -95,6 +95,6 @@ exports.validateBodyTags = async (req, res, next) => {
         };
     } catch (error) {
         console.error(error);
-        res.status(500);
+        return res.status(500);
     };
 };
