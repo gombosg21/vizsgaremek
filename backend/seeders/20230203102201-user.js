@@ -33,23 +33,21 @@ module.exports = {
         name: userName,
         password: password
       });
-    }
+    };
 
-    fs.writeFile('test_accounts_credentials.json', JSON.stringify(testPasswords), (err) => {
-      if (err) { throw err }
-      else {
-        console.log('test account credentials written.')
-      }
+     fs.appendFile('test_accounts_credentials.json', JSON.stringify(testPasswords), async () => {
+        console.log('test account credentials written.');
+        await queryInterface.bulkInsert('users', users);
     });
-    await queryInterface.bulkInsert('users', users);
   },
 
   async down(queryInterface, Sequelize) {
 
     await queryInterface.bulkDelete('users', null, {});
 
-    fs.unlink('test_accounts_credentials.json', (err) ={
+    fs.unlink('test_accounts_credentials.json', (err) => {
       if (err) { throw err }
-    })
+      console.log("test account credentials destoryed");
+    });
   }
 };
