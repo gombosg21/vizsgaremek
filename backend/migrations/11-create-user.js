@@ -38,11 +38,7 @@ module.exports = {
         defaultValue: Sequelize.NOW,
         type: Sequelize.DATE,
       },
-      password_hash: {
-        allowNull: false,
-        type: Sequelize.TEXT
-      },
-      password_salt: {
+      password: {
         allowNull: false,
         type: Sequelize.TEXT
       },
