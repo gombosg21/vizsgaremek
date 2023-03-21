@@ -1,6 +1,7 @@
 'use strict';
-
+const user = require("../models").user;
 const fake = require("@faker-js/faker");
+const encryptPassword = require("../util/password").generatePassword;
 const fs = require('fs');
 
 /** @type {import('sequelize-cli').Migration} */
@@ -17,11 +18,11 @@ module.exports = {
       var lastName = fake.faker.name.lastName(genderString).replace(/\s+/g, '');
       var userName = firstName + lastName;
       var password = fake.faker.internet.password((8 + Math.round(Math.random() * 4)), false);
-;
+      ;
 
       users.push({
         name: userName,
-        password: password,
+        password: await encryptPassword(password),
         email: fake.faker.internet.email(firstName, lastName),
         birth_date: fake.faker.date.birthdate(),
         gender: gender + Math.round(Math.random()),
@@ -35,9 +36,9 @@ module.exports = {
       });
     };
 
-     fs.appendFile('test_accounts_credentials.json', JSON.stringify(testPasswords), async () => {
-        console.log('test account credentials written.');
-        await queryInterface.bulkInsert('users', users);
+    fs.appendFile('test_accounts_credentials.json', JSON.stringify(testPasswords), async () => {
+      console.log('test account credentials written.');
+      await queryInterface.bulkInsert('users', users);
     });
   },
 
