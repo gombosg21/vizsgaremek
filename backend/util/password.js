@@ -12,31 +12,28 @@ exports.generatePassword = async (password) => {
             if (error) {
                 rejects(error);
             };
-            resolve({
-                salt: salt,
-                hash: derivedKey.toString('hex')
-            });
+            resolve(
+                salt + ":" + derivedKey.toString('hex')
+            );
         });
     });
 };
 
-exports.validatePassword = (password, salt, hash) => {
-    const regexCharMap = /[0-9a-fA-F]+/;
+exports.validatePassword = (password, encryptedPassword) => {
+    const regexCharMap = /[A-Za-z0-9]+:[A-Za-z0-9]+/;
 
     if (!password) { throw new Error("attribute password missing"); };
     if (typeof password != "string") { throw new TypeError("password must be a string"); };
 
-    if (!salt) { throw new Error("attribute salt missing"); };
-    if (typeof salt != "string") { throw new TypeError("salt must be a string"); };
-    if (salt.length != 512) { throw new RangeError("salt must be 512 characters long") };
-    if (salt.match(regexCharMap)[0] != salt) { throw new TypeError("salt must be a hexadecimal string"); };
+    if (!encryptedPassword) { throw new Error("attribute encryptedPassword missing"); };
+    if (typeof encryptedPassword != "string") { throw new TypeError("encryptedPassword must be a string"); };
+    if (encryptedPassword.length != 1025) { throw new RangeError("salt must be 1025 characters long") };
+    if (encryptedPassword.match(regexCharMap)[0] != encryptedPassword) { throw new TypeError("encryptedPassword must be a hexadecimal string"); };
 
-    if (!hash) { throw new Error("attribute hash missing"); };
-    if (typeof hash != "string") { throw new TypeError("hash must be a string"); };
-    if (hash.length != 512) { throw new RangeError("hash must be 512 characters long") };
-    if (hash.match(regexCharMap)[0] != hash) { throw new TypeError("hash must be a hexadecimal string"); };
 
     return new Promise((resolve, rejects) => {
+        const salt = encryptedPassword.split(":")[0];
+        const hash = encryptedPassword.split(":")[1];
         crypto.scrypt(password, salt, 256, (error, derivedKey) => {
             if (error) {
                 rejects(error);
