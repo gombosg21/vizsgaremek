@@ -89,10 +89,6 @@ module.exports = {
         allowNull: true,
         type: Sequelize.INTEGER
       },
-      profile_thread: {
-        allowNull: true,
-        type: Sequelize.INTEGER
-      },
       gender: {
         allowNull: false,
         type: Sequelize.INTEGER
