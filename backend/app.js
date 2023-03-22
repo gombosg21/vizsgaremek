@@ -10,12 +10,15 @@ const passport = require('passport');
 const DB = require('./util/db');
 const auth = require('./middlewares/authentiaction/auth');
 
+
+//routers
 const usersRouter = require('./routes/users');
 const mediaRouter = require('./routes/media');
 const tagRouter = require('./routes/tag');
 const indexRouter = require('./routes/index');
 const threadRouter = require('./routes/thread');
 const commentRouter = require('./routes/comment');
+const storyRouter = require('./routes/story');
 
 const app = express();
 
@@ -49,6 +52,7 @@ app.use(routePrefix, mediaRouter);
 app.use(routePrefix, tagRouter);
 app.use(routePrefix,threadRouter);
 app.use(routePrefix,commentRouter);
+app.use(routePrefix,storyRouter);
 
 
 //catch 404 and forward to error handler
