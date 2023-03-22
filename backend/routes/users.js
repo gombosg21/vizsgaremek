@@ -6,10 +6,10 @@ const auth = require('../middlewares/authentiaction/auth');
 const passport = require('passport');
 
 // get login
-router.get('/user/login', passport.authenticate('local', { failureRedirect: '/api/v/0.1/' }), userController.login);
+router.post('/user/login', passport.authenticate('local', { failureRedirect: '/api/v/0.1/' }), userController.login);
 
 // get logout
-router.get('/user/logout', userController.logout);
+router.post('/user/logout', userController.logout);
 
 // post create user
 router.post('/user/register', userValidator.checkIfNameConflicts, userValidator.registerRules(), commonValidation.validate, userController.createUser);
@@ -24,7 +24,7 @@ router.route('/user/')
     .delete(auth.isAuth, userController.deleteUser);
 
 // get reset password
-router.get('/user/reset-password/', userController.resetPassword);
+router.post('/user/reset-password/', userController.resetPassword);
 
 
 // patch change password

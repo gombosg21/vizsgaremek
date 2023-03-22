@@ -22,17 +22,17 @@ Visszatérési értékként egy tömbös JSON-t küld a {ID,name,gender,birth_da
 
 munkamenet jelenleg sütis megoldású, jövőben lehet hogy JSWT token lesz.
 
-GET /api/v/0.1/user/login
+POST /api/v/0.1/user/login
 Beléptet a rendszerbe.
 JSON-ként kér {password,name} mezőket.
 Sikeres belépés esetén átirányít a: /api/v/0.1/user/{ID} -re és létrehoz egy munkamenetet.
 Sikertelen belépés esetén átirányít a: /api/v/0.1/-ra.
 
-GET /api/v/0.1/user/logout
+POST /api/v/0.1/user/logout
 Kiléptet a rendszerből, megszünteti a munkamenetet és a /api/v/0.1/-re átirányít.
 Egyenlőre sajnos süti kliens oldalon marad...
 
-GET /api/v/0.1/{USER}/reset-password
+POST /api/v/0.1/{USER}/reset-password
 Egyenlőre nem mükszik.
 
 POST /api/v/0.1/user/register
