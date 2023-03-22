@@ -45,6 +45,7 @@ module.exports = {
       password_reset_token: {
         allowNull: true,
         defaultValue: null,
+        unique: true,
         type: Sequelize.TEXT
       },
       password_reset_token_date: {
@@ -55,6 +56,7 @@ module.exports = {
       email_token: {
         allowNull: true,
         defaultValue: null,
+        unique: true,
         type: Sequelize.TEXT
       },
       email_token_date: {
