@@ -1,6 +1,7 @@
 const thread = require('../models').thread;
 const user = require('../models').user;
 const fake = require('@faker-js/faker');
+const randomDate = require('../helpers/seeding/date').getRandomDate;
 
 'use strict';
 
@@ -10,11 +11,11 @@ module.exports = {
 
     const comments = [];
 
-    const threadIDsraw = await thread.findAll({ attributes: ['ID'] });
-    const threadIDs = [];
+    const threadIDsraw = await thread.findAll();
+    const threadDateAssocArray = [];
 
     threadIDsraw.forEach(thread => {
-      threadIDs.push(thread.ID)
+      threadDateAssocArray.push({ [thread.ID]: thread.created })
     });
 
     const userIDsraw = await user.findAll({ attributes: ['ID'] });
@@ -25,29 +26,40 @@ module.exports = {
 
     const threadCommentCounts = [];
 
-    threadIDs.forEach(threadID => {
-      var ravCommentCount = Math.floor(Math.random() * 10)
-      var commentCount = ravCommentCount > 0 ? ravCommentCount : 1;
-      threadCommentCounts.push({ [threadID]: commentCount });
-    });
+
+    for (let i = 1; i < threadDateAssocArray.length; i++) {
+      var rawCommentCount = Math.floor(Math.random() * 10)
+      var commentCount = rawCommentCount > 0 ? rawCommentCount : 1;
+      threadCommentCounts.push({ [Object.keys(threadDateAssocArray[i])[0]]: commentCount });
+    };
 
     for (let i = 0; i < threadCommentCounts.length; i++) {
 
       const keys = Object.keys(threadCommentCounts[i]);
       const threadID = Number(keys[0]);
+      var threadDate = threadDateAssocArray.threadID;
       const commentCount = threadCommentCounts[i][threadID];
 
       var a = 0;
       while (a < commentCount) {
-        const commenterID = userIDs[Math.floor(Math.random() * userIDs.length)];
-        const newComment = {
+        var commentCreateDate = randomDate("1999-01-01", "2020-12-31");
+        var commentEditDateRaw = randomDate("1999-01-01", "2020-12-31");
+        var commentEditDate = commentEditDateRaw > commentCreateDate ? commentEditDateRaw : commentCreateDate;
+        var commenterID = userIDs[Math.floor(Math.random() * userIDs.length)];
+        if (threadDate < commentEditDate) {
+          threadDate = commentEditDate;
+        };
+        var newComment = {
           thread_ID: threadID,
           user_ID: commenterID,
-          content: fake.faker.lorem.paragraph()
+          content: fake.faker.lorem.paragraph(),
+          created: commentCreateDate,
+          last_edit: commentEditDate,
         };
         a++;
         comments.push(newComment);
       };
+      await thread.update({ last_activity: threadDate }, { where: { ID: threadID } })
     };
 
     await queryInterface.bulkInsert('comments', comments);

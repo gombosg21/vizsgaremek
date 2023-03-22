@@ -4,6 +4,7 @@ const media = require('../models').media;
 const tag = require('../models').tag;
 const mediaData = require('../helpers/seeding/image-data');
 const toBase64 = require('../util/serialize-file').getBase64;
+const randomDate = require('../helpers/seeding/date').getRandomDate;
 
 'use strict';
 /** @type {import('sequelize-cli').Migration} */
@@ -38,6 +39,7 @@ module.exports = {
             };
           };
 
+          var uploadDate = randomDate("1999-01-01", "2020-12-31");
           var upload = await media.create({
             user_ID: userID,
             file_data: mediaFiles[Math.floor(Math.random() * mediaFiles.length)],
@@ -45,6 +47,7 @@ module.exports = {
             description: fake.faker.lorem.lines(),
             visibility: Math.floor(Math.random() * 3),
             placeholder_text: fake.faker.lorem.word(),
+            uploaded: uploadDate
           });
 
           await upload.setTags(uploadTagIDList);
