@@ -1,6 +1,7 @@
 const fake = require('@faker-js/faker');
 const user = require('../models').user;
 const media = require('../models').media;
+const randomDate = require('../helpers/seeding/date').getRandomDate;
 
 'use strict';
 
@@ -35,12 +36,15 @@ module.exports = {
 
       if (threadCount > 0) {
         var a = 0;
-        while ( a < threadCount){
-          const uploaderID = userIDs[Math.floor(Math.random() * userIDs.length)];
-          const newThread = {
+        while (a < threadCount) {
+          var createdDate = randomDate("1999-01-01", "2020-12-31");
+          var uploaderID = userIDs[Math.floor(Math.random() * userIDs.length)];
+          var newThread = {
             media_ID: mediaID,
             user_ID: uploaderID,
-            name: fake.faker.lorem.sentence()
+            name: fake.faker.lorem.sentence(),
+            created: createdDate,
+            last_activity: createdDate,
           };
           a++;
           Threads.push(newThread);
