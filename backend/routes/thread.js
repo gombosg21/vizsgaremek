@@ -22,6 +22,9 @@ router.post('/media/:mediaID/thread', auth.isAuth, mediaValidator.checkIfMediaID
 //list all threads
 router.get('/thread/all', threadController.getAllThreads);
 
+// search threads by params name, creation date, creater name and thread comment contents
+router.get('/thread/search', threadValidator.searchThreadRules(), commonValidator.validate, threadController.searchThreads);
+
 // by thread ID
 // view
 // delete
@@ -30,7 +33,6 @@ router.route('/thread/:threadID')
     .patch(threadValidator.checkIfThreadExsits, auth.isAuth, ownership.isMyThread, threadValidator.editThreadRules(), commonValidator.validate, threadController.editThread)
     .delete(threadValidator.checkIfThreadExsits, auth.isAuth, ownership.isMyThread, threadController.deleteTread);
 
-// search threads by params name, creation date, creater name and thread comment contents
-router.get('/thread/search', threadValidator.searchThreadRules(), commonValidator.validate, threadController.searchThreads);
+
 
 module.exports = router;
