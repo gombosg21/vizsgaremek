@@ -19,6 +19,7 @@ module.exports = {
       },
       profile_ID: {
         allowNull: true,
+        unique: true,
         type: Sequelize.INTEGER
       },
       user_ID: {
