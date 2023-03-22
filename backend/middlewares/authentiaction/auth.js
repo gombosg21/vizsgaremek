@@ -2,11 +2,10 @@ const session = require("express-session");
 const mysqlStore = require("express-mysql-session")(session);
 const config = require("../../config/config.json");
 const user = require('../../models').user;
-const sessionStorage = require("../../models").session_store;
 const path = require('path');
 const passport = require('passport');
 const localPassport = require('passport-local').Strategy;
-const validatePassword = require('../../util/password').validatePassword;
+const validatePassword = require('../../util/auth').validatePassword;
 require('dotenv').config({ path: path.resolve('./.env') });
 
 const mode = process.env.MODE.toLowerCase();
@@ -114,25 +113,3 @@ exports.isMod = (req, res, next) => {
 exports.isAdmin = (req, res, next) => {
 
 };
-
-// exports.revokeAuth = (req, res, next) => {
-//     console.log(req.session)
-//     try {
-//         if (req.sessionID) {
-//             req.session.destroy((err) => {
-//                 if (err) {
-//                     console.error(err);
-//                 } else {
-//                     return next();
-//                 }
-//             })
-//         }
-//         else {
-//             return res.status(409)
-//                 .json({ "error": "no login session was present" })
-//         };
-//     } catch (error) {
-//         console.error(error);
-//         return res.status(500);
-//     }
-// };
