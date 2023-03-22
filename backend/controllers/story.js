@@ -1,4 +1,6 @@
 const carousel = require('../models').carousel;
+const user = require('../models').user;
+const tag = require('../models').tag;
 const media = require('../models').media;
 const visibility = require('../helpers/authorization/visibility');
 
@@ -31,19 +33,28 @@ exports.createStory = async (req, res, next) => {
 exports.getStory = async (req, res, next) => {
     const ID = req.params.storyID;
     try {
-        const Story = await carousel.findByPk(ID, { include: [{ model: user, attributes: ['ID', 'name'] }, { model: media }] });
+        const Story = await carousel.findByPk(ID,
+            {
+                include: [
+                    { model: user, attributes: ['ID', 'name'] },
+                    {
+                        model: media, include: [
+                            { model: user, attributes: ['name', 'ID'] },
+                            { model: tag, attributes: ["name", "ID"] }]
+                    }]
+            });
 
-        if (!req.user) {
-            req.user.ID = -1;
+        var userID = -1
+        if (req.user) {
+            userID = req.user.ID;
         };
-        const userContextID = req.user.ID;
 
         const visibilityFlag = Story.visibility;
         const dataOwnerID = Story.ID;
 
         const storyMediaList = [];
 
-        Story.medias.forEach(Media => {
+        Story.media.forEach(Media => {
             var mediaTagList = [];
             Media.tags.forEach(tag => { mediaTagList.push({ "name": tag.name }) });
             storyMediaList.push({
@@ -57,7 +68,7 @@ exports.getStory = async (req, res, next) => {
             });
         });
 
-        const dataArray = {
+        const data = {
             ID: Story.ID,
             name: Story.name,
             description: Story.description,
@@ -66,9 +77,9 @@ exports.getStory = async (req, res, next) => {
             media_list: storyMediaList
         };
 
-        const result = await visibility.determineVisibility(userContextID, dataOwnerID, visibilityFlag, dataArray);
+        const result = await visibility.determineVisibility(userID, dataOwnerID, visibilityFlag, data);
 
-        return res.status(200).json(result);
+        return res.status(result.status).json(result.data);
 
     } catch (error) {
         console.error(error);
@@ -77,15 +88,24 @@ exports.getStory = async (req, res, next) => {
 };
 
 exports.getAllStoryFromUser = async (req, res, next) => {
-    const userID = req.params.userID;
+    const userID = Number(req.params.userID);
     try {
-        const StoryList = await carousel.findAll({ where: { user_ID: userID }, include: [{ model: user, attributes: ['ID', 'name'] }, { model: media }] });
+        const StoryList = await carousel.findAll({
+            where: { user_ID: userID },
+            include: [
+                { model: user, attributes: ['ID', 'name'] },
+                {
+                    model: media, include: [
+                        { model: user, attributes: ['ID', 'name'] },
+                        { model: tag, attributes: ['ID', 'name'] }]
+                }]
+        });
 
-        if (!req.user) {
-            req.user.ID = -1;
+        var userContextID = -1
+        if (req.user) {
+            userContextID = req.user.ID;
         };
 
-        const userContextID = req.user.ID;
         const dataArray = [];
         const visibilityArray = [];
 
@@ -95,7 +115,7 @@ exports.getAllStoryFromUser = async (req, res, next) => {
 
         StoryList.forEach(story => {
             var storyMediaList = [];
-            story.medias.forEach(Media => {
+            story.media.forEach(Media => {
                 var mediaTagList = [];
                 Media.tags.forEach(tag => { mediaTagList.push({ "name": tag.name }) });
                 storyMediaList.push({
@@ -135,7 +155,7 @@ exports.editStory = async (req, res, next) => {
         const Story = await carousel.findByPk(ID);
 
         await Story.update({
-            
+
         });
 
         return res.status(200).json({ ID: Story.ID })
