@@ -42,3 +42,15 @@ exports.validatePassword = (password, encryptedPassword) => {
         });
     });
 };
+
+exports.generateToken = () => {
+
+    return new Promise((rejects, resolve) => {
+        crypto.randomBytes(4096, (err, buff) => {
+            if (err) {
+                rejects(err);
+            };
+            resolve(buff.toString('base64url'))
+        });
+    });
+};
