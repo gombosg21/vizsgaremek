@@ -19,26 +19,29 @@ module.exports = {
     const mediaAssocIDs = [];
     const mediaRaw = await media.findAll({ include: { model: user } });
     mediaRaw.forEach(media => {
-      mediaAssocIDs.push({ [media.user.ID]: media.ID });
+      mediaAssocIDs.push({ [media.user.ID]: media.ID, visibility: media.visibility });
     });
 
 
 
     for (ID of userIDs) {
       var uploadIDs = [];
+      var visibility = 3;
       for (let i = 0; i < mediaAssocIDs.length; i++) {
-        var userID = Number(Object.keys(mediaAssocIDs[i]));
+        var userID = Number(Object.keys(mediaAssocIDs[i])[0]);
         var mediaID = mediaAssocIDs[i][userID];
         if (userID == ID) {
           uploadIDs.push(mediaID);
+          if (mediaAssocIDs[i].visibility < visibility)
+            visibility = mediaAssocIDs[i].visibility;
         };
-      };
 
+      };
       const newCarousel = await carousel.create({
         user_ID: ID,
         name: fake.faker.lorem.word(),
         description: fake.faker.lorem.sentences(),
-        visibility: Math.floor(Math.random() * 3),
+        visibility: visibility,
       });
 
       await newCarousel.setMedia(uploadIDs);
