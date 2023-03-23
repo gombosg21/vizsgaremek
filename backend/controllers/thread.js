@@ -156,9 +156,6 @@ exports.searchThreads = async (req, res, next) => {
         const parentType = req.query.parent;
         const threadContent = req.query.content;
 
-        //console.log(parentType)
-        //console.log(createrID)
-
         const query = {
             where:
             {
@@ -181,42 +178,40 @@ exports.searchThreads = async (req, res, next) => {
             query.where.user_ID = createrID;
         };
         if (threadContent) {
-            query.include.push({ model: comment, where:{ content: { [Op.substring]: threadContent } }, attributes: ['ID', 'content'] });
+            query.include.push({ model: comment, where: { content: { [Op.substring]: threadContent } }, attributes: ['ID', 'content'] });
+        };
+
+        switch (parentType) {
+            case ("profile"): {
+                query.where.profile_ID = { [Op.not]: null };
+                query.include.push({ model: user, attributes: ['ID', 'alias'] });
+                break;
+            }
+            case ("media"): {
+                query.where.media_ID = { [Op.not]: null };
+                query.include.push({ model: media, attributes: ['ID', 'user_ID'] });
+                break;
+            }
+            case ("story"): {
+                query.where.carousel_ID = { [Op.not]: null };
+                query.include.push({ model: carousel, attributes: ['ID', 'user_ID'] });
+                break;
+            }
+            case (undefined): {
+                // any parent is also a valid type
+                break;
+            }
+            default: {
+                return res.status(400).json({ error: "bad search parent type" });
+            }
+        };
+
+        const threadList = await thread.findAll(query);
+
+        return res.status(200).json({ results: threadList });
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500);
     };
-
-    switch (parentType) {
-        case ("profile"): {
-            query.where.profile_ID = { [Op.not]: null };
-            query.include.push({ model: user, attributes: ['ID', 'alias'] });
-            break;
-        }
-        case ("media"): {
-            query.where.media_ID = { [Op.not]: null };
-            query.include.push({ model: media, attributes: ['ID', 'user_ID'] });
-            break;
-        }
-        case ("story"): {
-            query.where.carousel_ID = { [Op.not]: null };
-            query.include.push({ model: carousel, attributes: ['ID', 'user_ID'] });
-            break;
-        }
-        case (undefined): {
-            // any parent is also a valid type
-            break;
-        }
-        default: {
-            return res.status(400).json({ error: "bad search parent type" });
-        }
-    };
-
-    console.log(query);
-
-    const threadList = await thread.findAll(query);
-
-    return res.status(200).json({ results: threadList })
-
-} catch (error) {
-    console.error(error);
-    return res.status(500);
-};
 };
