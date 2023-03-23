@@ -5,6 +5,7 @@ const tag = require('../models').tag;
 const mediaData = require('../helpers/seeding/image-data');
 const toBase64 = require('../util/serialize-file').getBase64;
 const randomDate = require('../helpers/seeding/date').getRandomDate;
+const mixedArraySilce = require('../helpers/seeding/array').getRandomMixedArraySlice;
 
 'use strict';
 /** @type {import('sequelize-cli').Migration} */
@@ -12,7 +13,11 @@ module.exports = {
   async up(queryInterface, Sequelize) {
 
     const userIDs = await user.findAll({ attributes: ['ID'] });
-    const tag_list = await tag.findAll({ attributes: ['ID'] });
+    const tagListRaw = await tag.findAll({ attributes: ['ID'] });
+    const tagIDList = [];
+    tagListRaw.forEach(Tag => {
+      tagIDList.push(Tag.ID);
+    });
     const rawMediaFiles = await mediaData.getTemp(10);
     const mediaFiles = []
 
@@ -29,15 +34,15 @@ module.exports = {
         var userID = userIDs[i].ID;
 
         for (let i = 0; i < userUploadCount; i++) {
-          var uploadTagCount = Math.floor(Math.random() * tag_list.length);
-          var uploadTagIDList = [];
+          // var uploadTagCount = Math.floor(Math.random() * tag_list.length);
+          var uploadTagIDList = mixedArraySilce(tagIDList);
 
-          while (uploadTagIDList.length < uploadTagCount) {
-            var randomTagID = tag_list[Math.floor(Math.random() * tag_list.length)].ID;
-            if (!uploadTagIDList.includes(randomTagID)) {
-              uploadTagIDList.push(randomTagID);
-            };
-          };
+          // while (uploadTagIDList.length < uploadTagCount) {
+          //   var randomTagID = tag_list[Math.floor(Math.random() * tag_list.length)].ID;
+          //   if (!uploadTagIDList.includes(randomTagID)) {
+          //     uploadTagIDList.push(randomTagID);
+          //   };
+          // };
 
           var uploadDate = randomDate("1999-01-01", "2020-12-31");
           var upload = await media.create({
