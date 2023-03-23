@@ -1,4 +1,4 @@
-const password = require("../util/password");
+const password = require("../util/auth");
 
 
 let returnData;
@@ -100,6 +100,15 @@ test('password hashing retruns different outputs w different inputs, hash field'
     expect(returnData.hash).not.toStrictEqual(secondReturnData.hash);
 });
 
+test('password cheker callable', async () => {
+    expect(password.validatePassword instanceof  Function).toBe(true);
+});
+
+test('password cheker is an async function', async () => {
+    const AsyncFunction = (async () => { }).constructor;
+    expect(password.validatePassword instanceof AsyncFunction).toBe(true);
+});
+
 test('password cheker returns', async () => {
     expect(validateData).toBeTruthy();
 });
@@ -113,6 +122,6 @@ test('password cheker returns true on matching password', async () => {
 });
 
 test('password cheker returns false on mismatching password', async () => {
-    expect(badPassword).toBe(false);
+    expect(await badPassword).toBe(false);
 });
 
