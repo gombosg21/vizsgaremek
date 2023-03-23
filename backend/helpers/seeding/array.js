@@ -1,7 +1,7 @@
 const getRandomArrayMember = (array) => {
 
     if (!array) { throw new Error("argumnet array missing") };
-    if (!(array instanceof Array)) { throw new Error("array must be an array") };
+    if (!(array instanceof Array)) { throw new TypeError("array must be an array") };
     if (array.length == 0) { throw new Error("array cannot be an empty array") };
     if (array.lenght == 1) { throw new Error("cannot random select from a 1 lenght array") };
 
@@ -11,7 +11,7 @@ const getRandomArrayMember = (array) => {
 
 const getRandomArraySlice = (array) => {
     if (!array) { throw new Error("argumnet array missing") };
-    if (!(array instanceof Array)) { throw new Error("array must be an array") };
+    if (!(array instanceof Array)) { throw new TypeError("array must be an array") };
     if (array.length == 0) { throw new Error("array cannot be an empty array") };
     if (array.lenght == 1) { throw new Error("cannot random slice from a 1 lenght array") };
 
@@ -29,7 +29,7 @@ const getRandomArraySlice = (array) => {
 
 const getMixedArray = (array) => {
     if (!array) { throw new Error("argumnet array missing") };
-    if (!(array instanceof Array)) { throw new Error("array must be an array") };
+    if (!(array instanceof Array)) { throw new TypeError("array must be an array") };
     if (array.length == 0) { throw new Error("array cannot be an empty array") };
     if (array.lenght == 1) { throw new Error("cannot random mix a 1 lenght array") };
 
@@ -46,7 +46,7 @@ const getMixedArray = (array) => {
 
 const getRandomMixedArraySlice = (array) => {
     if (!array) { throw new Error("argumnet array missing") };
-    if (!(array instanceof Array)) { throw new Error("array must be an array") };
+    if (!(array instanceof Array)) { throw new TypeError("array must be an array") };
     if (array.length == 0) { throw new Error("array cannot be an empty array") };
     if (array.lenght == 1) { throw new Error("cannot generate a mixed random slice from a 1 lenght array") };
 
