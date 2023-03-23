@@ -11,7 +11,10 @@ module.exports = (sequelize, DataTypes) => {
   }
   carousel_medialist.init({
     carousel_ID: { allowNull: false, type: DataTypes.INTEGER, references: { model: 'carousel', key: 'ID' } },
-    media_ID: { allowNull: false, type: DataTypes.INTEGER, references: { model: 'media', key: 'ID' } }},
+    media_ID: { allowNull: false, type: DataTypes.INTEGER, references: { model: 'media', key: 'ID' } },
+    item_number: { allowNull: false, type: DataTypes.INTEGER },
+    item_description: { allowNull: true, type: DataTypes.TEXT, defaultValue: null }
+  },
     {
       sequelize,
       modelName: 'carousel_medialist',

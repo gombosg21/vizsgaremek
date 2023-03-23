@@ -8,9 +8,18 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       media_ID: {
-        allowNull:false,
+        allowNull: false,
         type: Sequelize.INTEGER
       },
+      item_number: {
+        allowNull: false,
+        type: Sequelize.INTEGER
+      },
+      item_description: {
+        allowNull: true,
+        defaultValue: null,
+        type: Sequelize.TEXT
+      }
     });
   },
   async down(queryInterface, Sequelize) {
