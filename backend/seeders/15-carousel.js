@@ -1,8 +1,8 @@
 const carousel = require('../models').carousel;
-const carousel_medialist = require('../models').carousel_medialist;
 const media = require('../models').media;
 const user = require('../models').user;
 const fake = require('@faker-js/faker');
+const mixedArraySilce = require('../helpers/seeding/array').getRandomMixedArraySlice;
 
 'use strict';
 
@@ -25,26 +25,38 @@ module.exports = {
 
 
     for (ID of userIDs) {
-      var uploadIDs = [];
+      var randomNum = Math.floor(Math.random() * 10)
+      var carouselCount = randomNum > 1 ? randomNum : 1;
+      var userMediaIDs = [];
       var visibility = 3;
       for (let i = 0; i < mediaAssocIDs.length; i++) {
         var userID = Number(Object.keys(mediaAssocIDs[i])[0]);
         var mediaID = mediaAssocIDs[i][userID];
         if (userID == ID) {
-          uploadIDs.push(mediaID);
+          userMediaIDs.push(mediaID);
           if (mediaAssocIDs[i].visibility < visibility)
             visibility = mediaAssocIDs[i].visibility;
         };
-
       };
-      const newCarousel = await carousel.create({
-        user_ID: ID,
-        name: fake.faker.lorem.word(),
-        description: fake.faker.lorem.sentences(),
-        visibility: visibility,
-      });
 
-      await newCarousel.setMedia(uploadIDs);
+      for (let i = 0; i < carouselCount; i++) {
+        var storyMediasRaw = mixedArraySilce(userMediaIDs);
+        var storyMedias = [];
+        for (let i = 0; i< storyMediasRaw.length; i++) {
+          storyMedias.push({
+            ID: storyMediasRaw[i],
+            item_number : i,
+            item_description : fake.faker.lorem.sentences()
+          });
+        };
+        const newCarousel = await carousel.create({
+          user_ID: ID,
+          name: fake.faker.lorem.word(),
+          description: fake.faker.lorem.sentences(),
+          visibility: visibility,
+        });
+        await newCarousel.setMedia(storyMedias);
+      };
     };
   },
 
