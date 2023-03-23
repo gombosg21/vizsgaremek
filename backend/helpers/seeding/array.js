@@ -57,4 +57,4 @@ const getRandomMixedArraySlice = (array) => {
     return randomSliceFromShuffled;
 };
 
-module.exports = [getRandomArrayMember, getRandomArraySlice, getMixedArray, getRandomMixedArraySlice];
+module.exports = {getRandomArrayMember, getRandomArraySlice, getMixedArray, getRandomMixedArraySlice};
