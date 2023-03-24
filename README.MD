@@ -11,10 +11,12 @@ It *is* indeed a web-server and a SPA frontend bundled together.
 Backend uses Express in **Community Edition** Node.js
 DB is *MySQL* provided by a MariaDB engine.
 Connectivity between the server and DB is thru mysql2/Sequelize ORM.
+Tests provided by **jest**
 
 ### Frontend
 As for most frontends language is js too.
 The framework of our choice is **Angular**
+[Frontend readme](./frontend/README.md)
 
 ## The devs
 - smat3us
@@ -31,3 +33,4 @@ Currently *still* ***under development!!!***
 - [MariaDB](https://mariadb.org/documentation/)
 - [Sequelize ORM v6](https://sequelize.org/docs/v6/)
 - [Angular.js](https://docs.angularjs.org/api)
+- [Jest](https://jestjs.io/)
