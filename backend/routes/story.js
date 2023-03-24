@@ -3,11 +3,12 @@ const auth = require('../middlewares/authentiaction/auth');
 const ownership = require('../middlewares/authentiaction/ownership');
 const storyController = require('../controllers/story');
 const storyValidator = require('../middlewares/validators/story');
-const userValidator = require('../middlewares/validators/user')
+const validate = require('../middlewares/validators/common').validate;
+const userValidator = require('../middlewares/validators/user');
 
 
 // create story
-router.post('/story', auth.isAuth, storyController.createStory);
+router.post('/story', auth.isAuth, storyValidator.createStoryRules(), validate, storyController.createStory);
 
 //get all stories from user
 
