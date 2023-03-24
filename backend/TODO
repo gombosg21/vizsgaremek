@@ -1,0 +1,23 @@
+Reverse image search???
+implement TLS
+implement OAuth v2
+Input sanitization using express-validator
+Use JWT instead of cookies
+Media, Carousel return associated thread name, id, creator, activity, date
+More API and UNIT test
+Do MOCK tests
+Review story visibilty rule, too restrictive
+Make DB milestone 4: relations
+Do milestone 4 code
+Test milestone 4 code
+Make DB milestone: 5 moderation
+Do milestone 5 code
+Test milestone 5 code
+Save Postman tests
+Utilize webp to convert images
+Test email sending
+Auth, use Bearer token
+CSRF protection
+Param pollution protection
+SQL injection protection
+Prepare for a release???
