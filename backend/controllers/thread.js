@@ -7,7 +7,6 @@ const { Op } = require("sequelize");
 // const story = require("../models").story;
 
 exports.getThread = async (req, res, next) => {
-
     const threadID = req.params.threadID;
 
     try {
@@ -21,21 +20,18 @@ exports.getThread = async (req, res, next) => {
                     include: [
                         {
                             model: user,
-                            attributes: ['ID', 'name']
+                            attributes: ['ID', 'alias']
                         }
                     ]
                 },
                 {
                     model: user,
-                    attributes: ['ID', 'name']
+                    attributes: ['ID', 'alias']
                 }]
         });
 
-        return res.status(200)
-            .json(threadData);
-    }
-    catch
-    (error) {
+        return res.status(200).json(threadData);
+    } catch (error) {
         console.error(error);
         return res.status(500);
     };
@@ -46,7 +42,10 @@ exports.getAllThreads = async (req, res, next) => {
     try {
         const threadList = await thread.findAll({
             attributes: ['ID', 'name', 'status', 'created', 'last_activity'],
-            include: [{ model: user, attributes: ['ID', 'name'] }]
+            include: [{
+                model: user,
+                attributes: ['ID', 'alias']
+            }]
         });
 
         return res.status(200).json(threadList);
@@ -108,13 +107,11 @@ exports.editThread = async (req, res, next) => {
 
     const threadID = req.params.threadID;
     const threadName = req.body.name;
-    const threadStatus = req.body.status;
 
     try {
         const Thread = await thread.findByPk(threadID);
         Thread.set({
             name: threadName,
-            status: threadStatus
         });
         return res.status(200)
             .json(Thread);
@@ -125,7 +122,6 @@ exports.editThread = async (req, res, next) => {
 };
 
 exports.deleteTread = async (req, res, next) => {
-
     const threadID = req.params.threadID;
 
     try {
@@ -163,11 +159,7 @@ exports.searchThreads = async (req, res, next) => {
                 last_activity: { [Op.between]: [lastActivityStart, lastActivityEnd] }
             },
             attributes: ['ID', 'name', 'status', 'created', 'last_activity'],
-            include: [
-                {
-                    model: user,
-                    attributes: ['ID', 'name']
-                }]
+            include: []
         };
 
         if (threadName) {
@@ -175,6 +167,10 @@ exports.searchThreads = async (req, res, next) => {
         };
 
         if (createrID) {
+            query.include.push({
+                model: user,
+                attributes: ['ID', 'alias']
+            });
             query.where.user_ID = createrID;
         };
         if (threadContent) {
@@ -209,7 +205,6 @@ exports.searchThreads = async (req, res, next) => {
         const threadList = await thread.findAll(query);
 
         return res.status(200).json({ results: threadList });
-
     } catch (error) {
         console.error(error);
         return res.status(500);
