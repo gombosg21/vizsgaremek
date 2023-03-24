@@ -1,3 +1,10 @@
+Licensing, maybe GNU GPL v3?
+Add a README.md
+Add a CONTRIBUTING.md
+Define pull request schema
+Define issue schema
+Define code of conduct
+Set up security
 Reverse image search???
 implement TLS
 implement OAuth v2
