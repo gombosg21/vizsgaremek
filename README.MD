@@ -22,7 +22,7 @@ The framework of our choice is **Angular**
 - smat3us
 - gombosg
 
-Currently *still* ***under development!!!***
+[Currently *still* ***under development!!!***](./TODO.MD)
 
 # Usefull Links
 
