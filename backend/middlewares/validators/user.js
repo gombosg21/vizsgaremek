@@ -48,16 +48,19 @@ exports.searchRules = () => {
 };
 
 exports.updateProfileRules = () => {
-    return [validator.oneOf([
-        validator.body("profile_description").exists(),
-        validator.body("profile_visibility").exists(),
-        validator.body("profile_picture").exists()
-    ], "no changes, aborting"),
-    [
-        validator.body("profile_description").isAscii().optional({ nullable: true, checkFalsy: true }).withMessage("no advanced special characters allowed"),
-        validator.body("profile_visibility").isInt({ min: 0, max: 3 }).optional({ nullable: true, checkFalsy: true }).withMessage("unknown visibility level"),
-        validator.body("profile_picture").isInt().optional({ nullable: true, checkFalsy: true }).withMessage("profile picture must be a numeric ID")
-    ]
+    return [
+        validator.oneOf([
+            validator.body("profile_description").exists(),
+            validator.body("profile_visibility").exists(),
+            validator.body("profile_picture").exists(),
+            validator.body("alias").exists()
+        ], "no changes, aborting"),
+        [
+            validator.body("profile_description").isAscii().optional({ nullable: true, checkFalsy: true }).withMessage("only numbers, letters and special characters are allowed"),
+            validator.body("alias").isAscii().optional({ nullable: true, checkFalsy: true }).withMessage("only numbers, letters and special characters are allowed"),
+            validator.body("profile_visibility").isInt({ min: 0, max: 3 }).optional({ nullable: true, checkFalsy: true }).withMessage("unknown visibility level"),
+            validator.body("profile_picture").isInt().optional({ nullable: true, checkFalsy: true }).withMessage("profile picture must be a numeric ID")
+        ]
     ]
 };
 
@@ -66,7 +69,7 @@ exports.changePasswordRules = () => {
         validator.body('password').notEmpty().withMessage("password cannot be empty"),
         validator.body('password').isLength({ min: password_min, max: password_max }).withMessage(`password must be within ${password_min} and ${password_max} characters long`),
         validator.body('password').isStrongPassword().withMessage("too weak password, try a different one"),
-        validator.body('re_password').custom((value, { req, loc, path }) => { if (value !== req.body.password) { throw new Error("password fields must match") } else { return value; } }),
+        validator.body('re_password').custom((value, { req, loc, path }) => { if (value !== req.body.password) { throw new Error("password and re_password fields must match") } else { return value; } }),
     ]
 };
 
@@ -74,7 +77,7 @@ exports.checkIfNameConflicts = async (req, res, next) => {
     const UserName = req.body.name;
 
     try {
-        const User = await user.findOne({ where: { name: UserName }, paranoid: false});
+        const User = await user.findOne({ where: { name: UserName }, paranoid: false });
         if (User) {
             return res.status(400)
                 .json({ "error": `username ${UserName} already exists` });
@@ -108,7 +111,7 @@ exports.checkIfNameExsist = async (req, res, next) => {
     const Name = req.params.name;
 
     try {
-        const User = await user.findOne({ where: { name: Name }});
+        const User = await user.findOne({ where: { name: Name } });
         if (!User) {
             return res.status(404)
                 .json({ "error": `username ${Name} does not exist` });
