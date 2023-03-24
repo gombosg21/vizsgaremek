@@ -1,6 +1,7 @@
 const fake = require('@faker-js/faker');
 const user = require('../models').user;
 const media = require('../models').media;
+const carousel = require('../models').carousel;
 const randomDate = require('../helpers/seeding/date').getRandomDate;
 
 'use strict';
@@ -10,33 +11,32 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     const Threads = [];
 
-    const userIDsraw = await user.findAll({ attributes: ['ID'] });
+    const userIDsraw = await user.findAll({ attributes: ['ID', 'alias', 'register_date'] });
     const userIDs = [];
-    userIDsraw.forEach(user => {
-      userIDs.push(user.ID)
+    userIDsraw.forEach(User => {
+      userIDs.push(User.ID);
     });
 
     const mediaIDsraw = await media.findAll({ attributes: ['ID'] });
-    const mediaIDs = [];
-    mediaIDsraw.forEach(media => {
-      mediaIDs.push(media.ID)
-    });
     const mediaThreadCounts = [];
-
-    mediaIDs.forEach(mediaID => {
+    mediaIDsraw.forEach(Media => {
       var threadCount = Math.floor(Math.random() * 10);
-      mediaThreadCounts.push({ [mediaID]: threadCount });
+      mediaThreadCounts.push({ thread: { target_ID: Media.ID, count: threadCount } });
+    });
+
+    const carouselsRaw = await carousel.findAll({ attributes: ['ID'] });
+    const carouselThreadCounts = [];
+    carouselsRaw.forEach(Carousel => {
+      var threadCount = Math.floor(Math.random() * 10);
+      carouselThreadCounts.push({ thread: { target_ID: Carousel.ID, count: threadCount } });
     });
 
     for (let i = 0; i < mediaThreadCounts.length; i++) {
-
-      const keys = Object.keys(mediaThreadCounts[i]);
-      const mediaID = Number(keys[0]);
-      const threadCount = mediaThreadCounts[i][mediaID];
+      const mediaID = mediaThreadCounts[i].thread.target_ID;
+      const threadCount = mediaThreadCounts[i].thread.count;
 
       if (threadCount > 0) {
-        var a = 0;
-        while (a < threadCount) {
+        for (let i = 0; i < threadCount; i++) {
           var createdDate = randomDate("1999-01-01", "2020-12-31");
           var uploaderID = userIDs[Math.floor(Math.random() * userIDs.length)];
           var newThread = {
@@ -46,15 +46,44 @@ module.exports = {
             created: createdDate,
             last_activity: createdDate,
           };
-          a++;
           Threads.push(newThread);
         };
       };
     };
+
+    for (let i = 0; i < carouselThreadCounts.length; i++) {
+      const carouselID = carouselThreadCounts[i].thread.target_ID;
+      const threadCount = carouselThreadCounts[i].thread.count;
+      var createdDate = randomDate("1999-01-01", "2020-12-31");
+      var uploaderID = userIDs[Math.floor(Math.random() * userIDs.length)];
+
+      if (threadCount > 0) {
+        for (let i = 0; i < threadCount; i++) {
+          var newThread = {
+            carousel_ID: carouselID,
+            user_ID: uploaderID,
+            name: fake.faker.lorem.sentence(),
+            created: createdDate,
+            last_activity: createdDate,
+          };
+          Threads.push(newThread);
+        };
+      };
+    };
+
+    for (let i = 0; i < userIDsraw.length; i++) {
+      var uploaderID = userIDsraw[i].ID;
+      var newThread = {
+        profile_ID: uploaderID,
+        user_ID: uploaderID,
+        name: userIDsraw[i].alias + "'s profile thread",
+        created: userIDsraw[i].register_date,
+        last_activity: userIDsraw[i].register_date,
+      };
+      Threads.push(newThread);
+    };
     await queryInterface.bulkInsert('threads', Threads);
   },
-
-
 
   async down(queryInterface, Sequelize) {
     await queryInterface.bulkDelete('threads');
