@@ -74,7 +74,7 @@ exports.checkIfNameConflicts = async (req, res, next) => {
     const UserName = req.body.name;
 
     try {
-        const User = await user.findOne({ where: { name: UserName } })
+        const User = await user.findOne({ where: { name: UserName }, paranoid: false});
         if (User) {
             return res.status(400)
                 .json({ "error": `username ${UserName} already exists` });
