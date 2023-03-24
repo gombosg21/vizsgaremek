@@ -2,16 +2,22 @@ const validator = require('express-validator');
 const media = require('../../models').media;
 const tag = require('../../models').tag;
 const filetype = require('magic-bytes.js');
+const arrayValidation = require('../../helpers/validation/array');
 
 exports.uploadRules = () => {
     return [
-        validator.body('placeholder').notEmpty().withMessage("placeholder text cannot be empty")
+        validator.body('placeholder_text').notEmpty().withMessage("placeholder_text cannot be empty"),
+        validator.body('placeholder_text').isAlphanumeric().withMessage("placeholder_text must be a string of letters and numbers only"),
+        validator.body('tag_id_array').notEmpty().withMessage("media must have tags"),
+        validator.body("tag_id_array").optional({ nullable: true, checkFalsy: true }).custom((vaule) => { return arrayValidation.isArray(vaule,"tag_id_array must be an array"); }),
+        validator.body("tag_id_array").optional({ nullable: true, checkFalsy: true }).custom((vaule) => { return arrayValidation.nonEmptyArray(vaule, "tag_id_array cannot be any empty array"); }),
+        validator.body("tag_id_array").optional({ nullable: true, checkFalsy: true }).custom((vaule) => { return arrayValidation.itemIDOnylArray(vaule, "tag_id_array can only contain poistive non zero whole numbers"); }),
     ]
 };
 
 exports.editRules = () => {
     return [
-        validator.body('placeholder').notEmpty().withMessage("placeholder text cannot be empty")
+        validator.body('placeholder_text').notEmpty().withMessage("placeholder_text cannot be empty")
     ]
 };
 
@@ -22,11 +28,27 @@ exports.searchByTagRules = () => {
     ]
 };
 
+exports.editTagRules = () => {
+    return [
+        validator.oneOf([
+            validator.body("tag_id_list_remove").exists(),
+            validator.body("tag_id_list_add").exists()
+        ], "no changes made aborting"), [
+            validator.body("tag_id_list_remove").optional({ nullable: true, checkFalsy: true }).custom((vaule) => { return arrayValidation.isArray(vaule,"tag_id_list_remove must be an array"); }),
+            validator.body("tag_id_list_remove").optional({ nullable: true, checkFalsy: true }).custom((vaule) => { return arrayValidation.nonEmptyArray(vaule, "tag_id_list_remove cannot be any empty array"); }),
+            validator.body("tag_id_list_remove").optional({ nullable: true, checkFalsy: true }).custom((vaule) => { return arrayValidation.itemIDOnylArray(vaule, "tag_id_list_remove can only contain poistive non zero whole numbers"); }),
+            validator.body("tag_id_list_add").optional({ nullable: true, checkFalsy: true }).custom((vaule) => { return arrayValidation.isArray(vaule,"tag_id_list_add must be an array"); }),
+            validator.body("tag_id_list_add").optional({ nullable: true, checkFalsy: true }).custom((vaule) => { return arrayValidation.nonEmptyArray(vaule, "tag_id_list_add cannot be any empty array"); }),
+            validator.body("tag_id_list_add").optional({ nullable: true, checkFalsy: true }).custom((vaule) => { return arrayValidation.itemIDOnylArray(vaule, "tag_id_list_add can only contain poistive non zero whole numbers"); }),
+        ]
+    ]
+};
+
 exports.checkIfMediaIDExsist = async (req, res, next) => {
     const ID = req.params.mediaID;
 
     try {
-        const Media = await media.FindByPk(ID);
+        const Media = await media.findByPk(ID);
         if (!Media) {
             return res.status(404)
                 .json({ "error": `media with id:${ID} does not exsist` });
@@ -61,40 +83,6 @@ exports.validateUploadFile = (req, res, next) => {
     };
 };
 
-exports.validateBodyTags = async (req, res, next) => {
-    const tagNames = req.body.tags;
+exports.vaildateTagIDs = () => {
 
-    const tagIDs = [];
-    const validTagNames = [];
-
-    try {
-        if (tagNames[0] == undefined || null) {
-            return res.status(400)
-                .json({ "error": "tag list cannot be empty" });
-        };
-        const badTag = false;
-        const badTagList = [];
-        for (var tagName of tagNames) {
-            var singleTag = await tag.findOne({ where: { name: tagName } });
-            if (singleTag == null || undefined) {
-                badTag = true;
-                badTagList.push(tag.name);
-            } else {
-                tagIDs.push(singleTag.ID);
-                validTagNames.push(singleTag.name);
-            };
-        };
-
-        if (badTag) {
-            return res.status(400)
-                .json({ "error": `invalid tags: ${badTagList} in list of tags` });
-        } else {
-            req.body.tagIDs = tagIDs;
-            req.body.tagNames = validTagNames;
-            return next();
-        };
-    } catch (error) {
-        console.error(error);
-        return res.status(500);
-    };
 };
