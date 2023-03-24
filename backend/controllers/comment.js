@@ -6,7 +6,7 @@ exports.getComment = async (req, res, next) => {
     const commentID = req.params.commentID;
 
     try {
-        const Comment = await comment.findByPk(commentID, { attributes: ['ID', 'content'], include: [{ model: user, attributes: ['ID', 'name'] }, { model: thread, attributes: ['ID', 'name'] }] });
+        const Comment = await comment.findByPk(commentID, { attributes: ['ID', 'content'], include: [{ model: user, attributes: ['ID', 'alias'] }, { model: thread, attributes: ['ID', 'name'] }] });
 
         return res.status(200)
             .json(Comment);
