@@ -1,5 +1,8 @@
 const user = require("../models").user;
 const media = require("../models").media;
+const thread = require("../models").thread;
+const comment = require("../models").comment;
+const reaction = require("../models").reaction;
 const { Op } = require("sequelize");
 const Visibility = require('../helpers/authorization/visibility').determineVisibility;
 
@@ -12,14 +15,18 @@ exports.getProfile = async (req, res, next) => {
     };
 
     try {
-        const User = await user.findByPk(ID, { attributes: ['ID', 'alias', 'register_date', 'gender', 'birth_date', 'profile_description', 'profile_pic', 'type'], include: [{ model: media }] });
+        const User = await user.findByPk(ID, { attributes: ['profile_visibility', 'ID', 'alias', 'register_date', 'gender', 'birth_date', 'profile_description', 'profile_pic', 'type'] });
+        const profileThread = await thread.findOne({ where: { profile_ID: ID }, include: [{ model: comment }] });
 
-        // const profilePicId = User.profile_pic;
+        const profilePicId = User.profile_pic;
 
-        // let ProfilePic;
-        // if (profilePicId != null) {
-        //     ProfilePic = await media.findOne({ where: { ID: profilePicId }, attributes: ['file_data'] });
-        // };
+        let ProfilePic = null;
+        if (profilePicId != null) {
+            ProfilePic = await media.findOne({ where: { ID: profilePicId }, attributes: ['file_data'] });
+        };
+
+        User.dataValues.profile_pic = ProfilePic;
+        User.dataValues.profile_thread = profileThread;
 
         // const UserProfile = {
         //     ID: user.ID,
@@ -34,7 +41,7 @@ exports.getProfile = async (req, res, next) => {
 
         const visibility = User.profile_visibility;
 
-        const results = await Visibility(userID, User.ID, visibility, User);
+        const results = await Visibility(userID, User.ID, visibility, User.dataValues);
 
         return res.status(results.status).json(results.data);
     }
@@ -63,7 +70,9 @@ exports.editProfile = async (req, res, next) => {
             alias: userAlias ?? User.alias
         });
 
-        await User.save();
+        if (userAlias) {
+            await thread.update({ name: User.alias + "'s profile thread" }, { where: { profile_ID: User.ID } });
+        };
 
         return res.status(200).json({ ID: User.ID });
     }
@@ -130,7 +139,7 @@ exports.resetPassword = async (req, res, next) => {
 
     try {
         const User = await user.findOne({ where: { Name: Name } });
-        return res.status(200).json({message : "reset email sent."});
+        return res.status(200).json({ message: "reset email sent." });
         // email.sendResetEmail(User.ID);
     } catch (error) {
         console.error(error);
@@ -161,6 +170,12 @@ exports.createUser = async (req, res, next) => {
             gender: UserGender
         });
 
+        await thread.create({
+            user_ID: User.ID,
+            profile_ID: User.ID,
+            name: User.alias + "'s profile thread"
+        });
+
         // email.sendVerfyEmail(User.Email);
         req.logIn(User, async (error) => {
             if (error) {
@@ -182,12 +197,12 @@ exports.deleteUser = async (req, res, next) => {
 
     try {
         const User = await user.findByPk(ID);
-        
+
         req.logout(User, async (error) => {
             if (error) {
                 console.error(error);
                 return res.status(500);
-            } else { 
+            } else {
                 await User.destroy();
                 return res.json({ ID: User.ID });
             };
