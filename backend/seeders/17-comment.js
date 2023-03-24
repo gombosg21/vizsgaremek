@@ -40,8 +40,8 @@ module.exports = {
       var threadDate = threadDateAssocArray.threadID;
       const commentCount = threadCommentCounts[i][threadID];
 
-      var a = 0;
-      while (a < commentCount) {
+
+      for (let i = 0; i < commentCount; i++) {
         var commentCreateDate = randomDate("1999-01-01", "2020-12-31");
         var commentEditDateRaw = randomDate("1999-01-01", "2020-12-31");
         var commentEditDate = commentEditDateRaw > commentCreateDate ? commentEditDateRaw : commentCreateDate;
@@ -56,7 +56,6 @@ module.exports = {
           created: commentCreateDate,
           last_edit: commentEditDate,
         };
-        a++;
         comments.push(newComment);
       };
       await thread.update({ last_activity: threadDate }, { where: { ID: threadID } })
