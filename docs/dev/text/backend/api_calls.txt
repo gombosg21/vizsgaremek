@@ -153,3 +153,11 @@ Visszaad egy képtörténetet ID alapján.
 
 GET /api/v/0.1/story/user/{ID}/all
 Visszaadja az összes képtörténetet egy adott ID-jű usertől.
+
+POST /api/v/0.1/story
+Belépés után elérhető...
+Létrehoz egy új képtörténetet.
+JSON-ban kéri az alábbiakat : {name, visibility, description ,medias:[{ID}, {item_number}, {item_description}]}
+AZ ID és item_number  0-nál nagyobb egész szám kell hogy legyen.
+A visibility 0 és 3 között lehet.
+Többi mező szöveges.
