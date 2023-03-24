@@ -1,4 +1,5 @@
 const carousel = require('../models').carousel;
+const carousel_medialist = require('../models').carousel_medialist;
 const user = require('../models').user;
 const tag = require('../models').tag;
 const media = require('../models').media;
@@ -9,18 +10,28 @@ exports.createStory = async (req, res, next) => {
     const name = req.body.name;
     const visibility = req.body.visibility;
     const description = req.body.description;
-    const mediaIDs = req.body.IDs;
+    const medias = req.body.medias;
 
     try {
-        const newStory = await carousel.build({
+        const newStory = await carousel.create({
             user_ID: userID,
             name: name,
             visibility: visibility,
             description: description
         });
-        await newStory.setMedias(mediaIDs);
 
-        await newStory.save();
+        const carousel_medias = [];
+
+        medias.forEach(media => {
+            carousel_medias.push({
+                media_ID : media.ID,
+                carousel_ID: newStory.ID,
+                item_number : media.item_number,
+                item_description: media.description
+            });
+        });
+
+       await carousel_medialist.bulkCreate(carousel_medias);
 
         return res.status(200).json({ ID: newStory.ID });
 
@@ -151,11 +162,16 @@ exports.getAllStoryFromUser = async (req, res, next) => {
 
 exports.editStory = async (req, res, next) => {
     const ID = req.params.storyID;
+    const name = req.body.name;
+    const visibility = req.body.visibility;
+    const description = req.body.description;
     try {
         const Story = await carousel.findByPk(ID);
 
         await Story.update({
-
+            name: name,
+            visibility: visibility,
+            description: description
         });
 
         return res.status(200).json({ ID: Story.ID })
