@@ -10,39 +10,39 @@
 ### The Project  
 - [ ] Reverse image search *???*
 - [ ] *implement* OAuth v2
- - [ ] *implement* TLS
- - [ ] Use **JWT** *instead* of just cookies
- - [ ] use Bearer tokens
- - [ ] CSRF protection
+  - [ ] *implement* TLS
+  - [ ] Use **JWT** *instead* of just cookies
+  - [ ] use Bearer tokens
+  - [ ] CSRF protection
 - [ ] Media, Carousel return associated thread name, id, creator, activity, date
 - [ ] More API and UNIT test
- - [ ] Fully test array helper
- - [ ] Fully test image helper
+  - [ ] Fully test array helper
+  - [ ] Fully test image helper
 - [ ] Do MOCK tests
- - [ ] Mock routes
- - [ ] Mock email util 
+  - [ ] Mock routes
+  - [ ] Mock email util 
 - [ ] Review story visibilty rule, too restrictive
 - [ ] Make DB milestone 4: relations
- - [ ] Do milestone 4 code
-  - [ ] Write migrations
-  - [ ] Write seeding
-  - [ ] Write Routes
-  - [ ] Write route logic
-  - [ ] Write validation
- - [ ]Test milestone 4 code
+  - [ ] Do milestone 4 code
+     - [ ] Write migrations
+     - [ ] Write seeding
+     - [ ] Write Routes
+     - [ ] Write route logic
+     - [ ] Write validation
+  - [ ] Test milestone 4 code
 - [ ] Make DB milestone: 5 moderation
- - [ ] Do milestone 5 code
-  - [ ] Write migrations
-  - [ ] Write seeding
-  - [ ] Write Routes
-  - [ ] Write route logic
-  - [ ] Write validation
- - [ ] Test milestone 5 code
+  - [ ] Do milestone 5 code
+     - [ ] Write migrations
+     - [ ] Write seeding
+     - [ ] Write Routes
+     - [ ] Write route logic
+     - [ ] Write validation
+  - [ ] Test milestone 5 code
 - [ ] Save Postman tests
 - [ ] Utilize webp to convert images
 - [ ] Test email sending
 - [ ] More security
- - [ ] ***Input sanitization*** using express-validator
- - [ ] Param pollution protection
- - [ ] SQL injection protection
- - [ ] Prepare for a release???
+  - [ ] ***Input sanitization*** using express-validator
+  - [ ] Param pollution protection
+  - [ ] SQL injection protection
+  - [ ] Prepare for a release???
