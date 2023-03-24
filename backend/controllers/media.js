@@ -12,27 +12,30 @@ exports.getMediaByID = async (req, res, next) => {
     const mediaID = req.params.mediaID;
 
     try {
-        const Media = await media.findOne({ where: { ID: mediaID }, include: [{ model: user, attributes: ["name"] }, { model: tag, attributes: ["name"] }] });
+        const Media = await media.findOne({
+            where:
+            {
+                ID: mediaID,
+            },
+            attributes: ["ID", "file_data", "uploaded", "description", "placeholder_text", "visibility"],
+            include: [
+                {
+                    model: user,
+                    attributes: ["ID", "alias"]
+                },
+                {
+                    model: tag,
+                    attributes: ["ID", "name"]
+                }]
+        });
 
         var userID = -1;
         if (req.user) { userID = req.user.ID; };
 
-        const mediaTagList = [];
-        Media.tags.forEach(tag => { mediaTagList.push({ "name": tag.name }) });
-        const MediaData = {
-            ID: Media.ID,
-            uploader: Media.user.name,
-            file: Media.file_data,
-            uploaded: Media.uploaded,
-            description: Media.description,
-            placeholder_text: Media.placeholder_text,
-            tags: mediaTagList
-        };
-
         const itemVisibility = Media.visibility;
-        const mediaOwner = Media.user_ID;
+        const mediaOwner = Media.user.ID;
 
-        const results = await Visibility(userID, mediaOwner, itemVisibility, MediaData);
+        const results = await Visibility(userID, mediaOwner, itemVisibility, Media.dataValues);
 
         return res.status(results.status).json(results.data);
     }
@@ -46,40 +49,38 @@ exports.getAllMediaFromUser = async (req, res, next) => {
     const mediaOwner = Number(req.params.userID);
 
     try {
-        const MediaList = await media.findAll({ where: { user_ID: mediaOwner }, include: [{ model: user, attributes: ["name"] }, { model: tag, attributes: ["name"] }] });
-        if (MediaList == null) {
-            return res.status(200).json({ "msg": "user has no uploads" });
-        } else {
-            var userID = -1;
-            if (req.user) { userID = req.user.ID; };
+        const MediaList = await media.findAll({
+            where: {
+                user_ID: mediaOwner,
+            },
+            attributes: ["ID", "file_data", "uploaded", "description", "placeholder_text", "visibility"],
+            include: [
+                {
+                    model: user,
+                    attributes: ["ID", "alias"]
+                },
+                {
+                    model: tag,
+                    attributes: ["ID", "name"]
+                }]
+        });
 
-            const MediaDataList = [];
-            const visibilityFlagArray = [];
+        if (MediaList == null) { return res.status(200).json({ message: "user has no uploads" }); };
 
-            MediaList.forEach(Media => {
-                const mediaTagList = [];
-                Media.tags.forEach(tag => { mediaTagList.push({ "name": tag.name }) });
-                var MediaData = {
-                    ID: Media.ID,
-                    uploader: Media.user.name,
-                    file: Media.file_data,
-                    uploaded: Media.uploaded,
-                    description: Media.description,
-                    placeholder_text: Media.placeholder_text,
-                    tags: mediaTagList
-                };
-                MediaDataList.push(MediaData);
-                visibilityFlagArray.push(Media.visibility);
-            });
+        var userID = -1;
+        if (req.user) { userID = req.user.ID; };
 
-            const result = await VisibilityArray(userID, mediaOwner, visibilityFlagArray, MediaDataList);
+        const visibilityFlagArray = [];
 
-            if (result[0] != undefined) {
-                return res.status(200).json(result);
-            } else {
-                return res.status(403).json({ "error": "insufficient privilegdes" });
-            };
-        };
+        const evalList = [];
+        MediaList.forEach(Media => {
+            evalList.push(Media.dataValues);
+            visibilityFlagArray.push(Media.visibility);
+        });
+
+        const result = await VisibilityArray(userID, mediaOwner, visibilityFlagArray, evalList);
+        return res.status(200).json({ resulsts: result });
+
     }
     catch (error) {
         console.error(error);
@@ -113,36 +114,37 @@ exports.getAllMediaByTags = async (req, res, next) => {
             MediaIDList.push(media.media_ID);
         });
 
-        const MediaList = await media.findAll({ where: { ID: { [Op.in]: MediaIDList } }, include: [{ model: user, attributes: ["name", "ID"] }, { model: tag, attributes: ["name"] }] });
-
-        if (MediaList == null || undefined || MediaList.lenght == 0) {
-            return res.status(200).json({ "msg": "no matches found" });
-        } else {
-
-            const MediaDataList = [];
-            const visibilityFlagArray = [];
-            const dataOwnerIDArray = [];
-
-            MediaList.forEach(Media => {
-                const mediaTagList = [];
-                Media.tags.forEach(tag => { mediaTagList.push({ "name": tag.name }) });
-                var MediaData = {
-                    ID: Media.ID,
-                    uploader: Media.user.name,
-                    file: Media.file_data,
-                    uploaded: Media.uploaded,
-                    description: Media.description,
-                    placeholder_text: Media.placeholder_text,
-                    tags: mediaTagList
-                };
-                MediaDataList.push(MediaData);
-                visibilityFlagArray.push(Media.visibility);
-                dataOwnerIDArray.push(Media.user.ID);
+        const MediaList = await media.findAll(
+            {
+                where: {
+                    ID: { [Op.in]: MediaIDList },
+                },
+                attributes: ["ID", "file_data", "uploaded", "description", "placeholder_text", "visibility"],
+                include: [
+                    {
+                        model: user,
+                        attributes: ["alias", "ID"]
+                    },
+                    {
+                        model: tag,
+                        attributes: ["ID", "name"]
+                    }]
             });
 
-            const result = await determineMixedArrayVisibility(userID, dataOwnerIDArray, visibilityFlagArray, MediaDataList);
-            return res.status(200).json(result);
+        if (MediaList == null || undefined || MediaList.lenght == 0) {
+            return res.status(200).json({ message: "no matches found, try a different search" });
         };
+
+        const visibilityFlagArray = [];
+        const dataOwnerIDArray = [];
+
+        MediaList.forEach(Media => {
+            visibilityFlagArray.push(Media.visibility);
+            dataOwnerIDArray.push(Media.user.ID);
+        });
+
+        const result = await determineMixedArrayVisibility(userID, dataOwnerIDArray, visibilityFlagArray, MediaList);
+        return res.status(200).json(result);
     }
     catch (error) {
         console.error(error);
@@ -158,27 +160,20 @@ exports.uploadMedia = async (req, res, next) => {
     const description = req.body.description;
     const visibility = req.body.visibility;
     const placeholder_text = req.body.placeholder_text;
-    const tags = req.body.tags;
+    const tagArray = req.body.tag_id_array;
 
     try {
-        const upload = await media.create(
-            {
-                user_ID: userID,
-                file_data: await toBase64(data),
-                description: description,
-                visibility: visibility,
-                placeholder_text: placeholder_text
-            });
+        const upload = await media.create({
+            user_ID: userID,
+            file_data: await toBase64(data),
+            description: description,
+            visibility: visibility,
+            placeholder_text: placeholder_text
+        });
 
-        if (tags) {
-            const tagArray = tags.split(",")
+        if (tagArray) { await upload.setTags(tagArray); };
 
-            await upload.setTags(tagArray);
-        };
-
-        return res.status(200)
-            .json(upload.ID);
-
+        return res.status(200).json({ ID: upload.ID });
     }
     catch (error) {
         console.error(error);
@@ -192,14 +187,9 @@ exports.deleteMedia = async (req, res, next) => {
     try {
         const Media = await media.findByPk(ID);
 
-        Media.update({
-            deleted: true
-        });
-        await Media.save();
         await Media.destroy();
 
-        return res.status(200)
-            .json(Media.ID);
+        return res.status(200).json(Media.ID);
     }
     catch (error) {
         console.error(error);
@@ -220,8 +210,7 @@ exports.editMedia = async (req, res, next) => {
         });
 
         await Media.save();
-        return res.status(200)
-            .json(Media);
+        return res.status(200).json(Media);
     }
     catch (error) {
         console.error(error);
@@ -231,20 +220,41 @@ exports.editMedia = async (req, res, next) => {
 
 exports.editMediaTags = async (req, res, next) => {
     const ID = req.params.mediaID;
-    const tagIDList = req.body.tagidlist;
+    const tagIDListAdd = req.body.tag_id_list_add;
+    const tagIDListRemove = req.body.tag_id_list_remove;
 
     try {
-        const Media = await media.findOne({ where: { id: ID }, include: [{ model: tag, attributes: ["ID"] }] });
-        await Media.setTags(tagIDList);
-        const updatedMedia = await media.findOne({ where: { id: ID }, include: [{ model: tag, attributes: ["ID"] }] });
+        const Media = await media.findOne({
+            where:
+                { ID: ID },
+            include: [{
+                model: tag,
+                attributes: ["ID", "name"]
+            }]
+        });
 
-        const tagList = updatedMedia.tags;
-        const returnList = [];
+        if (tagIDListAdd) {
+            await Media.addTags(tagIDListAdd);
+        };
+        if (tagIDListRemove) {
+            // instance.removeBars is a function according to docs, but not to ORM...
+            await Media.removeTag(tagIDListRemove);
+        };
+        await Media.save();
 
-        for (var Tag of tagList) { returnList.push(Tag.ID) };
 
-        return res.status(200)
-            .json(returnList);
+        const tagListRaw = await media.findOne({
+            where:
+                { ID: ID },
+            include: [{
+                model: tag,
+                attributes: ["ID", "name"]
+            }]
+        });
+
+        const tagList = tagListRaw.tags;
+
+        return res.status(200).json({ new_taglist: tagList });
     }
     catch (error) {
         console.error(error);
