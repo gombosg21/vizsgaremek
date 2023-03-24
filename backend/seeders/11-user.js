@@ -1,5 +1,5 @@
 'use strict';
-const user = require("../models").user;
+const randomDate = require("../helpers/seeding/date").getRandomDate;
 const fake = require("@faker-js/faker");
 const encryptPassword = require("../util/auth").generatePassword;
 const fs = require('fs');
@@ -27,6 +27,7 @@ module.exports = {
         password: await encryptPassword(password),
         email: fake.faker.internet.email(firstName, lastName),
         birth_date: fake.faker.date.birthdate(),
+        register_date : randomDate("2015-01-01","2022-12-31"),
         gender: gender + Math.round(Math.random()),
         profile_visibility: Math.floor(Math.random() * 3),
         profile_description: fake.faker.lorem.sentence()
