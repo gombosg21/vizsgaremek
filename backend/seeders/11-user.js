@@ -1,7 +1,7 @@
 'use strict';
 const user = require("../models").user;
 const fake = require("@faker-js/faker");
-const encryptPassword = require("../util/password").generatePassword;
+const encryptPassword = require("../util/auth").generatePassword;
 const fs = require('fs');
 
 /** @type {import('sequelize-cli').Migration} */
