@@ -1,14 +1,16 @@
 {} represent values
+munkamenet jelenleg sütis megoldású, jövőben lehet hogy JSWT token lesz.
 
 GET /api/v/0.1/user/{ID}
 ID alapján visszad egy nézetet a felhasználótól: {alias, register_date, gender,birth_date, profile_description, profile_pic, profile_visibility, type}
-ha profile_visibility nem publikus (3), akkor nem minden körülmény között érhető el.
-ha a felhasználó kiválasztott egy profilképet, a profile_pic egy base64 kódolású kép egyébként meg üres.
+Ha profile_visibility nem publikus (3), akkor nem minden körülmény között érhető el.
+Ha a felhasználó kiválasztott egy profilképet, a profile_pic egy base64 kódolású kép egyébként meg üres, egyébként mező értéke null.
+A felhasználó profilbeszédszállát és a hozzá tartozó kommenteket is visszaadja.
 Visszatérési értéke egy JSON állomány.
 
 PATCH /api/v/0.1/user/
 bejelentkezés után, ID alapján frissíti a profiladatokat : {profile_description, profile_picture, profile_visibility, alias}
-JSON állományt vár el, a fent írt mezőkkel, opcionálisan.
+JSON állományt vár el, a fent írt mezőkkel, opcionálisan, legalább egyet meg kell adni.
 
 DELETE /api/v/0.1/user/
 Eltöröli a felhasználót, bejelentkezés után.
@@ -20,7 +22,6 @@ Felhasználót keres, becenév ,szül.idő és nem alapján. Nem értéke 0,1 va
 Legalább egyik kulcs érték párt elvárja.
 Visszatérési értékként egy tömbös JSON-t küld a {ID, alias, gender, birth_date} mezőkkel, eredményenként.
 
-munkamenet jelenleg sütis megoldású, jövőben lehet hogy JSWT token lesz.
 
 POST /api/v/0.1/user/login
 Beléptet a rendszerbe.
@@ -37,20 +38,21 @@ Egyenlőre nem mükszik.
 
 POST /api/v/0.1/user/register
 Regisztrál egy felhasználót.
-A sikeres regisztrációhoz a {name,gender,birth_date,email,password,re_password} mezőket követeli.
-A gender mező értéke 0 , 1 és 2 lehet (férfi,nő,x)
+A sikeres regisztrációhoz a {name, gender, birth_date, email ,password, re_password} mezőket követeli.
+A gender mező értéke 0 , 1 és 2 lehet (férfi,nő,x).
 A birth_date mezőt yyyy-mm-dd formában vár, nem lehet jövőbeli dátum.
 A password ill re_password csak erős jelszó lehet, min 8 karakter, max 32, kis és nagybetű és ASCII speciális karakterek.
 Sikeres regisztráció esetén létrehoz egy új munkamenetet és visszaadja a User ID-jét jsonban.
+A regisztráció pillanatában nyit egy új beszédszállat a profilra.
 
 POST /api/v/0.1/user/change-password
 Belépés után elérhető.
 A {password, re_password} mezőket kéri.
-Siker esetén frissíti a jelszót a {password} értékére, visszaadja a User ID-jét ill az új jelszót.
+Siker esetén frissíti a jelszót a {password} értékére, visszaadja az {ID, password} mezőket.
 
 
 GET /api/v/0.1/tag/all
-Visszaadja az összes cédulát, értékek {ID,name}.
+Visszaadja az összes cédulát, értékek: {ID, name}, jsonban tömbösítve.
 
 GET /api/v/0.1/tag?name={name}
 Cédulát keres minimum részleges egybeeséssel, kulcs érték mező kötelező.
@@ -83,9 +85,10 @@ csak a file van base64-ben.
 POST /api/v/0.1/media
 Belépés után elérhető...
 Egy képet form/multipart-data-val feltölt.
-A következő mezőket kéri: {image, description, placeholder_text, visibility, tags}
+A következő mezőket kéri: {image, description, placeholder_text, visibility, tag_id_array}
 Az image egy BLOB típus (képfálj) kell hogy legyen.
-A tags vesszőkkel elválasztott számok kell hogy legyen, semmi más, még space sem.
+A tag_id_array egy tömb kell hogy legyen!!!
+A tag_id_array csak pozitív egész számokat tartalmazhat, 0 kivételével! 
 A visibility szám 0 és 3 között kell legyen, 0 privát, 1 csak barátok, 2 csak regisztráltak, 3 nyilvános láthatóságot jelenti.
 A többi mező szöveges.
 
@@ -93,14 +96,15 @@ GET /api/v/0.1/media/search/tags?tagids={ID}
 Képet keres cédula ID alapján, több id-t is elfogad
 az extra id-ket &tagids={ID}&tagids={ID}... formában kéri
 Siker esetén visszaad egy listát amibe az alábbi értékek vannak: {uploader, file, uploaded, description, placeholder_text, tags:[name]},
-csak a file van base64-ben.
+Csak a file van base64-ben.
 
 PATCH /api/v/0.1/media/{ID}/tags
 Belépés után elérhető..
-ID alapján felfrissíti a tag-ok listáját.
-Egy tagidlist tömböt kér, mely tartalma csakis szám lehet
-Pl: {"tagidlist":[1,2,3]}
-Siker esetén visszaadja az id-k tömbjét
+ID alapján szerkeszti egy kép cédulalistáját
+A {tag_id_list_remove:[]} és vagy {tag_id_list_add:[]} mezőket kéri.
+A tömbökben csak pozitív egész csámok lehetnek, 0 kivételével.
+A {tag_id_list_remove} eltávolít cédulákat a képről, a {tag_id_list_add} hozzáad.
+Siker esetén visszadja a kép frissített cédulalistáját {ID, name} tömbösített json-ban.
 
 POST /api/v/0.1/media/{ID}/thread
 Belépés után elérhető...
