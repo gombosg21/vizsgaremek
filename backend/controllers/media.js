@@ -71,15 +71,14 @@ exports.getAllMediaFromUser = async (req, res, next) => {
         if (req.user) { userID = req.user.ID; };
 
         const visibilityFlagArray = [];
-
         const evalList = [];
         MediaList.forEach(Media => {
             evalList.push(Media.dataValues);
             visibilityFlagArray.push(Media.visibility);
         });
 
-        const result = await VisibilityArray(userID, mediaOwner, visibilityFlagArray, evalList);
-        return res.status(200).json({ resulsts: result });
+        const results = await VisibilityArray(userID, mediaOwner, visibilityFlagArray, evalList);
+        return res.status(200).json({ results: results });
 
     }
     catch (error) {
@@ -128,23 +127,20 @@ exports.getAllMediaByTags = async (req, res, next) => {
                     {
                         model: tag,
                         attributes: ["ID", "name"]
-                    }]
+                    }],
             });
-
-        if (MediaList == null || undefined || MediaList.lenght == 0) {
-            return res.status(200).json({ message: "no matches found, try a different search" });
-        };
 
         const visibilityFlagArray = [];
         const dataOwnerIDArray = [];
-
+        const evalList = [];
         MediaList.forEach(Media => {
+            evalList.push(Media.dataValues);
             visibilityFlagArray.push(Media.visibility);
             dataOwnerIDArray.push(Media.user.ID);
         });
 
-        const result = await determineMixedArrayVisibility(userID, dataOwnerIDArray, visibilityFlagArray, MediaList);
-        return res.status(200).json(result);
+        const results = await determineMixedArrayVisibility(userID, dataOwnerIDArray, visibilityFlagArray, evalList);
+        return res.status(200).json({ results: results });
     }
     catch (error) {
         console.error(error);
