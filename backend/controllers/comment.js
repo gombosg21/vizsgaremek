@@ -22,12 +22,14 @@ exports.createComment = async (req, res, next) => {
     const commentData = req.body.content;
 
     try {
-        const Comment = await comment.build({
+        const Comment = await comment.create({
             user_ID: userID,
             thread_ID: threadID,
             content: commentData
         });
-        await Comment.save();
+
+        const Thread = await thread.findByPk(threadID);
+        await Thread.update({ last_activity: Comment.created });
         return res.status(200).json({ ID: Comment.ID });
     }
     catch (error) {
@@ -48,6 +50,8 @@ exports.editComment = async (req, res, next) => {
             last_edit: Date.now()
         });
         Comment.save();
+        const Thread = await thread.findByPk(Comment.thread_ID);
+        await Thread.update({ last_activity: Comment.last_edit });
         return res.status(200).
             json({
                 ID: Comment.ID,
@@ -66,9 +70,11 @@ exports.deleteComment = async (req, res, next) => {
 
     try {
         const Comment = await comment.findByPk(commentID);
+        const Thread = await thread.findByPk(Comment.thread_ID);
+        await Thread.update({ last_activity: Date.now() });
         await Comment.destroy();
-        return res.status(200)
-            .json({ ID: Comment.ID });
+        
+        return res.status(200).json({ ID: Comment.ID });
     }
     catch (error) {
         console.error(error);
