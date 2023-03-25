@@ -18,7 +18,7 @@ module.exports = {
     tagListRaw.forEach(Tag => {
       tagIDList.push(Tag.ID);
     });
-    const rawMediaFiles = await mediaData.getTemp(10);
+    const rawMediaFiles = await mediaData.getImgFolder(10, "./temp/media_data");
     const mediaFiles = []
 
     for (var Media of rawMediaFiles) {
