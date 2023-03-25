@@ -13,7 +13,7 @@ module.exports = {
 
         for (let i = 0; i < reactionsData.length; i++) {
             const newReaction = {
-                name: fake.faker.lorem.word(),
+                name: fake.faker.word.noun(),
                 data: await toBase64(Buffer.from(await reactionsData[i].arrayBuffer()))
             };
             reactionList.push(newReaction)
