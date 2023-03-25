@@ -12,10 +12,7 @@ module.exports = {
     const Threads = [];
 
     const userIDsraw = await user.findAll({ attributes: ['ID', 'alias', 'register_date'] });
-    const userIDs = [];
-    userIDsraw.forEach(User => {
-      userIDs.push(User.ID);
-    });
+    const userIDs = userIDsraw.map(User => User.ID);
 
     const mediaIDsraw = await media.findAll({ attributes: ['ID'] });
     const mediaThreadCounts = [];
