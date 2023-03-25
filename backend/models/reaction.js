@@ -15,7 +15,8 @@ module.exports = (sequelize, DataTypes) => {
   reaction.init({
     ID: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true, allowNull: false },
     name: { type: DataTypes.STRING, allowNull: false, unique: true },
-    data: { type: DataTypes.TEXT('long'), allowNull: false }
+    data: { type: DataTypes.TEXT('long'), allowNull: false },
+    deletedAt: { type: DataTypes.DATE, allowNull: true, defaultValue: null }
   }, {
     sequelize,
     modelName: 'reaction',

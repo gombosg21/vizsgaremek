@@ -10,13 +10,18 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       name: {
-        allowNull:false,
-        unique:true,
+        allowNull: false,
+        unique: true,
         type: Sequelize.STRING
       },
       data: {
-        allowNull:false,
+        allowNull: false,
         type: Sequelize.STRING
+      },
+      deletedAt: {
+        type: Sequelize.DATE,
+        allowNull: true,
+        defaultValue: null
       }
     });
   },
