@@ -14,10 +14,8 @@ module.exports = {
 
     const userIDs = await user.findAll({ attributes: ['ID'] });
     const tagListRaw = await tag.findAll({ attributes: ['ID'] });
-    const tagIDList = [];
-    tagListRaw.forEach(Tag => {
-      tagIDList.push(Tag.ID);
-    });
+    const tagIDList = tagListRaw.map(Tag => Tag.ID);
+
     const rawMediaFiles = await mediaData.getImgFolder(10, "./temp/media_data");
     const mediaFiles = []
 
@@ -27,24 +25,14 @@ module.exports = {
     };
 
     if (mediaFiles) {
-
       for (let i = 0; i < userIDs.length; i++) {
         var userUploadCount = Math.floor(Math.random() * 10);
-
         var userID = userIDs[i].ID;
 
         for (let i = 0; i < userUploadCount; i++) {
-          // var uploadTagCount = Math.floor(Math.random() * tag_list.length);
           var uploadTagIDList = mixedArraySilce(tagIDList);
-
-          // while (uploadTagIDList.length < uploadTagCount) {
-          //   var randomTagID = tag_list[Math.floor(Math.random() * tag_list.length)].ID;
-          //   if (!uploadTagIDList.includes(randomTagID)) {
-          //     uploadTagIDList.push(randomTagID);
-          //   };
-          // };
-
           var uploadDate = randomDate("1999-01-01", "2020-12-31");
+
           var upload = await media.create({
             user_ID: userID,
             file_data: mediaFiles[Math.floor(Math.random() * mediaFiles.length)],
@@ -54,19 +42,15 @@ module.exports = {
             placeholder_text: fake.faker.lorem.word(),
             uploaded: uploadDate
           });
-
           await upload.setTags(uploadTagIDList);
-
         };
       };
-
     } else {
       throw new Error("mediadata missing");
     };
   },
 
   async down(queryInterface, Sequelize) {
-
     await queryInterface.bulkDelete('media_taglists');
     await queryInterface.bulkDelete('media');
   }
