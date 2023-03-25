@@ -27,7 +27,7 @@ module.exports = {
         password: await encryptPassword(password),
         email: fake.faker.internet.email(firstName, lastName),
         birth_date: fake.faker.date.birthdate(),
-        register_date : randomDate("2015-01-01","2022-12-31"),
+        register_date: randomDate("2015-01-01", "2022-12-31"),
         gender: gender + Math.round(Math.random()),
         profile_visibility: Math.floor(Math.random() * 3),
         profile_description: fake.faker.lorem.sentence()
@@ -39,7 +39,7 @@ module.exports = {
       });
     };
 
-    fs.appendFile('test_accounts_credentials.json', JSON.stringify(testPasswords), async () => {
+    fs.appendFile('test_accounts_credentials.json', JSON.stringify(testPasswords, null, 2), async () => {
       console.log('test account credentials written.');
       await queryInterface.bulkInsert('users', users);
     });
