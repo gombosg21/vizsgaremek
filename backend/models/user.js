@@ -11,13 +11,18 @@ module.exports = (sequelize, DataTypes) => {
       this.hasMany(models.thread, { foreignKey: "user_ID" });
       this.hasMany(models.comment, { foreignKey: "user_ID" });
       this.hasMany(models.carousel, { foreignKey: "user_ID" });
-      this.belongsToMany(models.reaction, { through: models.user_reactionlist, foreignKey: "reaction_ID", sourceKey: "ID" });
+      this.belongsToMany(models.reaction, { through: models.user_reactionlist, foreignKey: "user_ID", sourceKey: "ID", as: "profile_reaction_owner" });
+      this.belongsToMany(models.reaction, { through: models.user_reactionlist, foreignKey: "profile_ID", sourceKey: "ID", as: "profile_reaction_subject"});
+      this.belongsToMany(models.reaction, { through: models.thread_reactionlist, foreignKey: "user_ID", sourceKey: "ID", as: "thread_reaction_owner" });
+      this.belongsToMany(models.reaction, { through: models.media_reactionlist, foreignKey: "user_ID", sourceKey: "ID", as: "media_reaction_owner" });
+      this.belongsToMany(models.reaction, { through: models.comment_reactionlist, foreignKey: "user_ID", sourceKey: "ID", as: "comment_reaction_owner" });
+      this.belongsToMany(models.reaction, { through: models.carousel_reactionlist, foreignKey: "user_ID", sourceKey: "ID", as: "carousel_reaction_owner" });
     };
 
     getView() {
       if (this.deletedAt == null) {
         return [
-          this.name,
+          this.alias,
           this.banned,
           this.type,
           this.register_date,
@@ -31,14 +36,6 @@ module.exports = (sequelize, DataTypes) => {
       } else {
         return [];
       };
-    };
-
-    getProfile() {
-      return [
-        this.profile_description,
-        this.profile_pic,
-        this.profile_visibility
-      ]
     };
 
     validatePassword(pwd) {
