@@ -7,8 +7,9 @@ db.destroyDB();
 db.disconnect();
 
 fs.unlink('test_accounts_credentials.json', (err) => {
-    if (err) { throw err }
-    console.log("test account credentials destoryed");
+    if (err) { console.log("test account credentials doesnt exsits, proceeding"); } else {
+        console.log("test account credentials destoryed");
+    };
 });
 
 process.on('exit', (code) => {
