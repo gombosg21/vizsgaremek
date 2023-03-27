@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       this.belongsTo(models.user, { foreignKey: "user_ID" });
+      this.belongsTo(models.profile, { foreignKey: "profile_ID" });
       this.belongsTo(models.media, { foreignKey: "media_ID" });
       this.belongsTo(models.carousel, { foreignKey: "carousel_ID" });
       this.hasMany(models.comment, { foreignKey: "thread_ID" });
