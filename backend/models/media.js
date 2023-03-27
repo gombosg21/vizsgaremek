@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       this.hasMany(models.thread, { foreignKey: "media_ID" });
       this.belongsToMany(models.tag, { through: models.media_taglist, foreignKey: "media_ID", sourceKey: "ID" });
       this.belongsToMany(models.carousel, { through: models.carousel_medialist, foreignKey: "media_ID", sourceKey: "ID" });
-      this.belongsToMany(models.reaction, { through: models.carousel_reactionlist, foreignKey: "reaction_ID", sourceKey: "ID" });
+      this.belongsToMany(models.reaction, { through: models.media_reactionlist, foreignKey: "media_ID", sourceKey: "ID" });
     }
 
     removeTags(tagIDArray) {
