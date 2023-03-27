@@ -10,7 +10,7 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     const Threads = [];
 
-    const userIDsraw = await user.findAll({ attributes: ['ID', 'alias', 'register_date'] });
+    const userIDsraw = await user.findAll({ attributes: ['ID'] });
     const userIDs = userIDsraw.map(User => User.ID);
 
     const mediaIDsraw = await media.findAll({ attributes: ['ID'] });

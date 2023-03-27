@@ -35,7 +35,6 @@ module.exports = {
         });
         await queryInterface.bulkInsert('thread_reactionlists',threadReactions);
 
-
     },
     async down(queryInterface, Sequelize) {
         await queryInterface.bulkDelete('thread_reactionlists');

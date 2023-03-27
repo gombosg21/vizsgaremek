@@ -24,12 +24,12 @@ module.exports = {
                         user_ID: userID,
                         profile_ID: targetID,
                         reaction_ID: reactionID,
-                        date: randomDate("2000-01-01","2022-12-31")
+                        date: randomDate("2000-01-01", "2022-12-31")
                     });
                 });
             });
         });
-        await queryInterface.bulkInsert('user_reactionlists',profileReactions);
+        await queryInterface.bulkInsert('user_reactionlists', profileReactions);
 
     },
     async down(queryInterface, Sequelize) {

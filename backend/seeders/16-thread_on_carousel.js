@@ -10,7 +10,7 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     const Threads = [];
 
-    const userIDsraw = await user.findAll({ attributes: ['ID', 'alias', 'register_date'] });
+    const userIDsraw = await user.findAll({ attributes: ['ID']});
     const userIDs = userIDsraw.map(User => User.ID);
 
     const carouselsRaw = await carousel.findAll({ attributes: ['ID'] });
@@ -32,7 +32,7 @@ module.exports = {
           var newThread = {
             carousel_ID: carouselID,
             user_ID: uploaderID,
-            name: fake.faker.lorem.sentence(),
+            name: fake.faker.lorem.word(),
             created: createdDate,
             last_activity: createdDate,
           };
