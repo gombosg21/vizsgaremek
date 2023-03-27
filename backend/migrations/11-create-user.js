@@ -14,10 +14,6 @@ module.exports = {
         unique: true,
         type: Sequelize.STRING
       },
-      alias: {
-        allowNull: true,
-        type: Sequelize.STRING
-      },
       deleted: {
         allowNull: false,
         defaultValue: false,
@@ -76,18 +72,6 @@ module.exports = {
       birth_date: {
         allowNull: false,
         type: Sequelize.DATEONLY
-      },
-      profile_description: {
-        type: Sequelize.TEXT
-      },
-      profile_visibility: {
-        allowNull: false,
-        defaultValue: 0,
-        type: Sequelize.INTEGER
-      },
-      profile_pic: {
-        allowNull: true,
-        type: Sequelize.INTEGER
       },
       gender: {
         allowNull: false,
