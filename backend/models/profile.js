@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
         static associate(models) {
             this.hasOne(models.user, { sourceKey: "user_ID", foreignKey: "ID" });
             this.hasOne(models.media, { sourceKey: "picture_ID", foreignKey: "ID" });
-            this.belongsToMany(models.reaction, { through: models.user_reactionlist, foreignKey: "profile_ID", sourceKey: "user_ID", as: "profile_reaction_subject"});
+            this.belongsToMany(models.reaction, { through: models.user_reactionlist, foreignKey: "profile_ID", sourceKey: "user_ID"});
         };
     };
     profile.init({

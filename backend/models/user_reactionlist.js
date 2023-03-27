@@ -5,9 +5,9 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class user_reactionlist extends Model {
     static associate(models) {
-      this.hasMany(models.user, { sourceKey: "user_ID", foreignKey: "ID", as: "profile_reaction_owner" });
-      this.hasMany(models.profile, { sourceKey: "profile_ID", foreignKey: "user_ID", as: "profile_reaction_subject" });
-      this.hasMany(models.reaction, { sourceKey: "reaction_ID", foreignKey: "ID", as: "profile_reaction" });
+      this.hasMany(models.user, { sourceKey: "user_ID", foreignKey: "ID"});
+      this.hasMany(models.profile, { sourceKey: "profile_ID", foreignKey: "user_ID"});
+      this.hasMany(models.reaction, { sourceKey: "reaction_ID", foreignKey: "ID"});
     }
   }
   user_reactionlist.init({
