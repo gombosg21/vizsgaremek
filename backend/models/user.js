@@ -1,4 +1,5 @@
 const encryptPassword = require('../util/auth').generatePassword;
+const matchPassword = require('../util/auth').validatePassword;
 
 'use strict';
 const {
@@ -11,42 +12,22 @@ module.exports = (sequelize, DataTypes) => {
       this.hasMany(models.thread, { foreignKey: "user_ID" });
       this.hasMany(models.comment, { foreignKey: "user_ID" });
       this.hasMany(models.carousel, { foreignKey: "user_ID" });
+      this.hasOne(models.profile, { foreignKey: "user_ID" });
       this.belongsToMany(models.reaction, { through: models.user_reactionlist, foreignKey: "user_ID", sourceKey: "ID", as: "profile_reaction_owner" });
-      this.belongsToMany(models.reaction, { through: models.user_reactionlist, foreignKey: "profile_ID", sourceKey: "ID", as: "profile_reaction_subject"});
       this.belongsToMany(models.reaction, { through: models.thread_reactionlist, foreignKey: "user_ID", sourceKey: "ID", as: "thread_reaction_owner" });
       this.belongsToMany(models.reaction, { through: models.media_reactionlist, foreignKey: "user_ID", sourceKey: "ID", as: "media_reaction_owner" });
       this.belongsToMany(models.reaction, { through: models.comment_reactionlist, foreignKey: "user_ID", sourceKey: "ID", as: "comment_reaction_owner" });
       this.belongsToMany(models.reaction, { through: models.carousel_reactionlist, foreignKey: "user_ID", sourceKey: "ID", as: "carousel_reaction_owner" });
     };
 
-    getView() {
-      if (this.deletedAt == null) {
-        return [
-          this.alias,
-          this.banned,
-          this.type,
-          this.register_date,
-          this.last_online,
-          this.birth_date,
-          this.profile_description,
-          this.profile_pic,
-          this.profile_visibility,
-          this.gender
-        ];
-      } else {
-        return [];
-      };
-    };
-
-    validatePassword(pwd) {
-      return password.validatePassword(pwd, this.password_hash, this.password_salt);
+    validatePassword(password) {
+      return matchPassword(password, this.password);
     };
 
   };
   user.init({
     ID: { type: DataTypes.INTEGER, allowNull: false, autoIncrement: true, primaryKey: true },
     name: { type: DataTypes.STRING, allowNull: false, unique: true },
-    alias: { type: DataTypes.STRING, allowNull: true },
     deleted: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
     banned: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
     type: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 0 },
@@ -59,9 +40,6 @@ module.exports = (sequelize, DataTypes) => {
     email: { type: DataTypes.STRING, allowNull: false },
     last_online: { type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW },
     birth_date: { type: DataTypes.DATEONLY, allowNull: false },
-    profile_description: { type: DataTypes.TEXT },
-    profile_visibility: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 0 },
-    profile_pic: { type: DataTypes.INTEGER, allowNull: true, references: { model: 'media', key: 'ID', }, onDelete: 'set null', onUpdate: 'cascade' },
     gender: { type: DataTypes.INTEGER, allowNull: false },
     deletedAt: { type: DataTypes.DATE, allowNull: true, defaultValue: null }
   }, {
@@ -69,34 +47,22 @@ module.exports = (sequelize, DataTypes) => {
       beforeCreate: [
         async (User) => {
           User.password = await encryptPassword(User.password);
-        },
-        (User) => {
-          if (User.alias == null) { User.alias = User.name }
-        },
+        }
       ],
       beforeBulkCreate: [
         async (User) => {
           User.password_hash = await encryptPassword(User.password);
-        },
-        (User) => {
-          if (User.alias == null) { User.alias = User.name }
-        },
+        }
       ],
       beforeUpdate: [
         async (User) => {
           User.password = await encryptPassword(User.password);
-        },
-        (User) => {
-          if (User.alias == null) { User.alias = User.name }
-        },
+        }
       ],
       beforeBulkUpdate: [
         async (User) => {
           User.password = await encryptPassword(User.password);
-        },
-        (User) => {
-          if (User.alias == null) { User.alias = User.name }
-        },
+        }
       ]
     },
     sequelize,
