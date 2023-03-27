@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.media, { foreignKey: "media_ID" });
       this.belongsTo(models.carousel, { foreignKey: "carousel_ID" });
       this.hasMany(models.comment, { foreignKey: "thread_ID" });
-      this.belongsToMany(models.reaction, { through: models.thread_reactionlist, foreignKey: "reaction_ID", sourceKey: "ID" });
+      this.belongsToMany(models.reaction, { through: models.thread_reactionlist, foreignKey: "thread_ID", sourceKey: "ID" });
     }
   };
   thread.init({
