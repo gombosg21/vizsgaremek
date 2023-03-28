@@ -1,9 +1,9 @@
 const user = require("../models").user;
 const media = require("../models").media;
 const thread = require("../models").thread;
-const comment = require("../models").comment;
-const reaction = require("../models").reaction;
-const { Op } = require("sequelize");
+const profile = require("../models").profile;
+const profile_reactionlist = require("../models").profile_reactionlist;
+const { Op, fn} = require("sequelize");
 const Visibility = require('../helpers/authorization/visibility').determineVisibility;
 
 exports.getProfile = async (req, res, next) => {
@@ -15,31 +15,28 @@ exports.getProfile = async (req, res, next) => {
     };
 
     try {
-        const User = await user.findByPk(ID, { attributes: ['profile_visibility', 'ID', 'alias', 'register_date', 'gender', 'birth_date', 'profile_description', 'profile_pic', 'type'] });
-        const profileThread = await thread.findOne({ where: { profile_ID: ID }, include: [{ model: comment }] });
+        const User = await user.findByPk(ID, {
+            attributes: ['ID', 'register_date', 'gender', 'birth_date', 'type'],
+            include: [{
+                model: profile,
+                attributes: ["alias", "description", "visibility", "picture_ID"],
+                include: [
+                    {
+                        model: media,
+                        attributes: ['file_data']
+                    }, {
+                        model: profile_reactionlist,
+                        attributes: [['reaction_ID', 'ID'], [fn('COUNT', 'profile_reactionlist.reaction_ID'), 'reaction_count']],
+                    }, {
+                        model: thread,
+                        attributes: ['ID']
+                    }
+                ]
+            }],
+            group: ['reaction_ID']
+        });
 
-        const profilePicId = User.profile_pic;
-
-        let ProfilePic = null;
-        if (profilePicId != null) {
-            ProfilePic = await media.findOne({ where: { ID: profilePicId }, attributes: ['file_data'] });
-        };
-
-        User.dataValues.profile_pic = ProfilePic;
-        User.dataValues.profile_thread = profileThread;
-
-        // const UserProfile = {
-        //     ID: user.ID,
-        //     alias: User.alias,
-        //     register_date: User.register_date,
-        //     gender: User.gender,
-        //     birth_date: User.birth_date,
-        //     profile_description: User.profile_description,
-        //     profile_pic: ProfilePic,
-        //     type: User.type
-        // };
-
-        const visibility = User.profile_visibility;
+        const visibility = User.profile.visibility;
 
         const results = await Visibility(userID, User.ID, visibility, User.dataValues);
 
@@ -61,20 +58,26 @@ exports.editProfile = async (req, res, next) => {
     const userAlias = req.body.alias;
 
     try {
-        const User = await user.findByPk(ID);
+        const UserProfile = await profile.findByPk(ID);
+        var CurrDate = Date.now()
+        var lastUpdate = Date(UserProfile.last_updated);
+        if ((lastUpdate + (60 * 5)) < CurrDate) {
+            await UserProfile.update({
+                profile_description: profileDescription ?? UserProfile.profile_picture,
+                profile_visibility: profileVisibility ?? UserProfile.profile_visibility,
+                profile_picture: profilePicture ?? UserProfile.profilePicture,
+                alias: userAlias ?? UserProfile.alias
+            });
 
-        await User.update({
-            profile_description: profileDescription ?? User.profile_picture,
-            profile_visibility: profileVisibility ?? User.profile_visibility,
-            profile_picture: profilePicture ?? User.profilePicture,
-            alias: userAlias ?? User.alias
-        });
+            if (userAlias) {
+                await thread.update({ name: UserProfile.alias + "'s profile thread" }, { where: { profile_ID: UserProfile.ID } });
+            };
 
-        if (userAlias) {
-            await thread.update({ name: User.alias + "'s profile thread" }, { where: { profile_ID: User.ID } });
+            return res.status(200).json({ ID: UserProfile.ID });
+        } else {
+            return res.status(400).json({ error: "cannot update, last update was less than 5 minutes ago" });
         };
 
-        return res.status(200).json({ ID: User.ID });
     }
     catch (error) {
         console.error(error);
@@ -235,7 +238,22 @@ exports.findUser = async (req, res, next) => {
     var Gender = [req.query.gender][0] == undefined ? [0, 1, 2] : [req.query.gender];
 
     try {
-        const UserList = await user.findAll({ where: { alias: { [Op.substring]: Alias }, birth_date: { [Op.gt]: SDate, [Op.lt]: EDate }, gender: { [Op.in]: Gender } }, attributes: ['ID', 'alias', 'gender', 'birth_date'] });
+        const UserList = await user.findAll(
+            {
+                where: {
+                    birth_date: { [Op.gt]: SDate, [Op.lt]: EDate },
+                    gender: { [Op.in]: Gender }
+                },
+                attributes: ['ID', 'gender', 'birth_date'],
+                include: [
+                    {
+                        model: profile,
+                        attributes: ['alias'],
+                        where: {
+                            alias: { [Op.substring]: Alias }
+                        }
+                    }]
+            });
 
         return res.status(200).json({ results: UserList });
     }
