@@ -7,15 +7,19 @@ module.exports = {
     async up(queryInterface, Sequelize) {
         const userProfiles = [];
 
-        const userIDsRaw = await user.findAll({ attributes: ['ID'] });
+        const userIDsRaw = await user.findAll();
+
         const userIDs = userIDsRaw.map(User => User.ID);
 
         for (var ID of userIDs) {
+            var alias = fake.faker.lorem.word();
+            var description = fake.faker.lorem.sentences();
+            var visibility = Math.floor(Math.random() * 3);
             const newProfile = {
                 user_ID: ID,
-                alias: fake.faker.word.noun(),
-                description: fake.faker.lorem.sentences(),
-                visibility: Math.floor(Math.random() * 3)
+                alias: alias,
+                description: description,
+                visibility: visibility
             };
             userProfiles.push(newProfile);
         };

@@ -8,14 +8,13 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     const Threads = [];
 
-    const userIDsraw = await user.findAll({ attributes: ['ID', 'register_date'] , include:[{model:profile, attributes:['alias']}]});
+    const userIDsraw = await user.findAll({ attributes: ['ID', 'register_date'], include: [{ model: profile, attributes: ['alias'] }] });
 
     for (let i = 0; i < userIDsraw.length; i++) {
-      var uploaderID = userIDsraw[i].ID;
       var newThread = {
-        profile_ID: uploaderID,
-        user_ID: uploaderID,
-        name: userIDsraw[i].profile.alias + "'s profile thread",
+        profile_ID:  userIDsraw[i].ID,
+        user_ID:  userIDsraw[i].ID,
+        name: userIDsraw[i].profile.dataValues.alias + "s profile thread",
         created: userIDsraw[i].register_date,
         last_activity: userIDsraw[i].register_date,
       };
