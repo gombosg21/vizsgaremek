@@ -19,6 +19,7 @@ const indexRouter = require('./routes/index');
 const threadRouter = require('./routes/thread');
 const commentRouter = require('./routes/comment');
 const storyRouter = require('./routes/story');
+const reactionRouter = require('./routes/reaction');
 
 const app = express();
 
