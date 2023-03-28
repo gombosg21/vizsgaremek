@@ -2,16 +2,29 @@ const validator = require('express-validator');
 const media = require('../../models').media;
 const tag = require('../../models').tag;
 const filetype = require('magic-bytes.js');
-const arrayValidation = require('../../helpers/validation/array');
+
+//middleware CANNOT be asnyc :(
 
 exports.uploadRules = () => {
+    //const tagIDs = (await tag.findAll({ attributes: ['ID'] })).map(tag => tag.ID);
     return [
+        validator.body('visibility').optional({ nullable: true, checkFalsy: true }).isNumeric().withMessage('visibility must be a number'),
+        validator.body('visibility').optional({ nullable: true, checkFalsy: true }).custom((value) => { if (value % 1 != 0) { throw new Error("visibility must be a whole number") } else { return value } }),
+        validator.body('visibility').optional({ nullable: true, checkFalsy: true }).custom((value) => { if (value < 0 || value > 3) { throw new Error("visibility must be in range of 0-3") } else { return value } }),
         validator.body('placeholder_text').notEmpty().withMessage("placeholder_text cannot be empty"),
         validator.body('placeholder_text').isAlphanumeric().withMessage("placeholder_text must be a string of letters and numbers only"),
         validator.body('tag_id_array').notEmpty().withMessage("media must have tags"),
-        validator.body("tag_id_array").optional({ nullable: true, checkFalsy: true }).custom((vaule) => { return arrayValidation.isArray(vaule,"tag_id_array must be an array"); }),
-        validator.body("tag_id_array").optional({ nullable: true, checkFalsy: true }).custom((vaule) => { return arrayValidation.nonEmptyArray(vaule, "tag_id_array cannot be any empty array"); }),
-        validator.body("tag_id_array").optional({ nullable: true, checkFalsy: true }).custom((vaule) => { return arrayValidation.itemIDOnylArray(vaule, "tag_id_array can only contain poistive non zero whole numbers"); }),
+        validator.body("tag_id_array").isArray().withMessage("media tags must be supplied as an array"),
+        validator.body("tag_id_array").isArray({ min: 1 }).withMessage("media tags array cannot be an empty array"),
+        validator.body("tag_id_array.*").isNumeric().withMessage("media tag id must be a number"),
+        validator.body("tag_id_array.*").custom((vaule) => { if (vaule % 1 != 0 || vaule < 1) { throw new Error("media tag id must be a whole positive non zero number") } else { return vaule } }),
+        // validator.body("tag_id_array.*").custom((vaule) => {
+        //     if (!(tagIDs.contains(vaule))) {
+        //         throw new Error(`tag ID: ${vaule} does not exsits`);
+        //     } else {
+        //         return vaule;
+        //     };
+        //})
     ]
 };
 
@@ -21,25 +34,36 @@ exports.editRules = () => {
     ]
 };
 
-exports.searchByTagRules = () => {
-    return [
-        validator.query().notEmpty().withMessage("cannot process empty query"),
-        validator.query().isAscii().withMessage("only text and simple characters are allowed in search query")
-    ]
-};
+
+// query can be an array or a string... cuz why not.
+// exports.searchByTagRules = () => {
+//     return [
+//         validator.query('tagids').notEmpty().withMessage("cannot process empty query"),
+//     ]
+// };
 
 exports.editTagRules = () => {
+    // const tagIDs = (await tag.findAll({ attributes: ['ID'] })).map(tag => tag.ID);
     return [
         validator.oneOf([
             validator.body("tag_id_list_remove").exists(),
             validator.body("tag_id_list_add").exists()
         ], "no changes made aborting"), [
-            validator.body("tag_id_list_remove").optional({ nullable: true, checkFalsy: true }).custom((vaule) => { return arrayValidation.isArray(vaule,"tag_id_list_remove must be an array"); }),
-            validator.body("tag_id_list_remove").optional({ nullable: true, checkFalsy: true }).custom((vaule) => { return arrayValidation.nonEmptyArray(vaule, "tag_id_list_remove cannot be any empty array"); }),
-            validator.body("tag_id_list_remove").optional({ nullable: true, checkFalsy: true }).custom((vaule) => { return arrayValidation.itemIDOnylArray(vaule, "tag_id_list_remove can only contain poistive non zero whole numbers"); }),
-            validator.body("tag_id_list_add").optional({ nullable: true, checkFalsy: true }).custom((vaule) => { return arrayValidation.isArray(vaule,"tag_id_list_add must be an array"); }),
-            validator.body("tag_id_list_add").optional({ nullable: true, checkFalsy: true }).custom((vaule) => { return arrayValidation.nonEmptyArray(vaule, "tag_id_list_add cannot be any empty array"); }),
-            validator.body("tag_id_list_add").optional({ nullable: true, checkFalsy: true }).custom((vaule) => { return arrayValidation.itemIDOnylArray(vaule, "tag_id_list_add can only contain poistive non zero whole numbers"); }),
+            validator.body("tag_id_list_remove").optional({ nullable: true, checkFalsy: true }).isArray().withMessage("tag_id_list_remove must be an array"),
+            validator.body("tag_id_list_remove").optional({ nullable: true, checkFalsy: true }).isArray({ min: 1 }).withMessage("tag_id_list_remove cannot be any empty array"),
+            validator.body("tag_id_list_remove.*").optional({ nullable: true, checkFalsy: true }).isNumeric().withMessage("tag_id_list_remove can only contain numbers"),
+            validator.body("tag_id_list_remove.*").optional({ nullable: true, checkFalsy: true }).custom((value) => { if (value < 1 || value % 1 != 0) { throw new Error("tag_id__list_remove can only contain non-zero positive whole numbers") } else { return value } }),
+            validator.body("tag_id_list_add").optional({ nullable: true, checkFalsy: true }).isArray().withMessage("tag_id_list_add must be an array"),
+            validator.body("tag_id_list_add").optional({ nullable: true, checkFalsy: true }).isArray({ min: 1 }).withMessage("tag_id_list_add cannot be any empty array"),
+            validator.body("tag_id_list_add.*").optional({ nullable: true, checkFalsy: true }).isNumeric().withMessage("tag_id_list_add can only contain numbers"),
+            validator.body("tag_id_list_add.*").optional({ nullable: true, checkFalsy: true }).custom((vaule) => { if (vaule % 1 != 0 || vaule < 1) { throw new Error("tag_id_list_add can only contain non-zero positive whole numbers") } else { return vaule } }),
+            //validator.body("tag_id_list_add.*").optional({ nullable: true, checkFalsy: true }).custom((vaule) => {
+            //     if (!(tagIDs.contains(vaule))) {
+            //         throw new Error(`tag ID: ${vaule} does not exsits`);
+            //     } else {
+            //         return vaule;
+            //     };
+            // }),
         ]
     ]
 };
