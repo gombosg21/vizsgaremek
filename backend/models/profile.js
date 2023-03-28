@@ -15,10 +15,15 @@ module.exports = (sequelize, DataTypes) => {
         user_ID: { type: DataTypes.INTEGER, allowNull: false, primaryKey: true, unique: true, references: { model: 'user', key: 'ID' } },
         description: { type: DataTypes.TEXT, allowNull: true },
         visibility: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 0 },
-        picture_ID: { type: DataTypes.INTEGER, allowNull: true, references: { model: 'media', key: 'ID' } }
+        picture_ID: { type: DataTypes.INTEGER, allowNull: true, references: { model: 'media', key: 'ID' } },
+        last_updated: { type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW },
+        deletedAt: { type: DataTypes.DATE, allowNull: true, defaultValue: null }
     }, {
         sequelize,
-        timestamps: false,
+        timestamps: true,
+        updatedAt: 'last_updated',
+        createdAt:false,
+        paranoid: true,
         modelName: 'profile',
     });
     return profile;
