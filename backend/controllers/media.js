@@ -189,6 +189,23 @@ exports.uploadMedia = async (req, res, next) => {
             tagArray = [tagArray];
         };
 
+        const tagIDs = (await tag.findAll({ attributes: ['ID'] })).map(Tag => Tag.ID);
+
+
+        const badIDArray = [];
+        const filteredIDArray = [];
+        tagArray.forEach(ID => {
+            if (tagIDs.includes(ID)) {
+                filteredIDArray.push(ID);
+            } else {
+                badIDArray.push(ID);
+            };
+        });
+
+        if (filteredIDArray.length == 0) {
+            return res.status(400).json({ error: "no valid tags given, aborting" })
+        };
+
         const upload = await media.create({
             user_ID: userID,
             file_data: await toBase64(data),
@@ -197,9 +214,16 @@ exports.uploadMedia = async (req, res, next) => {
             placeholder_text: placeholder_text
         });
 
-        if (tagArray) { await upload.setTags(tagArray); };
+        await upload.setTags(filteredIDArray);
 
-        return res.status(200).json({ ID: upload.ID });
+        const result = {
+            ID: upload.ID
+        };
+        if (badIDArray.length != 0) {
+            result.rejected_ids = badIDArray;
+        };
+
+        return res.status(200).json(result);
     }
     catch (error) {
         console.error(error);
@@ -259,15 +283,52 @@ exports.editMediaTags = async (req, res, next) => {
             }]
         });
 
+
+        const mediaTagIDs = Media.tags.map(Tag => Tag.ID);
+        const tagIDs = (await tag.findAll({ attributes: ['ID'] })).map(Tag => Tag.ID);
+
+        const filteredAddList = [];
+        const badAddIDList = [];
         if (tagIDListAdd) {
-            await Media.addTags(tagIDListAdd);
+            tagIDListAdd.forEach(ID => {
+                if (tagIDs.includes(ID)) {
+                    filteredAddList.push(ID);
+                } else {
+                    badAddIDList.push(ID);
+                };
+            });
         };
+
+        if (filteredAddList.length != 0) {
+            await Media.addTags(filteredAddList);
+        };
+
+        const badRemoveIDList = [];
+        const filteredRemoveList = [];
         if (tagIDListRemove) {
+            tagIDListRemove.forEach(ID => {
+                if (mediaTagIDs.includes(ID)) {
+                    filteredRemoveList.push(ID);
+                } else {
+                    badRemoveIDList.push(ID);
+                };
+            });
+        };
+
+        if (filteredRemoveList.length != 0) {
             // instance.removeBars is a function according to docs, but not to ORM...
             await Media.removeTag(tagIDListRemove);
         };
-        await Media.save();
 
+        if (filteredAddList.length == 0 && filteredRemoveList.length == 0) {
+            return res.status(400).json({
+                error: "only bad tag ids where given",
+                bad_remove_ids: badRemoveIDList,
+                bad_add_ids: badAddIDList
+            })
+        };
+
+        await Media.save();
 
         const tagListRaw = await media.findOne({
             where:
@@ -279,8 +340,17 @@ exports.editMediaTags = async (req, res, next) => {
         });
 
         const tagList = tagListRaw.tags;
+        const result = {
+            new_taglist: tagList
+        };
+        if (badAddIDList.length != 0) {
+            result.bad_add_ids = badAddIDList;
+        };
+        if (badRemoveIDList.length != 0) {
+            result.bad_remove_ids = badRemoveIDList;
+        };
 
-        return res.status(200).json({ new_taglist: tagList });
+        return res.status(200).json(result);
     }
     catch (error) {
         console.error(error);
