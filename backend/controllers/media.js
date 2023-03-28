@@ -12,6 +12,8 @@ const toBase64 = require("../util/serialize-file").getBase64;
 exports.getMediaByID = async (req, res, next) => {
     const mediaID = req.params.mediaID;
 
+    //TODO remove media_taglists from results
+
     try {
         const Media = await media.findOne({
             where:
@@ -22,7 +24,11 @@ exports.getMediaByID = async (req, res, next) => {
             include: [
                 {
                     model: user,
-                    attributes: ["ID", "alias"]
+                    attributes: ["ID"], include: [
+                        {
+                            model: profile,
+                            attributes: ["alias"]
+                        }]
                 },
                 {
                     model: tag,
@@ -49,6 +55,8 @@ exports.getMediaByID = async (req, res, next) => {
 exports.getAllMediaFromUser = async (req, res, next) => {
     const mediaOwner = Number(req.params.userID);
 
+    //TODO remove media_taglists from results
+
     try {
         const MediaList = await media.findAll({
             where: {
@@ -58,7 +66,12 @@ exports.getAllMediaFromUser = async (req, res, next) => {
             include: [
                 {
                     model: user,
-                    attributes: ["ID", "alias"]
+                    attributes: ["ID"],
+                    include: [
+                        {
+                            model: profile,
+                            attributes: ["alias"]
+                        }]
                 },
                 {
                     model: tag,
@@ -92,11 +105,13 @@ exports.getAllMediaFromUser = async (req, res, next) => {
 exports.getAllMediaByTags = async (req, res, next) => {
     var tagIDs = req.query.tagids;
 
-    if(!(tagIDs instanceof Array)) {
-        tagIDs = [tagIDs];
-    }
+    //TODO remove media_taglists from results
 
     try {
+        if (!(tagIDs instanceof Array)) {
+            tagIDs = [tagIDs];
+        }
+
         var userID = -1;
         if (req.user) { userID = req.user.ID; };
 
@@ -166,9 +181,14 @@ exports.uploadMedia = async (req, res, next) => {
     const description = req.body.description;
     const visibility = req.body.visibility;
     const placeholder_text = req.body.placeholder_text;
-    const tagArray = req.body.tag_id_array;
+    var tagArray = req.body.tag_id_array;
 
     try {
+
+        if (!(tagArray instanceof Array)) {
+            tagArray = [tagArray];
+        };
+
         const upload = await media.create({
             user_ID: userID,
             file_data: await toBase64(data),
@@ -207,7 +227,7 @@ exports.editMedia = async (req, res, next) => {
     const ID = req.params.mediaID;
 
     try {
-        const Media = await media.findByPk(ID);
+        const Media = await media.findByPk(ID, { attributes: { exclude: ['deletedAt'] } });
 
         Media.update({
             description: req.body.description ?? Media.description,
