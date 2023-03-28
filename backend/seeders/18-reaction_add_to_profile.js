@@ -29,10 +29,10 @@ module.exports = {
                 });
             });
         });
-        await queryInterface.bulkInsert('user_reactionlists', profileReactions);
+        await queryInterface.bulkInsert('profile_reactionlists', profileReactions);
 
     },
     async down(queryInterface, Sequelize) {
-        await queryInterface.bulkDelete('user_reactionlists');
+        await queryInterface.bulkDelete('profile_reactionlists');
     }
 };
