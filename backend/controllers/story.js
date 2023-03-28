@@ -5,7 +5,6 @@ const tag = require('../models').tag;
 const media = require('../models').media;
 const profile = require('../models').profile;
 const visibility = require('../helpers/authorization/visibility');
-const profile = require('../models').profile;
 
 exports.createStory = async (req, res, next) => {
     const userID = req.user.ID;
