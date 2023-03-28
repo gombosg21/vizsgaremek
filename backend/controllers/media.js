@@ -79,7 +79,7 @@ exports.getAllMediaFromUser = async (req, res, next) => {
                 }]
         });
 
-        if (MediaList == null) { return res.status(200).json({ message: "user has no uploads" }); };
+        if (MediaList.length == 0) { return res.status(200).json({ message: "user has no uploads" }); };
 
         var userID = -1;
         if (req.user) { userID = req.user.ID; };
