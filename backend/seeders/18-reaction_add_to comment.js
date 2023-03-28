@@ -22,18 +22,22 @@ module.exports = {
 
         commentIDs.forEach(commentID => {
             userIDs.forEach(userID => {
-                var reactions = getRandomSubArray(reactionIDs);
-                reactions.forEach(reactionID => {
-                    commentReactions.push({
-                        user_ID: userID,
-                        comment_ID: commentID,
-                        reaction_ID: reactionID,
-                        date: randomDate("2000-01-01","2022-12-31")
+                var makesReactions = Math.random() >= 0.95 ? true : false;
+                
+                if (makesReactions) {
+                    var reactions = getRandomSubArray(reactionIDs);
+                    reactions.forEach(reactionID => {
+                        commentReactions.push({
+                            user_ID: userID,
+                            comment_ID: commentID,
+                            reaction_ID: reactionID,
+                            date: randomDate("2000-01-01", "2022-12-31")
+                        });
                     });
-                });
+                };
             });
         });
-        await queryInterface.bulkInsert('comment_reactionlists',commentReactions);
+        await queryInterface.bulkInsert('comment_reactionlists', commentReactions);
 
 
     },
