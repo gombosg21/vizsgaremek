@@ -66,7 +66,8 @@ exports.editProfile = async (req, res, next) => {
                 profile_description: profileDescription ?? UserProfile.profile_picture,
                 profile_visibility: profileVisibility ?? UserProfile.profile_visibility,
                 profile_picture: profilePicture ?? UserProfile.profilePicture,
-                alias: userAlias ?? UserProfile.alias
+                alias: userAlias ?? UserProfile.alias,
+                last_updated: Date.now()
             });
 
             if (userAlias) {
@@ -142,6 +143,7 @@ exports.resetPassword = async (req, res, next) => {
 
     try {
         const User = await user.findOne({ where: { Name: Name } });
+
         return res.status(200).json({ message: "reset email sent." });
         // email.sendResetEmail(User.ID);
     } catch (error) {
@@ -173,10 +175,16 @@ exports.createUser = async (req, res, next) => {
             gender: UserGender
         });
 
+        await profile.create({
+            user_ID: User.ID,
+            alias: User.name,
+            last_updated: Date.now()
+        })
+
         await thread.create({
             user_ID: User.ID,
             profile_ID: User.ID,
-            name: User.alias + "'s profile thread"
+            name: User.name + "'s profile thread"
         });
 
         // email.sendVerfyEmail(User.Email);
