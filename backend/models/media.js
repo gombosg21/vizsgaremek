@@ -10,8 +10,11 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.user, { foreignKey: "user_ID" });
       this.hasMany(models.thread, { foreignKey: "media_ID" });
       this.belongsToMany(models.tag, { through: models.media_taglist, foreignKey: "media_ID", sourceKey: "ID" });
+      this.hasMany(models.media_taglist, { foreignKey: "media_ID", sourceKey: "ID" });
       this.belongsToMany(models.carousel, { through: models.carousel_medialist, foreignKey: "media_ID", sourceKey: "ID" });
+      this.hasMany(models.carousel_medialist, { foreignKey: "media_ID", sourceKey: "ID" });
       this.belongsToMany(models.reaction, { through: models.media_reactionlist, foreignKey: "media_ID", sourceKey: "ID" });
+      this.hasMany(models.media_reactionlist, { foreignKey: "media_ID", sourceKey: "ID" });
     }
 
     removeTags(tagIDArray) {

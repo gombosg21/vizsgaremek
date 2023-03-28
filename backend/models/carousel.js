@@ -7,8 +7,10 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       this.belongsTo(models.user, { foreignKey: 'user_ID' });
       this.belongsToMany(models.media, { through: models.carousel_medialist, foreignKey: "carousel_ID", sourceKey: "ID" });
-      this.belongsToMany(models.reaction, { through: models.media_reactionlist, foreignKey: "carousel_ID", sourceKey: "ID" })
-      this.hasMany(models.thread, { foreignKey: "carousel_ID" })
+      this.hasMany(models.carousel_medialist, { foreignKey: 'carousel_ID', sourceKey: 'ID' });
+      this.hasMany(models.carousel_reactionlist, { foreignKey: 'carousel_ID', sourceKey: 'ID' });
+      this.belongsToMany(models.reaction, { through: models.media_reactionlist, foreignKey: "carousel_ID", sourceKey: "ID" });
+      this.hasMany(models.thread, { foreignKey: "carousel_ID" });
     }
   }
   carousel.init({

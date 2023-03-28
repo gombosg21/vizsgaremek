@@ -8,7 +8,8 @@ module.exports = (sequelize, DataTypes) => {
             this.hasOne(models.user, { sourceKey: "user_ID", foreignKey: "ID" });
             this.hasOne(models.media, { sourceKey: "picture_ID", foreignKey: "ID" });
             this.hasOne(models.thread, { sourceKey: "user_ID", foreignKey: "profile_ID" });
-            this.belongsToMany(models.reaction, { through: models.user_reactionlist, foreignKey: "profile_ID", sourceKey: "user_ID" });
+            this.belongsToMany(models.reaction, { through: models.profile_reactionlist, foreignKey: "profile_ID", sourceKey: "user_ID" });
+            this.hasMany(models.profile_reactionlist, { foreignKey: "profile_ID", sourceKey: "user_ID" })
         };
     };
     profile.init({
@@ -22,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
         sequelize,
         timestamps: true,
         updatedAt: 'last_updated',
-        createdAt:false,
+        createdAt: false,
         paranoid: true,
         modelName: 'profile',
     });

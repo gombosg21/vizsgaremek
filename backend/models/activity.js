@@ -6,8 +6,8 @@ module.exports = (sequelize, DataTypes) => {
     class activity extends Model {
         static associate(models) {
             this.hasOne(models.user, { foreignKey: "ID", sourceKey: "user_ID" });
-            this.hasMany(models.user, { foreignKey: "ID", sourceKey: "followed_ID" });
-            this.hasMany(models.user, { foreignKey: "ID", sourceKey: "friend_ID" });
+            this.hasMany(models.followed, { foreignKey: "followed_ID", sourceKey: "followed_ID" });
+            this.hasMany(models.friends, { foreignKey: "friend_ID", sourceKey: "friend_ID" });
         };
     };
     activity.init({

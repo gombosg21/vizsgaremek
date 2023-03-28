@@ -6,6 +6,7 @@ module.exports = (sequelize, DataTypes) => {
   class tag extends Model {
     static associate(models) {
       this.belongsToMany(models.media, { through: models.media_taglist, foreignKey: "tag_ID", sourceKey: "ID" });
+      this.hasMany(models.media_taglist, { foreignKey: "tag_ID", sourceKey: "ID" });
     }
 
     rename(newName) {

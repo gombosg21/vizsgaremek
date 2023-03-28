@@ -13,11 +13,18 @@ module.exports = (sequelize, DataTypes) => {
       this.hasMany(models.comment, { foreignKey: "user_ID" });
       this.hasMany(models.carousel, { foreignKey: "user_ID" });
       this.hasOne(models.profile, { foreignKey: "user_ID" });
-      this.belongsToMany(models.reaction, { through: models.user_reactionlist, foreignKey: "user_ID", sourceKey: "ID", as: "profile_reaction_owner" });
+      this.belongsToMany(models.reaction, { through: models.profile_reactionlist, foreignKey: "user_ID", sourceKey: "ID", as: "profile_reaction_owner" });
+      this.hasMany(models.profile_reactionlist, { foreignKey: "user_ID", sourceKey: "ID" });
       this.belongsToMany(models.reaction, { through: models.thread_reactionlist, foreignKey: "user_ID", sourceKey: "ID", as: "thread_reaction_owner" });
+      this.hasMany(models.thread_reactionlist, { foreignKey: "user_ID", sourceKey: "ID" });
       this.belongsToMany(models.reaction, { through: models.media_reactionlist, foreignKey: "user_ID", sourceKey: "ID", as: "media_reaction_owner" });
+      this.hasMany(models.media_reactionlist, { foreignKey: "user_ID", sourceKey: "ID" });
       this.belongsToMany(models.reaction, { through: models.comment_reactionlist, foreignKey: "user_ID", sourceKey: "ID", as: "comment_reaction_owner" });
+      this.hasMany(models.comment_reactionlist, { foreignKey: "user_ID", sourceKey: "ID" });
       this.belongsToMany(models.reaction, { through: models.carousel_reactionlist, foreignKey: "user_ID", sourceKey: "ID", as: "carousel_reaction_owner" });
+      this.hasMany(models.carousel_reactionlist, { foreignKey: "user_ID", sourceKey: "ID" });
+      this.hasOne(models.friends, { sourceKey: "ID", foreignKey: "user_ID", as: "friendship_starter" });
+      this.hasMany(models.friends, { sourceKey: "ID", foreignKey: "friend_ID", as: "friendship_subject" })
     };
 
     validatePassword(password) {

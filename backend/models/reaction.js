@@ -6,11 +6,16 @@ module.exports = (sequelize, DataTypes) => {
   class reaction extends Model {
     static associate(models) {
       this.belongsToMany(models.media, { through: models.media_reactionlist, foreignKey: 'reaction_ID', sourceKey: 'ID' });
+      this.hasMany(models.media_reactionlist, { foreignKey: "reaction_ID", sourceKey: "ID" });
       this.belongsToMany(models.carousel, { through: models.carousel_reactionlist, foreignKey: 'reaction_ID', sourceKey: 'ID' });
-      this.belongsToMany(models.user, { through: models.user_reactionlist, foreignKey: 'reaction_ID', sourceKey: 'ID'});
-      this.belongsToMany(models.profile, { through: models.user_reactionlist, foreignKey: 'reaction_ID', sourceKey: 'ID'});
+      this.hasMany(models.carousel_reactionlist, { foreignKey: "reaction_ID", sourceKey: "ID" });
+      this.belongsToMany(models.user, { through: models.profile_reactionlist, foreignKey: 'reaction_ID', sourceKey: 'ID' });
+      this.hasMany(models.profile_reactionlist, { foreignKey: "reaction_ID", sourceKey: "ID" });
+      this.belongsToMany(models.profile, { through: models.profile_reactionlist, foreignKey: 'reaction_ID', sourceKey: 'ID' });
       this.belongsToMany(models.thread, { through: models.thread_reactionlist, foreignKey: 'reaction_ID', sourceKey: 'ID' });
+      this.hasMany(models.thread_reactionlist, { foreignKey: "reaction_ID", sourceKey: "ID" });
       this.belongsToMany(models.comment, { through: models.comment_reactionlist, foreignKey: 'reaction_ID', sourceKey: 'ID' });
+      this.hasMany(models.comment_reactionlist, { foreignKey: "reaction_ID", sourceKey: "ID" });
     }
   }
   reaction.init({
