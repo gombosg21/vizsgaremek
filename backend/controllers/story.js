@@ -3,7 +3,9 @@ const carousel_medialist = require('../models').carousel_medialist;
 const user = require('../models').user;
 const tag = require('../models').tag;
 const media = require('../models').media;
+const profile = require('../models').profile;
 const visibility = require('../helpers/authorization/visibility');
+const profile = require('../models').profile;
 
 exports.createStory = async (req, res, next) => {
     const userID = req.user.ID;
@@ -24,14 +26,14 @@ exports.createStory = async (req, res, next) => {
 
         medias.forEach(media => {
             carousel_medias.push({
-                media_ID : media.ID,
+                media_ID: media.ID,
                 carousel_ID: newStory.ID,
-                item_number : media.item_number,
+                item_number: media.item_number,
                 item_description: media.description
             });
         });
 
-       await carousel_medialist.bulkCreate(carousel_medias);
+        await carousel_medialist.bulkCreate(carousel_medias);
 
         return res.status(200).json({ ID: newStory.ID });
 
@@ -47,11 +49,22 @@ exports.getStory = async (req, res, next) => {
         const Story = await carousel.findByPk(ID,
             {
                 include: [
-                    { model: user, attributes: ['ID', 'name'] },
                     {
-                        model: media, include: [
-                            { model: user, attributes: ['name', 'ID'] },
-                            { model: tag, attributes: ["name", "ID"] }]
+                        model: user,
+                        attributes: ['ID'],
+                        include: [{
+                            model: profile,
+                            attributes: ['alias']
+                        }]
+                    },
+                    {
+                        model: media,
+                        attributes: { exclude: ["deletedAt"] },
+                        include: [
+                            {
+                                model: user, attributes: ["ID"], include: [{ model: profile, attributes: ['alias'] },
+                                { model: tag, attributes: ["name", "ID"] }]
+                            }]
                     }]
             });
 
@@ -107,7 +120,7 @@ exports.getAllStoryFromUser = async (req, res, next) => {
                 { model: user, attributes: ['ID', 'name'] },
                 {
                     model: media, include: [
-                        { model: user, attributes: ['ID', 'name'] },
+                        { model: user, attributes: ['ID'], include: [{ model: profile, attributes: ['alias'] }] },
                         { model: tag, attributes: ['ID', 'name'] }]
                 }]
         });
