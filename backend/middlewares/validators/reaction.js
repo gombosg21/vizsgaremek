@@ -1,4 +1,4 @@
-const reaction = require('../models').reaction;
+const reaction = require('../../models').reaction;
 const validator = require('express-validator');
 
 exports.createRules = () => {
