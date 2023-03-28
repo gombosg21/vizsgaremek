@@ -34,13 +34,13 @@ exports.registerRules = () => {
 
 exports.searchRules = () => {
     return [validator.oneOf([
-        validator.query('name').exists(),
+        validator.query('alias').exists(),
         validator.query('date_start').exists(),
         validator.query('date_end').exists(),
         validator.query('gender').exists()
     ], "empty query, aborting"),
     [
-        validator.query('name').isAlphanumeric().optional({ nullable: true, checkFalsy: true }).withMessage('name cannot contain special characters'),
+        validator.query('alias').isAlphanumeric().optional({ nullable: true, checkFalsy: true }).withMessage('name cannot contain special characters'),
         validator.query('date_start').isDate().optional({ nullable: true, checkFalsy: true }).withMessage("invalid date format"),
         validator.query('date_end').isDate().optional({ nullable: true, checkFalsy: true }).withMessage("invalid date format"),
         validator.query('gender').isInt({ min: gender_start, max: gender_end }).optional({ nullable: true, checkFalsy: true }).withMessage("unknown gender type")
