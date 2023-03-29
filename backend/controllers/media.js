@@ -116,6 +116,12 @@ exports.getAllMediaByTags = async (req, res, next) => {
             tagIDs = tagIDs.map(ID => Number(ID));
         };
 
+        tagIDs.forEach(ID => {
+            if (ID == NaN) {
+                return res.status(400).json({ error: "invalid tag ID" });
+            };
+        });
+
         const validIDs = (await tag.findAll({ attributes: ['ID'] })).map(Tag => Tag.ID);
         const filteredIDList = [];
         const badIDList = [];
@@ -143,11 +149,7 @@ exports.getAllMediaByTags = async (req, res, next) => {
             having: { tag_ID_list: { [Op.gte]: filteredIDList.length } }
         });
 
-
         const MediaIDList = MediaAssocList.map(Media => Media.media_ID);
-        // MediaAssocList.forEach(media => {
-        //     MediaIDList.push(media.media_ID);
-        // });
 
         const MediaList = await media.findAll(
             {
