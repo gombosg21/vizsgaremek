@@ -9,13 +9,11 @@ const thread_reactions = require("../models").thread_reactionlist;
 const comment_reactions = require("../models").comment_reactionlist;
 const profile_reactions = require("../models").user_reactionlist;
 const story_reactions = require("../models").carousel_reactionlist;
-
-
 const toBase64 = require("../util/serialize-file").getBase64;
 
 exports.getAllReactions = async (req, res, next) => {
     try {
-        const reactionList = await reaction.findAll();
+        const reactionList = await reaction.findAll({ attributes: { exclude: ["deletedAt"] } });
 
         return res.status(200).json(reactionList);
     } catch (error) {
