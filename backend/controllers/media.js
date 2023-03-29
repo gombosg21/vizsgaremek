@@ -109,8 +109,27 @@ exports.getAllMediaByTags = async (req, res, next) => {
 
     try {
         if (!(tagIDs instanceof Array)) {
-            tagIDs = [tagIDs];
-        }
+            tagIDs = [Number(tagIDs)];
+        };
+
+        if (tagIDs instanceof Array) {
+            tagIDs = tagIDs.map(ID => Number(ID));
+        };
+
+        const validIDs = (await tag.findAll({ attributes: ['ID'] })).map(Tag => Tag.ID);
+        const filteredIDList = [];
+        const badIDList = [];
+        tagIDs.forEach(ID => {
+            if (validIDs.includes(ID)) {
+                filteredIDList.push(ID);
+            } else {
+                badIDList.push(ID);
+            };
+        });
+
+        if (filteredIDList.length == 0) {
+            return res.status(400).json({ error: "no valid tag IDs given" })
+        };
 
         var userID = -1;
         if (req.user) { userID = req.user.ID; };
@@ -118,17 +137,17 @@ exports.getAllMediaByTags = async (req, res, next) => {
         var MediaAssocList = [];
 
         MediaAssocList = await media_taglist.findAll({
-            where: { tag_ID: { [Op.in]: tagIDs } },
-            attributes: { include: [[fn('COUNT', 'tag_ID'), 'tagIDs']] },
+            where: { tag_ID: { [Op.in]: filteredIDList } },
+            attributes: { include: [[fn('COUNT', 'tag_ID'), 'tag_ID_list']] },
             group: ['media_ID'],
-            having: { tagIDs: { [Op.gte]: tagIDs.length } }
+            having: { tag_ID_list: { [Op.gte]: filteredIDList.length } }
         });
 
 
-        const MediaIDList = [];
-        MediaAssocList.forEach(media => {
-            MediaIDList.push(media.media_ID);
-        });
+        const MediaIDList = MediaAssocList.map(Media => Media.media_ID);
+        // MediaAssocList.forEach(media => {
+        //     MediaIDList.push(media.media_ID);
+        // });
 
         const MediaList = await media.findAll(
             {
@@ -165,6 +184,11 @@ exports.getAllMediaByTags = async (req, res, next) => {
         });
 
         const results = await determineMixedArrayVisibility(userID, dataOwnerIDArray, visibilityFlagArray, evalList);
+
+        if (badIDList.length != 0) {
+            results.bad_tag_ids = badIDList;
+        };
+
         return res.status(200).json({ results: results });
     }
     catch (error) {
@@ -313,6 +337,10 @@ exports.editMediaTags = async (req, res, next) => {
                     badRemoveIDList.push(ID);
                 };
             });
+        };
+
+        if (filteredRemoveList.length == mediaTagIDs.length) {
+            return res.status(400).json({ error: "cannot remove ALL tags from media file, aborting" });
         };
 
         if (filteredRemoveList.length != 0) {
