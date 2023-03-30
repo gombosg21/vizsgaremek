@@ -155,15 +155,14 @@ exports.searchThreads = async (req, res, next) => {
         const query = {
             where:
             {
-                created: { [Op.between]: [createdStart, createdEnd] },
-                last_activity: { [Op.between]: [lastActivityStart, lastActivityEnd] }
+                [Op.and]: [{ created: { [Op.between]: [createdStart, createdEnd] } }, { last_activity: { [Op.between]: [lastActivityStart, lastActivityEnd] } }]
             },
             attributes: ['ID', 'name', 'status', 'created', 'last_activity'],
             include: []
         };
 
         if (threadName) {
-            query.where.name = { [Op.substring]: threadName }
+            query.where[Op.and].push({ [Op.substring]: threadName })
         };
 
         if (createrID) {
@@ -171,7 +170,7 @@ exports.searchThreads = async (req, res, next) => {
                 model: user,
                 attributes: ['ID', 'alias']
             });
-            query.where.user_ID = createrID;
+            query.where[Op.and].push({ user_ID: createrID });
         };
         if (threadContent) {
             query.include.push({ model: comment, where: { content: { [Op.substring]: threadContent } }, attributes: ['ID', 'content'] });
@@ -179,17 +178,17 @@ exports.searchThreads = async (req, res, next) => {
 
         switch (parentType) {
             case ("profile"): {
-                query.where.profile_ID = { [Op.not]: null };
+                query.where[Op.and].push({ profile_ID: { [Op.not]: null } });
                 query.include.push({ model: user, attributes: ['ID', 'alias'] });
                 break;
             }
             case ("media"): {
-                query.where.media_ID = { [Op.not]: null };
+                query.where[Op.and].push({ media_ID: { [Op.not]: null } });
                 query.include.push({ model: media, attributes: ['ID', 'user_ID'] });
                 break;
             }
             case ("story"): {
-                query.where.carousel_ID = { [Op.not]: null };
+                query.where[Op.and].push({ carousel_ID: { [Op.not]: null } });
                 query.include.push({ model: carousel, attributes: ['ID', 'user_ID'] });
                 break;
             }

@@ -27,7 +27,6 @@ router.get('/media/all/:userID', userValidator.checkIfUserIDExsits, mediaControl
 router.get('/media/search/tags', mediaController.getAllMediaByTags);
 
 // edit tags
-// TODO verify tagIDs, block attempts at total de-tagging
 router.patch('/media/:mediaID/tags', auth.isAuth, mediaValidator.editTagRules(), validate, mediaController.editMediaTags);
 
 module.exports = router;
