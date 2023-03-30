@@ -5,15 +5,35 @@ const tag = require('../models').tag;
 const media = require('../models').media;
 const profile = require('../models').profile;
 const visibility = require('../helpers/authorization/visibility');
+const { Op } = require("sequelize");
 
 exports.createStory = async (req, res, next) => {
     const userID = req.user.ID;
     const name = req.body.name;
-    const visibility = req.body.visibility;
+    var visibility = req.body.visibility;
     const description = req.body.description;
     const medias = req.body.medias;
 
     try {
+        const userUpLoadIDList = (await media.findAll({ where: { user_ID: userID }, attributes: ['ID'] })).map(Media => Media.ID);
+
+        const carousel_medias = [];
+        const badIDList = [];
+        medias.forEach(Media => {
+            if (userUpLoadIDList.includes(Media.ID)) {
+                carousel_medias.push({
+                    media_ID: Media.ID,
+                    carousel_ID: newStory.ID,
+                    item_number: Media.item_number,
+                    item_description: Media.description
+                });
+            } else {
+                badIDList.push(Media.ID)
+            };
+        });
+
+        if (carousel_medias.length == 0) { return res.status(400).json({ error: "no valid media IDs where given" }) };
+
         const newStory = await carousel.create({
             user_ID: userID,
             name: name,
@@ -21,20 +41,17 @@ exports.createStory = async (req, res, next) => {
             description: description
         });
 
-        const carousel_medias = [];
-
-        medias.forEach(media => {
-            carousel_medias.push({
-                media_ID: media.ID,
-                carousel_ID: newStory.ID,
-                item_number: media.item_number,
-                item_description: media.description
-            });
-        });
-
         await carousel_medialist.bulkCreate(carousel_medias);
 
-        return res.status(200).json({ ID: newStory.ID });
+        const result = {
+            ID: newStory.ID
+        };
+
+        if (badIDList.length != 0) {
+            result.bad_media_ids = badIDList;
+        };
+
+        return res.status(200).json(result);
 
     } catch (error) {
         console.error(error);
@@ -44,6 +61,7 @@ exports.createStory = async (req, res, next) => {
 
 exports.getStory = async (req, res, next) => {
     const ID = req.params.storyID;
+
     try {
         const Story = await carousel.findByPk(ID,
             {
@@ -60,10 +78,8 @@ exports.getStory = async (req, res, next) => {
                         model: media,
                         attributes: { exclude: ["deletedAt"] },
                         include: [
-                            {
-                                model: user, attributes: ["ID"], include: [{ model: profile, attributes: ['alias'] },
-                                { model: tag, attributes: ["name", "ID"] }]
-                            }]
+                            { model: tag, attributes: ["name", "ID"] }
+                        ]
                     }]
             });
 
@@ -82,7 +98,6 @@ exports.getStory = async (req, res, next) => {
             Media.tags.forEach(tag => { mediaTagList.push({ "name": tag.name }) });
             storyMediaList.push({
                 ID: Media.ID,
-                uploader: Media.user.name,
                 file: Media.file_data,
                 uploaded: Media.uploaded,
                 description: Media.description,
@@ -175,22 +190,174 @@ exports.getAllStoryFromUser = async (req, res, next) => {
 exports.editStory = async (req, res, next) => {
     const ID = req.params.storyID;
     const name = req.body.name;
-    const visibility = req.body.visibility;
+    var visibility = req.body.visibility;
     const description = req.body.description;
+    const addMediaList = req.body.add_medias;
+    const removeMediaList = req.body.remove_media_ids;
+    const changeMediaList = req.body.change_medias;
+
     try {
-        const Story = await carousel.findByPk(ID);
+        const Story = await carousel.findByPk(ID, { include: [{ model: media, attributes: ['ID', 'visibility'] }] });
+        const userMediaIDList = await media.findAll({ where: { user_ID: ID }, attributes: ['ID', 'visibility'] });
+        // const userMediaIDs = userMediaIDList.map(Media => Media.ID);
+        const StoryItemNumbers = [];
+        Story.map(Media => StoryItemNumbers.push({ ID: Media.carousel_medialist.media_ID, item_number: Media.carousel_medialist.item_number }));
+
+
+        // remove story elements by id
+        const filteredRemoveIDs = [];
+        const badRemoveIDs = [];
+        if (removeMediaList) {
+            removeMediaList.forEach(ID => {
+                for (let i = 0; i < StoryItemNumbers.length; i++) {
+                    if (StoryItemNumbers[i].ID == ID) {
+                        StoryItemNumbers.splice(i, 1);
+                        filteredRemoveIDs.push(ID);
+                    };
+                };
+                if (!(removeMediaList.includes(ID))) {
+                    badRemoveIDs.push(ID);
+                };
+            });
+            if (filteredRemoveIDs.length != 0) {
+                await Story.removeMedia(filteredRemoveIDs);
+            };
+        };
+
+        // change story elements by id with props
+        const filteredMedias = [];
+        const badMediaIDs = [];
+        if (changeMediaList) {
+            changeMediaList.forEach(Media => {
+                for (let i = 0; i < StoryItemNumbers.length; i++) {
+                    if (StoryItemNumbers[i].ID == ID) {
+                        filteredMedias.push(Media);
+                    };
+                };
+                if (!(filteredMedias.includes(Media))) { badMediaIDs.push(Media.ID) };
+            });
+
+            const changeItems = [];
+            filteredMedias.forEach(Media => { 
+                // somehow remap array of objects to still contain unique objects...
+                // if item x number changes to y and number y exsist eslewhere, check if its item also changes number, until number is a new number or chain ends, latter triggers a rejection
+                changeItems.push({
+                    media_ID: Media.ID,
+                    carousel_ID: Story.ID,
+                    item_number: Media.item_number,
+                    item_description: Media.description
+                });
+            });
+        };
+
+        // add story elements by id with props
+        // needs rework...
+        const badAddIDs = [];
+        const filteredAddMedias = [];
+        const badItemNumbers = [];
+        if (addMediaList) {
+            for (let i = 0; i < userMediaIDList.length; i++) {
+                addMediaList.forEach(Media => {
+                    if (userMediaIDList[i].ID == Media.ID) {
+                        if (!(StoryItemNumbers.includes(Media.item_number))) {
+                            StoryItemNumbers.push(Media.item_number);
+                            filteredAddMedias.push(Media);
+                            if (userMediaIDList[i].visibility < Story.visibility) {
+                                visibility = userMediaIDList[i].visibility;
+                            };
+                        } else {
+                            badItemNumbers.push(Media.item_number);
+                        };
+                    } else {
+                        badAddIDs.push(ID);
+                    };
+                });
+            };
+
+            const addItems = [];
+            filteredAddMedias.forEach(Media => {
+                addItems.push({
+                    media_ID: Media.ID,
+                    carousel_ID: Story.ID,
+                    item_number: Media.item_number,
+                    item_description: Media.description
+                });
+            });
+            if (addItems.length != 0) {
+                await carousel_medialist.bulkCreate(addItems);
+            };
+        };
+
 
         await Story.update({
-            name: name,
-            visibility: visibility,
-            description: description
+            name: name ?? Story.name,
+            visibility: visibility ?? Story.visibility,
+            description: description ?? Story.description
         });
 
-        return res.status(200).json({ ID: Story.ID })
+        await Story.save();
+
+        const result = { story: Story };
+
+        if (badAddIDs.length != 0) {
+            result.bad_add_ids = badAddIDs;
+        };
+        if (badRemoveIDs.length != 0) {
+            result.bad_remove_ids = badRemoveIDs;
+        };
+        if (badMediaIDs.length != 0) {
+            result.bad_modify_ids = badMediaIDs;
+        };
+
+        return res.status(200).json(result);
 
     } catch (error) {
         console.error(error);
-        res.status(500);
+        return res.status(500);
+    };
+};
+
+exports.searchStory = async (req, res, next) => {
+    const date = new Date();
+    const day = date.getDay();
+    const month = date.getMonth();
+    const year = date.getFullYear();
+    const currDate = new Date(year, month, day).toJSON();
+
+
+    const name = req.query.name;
+    const description = req.query.description;
+    const mediaIDs = req.query.media_ids;
+    const userID = req_query.user_id;
+    const createdStart = req.query.created_start ?? "1000-01-01";
+    const createdEnd = req.query.created_end ?? currDate;
+    const editStart = req.query.edit_start ?? "1000-01-01";
+    const editEnd = req.query.edit_end ?? currDate;
+
+    try {
+
+        const query = { where: { [Op.and]: [{ created_date: { [Op.between]: [createdStart, createdEnd] } }, { modified_date: { [Op.between]: [editStart, editEnd] } }] }, include: [{ model: media, attributes: { exclude: ["deletedAt"] }, include: [{ model: tag, attributes: { exclude: ["deletedAt"] } }] }] };
+
+        if (name) {
+            query.where[Op.and].push({ name: name });
+        };
+        if (description) {
+            query.where[Op.and].push({ description: description });
+        };
+        if (mediaIDs) {
+            query.include[0].where = { ID: { [Op.in]: [mediaIDs] } };
+        };
+        if (userID) {
+            query.where[Op.and].push({ user_ID: userID });
+        };
+
+        const results = await carousel.findAll(query);
+
+        res.status(200).json({ results: results });
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500);
     };
 };
 
