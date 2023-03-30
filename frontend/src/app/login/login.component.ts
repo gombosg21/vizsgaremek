@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
+import { User } from '../models/user.model';
 
 @Component({
   selector: 'app-login',
@@ -10,24 +12,32 @@ import { Router } from '@angular/router';
 export class LoginComponent {
   username: string;
   password: string;
+  errorMessage: string;
 
-
-  loginData = {
-    username: 'admin',
-    password: 'admin'
-  };
-
-  constructor (private titleService: Title, private router: Router) {
+  constructor(
+    private titleService: Title,
+    private router: Router,
+    private authService: AuthService
+  ) {
     this.titleService.setTitle('VisualPosting - Bejelentkezés');
   }
 
   login() {
-    console.log(this.username, this.password);
-
-    if (this.username === this.loginData.username && this.password === this.loginData.password) {
-      this.router.navigate(['/feed']);
-    }
+    const user = new User(this.username, this.password);
+    this.authService.loginUser(user).subscribe(
+      (response) => {
+        console.log('Login successful:', response); 
+        // sessionStorage.setItem('user', JSON.stringify(response)); // TODO: store user in session storage
+        // this.router.navigate([`/api/v/0.1/user/${response.id}`]); // TODO: redirect to profile page
+      },
+      (error) => {
+        console.error('Login failed:', error);
+        this.errorMessage = 'Login failed: Invalid username or password';
+        this.password = ''; // Clear pw input
+      }
+    );
   }
+  
 
   isFormValid() {
     return this.username && this.password;

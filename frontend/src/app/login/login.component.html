@@ -1,16 +1,20 @@
 <div class="container mt-5">
     <h2 class="text-center">Log in</h2>
-    <form>
+    <form (ngSubmit)="login()">
         <div class="form-group">
-            <input type="text" class="form-control" id="username" placeholder="Username" [(ngModel)]="username" name="username">
+            <input type="text" class="form-control" id="username" placeholder="Username" [(ngModel)]="username" name="username" />
         </div>
         <div class="form-group">
-            <input type="password" class="form-control" id="password" placeholder="Password" [(ngModel)]="password" name="password">
+            <input type="password" class="form-control" id="password" placeholder="Password" [(ngModel)]="password" name="password" />
         </div>
-        <button type="submit" class="btn btn-primary" [disabled]="!isFormValid()" (click)="login()">Log in</button>
+        <button type="submit" class="btn btn-primary" [disabled]="!isFormValid()">
+        Log in
+    </button>
     </form>
+    <div *ngIf="errorMessage" class="alert alert-danger mt-3" role="alert">
+        {{ errorMessage }}
+    </div>
     <div class="haveRegister">
         <p>Don't have an account? <a routerLink="/register">Sign up</a></p>
     </div>
-
 </div>

@@ -1,3 +1,4 @@
+@import '~@fortawesome/fontawesome-free/css/all.css';
 .container {
     max-width: 600px;
     background: linear-gradient(45deg, rgb(186, 230, 255), #e7eeff);
@@ -23,7 +24,8 @@
 }
 
 #male,
-#female {
+#female,
+#other {
     margin-right: 0.6em;
 }
 

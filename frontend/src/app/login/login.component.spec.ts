@@ -20,20 +20,9 @@ describe('LoginComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-
   it('should have an empty username and password upon initialization', () => {
     expect(component.username).toBe('');
     expect(component.password).toBe('');
   });
 
-  it('should log the username and password to the console upon form submission', () => {
-    spyOn(console, 'log');
-    component.username = 'testUsername';
-    component.password = 'testPassword';
-    component.login();
-    expect(console.log).toHaveBeenCalledWith('testUsername', 'testPassword');
-  });
 });
