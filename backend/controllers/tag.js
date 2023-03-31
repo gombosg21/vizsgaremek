@@ -1,5 +1,6 @@
 const tag = require("../models").tag;
-const { Op } = require("sequelize");
+const media_taglist = require("../models").media_taglist;
+const { Op, col, fn } = require("sequelize");
 
 exports.createTag = async (req, res, next) => {
     const tagName = req.body.tag_name;
@@ -79,9 +80,9 @@ exports.findTags = async (req, res, next) => {
 
 exports.getAllTags = async (req, res, next) => {
     try {
-        const tagList = await tag.findAll({ attributes: ['ID', 'name'] });
+        const tagList = await tag.findAll({ attributes: ['ID', 'name'], include: [{ model: media_taglist, attributes: [[fn('COUNT', 'tag_ID'), 'tag_count']] }], group: ['tag_ID'] });
 
-       return res.status(200).json({ tags: tagList });
+        return res.status(200).json({ tags: tagList });
     } catch (error) {
         console.error(error);
         return res.status(500);
