@@ -3,7 +3,10 @@ const comment = require("../models").comment;
 const user = require("../models").user;
 const media = require("../models").media;
 const carousel = require("../models").carousel;
-const { Op } = require("sequelize");
+const profile = require("../models").profile;
+const comment_reactionlist = require("../models").comment_reactionlist;
+const thread_reactionlist = require("../models").thread_reactionlist;
+const { Op, fn, col } = require("sequelize");
 // const story = require("../models").story;
 
 exports.getThread = async (req, res, next) => {
@@ -20,17 +23,29 @@ exports.getThread = async (req, res, next) => {
                     include: [
                         {
                             model: user,
-                            attributes: ['ID', 'alias']
+                            attributes: ['ID'],
+                            include: [{ model: profile, attributes: ['alias'] }]
+                        },
+                        {
+                            model: comment_reactionlist,
+                            attributes: [['reaction_ID', 'ID'], [fn('COUNT', 'comment_reactionlist.reaction_ID'), 'reaction_count']]
                         }
                     ]
                 },
                 {
                     model: user,
-                    attributes: ['ID', 'alias']
-                }]
+                    attributes: ['ID'],
+                    include: [{ model: profile, attributes: ['alias'] }]
+                },
+                {
+                    model: thread_reactionlist,
+                    attributes: [['reaction_ID', 'ID'], [fn('COUNT', 'thread_reactionlist.reaction_ID'), 'reaction_count']]
+                }
+            ],
+            group: [col('thread_reactionlists.reaction_ID'), col('comments.comment_reactionlists.reaction_ID')]
         });
 
-        return res.status(200).json(threadData);
+        return res.status(200).json({ thread: threadData });
     } catch (error) {
         console.error(error);
         return res.status(500);
@@ -110,11 +125,16 @@ exports.editThread = async (req, res, next) => {
 
     try {
         const Thread = await thread.findByPk(threadID);
-        Thread.set({
-            name: threadName,
-        });
-        return res.status(200)
-            .json(Thread);
+        if (Thread.profile_ID == null) {
+            Thread.set({
+                name: threadName,
+            });
+            return res.status(200)
+                .json(Thread);
+        } else {
+            return res.status(400).json({ error: "cannot rename profile thread" });
+        };
+
     } catch (error) {
         console.error(error);
         return res.status(500);
