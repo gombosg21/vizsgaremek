@@ -1,11 +1,13 @@
 const carousel = require('../models').carousel;
 const carousel_medialist = require('../models').carousel_medialist;
+const carousel_reactionlist = require('../models').carousel_reactionlist;
 const user = require('../models').user;
 const tag = require('../models').tag;
 const media = require('../models').media;
 const profile = require('../models').profile;
+const thread = require('../models').thread;
 const visibility = require('../helpers/authorization/visibility');
-const { Op } = require("sequelize");
+const { Op, fn } = require("sequelize");
 
 exports.createStory = async (req, res, next) => {
     const userID = req.user.ID;
@@ -80,7 +82,12 @@ exports.getStory = async (req, res, next) => {
                         include: [
                             { model: tag, attributes: ["name", "ID"] }
                         ]
-                    }]
+                    }, {
+                        model: carousel_reactionlist, attributes: [['reaction_ID', 'ID'], [fn('COUNT', 'carousel_reactionlists.reaction_ID'), 'reaction_count']]
+                    }, {
+                        model: thread, attributes: ['ID', 'name', 'created', 'last_activity', 'status']
+                    }],
+                group: ['carousel_reactionlists.reaction_ID']
             });
 
         var userID = -1
@@ -91,33 +98,33 @@ exports.getStory = async (req, res, next) => {
         const visibilityFlag = Story.visibility;
         const dataOwnerID = Story.ID;
 
-        const storyMediaList = [];
+        //const storyMediaList = [];
 
-        Story.media.forEach(Media => {
-            var mediaTagList = [];
-            Media.tags.forEach(tag => { mediaTagList.push({ "name": tag.name }) });
-            storyMediaList.push({
-                ID: Media.ID,
-                file: Media.file_data,
-                uploaded: Media.uploaded,
-                description: Media.description,
-                placeholder_text: Media.placeholder_text,
-                tags: mediaTagList
-            });
-        });
+        // Story.media.forEach(Media => {
+        //     var mediaTagList = [];
+        //     Media.tags.forEach(tag => { mediaTagList.push({ "name": tag.name }) });
+        //     storyMediaList.push({
+        //         ID: Media.ID,
+        //         file: Media.file_data,
+        //         uploaded: Media.uploaded,
+        //         description: Media.description,
+        //         placeholder_text: Media.placeholder_text,
+        //         tags: mediaTagList
+        //     });
+        // });
 
-        const data = {
-            ID: Story.ID,
-            name: Story.name,
-            description: Story.description,
-            created: Story.created_date,
-            updated: Story.modified_date,
-            media_list: storyMediaList
-        };
+        // const data = {
+        //     ID: Story.ID,
+        //     name: Story.name,
+        //     description: Story.description,
+        //     created: Story.created_date,
+        //     updated: Story.modified_date,
+        //     media_list: storyMediaList
+        // };
 
-        const result = await visibility.determineVisibility(userID, dataOwnerID, visibilityFlag, data);
+        const result = await visibility.determineVisibility(userID, dataOwnerID, visibilityFlag, Story.dataValues);
 
-        return res.status(result.status).json(result.data);
+        return res.status(result.status).json({ carousel: result.data });
 
     } catch (error) {
         console.error(error);
@@ -131,12 +138,16 @@ exports.getAllStoryFromUser = async (req, res, next) => {
         const StoryList = await carousel.findAll({
             where: { user_ID: userID },
             include: [
-                { model: user, attributes: ['ID', 'name'] },
                 {
                     model: media, include: [
-                        { model: user, attributes: ['ID'], include: [{ model: profile, attributes: ['alias'] }] },
-                        { model: tag, attributes: ['ID', 'name'] }]
-                }]
+                        { model: tag, attributes: ['ID', 'name'] }
+                    ]
+                }, {
+                    model: carousel_reactionlist, attributes: [['reaction_ID', 'ID'], [fn('COUNT', 'carousel_reactionlists.reaction_ID'), 'reaction_count']]
+                }, {
+                    model: thread, attributes: ['ID', 'name', 'created', 'last_activity', 'status']
+                }],
+            group: ['carousel_reactionlists.reaction_ID']
         });
 
         var userContextID = -1
@@ -158,7 +169,6 @@ exports.getAllStoryFromUser = async (req, res, next) => {
                 Media.tags.forEach(tag => { mediaTagList.push({ "name": tag.name }) });
                 storyMediaList.push({
                     ID: Media.ID,
-                    uploader: Media.user.name,
                     file: Media.file_data,
                     uploaded: Media.uploaded,
                     description: Media.description,
@@ -238,7 +248,7 @@ exports.editStory = async (req, res, next) => {
             });
 
             const changeItems = [];
-            filteredMedias.forEach(Media => { 
+            filteredMedias.forEach(Media => {
                 // somehow remap array of objects to still contain unique objects...
                 // if item x number changes to y and number y exsist eslewhere, check if its item also changes number, until number is a new number or chain ends, latter triggers a rejection
                 changeItems.push({
@@ -349,6 +359,7 @@ exports.searchStory = async (req, res, next) => {
         };
         if (userID) {
             query.where[Op.and].push({ user_ID: userID });
+            query.include.push({ model: user, attributes: ['ID'], include: [{ model: profile, attributes: ['alias'] }] });
         };
 
         const results = await carousel.findAll(query);
