@@ -2,8 +2,11 @@ const user = require("../models").user;
 const media = require("../models").media;
 const thread = require("../models").thread;
 const profile = require("../models").profile;
+const comment = require("../models").comment;
+const comment_reactionlist = require("../models").comment_reactionlist;
+const thread_reactionlist = require("../models").thread_reactionlist;
 const profile_reactionlist = require("../models").profile_reactionlist;
-const { Op, fn} = require("sequelize");
+const { Op, fn, col } = require("sequelize");
 const Visibility = require('../helpers/authorization/visibility').determineVisibility;
 
 exports.getProfile = async (req, res, next) => {
@@ -29,11 +32,30 @@ exports.getProfile = async (req, res, next) => {
                         attributes: [['reaction_ID', 'ID'], [fn('COUNT', 'profile_reactionlist.reaction_ID'), 'reaction_count']],
                     }, {
                         model: thread,
-                        attributes: ['ID']
+                        attributes: ['ID', 'name', 'status', 'created', 'last_activity'],
+                        include: [
+                            {
+                                model: comment,
+                                attributes: ['content', 'ID', 'created', 'last_edit'],
+                                include: [
+                                    {
+                                        model: user,
+                                        attributes: ['ID'],
+                                        include: [{ model: profile, attributes: ['alias'] }]
+                                    }, {
+                                        model: comment_reactionlist,
+                                        attributes: [['reaction_ID', 'ID'], [fn('COUNT', 'comment_reactionlist.reaction_ID'), 'reaction_count']]
+                                    }
+                                ]
+                            }, {
+                                model: thread_reactionlist,
+                                attributes: [['reaction_ID', 'ID'], [fn('COUNT', 'thread_reactionlist.reaction_ID'), 'reaction_count']]
+                            }
+                        ]
                     }
                 ]
             }],
-            group: ['reaction_ID']
+            group: [col('profile.profile_reactionlists.reaction_ID'), col('profile.thread.thread_reactionlists.reaction_ID'), col('profile.thread.comments.comment_reactionlists.reaction_ID')]
         });
 
         const visibility = User.profile.visibility;
