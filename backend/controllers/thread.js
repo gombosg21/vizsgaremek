@@ -188,7 +188,7 @@ exports.searchThreads = async (req, res, next) => {
         if (createrID) {
             query.include.push({
                 model: user,
-                attributes: ['ID', 'alias']
+                attributes: ['ID'], include: [{ model: profile, attributes: ['alias'] }]
             });
             query.where[Op.and].push({ user_ID: createrID });
         };
@@ -199,7 +199,7 @@ exports.searchThreads = async (req, res, next) => {
         switch (parentType) {
             case ("profile"): {
                 query.where[Op.and].push({ profile_ID: { [Op.not]: null } });
-                query.include.push({ model: user, attributes: ['ID', 'alias'] });
+                query.include.push({ model: user, attributes: ['ID'], include: [{ model: profile, attributes: ['alias'] }] });
                 break;
             }
             case ("media"): {
