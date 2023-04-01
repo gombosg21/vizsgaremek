@@ -210,101 +210,103 @@ exports.editStory = async (req, res, next) => {
         const Story = await carousel.findByPk(ID, { include: [{ model: media, attributes: ['ID', 'visibility'] }] });
         const userMediaIDList = await media.findAll({ where: { user_ID: ID }, attributes: ['ID', 'visibility'] });
         // const userMediaIDs = userMediaIDList.map(Media => Media.ID);
-        const StoryItemNumbers = [];
-        Story.map(Media => StoryItemNumbers.push({ ID: Media.carousel_medialist.media_ID, item_number: Media.carousel_medialist.item_number }));
-
+        const StoryItems = [];
+        Story.map(Media => StoryItems.push({
+            item_description: Media.carousel_medialist.item_description,
+            media_ID: Media.carousel_medialist.media_ID,
+            item_number: Media.carousel_medialist.item_number,
+            carousel_ID: Story.ID
+        }));
 
         // remove story elements by id
-        const filteredRemoveIDs = [];
         const badRemoveIDs = [];
         if (removeMediaList) {
             removeMediaList.forEach(ID => {
-                for (let i = 0; i < StoryItemNumbers.length; i++) {
-                    if (StoryItemNumbers[i].ID == ID) {
-                        StoryItemNumbers.splice(i, 1);
-                        filteredRemoveIDs.push(ID);
+                var found = false;
+                for (let i = 0; i < StoryItems.length; i++) {
+                    if (StoryItems[i].ID == ID) {
+                        StoryItems.splice(i, 1);
+                        found = true;
+                        break;
                     };
                 };
-                if (!(removeMediaList.includes(ID))) {
+                if (!found) {
                     badRemoveIDs.push(ID);
                 };
             });
-            if (filteredRemoveIDs.length != 0) {
-                await Story.removeMedia(filteredRemoveIDs);
-            };
         };
 
-        // change story elements by id with props
-        const filteredMedias = [];
+        // add changed items
         const badMediaIDs = [];
         if (changeMediaList) {
             changeMediaList.forEach(Media => {
-                for (let i = 0; i < StoryItemNumbers.length; i++) {
-                    if (StoryItemNumbers[i].ID == ID) {
-                        filteredMedias.push(Media);
+                var found = false;
+                for (let i = 0; i < StoryItems.length; i++) {
+                    if (StoryItems[i].media_ID == ID) {
+                        StoryItems.splice(i, 1);
+                        StoryItems.push({
+                            media_ID: Media.ID,
+                            carousel_ID: Story.ID,
+                            item_number: Media.item_number,
+                            item_description: Media.description
+                        });
+                        found = true;
+                        break;
                     };
                 };
-                if (!(filteredMedias.includes(Media))) { badMediaIDs.push(Media.ID) };
-            });
-
-            const changeItems = [];
-            filteredMedias.forEach(Media => {
-                // somehow remap array of objects to still contain unique objects...
-                // if item x number changes to y and number y exsist eslewhere, check if its item also changes number, until number is a new number or chain ends, latter triggers a rejection
-                changeItems.push({
-                    media_ID: Media.ID,
-                    carousel_ID: Story.ID,
-                    item_number: Media.item_number,
-                    item_description: Media.description
-                });
+                if (!found) {
+                    badMediaIDs.push(Media.ID);
+                };
             });
         };
 
         // add story elements by id with props
-        // needs rework...
         const badAddIDs = [];
         const filteredAddMedias = [];
-        const badItemNumbers = [];
         if (addMediaList) {
-            for (let i = 0; i < userMediaIDList.length; i++) {
-                addMediaList.forEach(Media => {
-                    if (userMediaIDList[i].ID == Media.ID) {
-                        if (!(StoryItemNumbers.includes(Media.item_number))) {
-                            StoryItemNumbers.push(Media.item_number);
-                            filteredAddMedias.push(Media);
-                            if (userMediaIDList[i].visibility < Story.visibility) {
-                                visibility = userMediaIDList[i].visibility;
-                            };
-                        } else {
-                            badItemNumbers.push(Media.item_number);
-                        };
-                    } else {
-                        badAddIDs.push(ID);
-                    };
-                });
-            };
+            addMediaList.forEach(Media => {
+                var found = false;
+                for (let i = 0; i < userMediaIDList.length; i++) {
 
-            const addItems = [];
-            filteredAddMedias.forEach(Media => {
-                addItems.push({
-                    media_ID: Media.ID,
-                    carousel_ID: Story.ID,
-                    item_number: Media.item_number,
-                    item_description: Media.description
-                });
+                    if (userMediaIDList[i].ID == Media.ID) {
+                        found = true;
+                        filteredAddMedias.push({
+                            media_ID: Media.ID,
+                            carousel_ID: Story.ID,
+                            item_number: Media.item_number,
+                            item_description: Media.description
+                        });
+                        break;
+                    };
+                };
+                if (!found) {
+                    badAddIDs.push(Media.ID);
+                };
             });
-            if (addItems.length != 0) {
-                await carousel_medialist.bulkCreate(addItems);
+        };
+
+        // sort by item_number
+        StoryItems.sort((a, b) => ((a.item_number > b.item_number) ? 1 : ((b.item_number > a.item_number) ? -1 : 0)));
+
+
+        //remove bad items
+        const conflictItems = [];
+        const filteredStoryItems = [];
+        for (let i = 0; i < (StoryItems.length - 1); i++) {
+            if (StoryItems[i].item_number != StoryItems[i + 1].item_number) {
+                filteredStoryItems.push(StoryItems[i]);
+            } else {
+                conflictItems.push({ conflicts: [StoryItems[i], StoryItems[i + 1]] });
             };
         };
 
-
+        // finalize transaction
         await Story.update({
             name: name ?? Story.name,
             visibility: visibility ?? Story.visibility,
             description: description ?? Story.description
         });
-
+        await Story.setMedias(filteredStoryItems);
         await Story.save();
 
         const result = { story: Story };
@@ -317,6 +319,9 @@ exports.editStory = async (req, res, next) => {
         };
         if (badMediaIDs.length != 0) {
             result.bad_modify_ids = badMediaIDs;
+        };
+        if (conflictItems.length != 0) {
+            result.conflicting_items = conflictItems;
         };
 
         return res.status(200).json(result);
