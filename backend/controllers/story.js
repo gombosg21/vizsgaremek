@@ -95,8 +95,10 @@ exports.getStory = async (req, res, next) => {
             userID = req.user.ID;
         };
 
+        console.log(userID)
+
         const visibilityFlag = Story.visibility;
-        const dataOwnerID = Story.ID;
+        const dataOwnerID = Story.user.ID;
 
         //const storyMediaList = [];
 
