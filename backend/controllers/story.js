@@ -150,6 +150,10 @@ exports.getAllStoryFromUser = async (req, res, next) => {
             group: ['carousel_reactionlists.reaction_ID']
         });
 
+        if(StoryList.length == 0) {
+            return res.status(200).json({message:"user has no stories"});
+        };
+
         var userContextID = -1
         if (req.user) {
             userContextID = req.user.ID;
@@ -161,6 +165,7 @@ exports.getAllStoryFromUser = async (req, res, next) => {
         StoryList.forEach(story => {
             visibilityArray.push(story.visibility);
         });
+
 
         StoryList.forEach(story => {
             var storyMediaList = [];
