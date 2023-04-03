@@ -95,8 +95,6 @@ exports.getStory = async (req, res, next) => {
             userID = req.user.ID;
         };
 
-        console.log(userID)
-
         const visibilityFlag = Story.visibility;
         const dataOwnerID = Story.user.ID;
 
@@ -152,8 +150,8 @@ exports.getAllStoryFromUser = async (req, res, next) => {
             group: ['carousel_reactionlists.reaction_ID']
         });
 
-        if(StoryList.length == 0) {
-            return res.status(200).json({message:"user has no stories"});
+        if (StoryList.length == 0) {
+            return res.status(200).json({ message: "user has no stories" });
         };
 
         var userContextID = -1
@@ -216,9 +214,11 @@ exports.editStory = async (req, res, next) => {
     try {
         const Story = await carousel.findByPk(ID, { include: [{ model: media, attributes: ['ID', 'visibility'] }] });
         const userMediaIDList = await media.findAll({ where: { user_ID: ID }, attributes: ['ID', 'visibility'] });
+
         // const userMediaIDs = userMediaIDList.map(Media => Media.ID);
         const StoryItems = [];
-        Story.map(Media => StoryItems.push({
+
+        Story.media.map(Media => StoryItems.push({
             item_description: Media.carousel_medialist.item_description,
             media_ID: Media.carousel_medialist.media_ID,
             item_number: Media.carousel_medialist.item_number,
@@ -313,10 +313,13 @@ exports.editStory = async (req, res, next) => {
             visibility: visibility ?? Story.visibility,
             description: description ?? Story.description
         });
-        await Story.setMedias(filteredStoryItems);
+
+        await Story.setMedia(filteredStoryItems);
         await Story.save();
 
-        const result = { story: Story };
+        const updatedStroy = await carousel.findByPk(ID, { include: [{ model: media }] });
+
+        const result = { story: updatedStroy };
 
         if (badAddIDs.length != 0) {
             result.bad_add_ids = badAddIDs;
@@ -350,7 +353,7 @@ exports.searchStory = async (req, res, next) => {
     const name = req.query.name;
     const description = req.query.description;
     const mediaIDs = req.query.media_ids;
-    const userID = req_query.user_id;
+    const userID = req.query.user_id;
     const createdStart = req.query.created_start ?? "1000-01-01";
     const createdEnd = req.query.created_end ?? currDate;
     const editStart = req.query.edit_start ?? "1000-01-01";
@@ -358,16 +361,28 @@ exports.searchStory = async (req, res, next) => {
 
     try {
 
-        const query = { where: { [Op.and]: [{ created_date: { [Op.between]: [createdStart, createdEnd] } }, { modified_date: { [Op.between]: [editStart, editEnd] } }] }, include: [{ model: media, attributes: { exclude: ["deletedAt"] }, include: [{ model: tag, attributes: { exclude: ["deletedAt"] } }] }] };
+        const query = {
+            where: {
+                [Op.and]: [
+                    { created_date: { [Op.between]: [createdStart, createdEnd] } },
+                    { modified_date: { [Op.between]: [editStart, editEnd] } }]
+            },
+            include: [{
+                model: media, attributes: [],
+                include: [{ model: tag, attributes: [] }]
+            }], attributes: ['ID', 'name', 'created_date', 'modified_date']
+        };
 
         if (name) {
-            query.where[Op.and].push({ name: name });
+            query.where[Op.and].push({ name: { [Op.substring]: name } });
         };
         if (description) {
             query.where[Op.and].push({ description: description });
+            query.attributes.push('description');
         };
         if (mediaIDs) {
             query.include[0].where = { ID: { [Op.in]: [mediaIDs] } };
+            query.include[0].attributes.push('ID');
         };
         if (userID) {
             query.where[Op.and].push({ user_ID: userID });
