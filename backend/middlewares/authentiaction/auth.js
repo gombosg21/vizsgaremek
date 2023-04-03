@@ -18,16 +18,16 @@ const verifyCallback = async (username, password, done) => {
         const User = await user.findOne({ where: { Name: username } });
 
         if (!User) {
-            { return done(null, false) };
+            { return done(null, false, { message: "bad username or password" }) };
         };
 
         const valid = await validatePassword(password, User.password);
 
         if (valid) {
-            { return done(null, User) };
+            { return done(null, User, { message: "bad username or password" }) };
         }
         else {
-            { return done(null, false) };
+            { return done(null, false, { message: "bad username or password" }) };
         };
     }
     catch (error) {
