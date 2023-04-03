@@ -68,12 +68,14 @@ exports.editStoryRules = () => {
         }).optional({ nullable: true, checkFalsy: true }),
         validator.body('description').isAscii().optional({ nullable: true, checkFalsy: true }).withMessage("description must be made of letters numbers and special characters only"),
         validator.body('add_medias').isArray().optional({ nullable: true, checkFalsy: true }).withMessage("add_medias must be an array"),
-        validator.body('add_medias.*.ID').exists().optional({ nullable: true, checkFalsy: true }).withMessage("add_medias must have a field ID"),
-        validator.body('add_medias.*.ID').isNumeric().optional({ nullable: true, checkFalsy: true }).withMessage("add_medias field ID must be a number"),
-        validator.body('add_medias.*.ID').custom((value) => { if (value < 1 || value % 1 != 0) { throw new Error("add_medias field ID must be a non zero poisitive whole number") } else { return value } }).optional({ nullable: true, checkFalsy: true }),
-        validator.body('add_medias.*.item_number').exists().optional({ nullable: true, checkFalsy: true }).withMessage("add_medias must have a field item_number"),
-        validator.body('add_medias.*.item_number').isNumeric().optional({ nullable: true, checkFalsy: true }).withMessage("add_medias field item_number must be a number"),
-        validator.body('add_medias.*.item_number').custom((value) => { if (value < 0 || value % 1 != 0) { throw new Error("add_medias field item_number must be a poisitive whole number") } else { return value } }).optional({ nullable: true, checkFalsy: true }),
+        validator.body('add_medias.*.ID').if(validator.body('add_medias').exists())
+        .exists().withMessage("add_medias must have a field ID")
+        .isNumeric().withMessage("add_medias field ID must be a number")
+        .custom((value) => { if (value < 1 || value % 1 != 0) { throw new Error("add_medias field ID must be a non zero poisitive whole number") } else { return value } }),
+        validator.body('add_medias.*.item_number').if(validator.body('add_medias').exists())
+        .exists().withMessage("add_medias must have a field item_number")
+        .isNumeric().withMessage("add_medias field item_number must be a number")
+        .custom((value) => { if (value < 0 || value % 1 != 0) { throw new Error("add_medias field item_number must be a poisitive whole number") } else { return value } }).optional({ nullable: true, checkFalsy: true }),
         validator.body('add_medias.*.description').exists().optional({ nullable: true, checkFalsy: true }).withMessage("add_medias must have a field description"),
         validator.body('add_medias.*.description').isAscii().optional({ nullable: true, checkFalsy: true }).withMessage("add_medias field description can onyl contain letters numbers and special characters"),
         validator.body('remove_media_ids').isArray().optional({ nullable: true, checkFalsy: true }).withMessage("remove_media_ids must be an array"),
