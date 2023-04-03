@@ -10,6 +10,7 @@ const comment_reactions = require("../models").comment_reactionlist;
 const profile_reactions = require("../models").user_reactionlist;
 const story_reactions = require("../models").carousel_reactionlist;
 const toBase64 = require("../util/serialize-file").getBase64;
+const { Op } = require("sequelize");
 
 exports.getAllReactions = async (req, res, next) => {
     try {
@@ -59,82 +60,96 @@ exports.addReaction = async (req, res, next) => {
     const userID = req.user.ID;
 
     try {
+        const vaildReactionIDs = await reaction.findAll({attributes:["ID"]}).map(Reaction => Reaction.ID);
+        const filteredReactionIDs = [];
+        const badReactionIDs = [];
+
+        reactionIDs.forEach(ID => {
+            if (vaildReactionIDs.includes(ID)) {
+                filteredReactionIDs.push(ID);
+            } else {
+                badReactionIDs.push(ID);
+            };
+        });
+
+        const results = {};
 
         switch (target) {
             case ("media"): {
-                const targetItem = await media.findByPk(ID);
+                const targetItem = await media.findByPk(ID, { attributes: ["ID"] });
                 const addList = [];
-                reactionIDs.forEach(ID => {
-                    addList.push({ media_ID: targetItem.ID, reaction_ID: ID, user_ID: userID })
+                vaildReactionIDs.forEach(ID => {
+                    addList.push({ media_ID: targetItem.ID, reaction_ID: ID, user_ID: userID, date: Date.now() })
                 });
 
-                await targetItem.addReactions(addList);
+                await targetItem.addReaction(addList);
 
-                return res.status(200).json({
-                    ID: targetItem.ID,
-                    reactions: reactionIDs
-                });
+                results.ID = targetItem.ID;
+                results.reactions = vaildReactionIDs;
+                break;
             }
             case ("story"): {
-                const targetItem = await carousel.findByPk(ID);
+                const targetItem = await carousel.findByPk(ID, { attributes: ["ID"] });
                 const addList = [];
-                reactionIDs.forEach(ID => {
-                    addList.push({ carousel_ID: targetItem.ID, reaction_ID: ID, user_ID: userID })
+                vaildReactionIDs.forEach(ID => {
+                    addList.push({ carousel_ID: targetItem.ID, reaction_ID: ID, user_ID: userID, date: Date.now() })
                 });
 
-                await targetItem.addReactions(addList);
+                await targetItem.addReaction(addList);
 
-                return res.status(200).json({
-                    ID: targetItem.ID,
-                    reactions: reactionIDs
-                });
+                results.ID = targetItem.ID;
+                results.reactions = vaildReactionIDs;
+                break;
             }
             case ("comment"): {
-                const targetItem = await comment.findByPk(ID);
+                const targetItem = await comment.findByPk(ID, { attributes: ["ID"] });
                 const addList = [];
-                reactionIDs.forEach(ID => {
-                    addList.push({ comment_ID: targetItem.ID, reaction_ID: ID, user_ID: userID })
+                vaildReactionIDs.forEach(ID => {
+                    addList.push({ comment_ID: targetItem.ID, reaction_ID: ID, user_ID: userID, date: Date.now() })
                 });
 
-                await targetItem.addReactions(addList);
+                await targetItem.addReaction(addList);
 
-                return res.status(200).json({
-                    ID: targetItem.ID,
-                    reactions: reactionIDs
-                });
+                results.ID = targetItem.ID;
+                results.reactions = vaildReactionIDs;
+                break;
             }
             case ("thread"): {
-                const targetItem = await thread.findByPk(ID);
+                const targetItem = await thread.findByPk(ID, { attributes: ["ID"] });
                 const addList = [];
-                reactionIDs.forEach(ID => {
-                    addList.push({ thread_ID: targetItem.ID, reaction_ID: ID, user_ID: userID })
+                vaildReactionIDs.forEach(ID => {
+                    addList.push({ thread_ID: targetItem.ID, reaction_ID: ID, user_ID: userID, date: Date.now() })
                 });
 
-                await targetItem.addReactions(addList);
+                await targetItem.addReaction(addList);
 
-                return res.status(200).json({
-                    ID: targetItem.ID,
-                    reactions: reactionIDs
-                });
+                    results.ID = targetItem.ID;
+                    results.reactions = vaildReactionIDs;
+                    break;
             }
             case ("profile"): {
                 const targetItem = await user.findByPk(ID);
                 const addList = [];
-                reactionIDs.forEach(ID => {
-                    addList.push({ profile_ID: targetItem.ID, reaction_ID: ID, user_ID: userID })
+                vaildReactionIDs.forEach(ID => {
+                    addList.push({ profile_ID: targetItem.ID, reaction_ID: ID, user_ID: userID, date: Date.now() })
                 });
 
-                await targetItem.addReactions(addList);
+                await targetItem.addReaction(addList);
 
-                return res.status(200).json({
-                    ID: targetItem.ID,
-                    reactions: reactionIDs
-                });
+                results.ID = targetItem.ID;
+                results.reactions = vaildReactionIDs;
+                break;
             }
             default: {
-                return res.status(500);
+                throw new Error("invalid reation target was selected!");
             }
         };
+
+        if (badReactionIDs.length != 0) {
+            results.bad_reaction_ids = badReactionIDs;
+        };
+
+        return res.status(200).json(results)
 
     } catch (error) {
         console.error(error);
@@ -152,42 +167,42 @@ exports.removeReaction = async (req, res, next) => {
 
         switch (target) {
             case ("media"): {
-                const targetReaction = await media_reactions.findOne({ where: { user_ID: userID, media_ID: ID, reaction_ID: reactionID } });
+                const targetReaction = await media_reactions.findOne({ where: { [Op.and]: [{ user_ID: userID }, { media_ID: ID }, { reaction_ID: reactionID }] } });
 
                 await targetReaction.delete();
-                return res.status(200);
+                return res.status(200).json({ deleted: targetReaction });
             }
             case ("story"): {
-                const targetReaction = await story_reactions.findOne({ where: { user_ID: userID, carousel_ID: ID, reaction_ID: reactionID } });
+                const targetReaction = await story_reactions.findOne({ where: { [Op.and]: [{ user_ID: userID }, { carousel_ID: ID }, { reaction_ID: reactionID }] } });
 
                 await targetReaction.delete();
-                return res.status(200);
+                return res.status(200).json({ deleted: targetReaction });
 
             }
             case ("comment"): {
-                const targetReaction = await comment_reactions.findOne({ where: { user_ID: userID, comment_ID: ID, reaction_ID: reactionID } });
+                const targetReaction = await comment_reactions.findOne({ where: { [Op.and]: [{ user_ID: userID }, { comment_ID: ID }, { reaction_ID: reactionID }] } });
 
                 await targetReaction.delete();
-                return res.status(200);
+                return res.status(200).json({ deleted: targetReaction });
 
             }
             case ("thread"): {
-                const targetReaction = await thread_reactions.findOne({ where: { user_ID: userID, thread_ID: ID, reaction_ID: reactionID } });
+                const targetReaction = await thread_reactions.findOne({ where: { [Op.and]: [{ user_ID: userID }, { thread_ID: ID }, { reaction_ID: reactionID }] } });
 
                 await targetReaction.delete();
-                return res.status(200);
+                return res.status(200).json({ deleted: targetReaction });
 
             }
             case ("profile"): {
-                const targetReaction = await profile_reactions.findOne({ where: { user_ID: userID, profile_ID: ID, reaction_ID: reactionID } });
+                const targetReaction = await profile_reactions.findOne({ where: { [Op.and]: [{ user_ID: userID }, { profile_ID: ID }, { reaction_ID: reactionID }] } });
 
                 await targetReaction.delete();
-                return res.status(200);
+                return res.status(200).json({ deleted: targetReaction });
 
             }
             default: {
-                return res.status(500);
-            }
+                throw new Error("an error occured while trying to remove a reaction isntance.");
+            };
         };
 
     } catch (error) {
