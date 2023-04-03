@@ -51,9 +51,10 @@ app.use(routePrefix, indexRouter)
 app.use(routePrefix, usersRouter);
 app.use(routePrefix, mediaRouter);
 app.use(routePrefix, tagRouter);
-app.use(routePrefix,threadRouter);
-app.use(routePrefix,commentRouter);
-app.use(routePrefix,storyRouter);
+app.use(routePrefix, threadRouter);
+app.use(routePrefix, commentRouter);
+app.use(routePrefix, storyRouter);
+app.use(routePrefix, reactionRouter);
 
 
 //catch 404 and forward to error handler
@@ -76,6 +77,6 @@ app.use(function (err, req, res, next) {
 
 const port = process.env.APP_PORT;
 
-app.listen(port,()=> { console.log(`listening on port: ${port}`)});
+app.listen(port, () => { console.log(`listening on port: ${port}`) });
 
 module.exports = app;
