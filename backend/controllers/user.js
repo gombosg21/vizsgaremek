@@ -112,8 +112,6 @@ exports.login = async (req, res, next) => {
     const Name = req.body.name;
 
     try {
-        if (req.user) { return res.status(400).json({ error: "already signed in" }) };
-        
         const User = await user.findOne({ where: { Name: Name }, attributes: ['ID'] });
         return res.status(200).json({ ID: User.ID });
     } catch (error) {
