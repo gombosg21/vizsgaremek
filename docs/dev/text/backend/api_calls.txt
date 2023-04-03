@@ -52,7 +52,7 @@ Siker esetén frissíti a jelszót a {password} értékére, visszaadja az {ID, 
 
 
 GET /api/v/0.1/tag/all
-Visszaadja az összes cédulát, értékek: {ID, name}, jsonban tömbösítve.
+Visszaadja az összes cédulát, értékek: {ID, name}, jsonban tömbösítve, előfordulási számmal együtt.
 
 GET /api/v/0.1/tag?name={name}
 Cédulát keres minimum részleges egybeeséssel, kulcs érték mező kötelező.
@@ -159,5 +159,27 @@ Belépés után elérhető...
 Létrehoz egy új képtörténetet.
 JSON-ban kéri az alábbiakat : {name, visibility, description ,medias:[{ID}, {item_number}, {item_description}]}
 AZ ID és item_number  0-nál nagyobb egész szám kell hogy legyen.
+Az item_number nem lehet imsétlődő szám.
 A visibility 0 és 3 között lehet.
 Többi mező szöveges.
+
+PATCH /api/v/0.1/story/{ID}
+Belépés után elérhető...
+Szerkeszt egy képtörténetet ID alapján.
+Opcionálisan legalább egyet követel az alábbiak közül:
+{name, visibility, description, add_medias[{ID, item_number, description}], remove_media_ids[], change_medias[{ID, item_number, description}]}
+Az ID mezők csakis létező, a felhasználó által feltöltött médiafáljok ID-jei lehetnek, change_medias esetében ezen túl csakis a képtörténetben előforduló ID-k.
+A remove_media_ids csakis a képtörténetben létező médiafáljok ID-jei lehetnek.
+Az item_number mező értéke nem fordulhat elő kétszer.
+A description mező mind az add_medias és a change_medias-on belül opcionális.
+A name csakis betű + szám kombináció lehet.
+A description mindenütt betű + szám + speciális karakter lehet.
+A visibility 0 és 3 között lehet.
+
+GET /api/v/0.1/story?name={name}&user_id={id}&media_ids[]={id}&description={description}&created_start={date}&created_end={date}&edit_start={date}&edit_end={date}
+Keres képtörténeteket név, feltöltő felhasználó azonosító, leírás, tartalmazott médiafálj azonosítók és dátumok alapjám.
+Visszatérési értéke egy tömb mely a {ID, name, created_date, modified_date} mezőket tartalmazza minimum.
+
+GET /api/v/0.1/reaction
+Kilistázza az összes létező reakciót egy tömbben {ID, name, data} értékekkel.
+A data egy base64-ben kódolt képfálj.
