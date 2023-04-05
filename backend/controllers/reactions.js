@@ -76,89 +76,105 @@ exports.addReaction = async (req, res, next) => {
             case ("media"): {
                 const exsistingUserReactions = (await media_reactions.findAll({ where: { [Op.and]: [{ user_ID: userID }, { media_ID: ID }] } })).map(Reaction => Reaction.reaction_ID);
 
-                filteredReactionIDs.forEach(ID => {
-                    if (exsistingUserReactions.includes(ID)) {
-                        exsistingReactionIDs.push(ID)
+                filteredReactionIDs.forEach(reactionID => {
+                    if (exsistingUserReactions.includes(reactionID)) {
+                        exsistingReactionIDs.push(reactionID)
                     } else {
-                        addList.push({ media_ID: ID, reaction_ID: ID, user_ID: userID, date: Date.now() })
+                        addList.push({ media_ID: ID, reaction_ID: reactionID, user_ID: userID, date: Date.now() })
                     };
                 });
 
-                const addedReactions = await media_reactions.bulkCreate(addList);
+                if (addList.length != 0) {
+                    const addedReactions = await media_reactions.bulkCreate(addList);
 
-                results.reaction_ids = addedReactions.map(Reaction => Reaction.reaction_ID);
+                    results.reaction_ids = addedReactions.map(Reaction => Reaction.reaction_ID);
+                };
+
                 results.target = "media";
                 results.ID = ID;
                 break;
             }
             case ("story"): {
-                const exsistingUserReactions = (await carousel_reactionlist.findAll({ where: { user_ID: userID } })).map(Reaction => Reaction.reaction_ID);
+                const exsistingUserReactions = (await carousel_reactionlist.findAll({ where: { [Op.and]: [{ user_ID: userID }, { carousel_ID: ID }] } })).map(Reaction => Reaction.reaction_ID);
 
-                filteredReactionIDs.forEach(ID => {
-                    if (exsistingUserReactions.includes(ID)) {
-                        exsistingReactionIDs.push(ID)
+                filteredReactionIDs.forEach(reactionID => {
+                    if (exsistingUserReactions.includes(reactionID)) {
+                        exsistingReactionIDs.push(reactionID)
                     } else {
-                        addList.push({ carousel_ID: ID, reaction_ID: ID, user_ID: userID, date: Date.now() });
+                        addList.push({ carousel_ID: ID, reaction_ID: reactionID, user_ID: userID, date: Date.now() });
                     };
                 });
 
-                const addedReactions = await carousel_reactionlist.bulkCreate(addList);
+                if (addList.length != 0) {
+                    const addedReactions = await carousel_reactionlist.bulkCreate(addList);
 
-                results.reaction_ids = addedReactions.map(Reaction => Reaction.reaction_ID);
+                    results.reaction_ids = addedReactions.map(Reaction => Reaction.reaction_ID);
+                };
+
                 results.target = "carousel";
                 results.ID = ID;
                 break;
             }
             case ("comment"): {
-                const exsistingUserReactions = (await comment_reactions.findAll({ where: { user_ID: userID } })).map(Reaction => Reaction.reaction_ID);
+                const exsistingUserReactions = (await comment_reactions.findAll({ where: { [Op.and]: [{ user_ID: userID }, { comment_ID: ID }] } })).map(Reaction => Reaction.reaction_ID);
 
-                filteredReactionIDs.forEach(ID => {
-                    if (exsistingUserReactions.includes(ID)) {
-                        exsistingReactionIDs.push(ID)
+                filteredReactionIDs.forEach(reactionID => {
+                    if (exsistingUserReactions.includes(reactionID)) {
+                        exsistingReactionIDs.push(reactionID)
                     } else {
-                        addList.push({ comment_ID: ID, reaction_ID: ID, user_ID: userID, date: Date.now() });
+                        addList.push({ comment_ID: ID, reaction_ID: reactionID, user_ID: userID, date: Date.now() });
                     };
                 });
 
-                const addedReactions = await comment_reactions.bulkCreate(addList);
+                if (addList.length != 0) {
+                    const addedReactions = await comment_reactions.bulkCreate(addList);
 
-                results.reaction_ids = addedReactions.map(Reaction => Reaction.reaction_ID);
+                    results.reaction_ids = addedReactions.map(Reaction => Reaction.reaction_ID);
+                };
+
                 results.target = "comment";
                 results.ID = ID;
                 break;
             }
             case ("thread"): {
-                const exsistingUserReactions = (await thread_reactions.findAll({ where: { user_ID: userID } })).map(Reaction => Reaction.reaction_ID);
+                const exsistingUserReactions = (await thread_reactions.findAll({ where: { [Op.and]: [{ user_ID: userID }, { thread_ID: ID }] } })).map(Reaction => Reaction.reaction_ID);
 
-                filteredReactionIDs.forEach(ID => {
-                    if (exsistingUserReactions.includes(ID)) {
-                        exsistingReactionIDs.push(ID)
+                filteredReactionIDs.forEach(reactionID => {
+                    if (exsistingUserReactions.includes(reactionID)) {
+                        exsistingReactionIDs.push(reactionID)
                     } else {
-                        addList.push({ thread_ID: ID, reaction_ID: ID, user_ID: userID, date: Date.now() });
+                        addList.push({ thread_ID: ID, reaction_ID: reactionID, user_ID: userID, date: Date.now() });
                     };
                 });
 
-                const addedReactions = await thread_reactions.bulkCreate(addList);
+                if (addList.length != 0) {
+                    const addedReactions = await thread_reactions.bulkCreate(addList);
 
-                results.reaction_ids = addedReactions.map(Reaction => Reaction.reaction_ID);
+                    results.reaction_ids = addedReactions.map(Reaction => Reaction.reaction_ID);
+                };
+
                 results.target = "thread";
                 results.ID = ID;
                 break;
             }
             case ("profile"): {
-                const exsistingUserReactions = (await profile_reactions.findAll({ where: { user_ID: userID } })).map(Reaction => Reaction.reaction_ID);
+                const exsistingUserReactions = (await profile_reactions.findAll({ where: { [Op.and]: [{ user_ID: userID }, { profile_ID: ID }] } })).map(Reaction => Reaction.reaction_ID);
 
-                filteredReactionIDs.forEach(ID => {
-                    if (exsistingUserReactions.includes(ID)) {
-                        exsistingReactionIDs.push(ID)
+                filteredReactionIDs.forEach(reactionID => {
+                    if (exsistingUserReactions.includes(reactionID)) {
+                        exsistingReactionIDs.push(reactionID)
                     } else {
-                        addList.push({ profile_ID: ID, reaction_ID: ID, user_ID: userID, date: Date.now() });
+                        addList.push({ profile_ID: ID, reaction_ID: reactionID, user_ID: userID, date: Date.now() });
                     };
                 });
 
-                const addedReactions = await profile_reactions.bulkCreate(addList);
+                if (addList.length != 0) {
+                    console.log(addList)
+                    const addedReactions = await profile_reactions.bulkCreate(addList);
 
-                results.reaction_ids = addedReactions.map(Reaction => Reaction.reaction_ID);
+                    results.reaction_ids = addedReactions.map(Reaction => Reaction.reaction_ID);
+                };
+
                 results.target = "profile";
                 results.ID = ID;
                 break;
