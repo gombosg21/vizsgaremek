@@ -194,6 +194,12 @@ A name egyedi kell hogy legyen.
 Mindkét mező kötelező.
 Siker esetén visszaadja az új reakciótípus ID-jét.
 
+DELETE /api/v/0.1/reaction/{ID}
+Belépés után elérhető...
+Később admin joggal csak..
+Eltöröl egy reakciótípust ID alapján.
+Siker esetén visszaadja az eltörlött reakciótípus ID-jét.
+
 POST /api/v/0.1/media/{ID}/reaction
 Belépés után elérhető...
 Reagál egy reakcióval az adott ID-jű médiafáljra.
