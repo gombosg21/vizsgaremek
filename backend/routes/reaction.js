@@ -14,7 +14,7 @@ const upload = multer({ storage: new multer.memoryStorage() });
 
 //create new reaction type, TODO: admin only
 //list all avalibe reaction types
-router.route('/reaction').post(auth.isAuth, reactionValidator.reactionCheckIfNameConflicts, upload.single('image'), reactionValidator.validateNewReactionData, reactionValidator.createRules(), commonValidator.validate, reactionsController.createReaction)
+router.route('/reaction').post(auth.isAuth, upload.single('image'), commonValidator.validateImage, reactionValidator.createRules(), commonValidator.validate, reactionsController.createReaction)
     .get(reactionsController.getAllReactions);
 
 //delete a reaction type ,TODO: admin only  
