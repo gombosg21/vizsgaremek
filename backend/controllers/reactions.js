@@ -207,44 +207,73 @@ exports.removeReaction = async (req, res, next) => {
 
     try {
 
-        switch (target) {
-            case ("media"): {
-                const targetReaction = await media_reactions.findOne({ where: { [Op.and]: [{ user_ID: userID }, { media_ID: ID }, { reaction_ID: reactionID }] } });
+        const vaildReactionIDs = (await reaction.findAll({ attributes: ["ID"] })).map(Reaction => Reaction.ID);
 
-                await targetReaction.delete();
-                return res.status(200).json({ deleted: targetReaction });
-            }
-            case ("story"): {
-                const targetReaction = await story_reactions.findOne({ where: { [Op.and]: [{ user_ID: userID }, { carousel_ID: ID }, { reaction_ID: reactionID }] } });
+        if (vaildReactionIDs.includes(reactionID)) {
 
-                await targetReaction.delete();
-                return res.status(200).json({ deleted: targetReaction });
+            switch (target) {
+                case ("media"): {
+                    const targetReaction = await media_reactions.findOne({ where: { [Op.and]: [{ user_ID: userID }, { media_ID: ID }, { reaction_ID: reactionID }] } });
 
-            }
-            case ("comment"): {
-                const targetReaction = await comment_reactions.findOne({ where: { [Op.and]: [{ user_ID: userID }, { comment_ID: ID }, { reaction_ID: reactionID }] } });
+                    if (targetReaction) {
+                        await targetReaction.destroy();
+                        return res.status(200).json({ deleted: targetReaction.reaction_ID });
+                    } else {
+                        return res.status(400).json({ error: "user has no such reaction on target item" });
+                    };
 
-                await targetReaction.delete();
-                return res.status(200).json({ deleted: targetReaction });
+                }
+                case ("story"): {
+                    const targetReaction = await story_reactions.findOne({ where: { [Op.and]: [{ user_ID: userID }, { carousel_ID: ID }, { reaction_ID: reactionID }] } });
 
-            }
-            case ("thread"): {
-                const targetReaction = await thread_reactions.findOne({ where: { [Op.and]: [{ user_ID: userID }, { thread_ID: ID }, { reaction_ID: reactionID }] } });
+                    if (targetReaction) {
+                        await targetReaction.destroy();
+                        return res.status(200).json({ deleted: targetReaction.reaction_ID });
+                    } else {
+                        return res.status(400).json({ error: "user has no such reaction on target item" });
+                    };
 
-                await targetReaction.delete();
-                return res.status(200).json({ deleted: targetReaction });
+                }
+                case ("comment"): {
+                    const targetReaction = await comment_reactions.findOne({ where: { [Op.and]: [{ user_ID: userID }, { comment_ID: ID }, { reaction_ID: reactionID }] } });
 
-            }
-            case ("profile"): {
-                const targetReaction = await profile_reactions.findOne({ where: { [Op.and]: [{ user_ID: userID }, { profile_ID: ID }, { reaction_ID: reactionID }] } });
+                    if (targetReaction) {
+                        await targetReaction.destroy();
+                        return res.status(200).json({ deleted: targetReaction.reaction_ID });
+                    } else {
+                        return res.status(400).json({ error: "user has no such reaction on target item" });
+                    };
 
-                await targetReaction.delete();
-                return res.status(200).json({ deleted: targetReaction });
+                }
+                case ("thread"): {
+                    const targetReaction = await thread_reactions.findOne({ where: { [Op.and]: [{ user_ID: userID }, { thread_ID: ID }, { reaction_ID: reactionID }] } });
 
-            }
-            default: {
-                throw new Error("an error occured while trying to remove a reaction isntance.");
+                    if (targetReaction) {
+                        await targetReaction.destroy();
+                        return res.status(200).json({ deleted: targetReaction.reaction_ID });
+                    } else {
+                        return res.status(400).json({ error: "user has no such reaction on target item" });
+                    };
+
+                }
+                case ("profile"): {
+                    const targetReaction = await profile_reactions.findOne({ where: { [Op.and]: [{ user_ID: userID }, { profile_ID: ID }, { reaction_ID: reactionID }] } });
+
+                    if (targetReaction) {
+                        await targetReaction.destroy();
+                        return res.status(200).json({ deleted: targetReaction.reaction_ID });
+                    } else {
+                        return res.status(400).json({ error: "user has no such reaction on target item" });
+                    };
+
+                }
+                default: {
+                    throw new Error("an error occured while trying to remove a reaction isntance.");
+                };
             };
+
+        } else {
+            return res.status(400).json({ error: `${reactionID} is not a vaild reaction ID` });
         };
 
     } catch (error) {
