@@ -50,7 +50,7 @@ exports.reactionCheckIfNameConflicts = async (req, res, next) => {
     };
 };
 
-exports.checkIfReactionIDExsist = async () => {
+exports.checkIfReactionIDExsist = async (req, res, next) => {
     const ID = req.params.reactionID;
     try {
         const Reaction = await reaction.findByPk(ID);
