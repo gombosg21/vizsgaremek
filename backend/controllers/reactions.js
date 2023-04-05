@@ -169,7 +169,6 @@ exports.addReaction = async (req, res, next) => {
                 });
 
                 if (addList.length != 0) {
-                    console.log(addList)
                     const addedReactions = await profile_reactions.bulkCreate(addList);
 
                     results.reaction_ids = addedReactions.map(Reaction => Reaction.reaction_ID);
