@@ -23,27 +23,27 @@ router.delete('/reaction/:reactionID', auth.isAuth, reactionValidator.checkIfRea
 
 //add reaction to media ID
 //remove reaction from media ID
-router.route('/media/:mediaID/reaction').post(mediaValidator.checkIfMediaIDExsist, auth.isAuth, preporcess.setTargetType("media"), reactionsController.addReaction)
-    .delete(mediaValidator.checkIfMediaIDExsist, auth.isAuth, preporcess.setTargetType("media"), reactionsController.removeReaction);
+router.route('/media/:mediaID/reaction').post(mediaValidator.checkIfMediaIDExsist, auth.isAuth, preporcess.setTargetType("media"), reactionValidator.addRules(), commonValidator.validate, reactionsController.addReaction)
+    .delete(mediaValidator.checkIfMediaIDExsist, auth.isAuth, preporcess.setTargetType("media"), reactionValidator.removeRules(), commonValidator.validate, reactionsController.removeReaction);
 
 //add reaction to thread ID
 //remove reaction from thread ID
-router.route('/thread/:threadID/reaction').post(threadValidator.checkIfThreadExsits, auth.isAuth, preporcess.setTargetType("thread"), reactionsController.addReaction)
-    .delete(threadValidator.checkIfThreadExsits, auth.isAuth, preporcess.setTargetType("thread"), reactionsController.removeReaction);
+router.route('/thread/:threadID/reaction').post(threadValidator.checkIfThreadExsits, auth.isAuth, preporcess.setTargetType("thread"), reactionValidator.addRules(), commonValidator.validate, reactionsController.addReaction)
+    .delete(threadValidator.checkIfThreadExsits, auth.isAuth, preporcess.setTargetType("thread"), reactionValidator.removeRules(), commonValidator.validate, reactionsController.removeReaction);
 
 //add reaction to profile ID
 //remove reaction from profile ID
-router.route('/user/:userID/reaction').post(userValidator.checkIfUserIDExsits, auth.isAuth, preporcess.setTargetType("profile"), reactionsController.addReaction)
-    .delete(userValidator.checkIfUserIDExsits, auth.isAuth, preporcess.setTargetType("profile"), reactionsController.removeReaction);
+router.route('/user/:userID/reaction').post(userValidator.checkIfUserIDExsits, auth.isAuth, preporcess.setTargetType("profile"), reactionValidator.addRules(), commonValidator.validate, reactionsController.addReaction)
+    .delete(userValidator.checkIfUserIDExsits, auth.isAuth, preporcess.setTargetType("profile"), reactionValidator.removeRules(), commonValidator.validate, reactionsController.removeReaction);
 
 //add reaction to story ID
 //remove reaction from story ID
-router.route('/story/:storyID/reaction').post(storyValidator.checkIfStoryIDExsits, auth.isAuth, preporcess.setTargetType("story"), reactionsController.addReaction)
-    .delete(storyValidator.checkIfStoryIDExsits, auth.isAuth, preporcess.setTargetType("story"), reactionsController.removeReaction);
+router.route('/story/:storyID/reaction').post(storyValidator.checkIfStoryIDExsits, auth.isAuth, preporcess.setTargetType("story"), reactionValidator.addRules(), commonValidator.validate, reactionsController.addReaction)
+    .delete(storyValidator.checkIfStoryIDExsits, auth.isAuth, preporcess.setTargetType("story"), reactionValidator.removeRules(), commonValidator.validate, reactionsController.removeReaction);
 
 //add reaction to comment ID
 //remove reaction from comment ID
-router.route('/comment/:commentID/reaction').post(commentValidator.checkIfCommentIDExsist, auth.isAuth, preporcess.setTargetType("comment"), reactionsController.addReaction)
-    .delete(commentValidator.checkIfCommentIDExsist, auth.isAuth, preporcess.setTargetType("comment"), reactionsController.removeReaction);
+router.route('/comment/:commentID/reaction').post(commentValidator.checkIfCommentIDExsist, auth.isAuth, preporcess.setTargetType("comment"), reactionValidator.addRules(), commonValidator.validate, reactionsController.addReaction)
+    .delete(commentValidator.checkIfCommentIDExsist, auth.isAuth, preporcess.setTargetType("comment"), reactionValidator.removeRules(), commonValidator.validate, reactionsController.removeReaction);
 
 module.exports = router;
