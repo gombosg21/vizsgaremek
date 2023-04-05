@@ -40,7 +40,7 @@ exports.deleteReaction = async (req, res, next) => {
 
     try {
         const Reaction = await reaction.findByPk(ID);
-        await Reaction.delete();
+        await Reaction.destroy();
         return res.status(200).json({ ID: Reaction.ID })
     } catch (error) {
         console.error(error);
