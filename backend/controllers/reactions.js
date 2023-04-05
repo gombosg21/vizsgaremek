@@ -2,7 +2,7 @@ const reaction = require('../models').reaction;
 const media_reactions = require("../models").media_reactionlist;
 const thread_reactions = require("../models").thread_reactionlist;
 const comment_reactions = require("../models").comment_reactionlist;
-const profile_reactions = require("../models").user_reactionlist;
+const profile_reactions = require("../models").profile_reactionlist;
 const story_reactions = require("../models").carousel_reactionlist;
 const toBase64 = require("../util/serialize-file").getBase64;
 const { Op } = require("sequelize");
@@ -76,11 +76,11 @@ exports.addReaction = async (req, res, next) => {
             case ("media"): {
                 const exsistingUserReactions = (await media_reactions.findAll({ where: { [Op.and]: [{ user_ID: userID }, { media_ID: ID }] } })).map(Reaction => Reaction.reaction_ID);
 
-                vaildReactionIDs.forEach(ID => {
+                filteredReactionIDs.forEach(ID => {
                     if (exsistingUserReactions.includes(ID)) {
                         exsistingReactionIDs.push(ID)
                     } else {
-                        addList.push({ media_ID: targetItem.ID, reaction_ID: ID, user_ID: userID, date: Date.now() })
+                        addList.push({ media_ID: ID, reaction_ID: ID, user_ID: userID, date: Date.now() })
                     };
                 });
 
@@ -88,17 +88,17 @@ exports.addReaction = async (req, res, next) => {
 
                 results.reaction_ids = addedReactions.map(Reaction => Reaction.reaction_ID);
                 results.target = "media";
-                results.ID = targetItem.ID;
+                results.ID = ID;
                 break;
             }
             case ("story"): {
                 const exsistingUserReactions = (await carousel_reactionlist.findAll({ where: { user_ID: userID } })).map(Reaction => Reaction.reaction_ID);
 
-                vaildReactionIDs.forEach(ID => {
+                filteredReactionIDs.forEach(ID => {
                     if (exsistingUserReactions.includes(ID)) {
                         exsistingReactionIDs.push(ID)
                     } else {
-                        addList.push({ carousel_ID: targetItem.ID, reaction_ID: ID, user_ID: userID, date: Date.now() });
+                        addList.push({ carousel_ID: ID, reaction_ID: ID, user_ID: userID, date: Date.now() });
                     };
                 });
 
@@ -106,17 +106,17 @@ exports.addReaction = async (req, res, next) => {
 
                 results.reaction_ids = addedReactions.map(Reaction => Reaction.reaction_ID);
                 results.target = "carousel";
-                results.ID = targetItem.ID;
+                results.ID = ID;
                 break;
             }
             case ("comment"): {
                 const exsistingUserReactions = (await comment_reactions.findAll({ where: { user_ID: userID } })).map(Reaction => Reaction.reaction_ID);
 
-                vaildReactionIDs.forEach(ID => {
+                filteredReactionIDs.forEach(ID => {
                     if (exsistingUserReactions.includes(ID)) {
                         exsistingReactionIDs.push(ID)
                     } else {
-                        addList.push({ comment_ID: targetItem.ID, reaction_ID: ID, user_ID: userID, date: Date.now() });
+                        addList.push({ comment_ID: ID, reaction_ID: ID, user_ID: userID, date: Date.now() });
                     };
                 });
 
@@ -124,17 +124,17 @@ exports.addReaction = async (req, res, next) => {
 
                 results.reaction_ids = addedReactions.map(Reaction => Reaction.reaction_ID);
                 results.target = "comment";
-                results.ID = targetItem.ID;
+                results.ID = ID;
                 break;
             }
             case ("thread"): {
                 const exsistingUserReactions = (await thread_reactions.findAll({ where: { user_ID: userID } })).map(Reaction => Reaction.reaction_ID);
 
-                vaildReactionIDs.forEach(ID => {
+                filteredReactionIDs.forEach(ID => {
                     if (exsistingUserReactions.includes(ID)) {
                         exsistingReactionIDs.push(ID)
                     } else {
-                        addList.push({ thread_ID: targetItem.ID, reaction_ID: ID, user_ID: userID, date: Date.now() });
+                        addList.push({ thread_ID: ID, reaction_ID: ID, user_ID: userID, date: Date.now() });
                     };
                 });
 
@@ -142,17 +142,17 @@ exports.addReaction = async (req, res, next) => {
 
                 results.reaction_ids = addedReactions.map(Reaction => Reaction.reaction_ID);
                 results.target = "thread";
-                results.ID = targetItem.ID;
+                results.ID = ID;
                 break;
             }
             case ("profile"): {
                 const exsistingUserReactions = (await profile_reactions.findAll({ where: { user_ID: userID } })).map(Reaction => Reaction.reaction_ID);
 
-                vaildReactionIDs.forEach(ID => {
+                filteredReactionIDs.forEach(ID => {
                     if (exsistingUserReactions.includes(ID)) {
                         exsistingReactionIDs.push(ID)
                     } else {
-                        addList.push({ profile_ID: targetItem.ID, reaction_ID: ID, user_ID: userID, date: Date.now() });
+                        addList.push({ profile_ID: ID, reaction_ID: ID, user_ID: userID, date: Date.now() });
                     };
                 });
 
@@ -160,7 +160,7 @@ exports.addReaction = async (req, res, next) => {
 
                 results.reaction_ids = addedReactions.map(Reaction => Reaction.reaction_ID);
                 results.target = "profile";
-                results.ID = targetItem.ID;
+                results.ID = ID;
                 break;
             }
             default: {
