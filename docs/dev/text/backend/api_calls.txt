@@ -235,3 +235,38 @@ A reactions[] mezőt követeli meg.
 A reactions csak érvényes reakcióID-ket tartalmazhat.
 Siker esetén visszaadja a létrehozott reakció ID-jét, a célpont típusát és ID-jét.
 Hiba esetén visszaadja az érvénytelen reakcióID-ket ill, a már létező reakcióID-ket.
+
+DELETE /api/v/0.1/media/{ID}/reaction
+Belépés után elérhető...
+Az id mezőt követeli.
+Az id csakis egy létező reakció ID lehet.
+Ha a user-nek van egy olyan reakciója a médiafáljon, eltörli azt és visszaadja az eltörlött reakció ID-jét.
+Ha nincs olyan reakciója akkor hibaüzenetet ad vissza.
+
+DELETE /api/v/0.1/thread/{ID}/reaction
+Belépés után elérhető...
+Az id mezőt követeli.
+Az id csakis egy létező reakció ID lehet.
+Ha a user-nek van egy olyan reakciója a beszédszálon, eltörli azt és visszaadja az eltörlött reakció ID-jét.
+Ha nincs olyan reakciója akkor hibaüzenetet ad vissza.
+
+DELETE /api/v/0.1/user/{ID}/reaction
+Belépés után elérhető...
+Az id mezőt követeli.
+Az id csakis egy létező reakció ID lehet.
+Ha a user-nek van egy olyan reakciója a felhasználóprofilon, eltörli azt és visszaadja az eltörlött reakció ID-jét.
+Ha nincs olyan reakciója akkor hibaüzenetet ad vissza.
+
+DELETE /api/v/0.1/story/{ID}/reaction
+Belépés után elérhető...
+Az id mezőt követeli.
+Az id csakis egy létező reakció ID lehet.
+Ha a user-nek van egy olyan reakciója a képtörténeten, eltörli azt és visszaadja az eltörlött reakció ID-jét.
+Ha nincs olyan reakciója akkor hibaüzenetet ad vissza.
+
+DELETE /api/v/0.1/comment/{ID}/reaction
+Belépés után elérhető...
+Az id mezőt követeli.
+Az id csakis egy létező reakció ID lehet.
+Ha a user-nek van egy olyan reakciója a kommenten, eltörli azt és visszaadja az eltörlött reakció ID-jét.
+Ha nincs olyan reakciója akkor hibaüzenetet ad vissza.
