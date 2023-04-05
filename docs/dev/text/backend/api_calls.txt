@@ -183,3 +183,13 @@ Visszatérési értéke egy tömb mely a {ID, name, created_date, modified_date}
 GET /api/v/0.1/reaction
 Kilistázza az összes létező reakciót egy tömbben {ID, name, data} értékekkel.
 A data egy base64-ben kódolt képfálj.
+
+POST /api/v/0.1/reaction
+Belépés után elérhető...
+Később admin joggal csak..
+Létrehoz egy új reakciótípust.
+A name és az image mezőket kéri multipart/form-data-ban.
+Az image egy érvényes kép kell hogy legyen.
+A name egyedi kell hogy legyen.
+Mindkét mező kötelező.
+Siker esetén visszaadja az új reakciótípus ID-jét.
