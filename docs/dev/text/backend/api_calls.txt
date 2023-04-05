@@ -193,3 +193,45 @@ Az image egy érvényes kép kell hogy legyen.
 A name egyedi kell hogy legyen.
 Mindkét mező kötelező.
 Siker esetén visszaadja az új reakciótípus ID-jét.
+
+POST /api/v/0.1/media/{ID}/reaction
+Belépés után elérhető...
+Reagál egy reakcióval az adott ID-jű médiafáljra.
+A reactions[] mezőt követeli meg.
+A reactions csak érvényes reakcióID-ket tartalmazhat.
+Siker esetén visszaadja a létrehozott reakció ID-jét, a célpont típusát és ID-jét.
+Hiba esetén visszaadja az érvénytelen reakcióID-ket ill, a már létező reakcióID-ket.
+
+POST /api/v/0.1/thread/{ID}/reaction
+Belépés után elérhető...
+Reagál egy reakcióval az adott ID-jű beszédszálra.
+A reactions[] mezőt követeli meg.
+A reactions csak érvényes reakcióID-ket tartalmazhat.
+Siker esetén visszaadja a létrehozott reakció ID-jét, a célpont típusát és ID-jét.
+Hiba esetén visszaadja az érvénytelen reakcióID-ket ill, a már létező reakcióID-ket.
+
+POST /api/v/0.1/user/{ID}/reaction
+Belépés után elérhető...
+Reagál egy reakcióval az adott ID-jű felhasználóprofilra.
+A reactions[] mezőt követeli meg.
+A reactions csak érvényes reakcióID-ket tartalmazhat.
+Siker esetén visszaadja a létrehozott reakció ID-jét, a célpont típusát és ID-jét.
+Hiba esetén visszaadja az érvénytelen reakcióID-ket ill, a már létező reakcióID-ket.
+
+
+POST /api/v/0.1/story/{ID}/reaction
+Belépés után elérhető...
+Reagál egy reakcióval az adott ID-jű képtörténetre.
+A reactions[] mezőt követeli meg.
+A reactions csak érvényes reakcióID-ket tartalmazhat.
+Siker esetén visszaadja a létrehozott reakció ID-jét, a célpont típusát és ID-jét.
+Hiba esetén visszaadja az érvénytelen reakcióID-ket ill, a már létező reakcióID-ket.
+
+
+POST /api/v/0.1/comment/{ID}/reaction
+Belépés után elérhető...
+Reagál egy reakcióval az adott ID-jű kommentre.
+A reactions[] mezőt követeli meg.
+A reactions csak érvényes reakcióID-ket tartalmazhat.
+Siker esetén visszaadja a létrehozott reakció ID-jét, a célpont típusát és ID-jét.
+Hiba esetén visszaadja az érvénytelen reakcióID-ket ill, a már létező reakcióID-ket.
