@@ -9,6 +9,30 @@ exports.createRules = () => {
     ];
 };
 
+exports.addRules = () => {
+    return [
+        validator.body('reactions').exists().withMessage('reactions missing, aborting'),
+        validator.body('reactions').isArray().withMessage('reactions must be an array'),
+        validator.body('reactions.*').isNumeric().withMessage('reactions can only contain numbers'),
+        validator.body('reactions.*').custom((value) => {
+            if (value < 1 || value % 1 != 0) {
+                throw new Error("reactions only contain non zero positive whole numbers")
+            } else {
+                return value;
+            }
+        })
+    ];
+};
+
+exports.removeRules = () => {
+    return [
+        validator.body('id').exists().withMessage('reaction id missing aborting'),
+        validator.body('id').isNumeric().withMessage('id must be a number'),
+        validator.body('id').custom((value) => { if (value < 1 || value % 1 != 0) { throw new Error("id must be a positive non zero whole number") } else { return value } })
+    ];
+};
+
+
 exports.reactionCheckIfNameConflicts = async (req, res, next) => {
     const reactionName = req.body.name;
     try {
