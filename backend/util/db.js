@@ -16,7 +16,7 @@ const connection = mysql.createConnection({
 exports.connect = async () => {
     try {
         (await connection).connect();
-        console.log(`connection to ${host}:${port} was successfully established`);
+        console.log(`connection to ${host}:${port} database: ${database} was successfully established`);
     } catch (error) {
         console.error(error);
     };
@@ -31,25 +31,4 @@ exports.disconnect = async () => {
     };
 };
 
-exports.initDB = async () => {
-    try {
-        (await connection).query(`CREATE DATABASE IF NOT EXISTS \`${database}\` CHARACTER SET \`${charset}\` COLLATE \`${collate}\` ;`);
-        console.log(`Database: ${database} Initialised.`);
-    } catch (error) {
-        console.error(error);
-    };
-};
-
-exports.destroyDB = async () => {
-    try {
-        (await connection).query(`DROP DATABASE IF EXISTS \`${database}\` ;`);
-        console.log(`Database: ${database} destroyed.`);
-    } catch (error) {
-        console.error(error);
-    };
-};
-
 exports.connection = connection;
-
-    // const sequelize = new Sequelize(database,username,password,{dialect: dialect})
-

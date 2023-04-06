@@ -1,10 +1,10 @@
-const db = require('./db');
+const db = require('./raw_db');
 const process = require('process');
 
 
-db.connect();
+db.rawConnect();
 db.initDB();
-db.disconnect();
+db.rawDisconnet();
 
 process.on('exit', (code) => {
     console.log(`Program has exited with code: ${code}`)

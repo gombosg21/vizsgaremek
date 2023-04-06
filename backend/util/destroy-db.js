@@ -1,10 +1,10 @@
-const db = require('./db');
+const db = require('./raw_db');
 const fs = require('fs');
 const process = require('process');
 
-db.connect();
+db.rawConnect();
 db.destroyDB();
-db.disconnect();
+db.rawDisconnet();
 
 fs.unlink('test_accounts_credentials.json', (err) => {
     if (err) { console.log("test account credentials doesnt exsits, proceeding"); } else {
