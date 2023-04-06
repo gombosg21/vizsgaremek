@@ -9,7 +9,8 @@ const connection = mysql.createConnection({
     host: host,
     user: username,
     password: password,
-    port: port
+    port: port,
+    database: database
 });
 
 exports.connect = async () => {
