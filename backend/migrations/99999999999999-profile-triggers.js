@@ -40,7 +40,6 @@ module.exports = {
         );
     },
 
-    // doesnt works..
     async down(queryInterface, Sequelize) {
         Sequelize.literal('DROP TRIGGER UPDATE_PROFILE_ALIAS_AFTER_CREATE_IF_NULL_TO_USER_NAME');
         Sequelize.literal('DROP TRIGGER UPDATE_PROFILE_AFTER_UPDATE_ALIAS_IF_NULL_TO_USER_NAME');
