@@ -19,15 +19,20 @@ module.exports = {
                 if (userFriendIDs[i] == ID) {
                     userFriendIDs.splice(i, 1);
                 };
-                userFriends.push({
-                    user_ID: ID,
-                    friend_ID: userFriendIDs[i],
-                    pending: Math.round(Math.random()) = 1 ? true : false,
-                    date: randomDate("2000-01-01", "2022-12-31"),
-                    unikey: ID > userFriendIDs[i] ? ID + "_" + userFriendIDs[i] : userFriendIDs[i] + "_" + ID
-                });
+
+                if (userFriendIDs.length != 0) {
+                    userFriends.push({
+                        user_ID: ID,
+                        friend_ID: userFriendIDs[i],
+                        pending: Math.round(Math.random()) == 1 ? true : false,
+                        date: randomDate("2000-01-01", "2022-12-31"),
+                        unikey: ID > userFriendIDs[i] ? ID + "_" + userFriendIDs[i] : userFriendIDs[i] + "_" + ID
+                    });
+                    friends.push(...userFriends);
+                };
             };
-            friends.concat(userFriends);
+
+
         });
 
         friends.sort((a, b) => ((a.unikey > b.unikey) ? 1 : ((b.unikey > a.unikey) ? -1 : 0)));
