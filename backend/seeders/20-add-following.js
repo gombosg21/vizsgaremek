@@ -9,25 +9,27 @@ module.exports = {
     async up(queryInterface, Sequelize) {
         const followings = [];
 
-        const userIDs = (await user.findAll({ attributes: ['ID'] })).map(User => User.ID);
+        // this gets called for every iteration, thats a no-no!
+        var userIDs = [];
+        userIDs = (await user.findAll({ attributes: ['ID'] })).map(User => User.ID);
 
-        userIDs.forEach(ID => {
+        for (let i = 0; i < userIDs.length; i++) {
+            console.log(userIDs);
             var followedIDs = getRandomSubArray(userIDs);
-            var followeds = [];
-            for (let i = 0; i < followedIDs; i++) {
-                if (followedIDs[i] == ID) {
-                    followedIDs.splice(i, 1);
+            followedIDs.forEach(followedID => {
+                if (userIDs[i] != followedID) {
+                    followings.push({
+                        user_ID: userIDs[i],
+                        followed_ID: followedID,
+                        date: randomDate("2000-01-01", "2022-12-31")
+                    });
                 };
-                followeds.push({
-                    user_ID: ID,
-                    followed_ID: followedIDs[i],
-                    date: randomDate("2000-01-01", "2022-12-31")
-                });
-            };
-            followings.concat(followeds);
-        });
+            });
+        };
 
-        await queryInterface.bulkInsert('followed', followings);
+        console.log(followings);
+
+        //await queryInterface.bulkInsert('followed', followings);
     },
     async down(queryInterface, Sequelize) {
         await queryInterface.bulkDelete('followed');
