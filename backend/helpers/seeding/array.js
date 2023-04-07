@@ -24,7 +24,7 @@ const getRandomArraySlice = (array) => {
         randomNum1 = Math.floor(array.length * Math.random());
         randomNum2 = Math.floor(array.length * Math.random());
     };
-    const newArray = array.slice(randomNum1, randomNum2);
+    const newArray = JSON.parse(JSON.stringify(array.slice(randomNum1, randomNum2)));
 
     return newArray;
 };
@@ -35,7 +35,7 @@ const getMixedArray = (array) => {
     if (array.length == 0) { throw new Error("array cannot be an empty array") };
     if (array.length == 1) { throw new Error("cannot random mix a 1 length array") };
 
-    var shuffledArray = array;
+    var shuffledArray = JSON.parse(JSON.stringify(array));
     for (let i = array.length - 1; i > 0; i--) {
 
         var randomIndex = Math.floor(i * Math.random());
