@@ -11,11 +11,11 @@ module.exports = {
             'BEGIN ' +
             'DECLARE USERNAME VARCHAR(255); ' +
             'BEGIN ' +
-            'IF profiles.alias = NULL ' +
+            'IF NEW.alias = NULL ' +
             'THEN ' +
-            'SELECT name INTO USERNAME FROM users WHERE user.ID = new.profile.user_ID; ' +
+            'SELECT name INTO USERNAME FROM users WHERE user.ID = NEW.profiles.user_ID; ' +
             'UPDATE profiles ' +
-            'SET alias = USERNAME WHERE user_ID = new.user_ID; ' +
+            'SET alias = USERNAME WHERE user_ID = NEW.user_ID; ' +
             'END IF; ' +
             'END; ' +
             'END; '
@@ -27,11 +27,11 @@ module.exports = {
             'BEGIN ' +
             'DECLARE USERNAME VARCHAR(255); ' +
             'BEGIN ' +
-            'IF profiles.alias = NULL ' +
+            'IF NEW.alias = NULL ' +
             'THEN ' +
-            'SELECT name INTO USERNAME FROM users WHERE user.ID = new.profile.user_ID; ' +
+            'SELECT name INTO USERNAME FROM users WHERE user.ID = OLD.profiles.user_ID; ' +
             'UPDATE profiles ' +
-            'SET alias = USERNAME WHERE user_ID = new.user_ID; ' +
+            'SET alias = USERNAME WHERE user_ID = OLD.user_ID; ' +
             'END IF; ' +
             'END; ' +
             'END; '
