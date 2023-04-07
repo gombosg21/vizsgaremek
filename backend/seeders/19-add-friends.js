@@ -19,7 +19,9 @@ module.exports = {
                 if (userFriendIDs[i] == ID) {
                     userFriendIDs.splice(i, 1);
                 };
+            };
 
+            for (let i = 0; i < userFriendIDs.length; i++) {
                 if (userFriendIDs.length != 0) {
                     userFriends.push({
                         user_ID: ID,
@@ -31,22 +33,20 @@ module.exports = {
                     friends.push(...userFriends);
                 };
             };
-
-
         });
 
         friends.sort((a, b) => ((a.unikey > b.unikey) ? 1 : ((b.unikey > a.unikey) ? -1 : 0)));
 
         for (let i = 0; i < (friends.length - 1); i++) {
-            if (friends[i].unikey == friends[i + 1].unikey) {
+            if (friends[i].unikey == friends[(i + 1)].unikey) {
                 friends.splice(i, 1);
+                i--;
             };
         };
 
         friends.forEach(Friend => {
             delete Friend.unikey;
         });
-
         await queryInterface.bulkInsert('friends', friends);
     },
     async down(queryInterface, Sequelize) {
