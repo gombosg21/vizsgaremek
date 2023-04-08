@@ -19,7 +19,8 @@ const indexRouter = require('./routes/index');
 const threadRouter = require('./routes/thread');
 const commentRouter = require('./routes/comment');
 const storyRouter = require('./routes/story');
-const reactionRouter = require('./routes/reaction');
+const reactionsRouter = require('./routes/reaction');
+const friendsRouter = require('./routes/friends');
 
 const app = express();
 
@@ -54,7 +55,8 @@ app.use(routePrefix, tagRouter);
 app.use(routePrefix, threadRouter);
 app.use(routePrefix, commentRouter);
 app.use(routePrefix, storyRouter);
-app.use(routePrefix, reactionRouter);
+app.use(routePrefix, reactionsRouter);
+app.use(routePrefix, friendsRouter);
 
 
 //catch 404 and forward to error handler
