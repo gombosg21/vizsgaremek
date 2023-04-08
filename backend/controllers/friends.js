@@ -1,10 +1,9 @@
-const user = require("../models").user;
 const friend = require("../models").friend;
 const { Op } = require("sequelize");
 
 exports.requestFriend = async (req, res, next) => {
     const userID = req.user.ID;
-    const friendID = req.body.id;
+    const friendID = req.params.userID;
 
     try {
         const newFriend = await friend.create({
@@ -14,7 +13,7 @@ exports.requestFriend = async (req, res, next) => {
             pending: true
         });
 
-        return res.status(201).json({ new_friend: newFriend });
+        return res.status(201).json({ id: newFriend.friendID, pending: newFriend.pending, date: newFriend.date });
     } catch (error) {
         console.error(error);
         return res.status(500);
@@ -25,7 +24,7 @@ exports.getPendingFriends = async (req, res, next) => {
     const userID = req.user.ID;
 
     try {
-        const pendingList = await friend.findAll({ where: { [Op.and]: [{ pending: true }, { user_ID: userID }] }, attributes: ['date', 'friend_ID'] });
+        const pendingList = await friend.findAll({ where: { [Op.and]: [{ pending: true }, { friend_ID: userID }] }, attributes: ['date', 'friend_ID'] });
 
         return res.status(200).json({ pending_friends: pendingList });
     } catch (error) {
@@ -36,10 +35,13 @@ exports.getPendingFriends = async (req, res, next) => {
 
 exports.verifyFriend = async (req, res, next) => {
     const userID = req.user.ID;
-    const friendID = req.body.id;
+    const friendID = req.params.userID;
+
     try {
-        const updateFriend = await friend.findOne({ where: { [Op.and]: [{ user_ID: userID }, { friend_ID: friendID }] } });
+        const updateFriend = await friend.findOne({ where: { [Op.and]: [{ user_ID: friendID }, { friend_ID: userID }] } });
         updateFriend.set({
+            user_ID: updateFriend.user_ID,
+            friend_ID: updateFriend.friend_ID,
             pending: false,
             date: Date.now()
         });
@@ -54,11 +56,18 @@ exports.verifyFriend = async (req, res, next) => {
 
 exports.removeFrined = async (req, res, next) => {
     const userID = req.user.ID;
-    const friendID = req.body.id;
+    const friendID = req.params.userID;
+
     try {
         const deleteFriend = await friend.findOne({ where: { [Op.and]: [{ user_ID: userID }, { friend_ID: friendID }] } });
-        await deleteFriend.destroy();
-        res.status(200).json({ deleted: deleteFriend })
+        if (deleteFriend) {
+            await deleteFriend.destroy();
+            return res.status(200).json({ deleted: deleteFriend.friend_ID });
+        } else {
+            const deleteFriend2 = await friend.findOne({ where: { [Op.and]: [{ user_ID: friendID }, { friend_ID: userID }] } });
+            await deleteFriend2.destroy();
+            return res.status(200).json({ deleted: deleteFriend2.friend_ID });
+        };
     } catch (error) {
         console.error(error);
         return res.status(500);
@@ -68,9 +77,9 @@ exports.removeFrined = async (req, res, next) => {
 exports.getFriends = async (req, res, next) => {
     const userID = req.user.ID;
     try {
-        const friendList = await friend.findAll({ where: { user_ID: userID }, group: 'user_ID' });
+        const friendList = await friend.findAll({ where: { [Op.and]: [{ [Op.or]: [{ user_ID: userID }, { friend_ID: userID }] }, { pending: false }] }, group: 'user_ID' });
 
-        res.status(200).json({ friend_list: friendList });
+        return res.status(200).json({ friend_list: friendList });
     } catch (error) {
         console.error(error);
         return res.status(500);
