@@ -20,5 +20,6 @@ module.exports = (sequelize, DataTypes) => {
         timestamps: false,
         modelName: 'friends',
     });
+    friends.removeAttribute('id');
     return friends;
 };
