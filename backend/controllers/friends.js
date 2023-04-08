@@ -1,4 +1,4 @@
-const friend = require("../models").friend;
+const friend = require("../models").friends;
 const { Op } = require("sequelize");
 
 exports.requestFriend = async (req, res, next) => {
@@ -75,9 +75,20 @@ exports.removeFrined = async (req, res, next) => {
 };
 
 exports.getFriends = async (req, res, next) => {
-    const userID = req.user.ID;
+    const userID = req.params.userID;
     try {
-        const friendList = await friend.findAll({ where: { [Op.and]: [{ [Op.or]: [{ user_ID: userID }, { friend_ID: userID }] }, { pending: false }] }, group: 'user_ID' });
+        const friendList = await friend.findAll({
+            where: {
+                [Op.and]: [{
+                    [Op.or]:
+                        [
+                            { user_ID: userID },
+                            { friend_ID: userID }
+                        ]
+                },
+                { pending: false }]
+            }, group: 'user_ID'
+        });
 
         return res.status(200).json({ friend_list: friendList });
     } catch (error) {
