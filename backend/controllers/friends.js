@@ -87,10 +87,24 @@ exports.getFriends = async (req, res, next) => {
                         ]
                 },
                 { pending: false }]
-            }, group: 'user_ID'
+            }, attributes: { exclude: ['pending'] }, group: 'user_ID'
         });
 
-        return res.status(200).json({ friend_list: friendList });
+        const friends = [];
+
+        friendList.forEach(Friend => {
+            var FormattedFriend = {
+                date: Friend.date
+            };
+            if(Friend.user_ID != userID) {
+                FormattedFriend.id = Friend.user_ID;
+            } else {
+                FormattedFriend.id = Friend.friend_ID;
+            };
+            friends.push(FormattedFriend)
+        });
+
+        return res.status(200).json({ friend_list: friends });
     } catch (error) {
         console.error(error);
         return res.status(500);
