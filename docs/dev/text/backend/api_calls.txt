@@ -276,3 +276,6 @@ Az id mezőt követeli.
 Az id csakis egy létező reakció ID lehet.
 Ha a user-nek van egy olyan reakciója a kommenten, eltörli azt és visszaadja az eltörlött reakció ID-jét.
 Ha nincs olyan reakciója akkor hibaüzenetet ad vissza.
+
+GET /api/v/0.1/friends/{ID}
+Kilistázza az adott id-jű user összes barátját, {iid, date} értékekkel.
