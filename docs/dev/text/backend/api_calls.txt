@@ -289,6 +289,11 @@ Belépés után elérhető...
 Megerősít egy függőben lévő barátkérelmet ID alapján.
 Siker esetén visszaadja a {friend:{ID, date}} értékeket.
 
+DELETE /api/v/0.1/friends/{ID}/confrim
+Belépés után elérhető...
+Visszautasíte egy barátkérelmet ID alapján.
+Siker esetén visszaadja a {deleted: { ID }} értékekeket.
+
 DELETE /api/v/0.1/friends/{ID}
 Belépés után elérhető...
 Eltöröl egy barátot ID alapján.
