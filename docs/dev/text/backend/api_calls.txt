@@ -298,3 +298,22 @@ POST  /api/v/0.1/friends/{ID}/add
 Belépés után elérhető...
 Létrehoz egy barátkérelmet ID alapján.
 Siker esetén visszaadja a {pending, date} értékekeket.
+
+GET /api/v/0.1/following/count/{ID}
+Visszaadja az adott ID-jű user követőinek számát.
+A {followers} értékeket adja vissza.
+
+GET /api/v/0.1/following/all
+Belépés után elérhető...
+Visszaadja a felhasználó összes feliratkozását.
+A { followed_list[{ date, ID }]} értékekeket adja vissza.
+
+POST /api/v/0.1/following/{ID}
+Belépés után elérhető...
+Feliratkozik az ID azonosítójú user-re.
+Siker esetén visszaadja a {subbed:{ID, date}} értékekeket.
+
+DELETE /api/v/0.1/following/{ID}
+Belépés után elérhető...
+Leiratkozik az ID azonosítójú user-ről.
+Siker esetén visszaadja a {unsubbed{ID}} értékekeket.
