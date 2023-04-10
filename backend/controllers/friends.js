@@ -24,7 +24,11 @@ exports.getPendingFriends = async (req, res, next) => {
     const userID = req.user.ID;
 
     try {
-        const pendingList = await friend.findAll({ where: { [Op.and]: [{ pending: true }, { friend_ID: userID }] }, attributes: ['date', 'friend_ID'] });
+        const pendingList = await friend.findAll({ where: { [Op.and]: [{ pending: true }, { friend_ID: userID }] }, attributes: ['date', ['user_ID', 'ID']] });
+
+        if (!pendingList) {
+            return res.status(200).json({ pending_friends: "no pending friend requests" });
+        };
 
         return res.status(200).json({ pending_friends: pendingList });
     } catch (error) {
@@ -38,7 +42,12 @@ exports.verifyFriend = async (req, res, next) => {
     const friendID = req.params.userID;
 
     try {
-        const updateFriend = await friend.findOne({ where: { [Op.and]: [{ user_ID: friendID }, { friend_ID: userID }] } });
+        const updateFriend = await friend.findOne({ where: { [Op.and]: [{ user_ID: friendID }, { friend_ID: userID }] }, attributes: [['user_ID', 'ID'], 'date'] });
+
+        if (!updateFriend) {
+            return res.status(400).json({ error: `user has no pending friend request with id of  ${friendID}` });
+        };
+
         updateFriend.set({
             user_ID: updateFriend.user_ID,
             friend_ID: updateFriend.friend_ID,
@@ -62,11 +71,16 @@ exports.removeFrined = async (req, res, next) => {
         const deleteFriend = await friend.findOne({ where: { [Op.and]: [{ user_ID: userID }, { friend_ID: friendID }] } });
         if (deleteFriend) {
             await deleteFriend.destroy();
-            return res.status(200).json({ deleted: deleteFriend.friend_ID });
+            return res.status(200).json({ deleted: { ID: deleteFriend.user_ID } });
         } else {
             const deleteFriend2 = await friend.findOne({ where: { [Op.and]: [{ user_ID: friendID }, { friend_ID: userID }] } });
-            await deleteFriend2.destroy();
-            return res.status(200).json({ deleted: deleteFriend2.friend_ID });
+            if (deleteFriend2) {
+                await deleteFriend2.destroy();
+                return res.status(200).json({ deleted: { ID: deleteFriend2.user_ID } });
+            } else {
+                return res.status(400).json({ error: `user has no friend with id of ${friendID}` });
+            };
+
         };
     } catch (error) {
         console.error(error);
@@ -96,12 +110,12 @@ exports.getFriends = async (req, res, next) => {
             var FormattedFriend = {
                 date: Friend.date
             };
-            if(Friend.user_ID != userID) {
+            if (Friend.user_ID != userID) {
                 FormattedFriend.id = Friend.user_ID;
             } else {
                 FormattedFriend.id = Friend.friend_ID;
             };
-            friends.push(FormattedFriend)
+            friends.push(FormattedFriend);
         });
 
         return res.status(200).json({ friend_list: friends });
