@@ -9,12 +9,10 @@ module.exports = {
     async up(queryInterface, Sequelize) {
         const followings = [];
 
-        // this gets called for every iteration, thats a no-no!
         var userIDs = [];
         userIDs = (await user.findAll({ attributes: ['ID'] })).map(User => User.ID);
 
         for (let i = 0; i < userIDs.length; i++) {
-            console.log(userIDs);
             var followedIDs = getRandomSubArray(userIDs);
             followedIDs.forEach(followedID => {
                 if (userIDs[i] != followedID) {
@@ -27,9 +25,7 @@ module.exports = {
             });
         };
 
-        console.log(followings);
-
-        //await queryInterface.bulkInsert('followed', followings);
+    await queryInterface.bulkInsert('followed', followings);
     },
     async down(queryInterface, Sequelize) {
         await queryInterface.bulkDelete('followed');
