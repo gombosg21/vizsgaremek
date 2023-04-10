@@ -18,9 +18,11 @@ module.exports = (sequelize, DataTypes) => {
         sequelize,
         timestamps: true,
         createdAt: 'date',
+        updatedAt: false,
         deletedAt: false,
         modelName: 'followed',
         freezeTableName: true
     });
+    followed.removeAttribute('id');
     return followed;
 };
