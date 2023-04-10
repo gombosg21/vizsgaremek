@@ -6,6 +6,12 @@ exports.requestFriend = async (req, res, next) => {
     const friendID = req.params.userID;
 
     try {
+        const userFriendList = friend.findAll({ where: { [Op.or]: [{ user_ID: friendID, friend_ID: userID }, { friend_ID: userID, user_ID: friendID }] } });
+
+        if (userFriendList) {
+            return res.status(400).json({ error: `cannot request friendship from user with id: ${friendID}, friendship ehiter already exsits or is pending` });
+        };
+
         const newFriend = await friend.create({
             user_ID: userID,
             friend_ID: friendID,
