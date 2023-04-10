@@ -278,4 +278,23 @@ Ha a user-nek van egy olyan reakciója a kommenten, eltörli azt és visszaadja 
 Ha nincs olyan reakciója akkor hibaüzenetet ad vissza.
 
 GET /api/v/0.1/friends/{ID}
-Kilistázza az adott id-jű user összes barátját, {iid, date} értékekkel.
+Kilistázza az adott id-jű user összes barátját, {id, date} értékekkel.
+
+GET /api/v/0.1/friends/pending
+Belépés után elérhető...
+Kilistázza az összes függőben lévő barátkérést, {id, date} értékekkel.
+
+POST /api/v/0.1/friends/{ID}/confrim
+Belépés után elérhető...
+Megerősít egy függőben lévő barátkérelmet ID alapján.
+Siker esetén visszaadja a {friend:{ID, date}} értékeket.
+
+DELETE /api/v/0.1/friends/{ID}
+Belépés után elérhető...
+Eltöröl egy barátot ID alapján.
+Siker esetén visszaadja a {deleted: { ID }} értékekeket.
+
+POST  /api/v/0.1/friends/{ID}/add
+Belépés után elérhető...
+Létrehoz egy barátkérelmet ID alapján.
+Siker esetén visszaadja a {pending, date} értékekeket.
