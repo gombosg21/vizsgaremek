@@ -1,9 +1,10 @@
 const followed = require("../models").followed;
+const { Op } = require("sequelize");
 
 exports.getFollowedList = async (req, res, next) => {
     const userID = req.user.ID;
     try {
-        const followedList = await followed.findALl({ where: { user_ID: userID } });
+        const followedList = await followed.findAll({ where: { user_ID: userID }, attributes: ['date', ['followed_ID', 'ID']] });
 
         if (!followedList) {
             return res.status(200).json({ followed_list: "user does not follow anyone" });
@@ -31,15 +32,25 @@ exports.getFollowerCount = async (req, res, next) => {
 
 exports.sub = async (req, res, next) => {
     const userID = req.user.ID;
-    const subID = req.body.id;
+    const subID = req.params.userID;
     try {
+        const userFollowingsRaw = await followed.findAll({ where: { user_ID: userID } });
+
+        if (userFollowingsRaw) {
+            const userFollowings = userFollowingsRaw.map(Followed => Followed.followed_ID);
+
+            if (userFollowings.includes(Number(subID))) {
+                return res.status(400).json({ error: `user is already subbed to user with id: ${subID}` });
+            };
+        };
+
         const newFollowing = await followed.create({
             user_ID: userID,
             followed_ID: subID,
             date: Date.now()
         });
 
-        return res.status(201).json({ subbed: { ID: newFollowing.followed_ID } });
+        return res.status(201).json({ subbed: { ID: newFollowing.followed_ID, date: newFollowing.date } });
     } catch (error) {
         console.error(error);
         return res.status(500);
@@ -49,7 +60,7 @@ exports.sub = async (req, res, next) => {
 
 exports.unSub = async (req, res, next) => {
     const userID = req.user.ID;
-    const subID = req.body.id;
+    const subID = req.params.userID;
     try {
         const deleteFollowing = await followed.findOne({ where: { [Op.and]: [{ user_ID: userID }, { followed_ID: subID }] } });
 
