@@ -43,25 +43,44 @@ exports.getPendingFriends = async (req, res, next) => {
     };
 };
 
-exports.verifyFriend = async (req, res, next) => {
+exports.verifyFriendRequest = async (req, res, next) => {
     const userID = req.user.ID;
     const friendID = req.params.userID;
 
     try {
-        const updateFriend = await friend.findOne({ where: { [Op.and]: [{ user_ID: friendID }, { friend_ID: userID }] }, attributes: [['user_ID', 'ID'], 'date'] });
+        const updateFriend = await friend.findOne({ where: { [Op.and]: [{ user_ID: friendID }, { friend_ID: userID }, { pending: true }] }, attributes: [['user_ID', 'ID'], 'date'] });
 
         if (!updateFriend) {
-            return res.status(400).json({ error: `user has no pending friend request with id of  ${friendID}` });
+            return res.status(400).json({ error: `cannot accept, user has no pending friend request with id of  ${friendID}` });
         };
 
-        updateFriend.set({
-            user_ID: updateFriend.user_ID,
-            friend_ID: updateFriend.friend_ID,
+        await updateFriend.update({
             pending: false,
             date: Date.now()
         });
 
         return res.status(200).json({ friend: updateFriend });
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500);
+    };
+};
+
+exports.rejectFriendRequest = async (req, res, next) => {
+    const userID = req.user.ID;
+    const friendID = req.params.userID;
+    try {
+
+        const rejectFriend = await friend.findOne({ where: { [Op.and]: [{ user_ID: friendID }, { friend_ID: userID }, { pending: true }] }, attributes: [['user_ID', 'ID'], 'date'] });
+
+        if (!rejectFriend) {
+            return res.status(400).json({ error: `cannot reject, user has no pending friend request with id of  ${friendID}` });
+        };
+
+        await rejectFriend.destroy();
+
+        return res.status(200).json({ deleted: { ID: rejectFriend.user_ID } });
 
     } catch (error) {
         console.error(error);
