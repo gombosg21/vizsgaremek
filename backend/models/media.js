@@ -40,6 +40,7 @@ module.exports = (sequelize, DataTypes) => {
     timestamps: true,
     createdAt: 'uploaded',
     updatedAt: 'last_edit',
+    freezeTableName: true
   });
   return media;
 };

@@ -16,8 +16,11 @@ module.exports = (sequelize, DataTypes) => {
         date: { type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW }
     }, {
         sequelize,
-        timestamps: false,
+        timestamps: true,
+        createdAt: 'date',
+        deletedAt: false,
         modelName: 'followed',
+        freezeTableName: true
     });
     return followed;
 };
