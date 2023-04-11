@@ -1,19 +1,14 @@
-// get friend activity by ID
+const activityController = require("../controllers/activity");
+const auth = require("../middlewares/authentiaction/auth");
+const router = require('express').Router();
 
-// get all friend activity
+//get user activity
+router.get(auth.isAuth, activityController.getActivity);
 
-// get all followed activity
+//sub notifications
+router.post(auth.isAuth, activityController.subNotify)
 
-// get followed activity by ID
+//unsub notifiactions
+router.delete(auth.isAuth, activityController.unSubNotify);
 
-// get followed and friend all activity
-
-// get all activity by date
-
-// get all friend activity by date
-
-// get all followed activity by date
-
-// get friend activity by ID by date
-
-// get followed activity by ID by date
+module.exports = router;
