@@ -132,7 +132,7 @@ const makeBannedAccountText = (userName, banReasons) => {
     htmlString += "<p>A " + userName + " VisualStory fiókod az alábbi okok miatt le lett tiltva:</p>";
     htmlString += "<ul>";
     banReasons.forEach(reason => {
-        htmlString += "<li>"+ reason +"<li/>";
+        htmlString += "<li>" + reason + "<li/>";
     });
     htmlString += "<ul/>";
     htmlString += "<p>Ha valaki más illetéktelen hozzáférése miatt történ e letiltás, a kapcsolatot csapatunkkal az alábbi linken veheted fel:</p>";
@@ -183,7 +183,7 @@ const makeSuspendedAccountText = (userName, suspendReasons, suspendExpirationDat
     htmlString += "<p>A " + userName + " VisualStory fiókod az alábbi okok miatt fel lett függesztve:</p>";
     htmlString += "<ul>";
     suspendReason.forEach(reason => {
-        htmlString += "<li>"+ reason +"<li/>";
+        htmlString += "<li>" + reason + "<li/>";
     });
     htmlString += "<ul/>";
     htmlString += "<p>A felfüggesztés lejárata: " + suspendExpirationDate + "</p>";
@@ -226,64 +226,64 @@ const setEmailOptions = (targetEmail, subject, html) => {
     return data;
 };
 
-exports.sendResetEmail = async (userName,resetToken,targetEmail) => {
+exports.sendResetEmail = async (userName, resetToken, targetEmail) => {
 
-    const html = await makeResetPasswordText(userName,resetToken);
+    const html = await makeResetPasswordText(userName, resetToken);
     const subject = "VisualStory " + userName + " felhasználó jelszóvisszaállítás";
 
-    const mailOptions = setEmailOptions(targetEmail,subject,html);
+    const mailOptions = setEmailOptions(targetEmail, subject, html);
 
-    transporter.sendMail(mailOptions,(error,info) => {
+    transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
             console.error(error);
-          } else {
+        } else {
             console.log('Email sent: ' + info.response);
-          };
+        };
     });
 };
 
-exports.sendVerfyEmail = async (userName,verifyToken,registerDate,targetEmail) => {
-    const html = await makeVerfiyRegisterText(userName,verifyToken,registerDate);
+exports.sendVerfyEmail = async (userName, verifyToken, registerDate, targetEmail) => {
+    const html = await makeVerfiyRegisterText(userName, verifyToken, registerDate);
     const subject = "VisualStory " + userName + " felhasználó megerősítése";
 
-    const mailOptions = setEmailOptions(targetEmail,subject,html);
+    const mailOptions = setEmailOptions(targetEmail, subject, html);
 
-    transporter.sendMail(mailOptions,(error,info) => {
+    transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
             console.error(error);
-          } else {
+        } else {
             console.log('Email sent: ' + info.response);
-          };
+        };
     });
 };
 
-exports.sendBanEmail = (userName,banReasons,targetEmail) => {
-    const html = makeBannedAccountText(userName,banReasons);
+exports.sendBanEmail = (userName, banReasons, targetEmail) => {
+    const html = makeBannedAccountText(userName, banReasons);
     const subject = "VisualStory " + userName + " felhasználó kitiltva";
 
-    const mailOptions = setEmailOptions(targetEmail,subject,html);
+    const mailOptions = setEmailOptions(targetEmail, subject, html);
 
-    transporter.sendMail(mailOptions,(error,info) => {
+    transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
             console.error(error);
-          } else {
+        } else {
             console.log('Email sent: ' + info.response);
-          };
+        };
     });
 };
 
-exports.sendSuspendEmail = (userName,suspendReasons,suspendExpirationDate,targetEmail) => {
-    const html = makeSuspendedAccountText(userName,suspendReasons,suspendExpirationDate);
+exports.sendSuspendEmail = (userName, suspendReasons, suspendExpirationDate, targetEmail) => {
+    const html = makeSuspendedAccountText(userName, suspendReasons, suspendExpirationDate);
     const subject = "VisualStory " + userName + " felhasználó felfüggesztve";
 
-    const mailOptions = setEmailOptions(targetEmail,subject,html);
+    const mailOptions = setEmailOptions(targetEmail, subject, html);
 
-    transporter.sendMail(mailOptions,(error,info) => {
+    transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
             console.error(error);
-          } else {
+        } else {
             console.log('Email sent: ' + info.response);
-          };
+        };
     });
 };
 
