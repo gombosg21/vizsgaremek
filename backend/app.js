@@ -27,10 +27,7 @@ const activityRouter = require('./routes/activity');
 const app = express();
 
 
-const corsOptions = {
-  origin: 'http://localhost:4200',
-  optionsSuccessStatus: 200,
-};
+
 
 DB.connect();
 
@@ -39,7 +36,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(cors(corsOptions));
+app.use(cors({
+  origin:"http://localhost:4200",
+  preflightContinue: true,
+  optionsSuccessStatus: 200,
+  credentials: true,
+  methods: ['GET','POST','PUT','PATCH','DELETE'],
+  allowedHeaders:['Origin','origin','x-request-with','X-Requested-With','Content-Type','Accept','accept','content-type','application/json','multipart/form-data']
+}));
 app.use(session(auth.sessionConfig));
 passport.use(auth.strategy);
 app.use(passport.initialize());
