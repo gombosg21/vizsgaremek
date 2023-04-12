@@ -22,6 +22,7 @@ const storyRouter = require('./routes/story');
 const reactionsRouter = require('./routes/reaction');
 const friendsRouter = require('./routes/friends');
 const followedRouter = require('./routes/following');
+const activityRouter = require('./routes/activity');
 
 const app = express();
 
@@ -59,6 +60,7 @@ app.use(routePrefix, storyRouter);
 app.use(routePrefix, reactionsRouter);
 app.use(routePrefix, friendsRouter);
 app.use(routePrefix, followedRouter);
+app.use(routePrefix, activityRouter);
 
 
 //catch 404 and forward to error handler
