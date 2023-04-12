@@ -1,4 +1,5 @@
 const followed = require("../models").followed;
+const activity = require("../models").activity;
 const { Op } = require("sequelize");
 
 exports.getFollowedList = async (req, res, next) => {
@@ -50,6 +51,11 @@ exports.sub = async (req, res, next) => {
             date: Date.now()
         });
 
+        await activity.create({
+            user_ID: userID,
+            followed_ID: subID
+        });
+
         return res.status(201).json({ subbed: { ID: newFollowing.followed_ID, date: newFollowing.date } });
     } catch (error) {
         console.error(error);
@@ -67,6 +73,10 @@ exports.unSub = async (req, res, next) => {
         if (!deleteFollowing) {
             return res.status(400).json({ error: `user does not follow user with id: ${subID}` })
         };
+
+        const activityInstance = await activity.findOne({ where: { [Op.and]: [{ user_ID: userID }, { followed_ID: subID }, { friend_ID: null }] } });
+
+        await activityInstance.destroy();
 
         await deleteFollowing.destroy();
 
