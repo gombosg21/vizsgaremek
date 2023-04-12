@@ -26,12 +26,12 @@ const activityRouter = require('./routes/activity');
 
 const app = express();
 
-// unused
-// const corsOptions = {
-//   origin: ['http://localhost/'],
-//   optionsSuccessStatus: 200,
-//   preflightContinue: true
-// };
+
+const corsOptions = {
+  origin: ['http://localhost:4200'],
+  optionsSuccessStatus: 200,
+  preflightContinue: true
+};
 
 DB.connect();
 
@@ -40,7 +40,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(session(auth.sessionConfig));
 passport.use(auth.strategy);
 app.use(passport.initialize());
