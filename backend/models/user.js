@@ -23,8 +23,11 @@ module.exports = (sequelize, DataTypes) => {
       this.hasMany(models.comment_reactionlist, { foreignKey: "user_ID", sourceKey: "ID" });
       this.belongsToMany(models.reaction, { through: models.carousel_reactionlist, foreignKey: "user_ID", sourceKey: "ID", as: "carousel_reaction_owner" });
       this.hasMany(models.carousel_reactionlist, { foreignKey: "user_ID", sourceKey: "ID" });
-      this.hasOne(models.friends, { sourceKey: "ID", foreignKey: "user_ID", as: "friendship_starter" });
-      this.hasMany(models.friends, { sourceKey: "ID", foreignKey: "friend_ID", as: "friendship_subject" })
+      this.hasMany(models.friends, { sourceKey: "ID", foreignKey: "user_ID", as: "friendship_starter" });
+      this.hasMany(models.friends, { sourceKey: "ID", foreignKey: "friend_ID", as: "friendship_recepient" });
+      this.hasMany(models.followed, { sourceKey: "ID", foreignKey: "user_ID", as: "follower" });
+      this.hasMany(models.followed, { sourceKey: "ID", foreignKey: "followed_ID", as: "followed" });
+      this.hasMany(models.activity, { sourceKey: "ID", foreignKey: "user_ID" });
     };
 
     validatePassword(password) {

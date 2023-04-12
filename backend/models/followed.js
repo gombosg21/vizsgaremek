@@ -5,9 +5,9 @@ const {
 module.exports = (sequelize, DataTypes) => {
     class followed extends Model {
         static associate(models) {
-            this.hasOne(models.user, { foreignKey: "ID", sourceKey: "user_ID" });
-            this.hasMany(models.user, { foreignKey: "ID", sourceKey: "followed_ID" });
-            this.hasMany(models.activity, { sourceKey: "followed_ID", foreignKey: "followed_ID" })
+            this.hasMany(models.user, { foreignKey: "ID", sourceKey: "user_ID", as: "follower" });
+            this.hasMany(models.user, { foreignKey: "ID", sourceKey: "followed_ID",  as: "followed" });
+            this.hasMany(models.activity, { sourceKey: "followed_ID", foreignKey: "followed_ID" });
         };
     };
     followed.init({
