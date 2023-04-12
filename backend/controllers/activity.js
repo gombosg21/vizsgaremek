@@ -19,9 +19,10 @@ exports.getActivity = async (req, res, next) => {
         // TODO: biiig sql query to get every associated users doing, needs to be smhw ordered by date fields...
         // FIXME: smh most of reactionlists dont work here, figure out why...
         // FIXME: sql query returns over 1k rows in client but naught here...
-        const activityFeed = activity.findAll({
+        const activityFeed = await activity.findAll({
             where:
                 { user_ID: userID },
+            attributes: [['user_ID', 'ID']],
             include: [
                 {
                     model: friend,
@@ -30,18 +31,18 @@ exports.getActivity = async (req, res, next) => {
                             model: user,
                             as: "friendship_starter",
                             attributes: ['ID'],
-                            include: [
-                                { model: profile, attributes: ["alias"] },
-                                { model: media, attributes: ['ID'], order: ["last_edit"] },
-                                { model: comment, attributes: ['ID'], order: ["last_edit"] },
-                                { model: thread, attributes: ['ID'], order: ["created"] },
-                                { model: carousel, attributes: ['ID'], order: ["modified_date"] },
-                                { model: profile_reactions, order: ["date"] },
-                                //{ model: thread_reactions, order: ["date"] },
-                                //{ model: comment_reactions, order: ["date"] },
-                                //{ model: media_reactions, order: ["date"] },
-                                //{ model: carousel_reactions, order: ["date"] }
-                            ]
+                            // include: [
+                            //     { model: profile, attributes: ["alias"] },
+                            //     { model: media, attributes: ['ID'], order: ["last_edit"] },
+                            //     { model: comment, attributes: ['ID'], order: ["last_edit"] },
+                            //     { model: thread, attributes: ['ID'], order: ["created"] },
+                            //     { model: carousel, attributes: ['ID'], order: ["modified_date"] },
+                            //     { model: profile_reactions, order: ["date"] },
+                            //{ model: thread_reactions, order: ["date"] },
+                            //{ model: comment_reactions, order: ["date"] },
+                            //{ model: media_reactions, order: ["date"] },
+                            //{ model: carousel_reactions, order: ["date"] }
+                            // ]
                         }]
                 },
                 {
@@ -51,40 +52,41 @@ exports.getActivity = async (req, res, next) => {
                             model: user,
                             as: "friendship_recepient",
                             attributes: ['ID'],
-                            include: [
-                                { model: profile, attributes: ["alias"] },
-                                { model: media, attributes: ['ID'], order: ["last_edit"] },
-                                { model: comment, attributes: ['ID'], order: ["last_edit"] },
-                                { model: thread, attributes: ['ID'], order: ["created"] },
-                                { model: carousel, attributes: ['ID'], order: ["modified_date"] },
-                                { model: profile_reactions, order: ["date"] },
-                                //{ model: thread_reactions, order: ["date"] },
-                                //{ model: comment_reactions, order: ["date"] },
-                                //{ model: media_reactions, order: ["date"] },
-                                //{ model: carousel_reactions, order: ["date"] }
-                            ]
+                            //             include: [
+                            //                 { model: profile, attributes: ["alias"] },
+                            //                 { model: media, attributes: ['ID'], order: ["last_edit"] },
+                            //                 { model: comment, attributes: ['ID'], order: ["last_edit"] },
+                            //                 { model: thread, attributes: ['ID'], order: ["created"] },
+                            //                 { model: carousel, attributes: ['ID'], order: ["modified_date"] },
+                            //                 { model: profile_reactions, order: ["date"] },
+                            //{ model: thread_reactions, order: ["date"] },
+                            //{ model: comment_reactions, order: ["date"] },
+                            //{ model: media_reactions, order: ["date"] },
+                            //{ model: carousel_reactions, order: ["date"] }
+                            //             ]
                         }]
                 },
-                // {
-                //     model: followed,
-                //     include: [
-                //         {
-                //             model: user,
-                //             as: "followed",
-                //             include: [
-                //                 { model: media, order: ["last_edit"] },
-                //                 { model: comment, order: ["last_edit"] },
-                //                 { model: thread, order: ["created"] },
-                //                 { model: carousel, order: ["modified_date"] },
-                //                 { model: profile_reactions, order: ["date"] },
-                //                 { model: thread_reactions, order: ["date"] },
-                //                 { model: comment_reactions, order: ["date"] },
-                //                 { model: media_reactions, order: ["date"] },
-                //                 { model: carousel_reactions, order: ["date"] }
-                //             ]
-                //         }
-                //     ]
-                // }
+                {
+                    model: followed,
+                    include: [
+                        {
+                            model: user,
+                            attributes: ['ID'],
+                            as: "followed",
+                            include: [
+                                { model: media, attributes: { exclude: ['user_ID', 'deletedAt', 'deleted'] } },
+                                { model: comment, attributes: { exclude: ['deletedAt', 'user_ID', 'deleted'] } },
+                                //                 { model: thread, order: ["created"] },
+                                //                 { model: carousel, order: ["modified_date"] },
+                                //                 { model: profile_reactions, order: ["date"] },
+                                //                 { model: thread_reactions, order: ["date"] },
+                                //                 { model: comment_reactions, order: ["date"] },
+                                //                 { model: media_reactions, order: ["date"] },
+                                //                 { model: carousel_reactions, order: ["date"] }
+                            ]
+                        }
+                    ]
+                }
             ]
         });
 
