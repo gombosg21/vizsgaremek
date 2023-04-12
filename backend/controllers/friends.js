@@ -1,4 +1,5 @@
 const friend = require("../models").friends;
+const activity = require("../models").activity;
 const { Op } = require("sequelize");
 
 exports.requestFriend = async (req, res, next) => {
@@ -59,6 +60,16 @@ exports.verifyFriendRequest = async (req, res, next) => {
             date: Date.now()
         });
 
+        await activity.create({
+            user_ID: userID,
+            friend_ID: friendID
+        });
+
+        await activity.create({
+            user_ID: friendID,
+            friend_ID: userID
+        });
+
         return res.status(200).json({ friend: updateFriend });
 
     } catch (error) {
@@ -96,11 +107,19 @@ exports.removeFrined = async (req, res, next) => {
         const deleteFriend = await friend.findOne({ where: { [Op.and]: [{ user_ID: userID }, { friend_ID: friendID }] } });
         if (deleteFriend) {
             await deleteFriend.destroy();
+            const activityInstanceOne = await activity.findOne({ where: { [Op.and]: [{ user_ID: userID }, { friend_ID: friendID }, { followed_ID: null }] } });
+            const activityInstanceTwo = await activity.findOne({ where: { [Op.and]: [{ user_ID: friendID }, { friend_ID: userID }, { followed_ID: null }] } });
+            await activityInstanceOne.destroy();
+            await activityInstanceTwo.destroy();
             return res.status(200).json({ deleted: { ID: deleteFriend.user_ID } });
         } else {
             const deleteFriend2 = await friend.findOne({ where: { [Op.and]: [{ user_ID: friendID }, { friend_ID: userID }] } });
             if (deleteFriend2) {
                 await deleteFriend2.destroy();
+                const activityInstanceOne = await activity.findOne({ where: { [Op.and]: [{ user_ID: userID }, { friend_ID: friendID }, { followed_ID: null }] } });
+                const activityInstanceTwo = await activity.findOne({ where: { [Op.and]: [{ user_ID: friendID }, { friend_ID: userID }, { followed_ID: null }] } });
+                await activityInstanceOne.destroy();
+                await activityInstanceTwo.destroy();
                 return res.status(200).json({ deleted: { ID: deleteFriend2.user_ID } });
             } else {
                 return res.status(400).json({ error: `user has no friend with id of ${friendID}` });
