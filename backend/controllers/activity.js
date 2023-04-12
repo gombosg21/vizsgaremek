@@ -1,16 +1,16 @@
-const user = require("../models").user;
-const friend = require("../models").friend;
-const followed = require("../models").followed;
-const media = require("../models").media;
-const comment = require("../models").comment;
-const thread = require("../models").thread;
-const carousel = require("../models").carousel;
-const profile_reactions = require("../models").profile_reactionlist;
-const comment_reactions = require("../models").comment_reactionlist;
-const thread_reactions = require("../models").thread_reactionlist;
-const media_reactions = require("../models").media_reactionlist;
-const carousel_reactions = require("../models").carousel_reactionlist;
 const activity = require("../models").activity;
+const comment = require('../models').comment;
+const user = require('../models').user;
+const thread = require('../models').thread;
+const followed = require("../models").followed;
+const friend = require("../models").friends;
+const media = require("../models").media;
+const carousel = require('../models').carousel;
+const media_reactions = require("../models").media_reactionlist;
+const thread_reactions = require("../models").thread_reactionlist;
+const comment_reactions = require("../models").comment_reactionlist;
+const profile_reactions = require("../models").profile_reactionlist;
+const carousel_reactions = require("../models").carousel_reactionlist;
 
 exports.getActivity = async (req, res, next) => {
     const userID = req.user.ID;
@@ -26,15 +26,15 @@ exports.getActivity = async (req, res, next) => {
                         {
                             model: user,
                             include: [
-                                { model: media },
-                                { model: comment },
-                                { model: thread },
-                                { model: carousel },
-                                { model: profile_reactions },
-                                { model: thread_reactions },
-                                { model: comment_reactions },
-                                { model: media_reactions },
-                                { model: carousel_reactions }
+                                { model: media, order: ["last_edit"] },
+                                { model: comment, order: ["last_edit"] },
+                                { model: thread, order: ["created"] },
+                                { model: carousel, order: ["modified_date"] },
+                                { model: profile_reactions, order: ["date"] },
+                                { model: thread_reactions, order: ["date"] },
+                                { model: comment_reactions, order: ["date"] },
+                                { model: media_reactions, order: ["date"] },
+                                { model: carousel_reactions, order: ["date"] }
                             ]
                         }]
                 },
@@ -42,17 +42,17 @@ exports.getActivity = async (req, res, next) => {
                     model: followed,
                     include: [
                         {
-                            model: user, 
+                            model: user,
                             include: [
-                                { model: media },
-                                { model: comment },
-                                { model: thread },
-                                { model: carousel },
-                                { model: profile_reactions },
-                                { model: thread_reactions },
-                                { model: comment_reactions },
-                                { model: media_reactions },
-                                { model: carousel_reactions }
+                                { model: media, order: ["last_edit"] },
+                                { model: comment, order: ["last_edit"] },
+                                { model: thread, order: ["created"] },
+                                { model: carousel, order: ["modified_date"] },
+                                { model: profile_reactions, order: ["date"] },
+                                { model: thread_reactions, order: ["date"] },
+                                { model: comment_reactions, order: ["date"] },
+                                { model: media_reactions, order: ["date"] },
+                                { model: carousel_reactions, order: ["date"] }
                             ]
                         }
                     ]
