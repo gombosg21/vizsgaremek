@@ -18,6 +18,9 @@ module.exports = (sequelize, DataTypes) => {
         sequelize,
         timestamps: false,
         modelName: 'activity',
+        freezeTableName: true,
+        
     });
+    activity.removeAttribute("id");
     return activity;
 };
