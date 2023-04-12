@@ -1,7 +1,6 @@
 'use strict';
 const followed = require("../models").followed;
 const friend = require("../models").friends;
-const { Op } = require("sequelize");
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
