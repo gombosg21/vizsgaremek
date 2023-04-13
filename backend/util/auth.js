@@ -1,6 +1,8 @@
 const crypto = require('crypto');
 const JWT = require('jsonwebtoken');
 const fs = require('fs/promises');
+const fs_old = require('fs');
+
 
 /**
  * 
@@ -77,10 +79,10 @@ exports.generateToken = () => {
 };
 
 
-exports.readPublicJWT = async () => {
+exports.readPublicJWT = () => {
     try {
 
-        const key = await fs.readFile("../keys/id_rsa_public.pem", "utf-8");
+        const key = fs_old.readFileSync("../keys/id_rsa_public.pem", "utf-8");
 
         return key;
     } catch (error) {
@@ -88,10 +90,10 @@ exports.readPublicJWT = async () => {
     };
 };
 
-exports.readPriavteJWT = async () => {
+exports.readPriavteJWT = () => {
     try {
 
-        const key = await fs.readFile("../keys/id_rsa_private.pem", "utf-8");
+        const key = fs_old.readFileSync("../keys/id_rsa_private.pem", "utf-8");
         return key;
     } catch (error) {
         console.log(error)
