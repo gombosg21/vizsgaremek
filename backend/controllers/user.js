@@ -9,7 +9,7 @@ const profile_reactionlist = require("../models").profile_reactionlist;
 const { Op, fn, col } = require("sequelize");
 const Visibility = require('../helpers/authorization/visibility').determineVisibility;
 const getJWT = require("../util/auth").generateJWT;
-const validatePassword = require('../../util/auth').validatePassword;
+const validatePassword = require('../util/auth').validatePassword;
 
 exports.getProfile = async (req, res, next) => {
     const ID = req.params.userID;
@@ -138,7 +138,7 @@ exports.login = async (req, res, next) => {
 
 exports.refresh = (req,res,next) => {
     try{
-        
+
     }  catch (error) {
         console.error(error);
         return res.status(500);
