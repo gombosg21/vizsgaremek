@@ -7,8 +7,6 @@ exports.corsOptions = {
     methods: ['GET', 'POST', 'OPTIONS','PUT', 'PATCH', 'DELETE'],
     allowedHeaders: ['authorization'],
     origin: (origin, callback) => {
-        console.log("im here \n \n")
-        console.log(origin)
         if (corsOriginList.indexOf(origin) !== -1) {
             callback(null, true)
         } else {
