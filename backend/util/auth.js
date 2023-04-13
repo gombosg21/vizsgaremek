@@ -1,4 +1,14 @@
 const crypto = require('crypto');
+const JWT = require('jsonwebtoken');
+const user = require('../models').user;
+const path = require('path');
+require('dotenv').config({ path: path.resolve('./.env') });
+
+/**
+ * 
+ * @param {String} password - the password to hash
+ * @returns {Object Promise Base64Encoded} returns a two part base64 string, separated by a single ':', first part is the salt, second is the hash
+ */
 
 exports.generatePassword = async (password) => {
 
@@ -18,6 +28,14 @@ exports.generatePassword = async (password) => {
         });
     });
 };
+
+
+/**
+ * 
+ * @param {String} password - the password to validate
+ * @param {String Base64Encoded} encryptedPassword - the passwords salt:hash combination to validate against
+ * @returns {Object Promise Boolean} true if validation is successfull, else false. may also return an error if something goes horribly wrong
+ */
 
 exports.validatePassword = (password, encryptedPassword) => {
     const regexCharMap = /[A-Za-z0-9]+:[A-Za-z0-9]+/;
@@ -43,6 +61,11 @@ exports.validatePassword = (password, encryptedPassword) => {
     });
 };
 
+/**
+ * 
+ * @returns {Object Promise String Base64UrlEncoded} a unique token. 
+ */
+
 exports.generateToken = () => {
 
     return new Promise((rejects, resolve) => {
@@ -53,4 +76,38 @@ exports.generateToken = () => {
             resolve(buff.toString('base64url'))
         });
     });
+};
+
+
+/**
+ *  
+ * @property {Number}  user_ID - The ID of a valid, exsisting user
+ * 
+ * @returns {Object String Token Number} an object containing a Bearer:token and the expiration date
+ */
+
+exports.generateJWT = async (user_ID) => {
+
+    const userIDs = (await user.findAll({ attributes: ['ID'] })).map(User => User.ID)
+
+    if (!user_ID) { throw new Error("attribute user_ID missing"); };
+    if (typeof user_ID != "number") { throw new TypeError("user_ID must be a number");};
+    if (user_ID < 1) { throw new RangeError("user_ID must be a non-zero number");};
+    if (user_ID % 1 != 0) { throw new TypeError("user_ID must be a whole number");};
+    if (!(userIDs.includes(user_ID))) {throw new RangeError("user_ID must be an exsisting user ID"); };
+
+    const payload = {
+        sub : user_ID,
+        iat: Date.now()
+    };
+
+    const expires = '3d';
+
+    const token = JWT.sign(payload, process.env.TOKEN_SECRET,{expiresIn:expires,algorithm:'RS256'});
+
+    return {
+        token: "Bearer:"+token,
+        expires: expires
+    };
+
 };
