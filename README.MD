@@ -34,3 +34,9 @@ The framework of our choice is **Angular**
 - [Sequelize ORM v6](https://sequelize.org/docs/v6/)
 - [Angular.js](https://docs.angularjs.org/api)
 - [Jest](https://jestjs.io/)
+
+# Requirements
+
+- Node >= 18.0
+- MariaDB >= 10.4
+- XAMP >= 3.3.0
