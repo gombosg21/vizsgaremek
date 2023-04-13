@@ -70,12 +70,7 @@ exports.isAuth = (req, res, next) => {
 };
 
 exports.hasAuth = (req, res, next) => {
-
-    if (req.isAuthenticated()) {
-        return res.status(400).json({ error: "already signed in" });
-    } else {
         return next();
-    };
 };
 
 exports.checkRole = (rolelevel) => {
