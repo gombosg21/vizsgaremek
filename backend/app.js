@@ -10,6 +10,7 @@ const corsOptions = require('./middlewares/authentiaction/cors').corsOptions;
 const DB = require('./util/db');
 const auth = require('./middlewares/authentiaction/auth');
 
+require('dotenv').config({ path: path.resolve(__dirname, './.env') })
 
 //routers
 const usersRouter = require('./routes/users');
