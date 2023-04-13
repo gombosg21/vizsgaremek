@@ -8,6 +8,8 @@ const thread_reactionlist = require("../models").thread_reactionlist;
 const profile_reactionlist = require("../models").profile_reactionlist;
 const { Op, fn, col } = require("sequelize");
 const Visibility = require('../helpers/authorization/visibility').determineVisibility;
+const getJWT = require("../util/auth").generateJWT;
+const validatePassword = require('../../util/auth').validatePassword;
 
 exports.getProfile = async (req, res, next) => {
     const ID = req.params.userID;
@@ -110,11 +112,34 @@ exports.editProfile = async (req, res, next) => {
 
 exports.login = async (req, res, next) => {
     const Name = req.body.name;
+    const password = req.body.password;
 
     try {
-        const User = await user.findOne({ where: { Name: Name }, attributes: ['ID'] });
-        return res.status(200).json({ ID: User.ID });
+        const User = await user.findOne({ where: { Name: Name }, attributes: ['ID', 'password'] });
+        if (!User) {
+            return res.status(400).json({ error: "bad username or password" });
+        };
+
+        const vaildPassword = await validatePassword(password, User.password);
+
+        const tokenResults = getJWT(User.ID);
+
+        if (vaildPassword) {
+            return res.status(200).json({ ID: User.ID, token: tokenResults.token, token_expires: tokenResults.expires });
+        };
+
+        return res.status(403).json({ error: "bad username or password" });
+
     } catch (error) {
+        console.error(error);
+        return res.status(500);
+    };
+};
+
+exports.refresh = (req,res,next) => {
+    try{
+        
+    }  catch (error) {
         console.error(error);
         return res.status(500);
     };
@@ -210,14 +235,10 @@ exports.createUser = async (req, res, next) => {
         });
 
         // email.sendVerfyEmail(User.Email);
-        req.logIn(User, async (error) => {
-            if (error) {
-                console.error(error);
-                return res.status(500);
-            } else {
-                return res.status(201).json({ ID: User.ID });
-            };
-        });
+
+        const tokenResults = getJWT(User.ID);
+
+        return res.status(201).json({ ID: User.ID, token: tokenResults.token, token_expires: tokenResults.expires });
     }
     catch (error) {
         console.error(error);
