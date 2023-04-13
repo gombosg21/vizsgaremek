@@ -1,8 +1,6 @@
 const crypto = require('crypto');
 const JWT = require('jsonwebtoken');
-const path = require('path');
 const fs = require('fs/promises');
-require('dotenv').config({ path: path.resolve('./.env') });
 
 /**
  * 
@@ -79,6 +77,27 @@ exports.generateToken = () => {
 };
 
 
+exports.readPublicJWT = async () => {
+    try {
+
+        const key = await fs.readFile("../keys/id_rsa_public.pem", "utf-8");
+
+        return key;
+    } catch (error) {
+        console.log(error)
+    };
+};
+
+exports.readPriavteJWT = async () => {
+    try {
+
+        const key = await fs.readFile("../keys/id_rsa_private.pem", "utf-8");
+        return key;
+    } catch (error) {
+        console.log(error)
+    };
+};
+
 /**
  *  
  * @property {Number}  user_ID - The ID of a valid, exsisting user
@@ -100,7 +119,9 @@ exports.generateJWT = async (user_ID) => {
 
     const expires = '3d';
 
-    const token = JWT.sign(payload, process.env.TOKEN_SECRET, { expiresIn: expires, algorithm: 'RS256' });
+    const privateKey = await this.readPriavteJWT()
+
+    const token = JWT.sign(payload, privateKey, { expiresIn: expires, algorithm: 'RS256' });
 
     return {
         token: "Bearer:" + token,
@@ -110,7 +131,7 @@ exports.generateJWT = async (user_ID) => {
 
 const JWTKeyGen = async () => {
 
-    return new Promise((resolve,rejects ) => {
+    return new Promise((resolve, rejects) => {
         crypto.generateKeyPair('rsa', {
             modulusLength: 4096,
             publicKeyEncoding: {
