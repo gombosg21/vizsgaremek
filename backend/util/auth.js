@@ -1,6 +1,7 @@
 const crypto = require('crypto');
 const JWT = require('jsonwebtoken');
 const path = require('path');
+const fs = require('fs/promises');
 require('dotenv').config({ path: path.resolve('./.env') });
 
 /**
@@ -88,22 +89,58 @@ exports.generateToken = () => {
 exports.generateJWT = async (user_ID) => {
 
     if (!user_ID) { throw new Error("attribute user_ID missing"); };
-    if (typeof user_ID != "number") { throw new TypeError("user_ID must be a number");};
-    if (user_ID < 1) { throw new RangeError("user_ID must be a non-zero number");};
-    if (user_ID % 1 != 0) { throw new TypeError("user_ID must be a whole number");};
+    if (typeof user_ID != "number") { throw new TypeError("user_ID must be a number"); };
+    if (user_ID < 1) { throw new RangeError("user_ID must be a non-zero number"); };
+    if (user_ID % 1 != 0) { throw new TypeError("user_ID must be a whole number"); };
 
     const payload = {
-        sub : user_ID,
+        sub: user_ID,
         iat: Date.now()
     };
 
     const expires = '3d';
 
-    const token = JWT.sign(payload, process.env.TOKEN_SECRET,{expiresIn:expires,algorithm:'RS256'});
+    const token = JWT.sign(payload, process.env.TOKEN_SECRET, { expiresIn: expires, algorithm: 'RS256' });
 
     return {
-        token: "Bearer:"+token,
+        token: "Bearer:" + token,
         expires: expires
     };
+};
 
+const JWTKeyGen = async () => {
+
+    return new Promise((resolve,rejects ) => {
+        crypto.generateKeyPair('rsa', {
+            modulusLength: 4096,
+            publicKeyEncoding: {
+                type: 'pkcs1',
+                format: 'pem'
+            }, privateKeyEncoding: {
+                type: 'pkcs1',
+                format: 'pem'
+            }
+        }, (err, publicKey, privateKey) => {
+            if (err) {
+                rejects(err);
+            };
+            if (publicKey && privateKey) {
+                resolve({
+                    publicKey,
+                    privateKey
+                });
+            };
+        });
+    });
+};
+
+exports.writeJWTKeys = async () => {
+    try {
+        const keys = await JWTKeyGen();
+
+        await fs.writeFile("../keys/id_rsa_public.pem", keys.publicKey);
+        await fs.writeFile("../keys/id_rsa_private.pem", keys.privateKey);
+    } catch (error) {
+        console.log(error)
+    };
 };
