@@ -7,6 +7,7 @@
     "start": "node app.js",
     "init-db": "node ./util/init-db.js",
     "wipe-db": "node ./util/destroy-db.js",
+    "jwt-keygen": "node ./util/jwt-keygen.js",
     "test": "jest"
   },
   "dependencies": {
