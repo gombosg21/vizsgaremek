@@ -7,7 +7,7 @@ const cors = require('cors');
 const session = require("express-session");
 const passport = require('passport');
 
-const corsMiddleware = require('./middlewares/authentiaction/cors');
+const corsOptions = require('./middlewares/authentiaction/cors').corsOptions;
 const DB = require('./util/db');
 const auth = require('./middlewares/authentiaction/auth');
 
@@ -47,10 +47,11 @@ const routePrefix = '/api/v/' + version;
 
 app.use(function (req, res, next) {
   req.headers.origin = req.headers.origin || req.headers.host;
-  next();
+  //console.log(res)
+  return next();
 });
 
-app.use('*',cors(corsMiddleware.corsOptions));
+app.use('*',cors(corsOptions));
 app.use(routePrefix, indexRouter)
 app.use(routePrefix, usersRouter);
 app.use(routePrefix, mediaRouter);

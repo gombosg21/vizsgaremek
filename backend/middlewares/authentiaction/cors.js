@@ -4,8 +4,8 @@ exports.corsOptions = {
     preflightContinue: true,
     optionsSuccessStatus: 200,
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
-    allowedHeaders: ['Origin', 'origin', 'x-request-with', 'X-Requested-With', 'Content-Type', 'Accept', 'accept', 'content-type', 'application/json', 'multipart/form-data'],
+    methods: ['GET', 'POST', 'OPTIONS','PUT', 'PATCH', 'DELETE'],
+    allowedHeaders: ['authorization'],
     origin: (origin, callback) => {
         console.log("im here \n \n")
         console.log(origin)
