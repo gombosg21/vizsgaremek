@@ -1,12 +1,10 @@
 const user = require('../../models').user;
-const path = require('path');
 const passport = require('passport');
 const ExtractJwt = require("passport-jwt").ExtractJwt;
 const JWTStrategy = require('passport-jwt').Strategy;
-require('dotenv').config({ path: path.resolve('./.env') });
+const publicJWT = require('../../util/auth').readPublicJWT;
 
 const options = {
-    secretOrKey: process.env.TOKEN_SECRET,
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     algorithms: ['RS256'],
     ignoreExpiration: false,
@@ -15,7 +13,6 @@ const options = {
         clocktolearnce: '',
         maxAge: '3h',
         clockTimestamp: 100,
-
     }
 };
 
@@ -44,7 +41,11 @@ const dataFields = {
     passwordField: "password"
 };
 
-exports.strategy = new JWTStrategy(options, verifyCallback);
+exports.strategy = async ()  =>{
+    options.secretOrKey = await publicJWT();
+    console.log(options)
+    return JWTStrategy(options, verifyCallback);
+};
 
 passport.serializeUser((User, done) => {
     done(null, User.ID);

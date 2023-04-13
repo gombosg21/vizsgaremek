@@ -36,7 +36,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-passport.use(auth.strategy);
+passport.use('jwt',auth.strategy);
 const version = process.env.VERSION ?? 0.1;
 
 const routePrefix = '/api/v/' + version;
