@@ -1,12 +1,11 @@
-@import '~@fortawesome/fontawesome-free/css/all.css';
 .container {
-    max-width: 600px;
+    max-width: 100%;
+}
+
+.card {
     background: linear-gradient(45deg, rgb(186, 230, 255), #e7eeff);
-    padding-top: 2em;
-    padding-left: 2em;
-    padding-right: 2em;
-    padding-bottom: 0.1em;
     border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .form-group {

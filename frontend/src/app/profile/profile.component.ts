@@ -1,4 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { AuthService } from '../services/auth.service';
+import { HttpClient } from '@angular/common/http';
+import { CookieService } from 'ngx-cookie-service';
+import { HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-profile',
@@ -6,17 +11,70 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-  username = 'johndoe';
-  bio = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent malesuada libero ac enim fringilla, non pellentesque mauris pulvinar.';
-  profileImage = 'https://via.placeholder.com/150x150';
+  username = '';
+  bio = '';
+  profileImage = '';
   postCount = 0; 
-  followersCount = 500;
+  followersCount = 100;
   followingCount = 200;
   showUploadForm = false;
 
   selectedImage = '';
   isSmallImage = false;
   showModal = false;
+
+
+  //template images posts
+  posts = [
+    {
+      image: 'https://www.shutterstock.com/image-photo/happy-cheerful-young-woman-wearing-260nw-613759379.jpg',
+      likes: 50,
+      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent malesuada libero ac enim fringilla, non pellentesque mauris pulvinar.',
+    },
+    {
+      image: 'https://www.shutterstock.com/shutterstock/photos/1865153395/display_1500/stock-photo-portrait-of-young-smiling-woman-looking-at-camera-with-crossed-arms-happy-girl-standing-in-1865153395.jpg',
+      likes: 100,
+      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent malesuada libero ac enim fringilla, non pellentesque mauris pulvinar.',
+    },
+  ];
+
+  constructor(private route: ActivatedRoute, private authService: AuthService, private http: HttpClient, private cookieService: CookieService) { }
+
+  ngOnInit() {
+    const userId = this.route.snapshot.params['id'];
+    this.authService.getUserProfile(userId).subscribe(
+      (profile) => {
+      },
+      (error: any) => {
+        console.error('Profile error:: ', error);
+      }
+    );
+  }
+  
+  
+  
+
+  getUserProfile(userId: string): void {
+    const token = this.cookieService.get('VSCookie');
+
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+   this.http.get(`/api/v/0.1/user/${userId}`, { headers }).subscribe(
+    (response: any) => {
+        this.username = response.profile.profile.alias;
+        this.bio = response.profile.profile.description;
+        this.profileImage = response.profile.profile.medium;
+        // other fetched data later
+
+        console.log('Fetched user profile:', response);
+      },
+      (error) => {
+        console.error('Errorlog2: ', error);
+      }
+    );
+  }
+  
+
 
   openImageModal(imageUrl: string): void {
     this.selectedImage = imageUrl;
@@ -33,19 +91,6 @@ export class ProfileComponent implements OnInit {
     this.isSmallImage = false;
     this.showModal = false;
   }
-
-  posts = [
-    {
-      image: 'https://www.shutterstock.com/image-photo/happy-cheerful-young-woman-wearing-260nw-613759379.jpg',
-      likes: 50,
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent malesuada libero ac enim fringilla, non pellentesque mauris pulvinar.',
-    },
-    {
-      image: 'https://www.shutterstock.com/shutterstock/photos/1865153395/display_1500/stock-photo-portrait-of-young-smiling-woman-looking-at-camera-with-crossed-arms-happy-girl-standing-in-1865153395.jpg',
-      likes: 100,
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent malesuada libero ac enim fringilla, non pellentesque mauris pulvinar.',
-    },
-  ];
 
   newPost = { image: '', likes: 0, description: '' };
 
@@ -75,9 +120,5 @@ export class ProfileComponent implements OnInit {
     this.newPost.image = '';
     this.newPost.description = '';
     this.showUploadForm = false;
-  }
-
-  ngOnInit(): void {
-    this.postCount = this.posts.length;
   }
 }

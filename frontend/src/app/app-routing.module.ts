@@ -11,9 +11,11 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
   { path: 'profile', component: ProfileComponent },
-  { path: '', redirectTo: 'feed', pathMatch: 'full' },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'feed', component: FeedComponent },
   { path : 'query', component: QueryComponent },
+  { path: 'profile/:id', component: ProfileComponent }
+
 ];
 
 @NgModule({

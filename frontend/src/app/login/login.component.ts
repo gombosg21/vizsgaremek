@@ -3,6 +3,9 @@ import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { User } from '../models/user.model';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-login',
@@ -17,27 +20,41 @@ export class LoginComponent {
   constructor(
     private titleService: Title,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private http: HttpClient,
+    private cookieService: CookieService 
   ) {
-    this.titleService.setTitle('VisualPosting - Bejelentkezés');
+    this.titleService.setTitle('VisualPosting - Login');
   }
-
+  
   login() {
     const user = new User(this.username, this.password);
     this.authService.loginUser(user).subscribe(
       (response) => {
-        console.log('Login successful:', response); 
-        // sessionStorage.setItem('user', JSON.stringify(response)); // TODO: store user in session storage
-        // this.router.navigate([`/api/v/0.1/user/${response.id}`]); // TODO: redirect to profile page
+        console.log('Login successful:', response);
+        sessionStorage.setItem('user', JSON.stringify(response));
+        sessionStorage.setItem('token', response.token);
+
+        console.log('Token:', response.token);
+        
+        this.cookieService.set('VSCookie', response.token, { expires: 30, path: '/', sameSite: 'Lax' });
+  
+        console.log('Response object:', response);
+  
+        this.router.navigate([`/profile/${response.ID}`]);
+  
+        this.http.get('/api/v/0.1/user', { observe: 'response' }).subscribe((response) => {
+          const vsCookie = response.headers.get('set-cookie');
+          console.log('VSCookie:', vsCookie);
+        });
       },
       (error) => {
         console.error('Login failed:', error);
         this.errorMessage = 'Login failed: Invalid username or password';
-        this.password = ''; // Clear pw input
+        this.password = '';
       }
     );
   }
-  
 
   isFormValid() {
     return this.username && this.password;
