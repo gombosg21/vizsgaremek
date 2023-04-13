@@ -7,6 +7,7 @@ const cors = require('cors');
 const session = require("express-session");
 const passport = require('passport');
 
+const corsMiddleware = require('./middlewares/authentiaction/cors');
 const DB = require('./util/db');
 const auth = require('./middlewares/authentiaction/auth');
 
@@ -28,7 +29,6 @@ const app = express();
 
 
 
-
 DB.connect();
 
 app.use(logger('dev'));
@@ -36,14 +36,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(cors({
-  origin:"http://localhost:4200",
-  preflightContinue: true,
-  optionsSuccessStatus: 200,
-  credentials: true,
-  methods: ['GET','POST','PUT','PATCH','DELETE'],
-  allowedHeaders:['Origin','origin','x-request-with','X-Requested-With','Content-Type','Accept','accept','content-type','application/json','multipart/form-data']
-}));
 app.use(session(auth.sessionConfig));
 passport.use(auth.strategy);
 app.use(passport.initialize());
@@ -53,6 +45,12 @@ const version = process.env.VERSION ?? 0.1;
 
 const routePrefix = '/api/v/' + version;
 
+app.use(function (req, res, next) {
+  req.headers.origin = req.headers.origin || req.headers.host;
+  next();
+});
+
+app.use('*',cors(corsMiddleware.corsOptions));
 app.use(routePrefix, indexRouter)
 app.use(routePrefix, usersRouter);
 app.use(routePrefix, mediaRouter);
