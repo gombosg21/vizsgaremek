@@ -7,14 +7,14 @@ require('dotenv').config({ path: path.resolve('./.env') });
 
 const options = {
     secretOrKey: process.env.TOKEN_SECRET,
-    JWTFromRequest : ExtractJwt.fromAuthHeaderAsBearerToken(),
-    algorithms : ['RS256'],
-    ignoreExpiration : false,
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    algorithms: ['RS256'],
+    ignoreExpiration: false,
     jsonWebTokenOptions: {
         complete: false,
-        clocktolearnce : '',
-        maxAge : '3h',
-        clockTimestamp : 100,
+        clocktolearnce: '',
+        maxAge: '3h',
+        clockTimestamp: 100,
 
     }
 };
@@ -66,11 +66,7 @@ passport.deserializeUser(async (userID, done) => {
 
 exports.isAuth = (req, res, next) => {
 
-    if (req.isAuthenticated()) {
-        return next();
-    } else {
-        return res.status(401).json({ error: "unauthorized request" });
-    };
+    next(passport.authenticate('jwt', { session: false }));
 };
 
 exports.hasAuth = (req, res, next) => {
