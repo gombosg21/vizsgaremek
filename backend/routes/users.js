@@ -3,10 +3,9 @@ const userController = require('../controllers/user');
 const userValidator = require('../middlewares/validators/user');
 const commonValidation = require('../middlewares/validators/common');
 const auth = require('../middlewares/authentiaction/auth');
-const passport = require('passport');
 
 // get login
-router.post('/user/login', auth.hasAuth, passport.authenticate('local', { failureMessage: true, failWithError: true }), userController.login);
+router.post('/user/login', auth.hasAuth, userController.login);
 
 // get logout
 router.post('/user/logout', userController.logout);
