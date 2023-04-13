@@ -1,4 +1,4 @@
-const corsOriginList = ['localhost:4200', 'localhost:3600'];
+const corsOriginList = ['localhost:4200','http://localhost:4200', 'localhost:3600','http://localhost:3600'];
 
 exports.corsOptions = {
     preflightContinue: true,
