@@ -1,33 +1,36 @@
-const session = require("express-session");
-const mysqlStore = require("express-mysql-session")(session);
-const config = require("../../config/config.json");
 const user = require('../../models').user;
 const path = require('path');
 const passport = require('passport');
-const localPassport = require('passport-local').Strategy;
-const validatePassword = require('../../util/auth').validatePassword;
+const ExtractJwt = require("passport-jwt").ExtractJwt;
+const JWTStrategy = require('passport-jwt').Strategy;
 require('dotenv').config({ path: path.resolve('./.env') });
 
-const mode = process.env.MODE.toLowerCase();
+const options = {
+    secretOrKey: process.env.TOKEN_SECRET,
+    JWTFromRequest : ExtractJwt.fromAuthHeaderAsBearerToken(),
+    algorithms : ['RS256'],
+    ignoreExpiration : false,
+    jsonWebTokenOptions: {
+        complete: false,
+        clocktolearnce : '',
+        maxAge : '3h',
+        clockTimestamp : 100,
 
+    }
+};
 
-const { database, username, password, host, port, dialect } = config[mode];
-
-const verifyCallback = async (username, password, done) => {
+const verifyCallback = async (payload, done) => {
     try {
-        const User = await user.findOne({ where: { Name: username } });
+        const User = await user.findOne({ where: { ID: payload.sub } });
 
-        if (!User) {
-            { return done(null, false, { message: "bad username or password" }) };
+        if (err) {
+            return done(err, false, { message: "something went wrong..." });
         };
 
-        const valid = await validatePassword(password, User.password);
-
-        if (valid) {
-            { return done(null, User, { message: "bad username or password" }) };
-        }
-        else {
-            { return done(null, false, { message: "bad username or password" }) };
+        if (!User) {
+            return done(null, false, { message: "bad username or password" });
+        } else {
+            return done(null, User);
         };
     }
     catch (error) {
@@ -41,13 +44,7 @@ const dataFields = {
     passwordField: "password"
 };
 
-const roles = {
-    Admin: "admin",
-    Moderator: "mod",
-    User: "user"
-};
-
-exports.strategy = new localPassport(dataFields, verifyCallback);
+exports.strategy = new JWTStrategy(options, verifyCallback);
 
 passport.serializeUser((User, done) => {
     done(null, User.ID);
@@ -65,44 +62,14 @@ passport.deserializeUser(async (userID, done) => {
     };
 });
 
-const sessionStore = new mysqlStore({
-    connectionLimit: 10,
-    password: password,
-    user: username,
-    database: database,
-    host: host,
-    port: port,
-    createDatabaseTable: false,
-    schema: {
-        tableName: 'session_stores',
-        columnNames: {
-            session_id: 'sid',
-            expires: 'expires',
-            data: 'data',
-        }
-    }
-});
-
-exports.sessionConfig = {
-    name: "VSCookie",
-    secret: process.env.COOKIE_SECRET,
-    resave: true,
-    saveUninitialized: true,
-    store: sessionStore,
-    cookie: {
-        maxAge: (1000 * 60 * 60),
-    }
-};
-
 
 
 exports.isAuth = (req, res, next) => {
 
     if (req.isAuthenticated()) {
         return next();
-    }
-    else {
-        return res.status(401).json({ "error": "unauthorized request" });
+    } else {
+        return res.status(401).json({ error: "unauthorized request" });
     };
 };
 
@@ -115,10 +82,12 @@ exports.hasAuth = (req, res, next) => {
     };
 };
 
-exports.isMod = (req, res, next) => {
-
-};
-
-exports.isAdmin = (req, res, next) => {
-
+exports.checkRole = (rolelevel) => {
+    return (req, res, next) => {
+        if (req.user.type === rolelevel) {
+            return next();
+        } else {
+            return res.status(403).json({ error: "issuficient privilegdes" });
+        };
+    };
 };
