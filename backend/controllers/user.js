@@ -122,7 +122,7 @@ exports.login = async (req, res, next) => {
 
         const vaildPassword = await validatePassword(password, User.password);
 
-        const tokenResults = getJWT(User.ID);
+        const tokenResults = await getJWT(User.ID);
 
         if (vaildPassword) {
             return res.status(200).json({ ID: User.ID, token: tokenResults.token, token_expires: tokenResults.expires });
