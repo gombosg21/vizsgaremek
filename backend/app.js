@@ -36,7 +36,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-passport.use('jwt',auth.strategy);
+passport.use(auth.strategy);
 const version = process.env.VERSION ?? 0.1;
 
 const routePrefix = '/api/v/' + version;
@@ -47,7 +47,7 @@ app.use(function (req, res, next) {
   return next();
 });
 
-app.use('*',cors(corsOptions));
+app.use('*', cors(corsOptions));
 app.use(routePrefix, indexRouter)
 app.use(routePrefix, usersRouter);
 app.use(routePrefix, mediaRouter);
