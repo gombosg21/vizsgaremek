@@ -8,3 +8,4 @@ coverage/
 jest.config.js
 *.bkp
 *.dtmp
+keys/
