@@ -1,5 +1,5 @@
-{} represent values
-munkamenet jelenleg sütis megoldású, jövőben lehet hogy JSWT token lesz.
+{} értékeket tartalmaz
+munkamenet authorization : Bearer | {token} működésű.
 
 GET /api/v/0.1/user/{ID}
 ID alapján visszad egy nézetet a felhasználótól: {alias, register_date, gender,birth_date, profile_description, profile_pic, profile_visibility, type}
@@ -26,7 +26,7 @@ Visszatérési értékként egy tömbös JSON-t küld a {ID, alias, gender, birt
 POST /api/v/0.1/user/login
 Beléptet a rendszerbe.
 JSON-ként kér {password,name} mezőket.
-Sikeres belépés esetén visszaadja a User ID-jét jsonban.
+Sikeres belépés esetén visszaadja a {ID, token, token_expires} mezőket.
 Sikertelen belépés esetén átirányít a: /api/v/0.1/-ra.
 
 POST /api/v/0.1/user/logout
@@ -42,7 +42,7 @@ A sikeres regisztrációhoz a {name, gender, birth_date, email ,password, re_pas
 A gender mező értéke 0 , 1 és 2 lehet (férfi,nő,x).
 A birth_date mezőt yyyy-mm-dd formában vár, nem lehet jövőbeli dátum.
 A password ill re_password csak erős jelszó lehet, min 8 karakter, max 32, kis és nagybetű és ASCII speciális karakterek.
-Sikeres regisztráció esetén létrehoz egy új munkamenetet és visszaadja a User ID-jét jsonban.
+Sikeres regisztráció esetén visszaadja a {ID, token, token_expires} mezőket.
 A regisztráció pillanatában nyit egy új beszédszállat a profilra.
 
 POST /api/v/0.1/user/change-password
