@@ -1,6 +1,5 @@
 const crypto = require('crypto');
 const JWT = require('jsonwebtoken');
-const user = require('../models').user;
 const path = require('path');
 require('dotenv').config({ path: path.resolve('./.env') });
 
@@ -88,13 +87,10 @@ exports.generateToken = () => {
 
 exports.generateJWT = async (user_ID) => {
 
-    const userIDs = (await user.findAll({ attributes: ['ID'] })).map(User => User.ID)
-
     if (!user_ID) { throw new Error("attribute user_ID missing"); };
     if (typeof user_ID != "number") { throw new TypeError("user_ID must be a number");};
     if (user_ID < 1) { throw new RangeError("user_ID must be a non-zero number");};
     if (user_ID % 1 != 0) { throw new TypeError("user_ID must be a whole number");};
-    if (!(userIDs.includes(user_ID))) {throw new RangeError("user_ID must be an exsisting user ID"); };
 
     const payload = {
         sub : user_ID,
