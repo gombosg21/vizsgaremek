@@ -4,7 +4,6 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
-const session = require("express-session");
 const passport = require('passport');
 
 const corsOptions = require('./middlewares/authentiaction/cors').corsOptions;
@@ -36,11 +35,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(session(auth.sessionConfig));
-passport.use(auth.strategy);
-app.use(passport.initialize());
-app.use(passport.session());
-
+passport.use(auth.strategy());
+app.use(passport());
 const version = process.env.VERSION ?? 0.1;
 
 const routePrefix = '/api/v/' + version;
