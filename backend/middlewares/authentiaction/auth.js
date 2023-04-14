@@ -46,7 +46,7 @@ exports.isAuth = (req, res, next) => {
     passport.authenticate('jwt', { session: false }, (err, user, info, status) => {
 
         if (err) { console.log("error?"); return next(err) };
-        if (!user) { console.log("no payload"); return next(new Error('no bearer token present')) };
+        if (!user) { console.log("no payload"); return next(new Error('no token or invalid token')) };
         if (user) {
             req.user = user;
             return next();
@@ -57,6 +57,15 @@ exports.isAuth = (req, res, next) => {
 exports.hasAuth = (req, res, next) => {
     passport.authenticate('jwt', { session: false }, (err, user, info, status) => {
         if (user) { return next(new Error("already signed in")) };
+        return next();
+    })(req, res, next);
+};
+
+exports.optionalAuth = (req, res, next) => {
+    passport.authenticate('jwt', { session: false }, (err, user, info, status) => {
+        if (user) { req.user = user; next(); };
+        if (!user) { req.user.ID = -1; return next(); };
+        return next();
     })(req, res, next);
 };
 
