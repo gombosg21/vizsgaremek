@@ -5,7 +5,7 @@ exports.corsOptions = {
     optionsSuccessStatus: 200,
     credentials: true,
     methods: ['GET', 'POST', 'OPTIONS','PUT', 'PATCH', 'DELETE'],
-    allowedHeaders: ['authorization'],
+    allowedHeaders: ['authorization','content-type'],
     origin: (origin, callback) => {
         if (corsOriginList.indexOf(origin) !== -1) {
             callback(null, true)
