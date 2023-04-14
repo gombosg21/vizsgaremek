@@ -63,7 +63,7 @@ exports.hasAuth = (req, res, next) => {
 
 exports.optionalAuth = (req, res, next) => {
     passport.authenticate('jwt', { session: false }, (err, user, info, status) => {
-        if (user) { req.user = user; next(); };
+        if (user) { req.user = user; return next(); };
         if (!user) { req.user = { ID: -1 }; return next(); };
         return next();
     })(req, res, next);
