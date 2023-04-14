@@ -11,18 +11,18 @@ const userValidator = require('../middlewares/validators/user');
 router.post('/story', auth.isAuth, storyValidator.createStoryRules(), validate, storyController.createStory);
 
 //get all stories from user
-router.get('/story/user/:userID/all', userValidator.checkIfUserIDExsits, storyController.getAllStoryFromUser);
+router.get('/story/user/:userID/all', userValidator.checkIfUserIDExsits, auth.optionalAuth, storyController.getAllStoryFromUser);
 
 // edit story
 // get story
 // delete story
 router.route('/story/:storyID')
-    .get(storyValidator.checkIfStoryIDExsits, storyController.getStory)
+    .get(storyValidator.checkIfStoryIDExsits, auth.optionalAuth, storyController.getStory)
     .patch(storyValidator.checkIfStoryIDExsits, auth.isAuth, ownership.isMyStory, storyValidator.editStoryRules(), validate, storyController.editStory)
     .delete(storyValidator.checkIfStoryIDExsits, auth.isAuth, ownership.isMyStory, storyController.deleteStory);
 
 //search story by query params
-router.get('/story', storyValidator.searchStoryRules(), validate, storyController.searchStory);
+router.get('/story', storyValidator.searchStoryRules(), validate, auth.optionalAuth, storyController.searchStory);
 
 
 module.exports = router;

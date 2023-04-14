@@ -136,10 +136,10 @@ exports.login = async (req, res, next) => {
     };
 };
 
-exports.refresh = (req,res,next) => {
-    try{
+exports.refresh = (req, res, next) => {
+    try {
 
-    }  catch (error) {
+    } catch (error) {
         console.error(error);
         return res.status(500);
     };
@@ -166,19 +166,10 @@ exports.changePassword = async (req, res, next) => {
 
 exports.logout = async (req, res, next) => {
     try {
-        req.logOut((error) => {
-            if (error) {
-                return res.status(500).json({ "error": error.message });
-            } else {
-                req.session.destroy((error) => {
-                    if (error) {
-                        return res.status(500).json({ "error": error.message });
-                    } else {
-                        return res.status(200).json({ message: "logout succesfull" });
-                    };
-                });
-            };
-        });
+
+        // TODO blacklist incoming token till expiry.
+        return res.status(200).json({ message: "logout succesfull" });
+
     } catch (error) {
         console.error(error);
         return res.status(500);
@@ -192,6 +183,8 @@ exports.resetPassword = async (req, res, next) => {
         const User = await user.findOne({ where: { Name: Name } });
 
         return res.status(200).json({ message: "reset email sent." });
+
+        // TODO finish email module
         // email.sendResetEmail(User.ID);
     } catch (error) {
         console.error(error);

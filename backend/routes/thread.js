@@ -20,16 +20,16 @@ router.post('/story/:storyID/thread', auth.isAuth, storyValidator.checkIfStoryID
 router.post('/media/:mediaID/thread', auth.isAuth, mediaValidator.checkIfMediaIDExsist, threadValidator.createThreadRules(), commonValidator.validate, preporcess.setTargetType("media"), threadController.CreateThread);
 
 //list all threads
-router.get('/thread/all', threadController.getAllThreads);
+router.get('/thread/all', auth.optionalAuth, threadController.getAllThreads);
 
 // search threads by params name, creation date, creater name and thread comment contents
-router.get('/thread/search', threadValidator.searchThreadRules(), commonValidator.validate, threadController.searchThreads);
+router.get('/thread/search', threadValidator.searchThreadRules(), commonValidator.validate, auth.optionalAuth, threadController.searchThreads);
 
 // by thread ID
 // view
 // delete
 router.route('/thread/:threadID')
-    .get(threadValidator.checkIfThreadExsits, threadController.getThread)
+    .get(threadValidator.checkIfThreadExsits, auth.optionalAuth, threadController.getThread)
     .patch(threadValidator.checkIfThreadExsits, auth.isAuth, ownership.isMyThread, threadValidator.editThreadRules(), commonValidator.validate, threadController.editThread)
     .delete(threadValidator.checkIfThreadExsits, auth.isAuth, ownership.isMyThread, threadController.deleteTread);
 

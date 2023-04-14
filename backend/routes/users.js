@@ -8,13 +8,13 @@ const auth = require('../middlewares/authentiaction/auth');
 router.post('/user/login', auth.hasAuth, userController.login);
 
 // get logout
-router.post('/user/logout', userController.logout);
+router.post('/user/logout', auth.hasAuth, userController.logout);
 
 // post create user
 router.post('/user/register', userValidator.checkIfNameConflicts, userValidator.registerRules(), commonValidation.validate, userController.createUser);
 
 // get profile
-router.get('/user/:userID', userValidator.checkIfUserIDExsits, userController.getProfile);
+router.get('/user/:userID', userValidator.checkIfUserIDExsits, auth.optionalAuth, userController.getProfile);
 
 // edit profile
 // delete user
@@ -33,6 +33,6 @@ router.patch('/user/change-password', auth.isAuth, userValidator.changePasswordR
 // router.patch('/user/register/:userID')
 
 // get search user by params name, birthdate, gender
-router.get('/user', userValidator.searchRules(), commonValidation.validate, userController.findUser);
+router.get('/user', auth.optionalAuth, userValidator.searchRules(), commonValidation.validate, userController.findUser);
 
 module.exports = router;

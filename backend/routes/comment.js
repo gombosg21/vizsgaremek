@@ -16,5 +16,5 @@ router.post('/thread/:threadID/comment', auth.isAuth, threadValidator.checkIfThr
 router.route('/comment/:commentID')
     .patch(commentValidator.checkIfCommentIDExsist, auth.isAuth, ownership.isMyComment, commentValidator.commentRules(), commonValidator.validate, commentController.editComment)
     .delete(commentValidator.checkIfCommentIDExsist, auth.isAuth, ownership.isMyComment, commentController.deleteComment)
-    .get(commentValidator.checkIfCommentIDExsist, commentController.getComment);
+    .get(commentValidator.checkIfCommentIDExsist, auth.optionalAuth, commentController.getComment);
 module.exports = router;

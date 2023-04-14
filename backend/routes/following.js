@@ -5,7 +5,7 @@ const followedController = require("../controllers/following");
 
 
 // get follower count
-router.get('/following/count/:userID', userValidator.checkIfUserIDExsits, followedController.getFollowerCount);
+router.get('/following/count/:userID', userValidator.checkIfUserIDExsits, auth.optionalAuth, followedController.getFollowerCount);
 
 // get all followed
 router.get('/following/all', auth.isAuth, followedController.getFollowedList);

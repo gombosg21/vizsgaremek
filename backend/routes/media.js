@@ -18,13 +18,13 @@ router.post('/media', auth.isAuth, upload.single('image'), mediaValidator.upload
 router.route('/media/:mediaID')
     .patch(auth.isAuth, ownership.isMyMedia, mediaValidator.checkIfMediaIDExsist, mediaValidator.editRules(), validate, mediaController.editMedia)
     .delete(auth.isAuth, ownership.isMyMedia, mediaValidator.checkIfMediaIDExsist, mediaController.deleteMedia)
-    .get(mediaValidator.checkIfMediaIDExsist, mediaController.getMediaByID);
+    .get(mediaValidator.checkIfMediaIDExsist, auth.optionalAuth, mediaController.getMediaByID);
 
 // view ALL media with user_ID
-router.get('/media/all/:userID', userValidator.checkIfUserIDExsits, mediaController.getAllMediaFromUser);
+router.get('/media/all/:userID', userValidator.checkIfUserIDExsits, auth.optionalAuth, mediaController.getAllMediaFromUser);
 
 // view media by tags, search function
-router.get('/media/search/tags', mediaController.getAllMediaByTags);
+router.get('/media/search/tags', auth.optionalAuth, mediaController.getAllMediaByTags);
 
 // edit tags
 router.patch('/media/:mediaID/tags', auth.isAuth, mediaValidator.editTagRules(), validate, mediaController.editMediaTags);

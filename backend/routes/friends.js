@@ -7,7 +7,7 @@ const router = require('express').Router();
 router.get("/friends/pending", auth.isAuth, friendController.getPendingFriends);
 
 // get all verified friends 
-router.get("/friends/:userID", userValidator.checkIfUserIDExsits, friendController.getFriends);
+router.get("/friends/:userID", userValidator.checkIfUserIDExsits, auth.optionalAuth, friendController.getFriends);
 
 // add friend
 router.post("/friends/:userID/add", auth.isAuth, userValidator.checkIfUserIDExsits, userValidator.checkIfNotSelf, friendController.requestFriend);
