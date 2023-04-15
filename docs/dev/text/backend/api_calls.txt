@@ -8,11 +8,11 @@ Ha a felhasználó kiválasztott egy profilképet, a profile_pic egy base64 kód
 A felhasználó profilbeszédszállát és a hozzá tartozó kommenteket is visszaadja.
 Visszatérési értéke egy JSON állomány.
 
-PATCH /api/v/0.1/user/
+PATCH /api/v/0.1/user
 bejelentkezés után, ID alapján frissíti a profiladatokat : {profile_description, profile_picture, profile_visibility, alias}
 JSON állományt vár el, a fent írt mezőkkel, opcionálisan, legalább egyet meg kell adni.
 
-DELETE /api/v/0.1/user/
+DELETE /api/v/0.1/user
 Eltöröli a felhasználót, bejelentkezés után.
 Az eltörölt profil ID-jét adja visszatérési értékként.
 Igen, ez megszünteti a munkamenetet is!
