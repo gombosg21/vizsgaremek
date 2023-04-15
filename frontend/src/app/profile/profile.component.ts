@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { AuthService } from '../services/auth.service';
+import { AuthService } from '../services/auth/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 import { HttpHeaders } from '@angular/common/http';
+import { ApiPaths } from '../enums/api-paths';
+import { enviroment } from 'src/enviroments/enviroment';
+import { profile } from '../models/profile';
 
 @Component({
   selector: 'app-profile',
@@ -11,12 +14,13 @@ import { HttpHeaders } from '@angular/common/http';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-  username = '';
-  bio = '';
+  alias = '';
+  description = '';
+  gender = 0;
   profileImage = '';
-  postCount = 0; 
-  followersCount = 100;
-  followingCount = 200;
+  postCount = 0;
+  followersCount = 0;
+  followingCount = 0;
   showUploadForm = false;
 
   selectedImage = '';
@@ -40,29 +44,38 @@ export class ProfileComponent implements OnInit {
 
   constructor(private route: ActivatedRoute, private authService: AuthService, private http: HttpClient, private cookieService: CookieService) { }
 
+  UserProfile: profile = new profile(undefined, undefined, undefined, undefined, undefined, undefined, undefined);
+
   ngOnInit() {
     const userId = this.route.snapshot.params['id'];
     this.authService.getUserProfile(userId).subscribe(
       (profile) => {
+        this.UserProfile.birth_date = profile.birth_date;
+        this.UserProfile.gender = profile.gender
+        this.UserProfile.alias = profile.profile.alias;
+        this.UserProfile.description = profile.profile.description;
+        this.UserProfile.type = profile.type;
+        this.UserProfile.register_date = profile.register_date;
+        this.UserProfile.avatar = profile.profile.medium;
       },
       (error: any) => {
         console.error('Profile error:: ', error);
       }
     );
   }
-  
-  
-  
+
+
+
 
   getUserProfile(userId: string): void {
     const token = this.cookieService.get('VSCookie');
 
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-   this.http.get(`/api/v/0.1/user/${userId}`, { headers }).subscribe(
-    (response: any) => {
-        this.username = response.profile.profile.alias;
-        this.bio = response.profile.profile.description;
+    this.http.get(enviroment.baseUrl + ApiPaths.User + "/" + userId, { headers }).subscribe(
+      (response: any) => {
+        this.alias = response.profile.profile.alias;
+        this.description = response.profile.profile.description;
         this.profileImage = response.profile.profile.medium;
         // other fetched data later
 
@@ -73,7 +86,7 @@ export class ProfileComponent implements OnInit {
       }
     );
   }
-  
+
 
 
   openImageModal(imageUrl: string): void {
