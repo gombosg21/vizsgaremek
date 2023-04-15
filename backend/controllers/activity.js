@@ -15,6 +15,8 @@ const carousel_reactions = require("../models").carousel_reactionlist;
 
 exports.getActivity = async (req, res, next) => {
     const userID = req.user.ID;
+    const limit = req.query.limit;
+    const offset = req.query.offset;
     try {
         // TODO: biiig sql query to get every associated users doing, needs to be smhw ordered by date fields...
         // FIXME: smh most of reactionlists dont work here, figure out why...
@@ -87,7 +89,9 @@ exports.getActivity = async (req, res, next) => {
                         }
                     ]
                 }
-            ]
+            ],
+            limit: limit,
+            offset: offset
         });
 
         return res.status(200).json(activityFeed);
