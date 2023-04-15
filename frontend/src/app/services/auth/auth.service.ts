@@ -38,8 +38,4 @@ export class AuthService {
     const token = sessionStorage.getItem("token");
     return token;
   };
-
-  getUserProfile(userId: Number): Observable<any> {
-    return this.http.get(enviroment.baseUrl + ApiPaths.User + "/" + userId);
-  };
 };
