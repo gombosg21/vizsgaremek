@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { AuthService } from '../services/auth/auth.service';
+import { UserService } from '../services/user/user.service';
 import { HttpClient } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 import { HttpHeaders } from '@angular/common/http';
@@ -42,13 +42,13 @@ export class ProfileComponent implements OnInit {
     },
   ];
 
-  constructor(private route: ActivatedRoute, private authService: AuthService, private http: HttpClient, private cookieService: CookieService) { }
+  constructor(private route: ActivatedRoute, private UserService : UserService,private http: HttpClient, private cookieService: CookieService) { }
 
   UserProfile: profile = new profile(undefined, undefined, undefined, undefined, undefined, undefined, undefined);
 
   ngOnInit() {
     const userId = this.route.snapshot.params['id'];
-    this.authService.getUserProfile(userId).subscribe(
+    this.UserService.getProfile(userId).subscribe(
       (profile) => {
         this.UserProfile.birth_date = profile.birth_date;
         this.UserProfile.gender = profile.gender
@@ -64,28 +64,6 @@ export class ProfileComponent implements OnInit {
     );
   }
 
-
-
-
-  getUserProfile(userId: string): void {
-    const token = this.cookieService.get('VSCookie');
-
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-
-    this.http.get(enviroment.baseUrl + ApiPaths.User + "/" + userId, { headers }).subscribe(
-      (response: any) => {
-        this.alias = response.profile.profile.alias;
-        this.description = response.profile.profile.description;
-        this.profileImage = response.profile.profile.medium;
-        // other fetched data later
-
-        console.log('Fetched user profile:', response);
-      },
-      (error) => {
-        console.error('Errorlog2: ', error);
-      }
-    );
-  }
 
 
 
