@@ -115,6 +115,8 @@ exports.login = async (req, res, next) => {
     const password = req.body.password;
 
     try {
+
+        if (!password || !Name) { return res.status(401).json({ error: "missing or partial credentials" }) };
         const User = await user.findOne({ where: { Name: Name }, attributes: ['ID', 'password'] });
         if (!User) {
             return res.status(400).json({ error: "bad username or password" });
