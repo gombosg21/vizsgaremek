@@ -23,7 +23,7 @@ router.route('/user/')
     .delete(auth.isAuth, userController.deleteUser);
 
 // get reset password
-router.post('/user/reset-password/', userController.resetPassword);
+router.post('/user/reset-password', userController.resetPassword);
 
 
 // patch change password
