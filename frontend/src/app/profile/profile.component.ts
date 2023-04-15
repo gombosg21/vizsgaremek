@@ -3,9 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 import { UserService } from '../services/user/user.service';
 import { HttpClient } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
-import { HttpHeaders } from '@angular/common/http';
-import { ApiPaths } from '../enums/api-paths';
-import { enviroment } from 'src/enviroments/enviroment';
 import { profile } from '../models/profile';
 
 @Component({
