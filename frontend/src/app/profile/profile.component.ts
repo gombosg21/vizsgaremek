@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../services/user/user.service';
-import { HttpClient } from '@angular/common/http';
-import { CookieService } from 'ngx-cookie-service';
+import { getTokenUserID } from '../helpers/extractors/token';
 import { profile } from '../models/profile';
+import { thread } from '../models/thread';
 
 @Component({
   selector: 'app-profile',
@@ -11,10 +11,13 @@ import { profile } from '../models/profile';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-  alias = '';
-  description = '';
-  gender = 0;
-  profileImage = '';
+
+  public UserProfile?: profile;
+
+  alias = this.UserProfile?.alias ?? "";
+  description = this.UserProfile?.description ?? "";
+  gender = this.UserProfile?.gender ?? NaN;
+  profileImage = this.UserProfile?.avatar ?? new Blob(); // fallback image?
   postCount = 0;
   followersCount = 0;
   followingCount = 0;
@@ -39,27 +42,31 @@ export class ProfileComponent implements OnInit {
     },
   ];
 
-  constructor(private route: ActivatedRoute, private UserService : UserService,private http: HttpClient, private cookieService: CookieService) { }
+  constructor(private UserService: UserService, private Router: Router, private Route: ActivatedRoute) {
+    this.onLoad();
+  };
 
-  UserProfile: profile = new profile(undefined, undefined, undefined, undefined, undefined, undefined, undefined);
+  ngOnInit(): void {
+  };
 
-  ngOnInit() {
-    const userId = this.route.snapshot.params['id'];
-    this.UserService.getProfile(userId).subscribe(
-      (profile) => {
-        this.UserProfile.birth_date = profile.birth_date;
-        this.UserProfile.gender = profile.gender
-        this.UserProfile.alias = profile.profile.alias;
-        this.UserProfile.description = profile.profile.description;
-        this.UserProfile.type = profile.type;
-        this.UserProfile.register_date = profile.register_date;
-        this.UserProfile.avatar = profile.profile.medium;
-      },
-      (error: any) => {
-        console.error('Profile error:: ', error);
+
+  onLoad(): void {
+    this.UserService.getProfile(getTokenUserID()).subscribe({
+      next: (data) => {
+        this.UserProfile = {
+          alias: data.alias,
+          description: data.description,
+          gender: data.gender,
+          type: data.type,
+          register_date: data.register_date,
+          birth_date: data.birth_date,
+          avatar: data.avatar
+        }
       }
-    );
+    }
+    )
   }
+
 
 
 
