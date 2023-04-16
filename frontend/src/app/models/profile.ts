@@ -8,5 +8,5 @@ export interface profile {
     picture_ID: Number,
     medium: String,
     profile_reactionlists: reaction[],
-    thread: thread,
+    thread: thread | undefined,
 };
