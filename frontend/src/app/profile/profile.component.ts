@@ -16,8 +16,8 @@ export class ProfileComponent implements OnInit {
 
   alias = this.UserProfile?.alias ?? "";
   description = this.UserProfile?.description ?? "";
-  gender = this.UserProfile?.gender ?? NaN;
-  profileImage = this.UserProfile?.avatar ?? new Blob(); // fallback image?
+  gender = NaN;
+  profileImage = this.UserProfile?.medium ?? new Blob(); // fallback image?
   postCount = 0;
   followersCount = 0;
   followingCount = 0;
@@ -54,13 +54,13 @@ export class ProfileComponent implements OnInit {
     this.UserService.getProfile(getTokenUserID()).subscribe({
       next: (data) => {
         this.UserProfile = {
-          alias: data.alias,
-          description: data.description,
-          gender: data.gender,
-          type: data.type,
-          register_date: data.register_date,
-          birth_date: data.birth_date,
-          avatar: data.avatar
+          alias: data.profile.alias,
+          description: data.profile.description,
+          visibility: data.profile.visibility,
+          picture_ID: data.profile.picture_ID,
+          medium: data.profile.medium,
+          profile_reactionlists: data.profile.profile_reactionlists,
+          thread: data.profile.thread
         }
       }
     }
