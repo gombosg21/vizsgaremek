@@ -1,9 +1,12 @@
-export class thread {
-    constructor(
-    public name:String | undefined,
-    public id:Number | undefined,
-    public status:Number | undefined,
-    public created_date:Date | undefined,
-    public last_activity:Date | undefined,
-) {};
+import { comment } from "./comment";
+import { reaction } from "./reaction";
+
+export interface thread {
+    name: String,
+    ID: Number,
+    status: Number,
+    created: Date,
+    last_activity: Date,
+    thread_reactionlist: reaction[],
+    comments: comment[],
 }
