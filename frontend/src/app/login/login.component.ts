@@ -2,12 +2,6 @@ import { Component } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth/auth.service';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { ApiPaths } from '../enums/api-paths';
-import { enviroment } from 'src/enviroments/enviroment';
-
-import { CookieService } from 'ngx-cookie-service';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -23,7 +17,6 @@ export class LoginComponent {
     private titleService: Title,
     private router: Router,
     private authService: AuthService,
-    private http: HttpClient,
   ) {
     this.titleService.setTitle('VisualPosting - Login');
     ;
@@ -35,6 +28,9 @@ export class LoginComponent {
   };
 
   login() {
-    this.authService.login(this.username, this.password);
+    this.authService.login(this.username, this.password).subscribe({
+      next: (vaule) => { this.router.navigate(["/profile/" + vaule.ID]) },
+      error: (error) => { console.error({ error: error }) }
+    });
   };
 };
