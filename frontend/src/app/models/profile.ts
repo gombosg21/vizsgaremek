@@ -1,11 +1,12 @@
-export class profile {
-    constructor(
-        public alias : string | undefined,
-        public description : string | undefined,
-        public gender : number  | undefined,
-        public register_date : Date | undefined,
-        public birth_date : Date | undefined,
-        public avatar : string | undefined,
-        public type : string | undefined
-    ) {};
+import { reaction } from "./reaction";
+import { thread } from "./thread";
+
+export interface profile {
+    alias: String,
+    description: String,
+    visibility: String,
+    picture_ID: Number,
+    medium: String,
+    profile_reactionlists: reaction[],
+    thread: thread,
 };
