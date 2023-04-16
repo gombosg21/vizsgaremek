@@ -3,7 +3,7 @@ import { enviroment } from 'src/enviroments/enviroment';
 import { ApiPaths } from '../../enums/api-paths';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { profile } from '../../models/profile';
+import { user } from '../../models/user';
 
 @Injectable({
   providedIn: 'root'
@@ -14,10 +14,10 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  getProfile(ID: Number): Observable<profile> {
+  getProfile(ID: Number): Observable<user> {
     const targetURL = this.controllerUrl + "/" + String(ID);
 
-    return this.http.get<profile>(targetURL);
+    return this.http.get<user>(targetURL);
   };
 
   updateProfile(ID: Number, Data: any): Observable<Object> {
