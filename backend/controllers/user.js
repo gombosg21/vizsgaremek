@@ -64,7 +64,7 @@ exports.getProfile = async (req, res, next) => {
 
         const results = await Visibility(userID, User.ID, visibility, User.dataValues);
 
-        return res.status(results.status).json({ profile: results.data });
+        return res.status(results.status).json(results.data);
     }
     catch (error) {
         console.error(error);
