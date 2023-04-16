@@ -1,10 +1,8 @@
-export class Register {
-  constructor(
-    public name: string,
-    public email: string,
-    public password: string,
-    public re_password: string,
-    public gender: number,
-    public birth_date: string
-  ) {}
+export interface Register {
+  name: string,
+  email: string,
+  password: string,
+  re_password: string,
+  gender: number,
+  birth_date: string
 }
