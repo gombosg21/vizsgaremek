@@ -3,6 +3,7 @@ import { enviroment } from 'src/enviroments/enviroment';
 import { ApiPaths } from '../../enums/api-paths';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { profile } from '../../models/profile';
 
 @Injectable({
   providedIn: 'root'
@@ -13,25 +14,25 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  getProfile(ID: Number): Observable<any> {
+  getProfile(ID: Number): Observable<profile> {
     const targetURL = this.controllerUrl + "/" + String(ID);
 
-    return this.http.get<any>(targetURL);
+    return this.http.get<profile>(targetURL);
   };
 
-  updateProfile(ID: Number, Data: any): Observable<any> {
+  updateProfile(ID: Number, Data: any): Observable<Object> {
     const targetURL = this.controllerUrl + "/" + String(ID);
 
-    return this.http.patch(targetURL, Data);
+    return this.http.patch<Object>(targetURL, Data);
   };
 
-  requestResetPassword(Name: string): Observable<any> {
+  requestResetPassword(Name: string): Observable<Object> {
     const targetURL = this.controllerUrl + "/reset-password";
 
-    return this.http.post(targetURL, { name: Name });
+    return this.http.post<Object>(targetURL, { name: Name });
   };
 
-  deleteUser(): Observable<any> {
+  deleteUser(): Observable<Object> {
     const targetURL = this.controllerUrl;
 
     // TODO tell auth that we're no longer good 
@@ -39,7 +40,7 @@ export class UserService {
     return this.http.delete(targetURL);
   };
 
-  updatePassword(password: String, re_password:string): Observable<any> {
+  updatePassword(password: String, re_password:string): Observable<Object> {
     const targetURL = this.controllerUrl + "/change-password";
 
     //TODO export validation OUTSIDE of service
@@ -47,6 +48,6 @@ export class UserService {
       throw new Error("password fields dont match");
     };
 
-    return this.http.post(targetURL, { password: password, re_password: re_password });
+    return this.http.post<Object>(targetURL, { password: password, re_password: re_password });
   };
 };
