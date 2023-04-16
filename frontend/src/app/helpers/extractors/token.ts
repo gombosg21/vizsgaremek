@@ -1,7 +1,7 @@
 import * as JWTdecode from "jwt-decode";
 
 
-export function getTokenExpiry(): Date {
+export function isTokenExpired(): Boolean {
     const token = sessionStorage.getItem("token");
     if (!token) {
         throw new Error("no token, aborting");
@@ -10,7 +10,13 @@ export function getTokenExpiry(): Date {
     const decodedToken:JWTdecode.JwtPayload = JWTdecode.default(token);
     const expiry = decodedToken!.exp ?? 0;
 
-    return new Date(expiry);
+    const tokenDate = new Date(expiry);
+
+    if(tokenDate < new Date()) {
+        return true;
+    } else {
+        return false;
+    };
 };
 
 export function getTokenUserID(): Number {
