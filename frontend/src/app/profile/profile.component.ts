@@ -54,14 +54,19 @@ export class ProfileComponent implements OnInit {
     this.UserService.getProfile(getTokenUserID()).subscribe({
       next: (data) => {
         this.UserProfile = {
-          alias: data.profile.alias,
-          description: data.profile.description,
-          visibility: data.profile.visibility,
-          picture_ID: data.profile.picture_ID,
-          medium: data.profile.medium,
-          profile_reactionlists: data.profile.profile_reactionlists,
-          thread: data.profile.thread
+          alias: data.profile?.alias ?? "",
+          description: data.profile?.description ?? "",
+          visibility: data.profile?.visibility ?? "",
+          picture_ID: data.profile?.picture_ID ?? -1,
+          medium: data.profile?.medium ?? "",
+          profile_reactionlists: data.profile?.profile_reactionlists ?? [],
+          thread: data.profile?.thread
         }
+
+        this.alias = this.UserProfile?.alias ?? "";
+        this.description = this.UserProfile?.description ?? "";
+        this.gender = NaN;
+        this.profileImage = this.UserProfile?.medium ?? new Blob(); // fallback image?
       }
     }
     )
