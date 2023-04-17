@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth/auth.service';
+import { getTokenUserID } from '../helpers/extractors/token';
 
 @Component({
   selector: 'app-login',
@@ -29,7 +30,10 @@ export class LoginComponent {
 
   login() {
     this.authService.login(this.username, this.password).subscribe({
-      next: (vaule) => { this.router.navigate(["/profile/" + vaule.ID]) },
+      // next: (vaule) => { this.router.navigate(["/profile/" + vaule.ID]) },
+      complete: () => {
+        this.router.navigate(["/profile/" + getTokenUserID() ])
+      },
       error: (error) => { console.error({ error: error }) }
     });
   };
