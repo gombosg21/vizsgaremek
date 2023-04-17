@@ -22,6 +22,7 @@ import { CommentComponent } from './comment/comment.component';
 import { StoryComponent } from './story/story.component';
 import { FriendsComponent } from './friends/friends.component';
 import { TagsComponent } from './tags/tags.component';
+import { ReactionsComponent } from './reactions/reactions.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { TagsComponent } from './tags/tags.component';
     StoryComponent,
     FriendsComponent,
     TagsComponent,
+    ReactionsComponent,
   ],
   imports: [
     BrowserModule,
