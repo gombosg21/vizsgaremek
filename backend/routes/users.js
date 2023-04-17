@@ -8,7 +8,7 @@ const auth = require('../middlewares/authentiaction/auth');
 router.post('/user/login', auth.hasAuth, userController.login);
 
 // get logout
-router.post('/user/logout', auth.hasAuth, userController.logout);
+router.delete('/user/logout', auth.isAuth, userController.logout);
 
 // post create user
 router.post('/user/register', userValidator.checkIfNameConflicts, userValidator.registerRules(), commonValidation.validate, userController.createUser);
