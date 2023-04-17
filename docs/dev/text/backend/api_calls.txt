@@ -29,7 +29,7 @@ JSON-ként kér {password,name} mezőket.
 Sikeres belépés esetén visszaadja a {ID, token, token_expires} mezőket.
 Sikertelen belépés esetén átirányít a: /api/v/0.1/-ra.
 
-POST /api/v/0.1/user/logout
+DELETE /api/v/0.1/user/logout
 Kiléptet a rendszerből, megszünteti a munkamenetet és a /api/v/0.1/-re átirányít.
 Egyenlőre sajnos süti kliens oldalon marad...
 
