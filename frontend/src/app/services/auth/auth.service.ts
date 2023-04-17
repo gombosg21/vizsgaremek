@@ -3,12 +3,14 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { enviroment } from 'src/enviroments/enviroment';
 import { ApiPaths } from '../../enums/api-paths';
+import { Router } from '@angular/router';
+import { getTokenUserID } from '../../helpers/extractors/token';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private router: Router,) {
   };
 
   login(username: string, password: string): Observable<any> {
@@ -21,14 +23,22 @@ export class AuthService {
         console.log(err);
         throw new Error(err);
       },
+      complete: () => {
+        this.router.navigate(["/profile/" + getTokenUserID() ])}
     });
     return uriResult;
   };
 
-  logout(): void {
-    this.http.delete<void>(enviroment.baseUrl + ApiPaths.User + "/logout").subscribe(() => {
-      sessionStorage.removeItem("token");
-    });
+  logout(): Observable<any> {
+    const uriResult = this.http.delete<any>(enviroment.baseUrl + ApiPaths.User + "/logout")
+    uriResult.subscribe(
+      {
+        next: (data) => {
+          sessionStorage.removeItem("token")
+        }
+      });
+
+    return uriResult;
   };
 
   getToken(): string | null {

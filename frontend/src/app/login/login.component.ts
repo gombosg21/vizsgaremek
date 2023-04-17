@@ -30,11 +30,11 @@ export class LoginComponent {
 
   login() {
     this.authService.login(this.username, this.password).subscribe({
-      // next: (vaule) => { this.router.navigate(["/profile/" + vaule.ID]) },
-      complete: () => {
-        this.router.navigate(["/profile/" + getTokenUserID() ])
-      },
       error: (error) => { console.error({ error: error }) }
     });
   };
+
+  logout() {
+    this.authService.logout();
+  }
 };
