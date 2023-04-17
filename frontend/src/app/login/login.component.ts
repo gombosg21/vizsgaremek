@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { Router } from '@angular/router';
 import { AuthService } from '../services/auth/auth.service';
-import { getTokenUserID } from '../helpers/extractors/token';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +14,6 @@ export class LoginComponent {
 
   constructor(
     private titleService: Title,
-    private router: Router,
     private authService: AuthService,
   ) {
     this.titleService.setTitle('VisualPosting - Login');
@@ -33,10 +30,4 @@ export class LoginComponent {
       error: (error) => { console.error({ error: error }) }
     });
   };
-
-  logout() {
-    this.authService.logout().subscribe({
-        error: (error) => { console.error({ error: error }) }
-      });
-  }
 };

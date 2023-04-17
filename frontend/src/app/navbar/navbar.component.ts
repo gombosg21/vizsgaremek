@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { AuthService } from '../services/auth/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -8,6 +10,16 @@ import { Component } from '@angular/core';
 export class NavbarComponent {
   showSearch = false;
   showUpload = false;
+  isSession = false;
+
+  constructor(private Auth: AuthService, private router: Router) {
+
+    router.events.subscribe({
+      next: (value) => {
+        this.isSession = this.Auth.activeToken();
+      }
+    })
+  }
 
   toggleSearch(): void {
     this.showSearch = true;
@@ -23,4 +35,11 @@ export class NavbarComponent {
     this.showSearch = false;
     document.body.style.overflow = 'auto'; // enable scrolling
   }
+
+  logout() {
+    this.Auth.logout().subscribe({
+      error: (error) => { console.error({ error: error }) },
+      complete: () => { this.router.navigate(["/login"]) },
+    });
+  };
 }

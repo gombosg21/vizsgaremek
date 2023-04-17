@@ -46,7 +46,7 @@ export class AuthService {
     return token;
   };
 
-  activeToken(): Boolean {
+  activeToken(): boolean {
     const token = sessionStorage.getItem("token");
 
     if (!token) {
