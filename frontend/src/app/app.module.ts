@@ -17,6 +17,11 @@ import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TokenInterceptor } from './auth/token.interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { ThreadComponent } from './thread/thread.component';
+import { CommentComponent } from './comment/comment.component';
+import { StoryComponent } from './story/story.component';
+import { FriendsComponent } from './friends/friends.component';
+import { TagsComponent } from './tags/tags.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +35,11 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
     UploadComponent,
     ImageModalComponent,
     QueryComponent,
+    ThreadComponent,
+    CommentComponent,
+    StoryComponent,
+    FriendsComponent,
+    TagsComponent,
   ],
   imports: [
     BrowserModule,
