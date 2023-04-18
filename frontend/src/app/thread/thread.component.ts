@@ -9,21 +9,20 @@ import { comment } from '../models/comment';
 })
 export class ThreadComponent {
 
-  @Input() public name:string = "";
-  @Input() public created:Date = new Date();
-  @Input() public last_activity:Date = new Date();
-  @Input() public status:number = 0;
-  @Input() public comments:comment[];
+  @Input() public name: string = "";
+  @Input() public created: Date = new Date();
+  @Input() public last_activity: Date = new Date();
+  @Input() public status: number = 0;
+  @Input() public comments: comment[];
 
-  constructor(private ThreadService: ThreadService) { 
+  constructor(private ThreadService: ThreadService) {
+  };
+
+  comment(): void {
 
   };
 
-  comment():void {
-
-  };
-
-  react():void {
+  react(): void {
 
   };
 
