@@ -47,10 +47,10 @@ export class ProfileComponent implements OnInit {
   ];
 
   constructor(private UserService: UserService, private Router: Router, private Route: ActivatedRoute) {
-    this.onLoad();
   };
 
   ngOnInit(): void {
+    this.onLoad();
   };
 
 
@@ -77,9 +77,6 @@ export class ProfileComponent implements OnInit {
           thread_reactionlist: data.profile.thread.thread_reactionlist ?? [{ ID: -1, name: "", data: "" }],
           comments: data.profile.thread.comments ?? []
         }
-
-        console.log(this.UserProfileThread.comments)
-
         this.alias = this.UserProfile.alias ?? "";
         this.description = this.UserProfile.description ?? "";
         this.birth_date = this.UserProfile.birth_date ?? new Date();
