@@ -1,10 +1,8 @@
-<p>thread works!</p>
-
 <h1>{{name}}</h1>
 
 <h2>{{created}}</h2>
 
 <div *ngFor="let comment of comments; index as i;">
-    <app-commnet></app-commnet>
+    <app-commnet [content]="comments[i].content" [ID]="comments[i].ID" [last_edit]="comments[i].last_edit" created="comments[i].created"></app-commnet>
 
 </div>
