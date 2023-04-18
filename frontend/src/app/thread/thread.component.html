@@ -4,6 +4,7 @@
 
 <h2>{{created}}</h2>
 
-<div *ngFor>
+<div *ngFor="let comment of comments; index as i;">
+    <app-commnet></app-commnet>
 
 </div>
