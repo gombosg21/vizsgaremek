@@ -1,8 +1,14 @@
-<h1>{{name}}</h1>
+<div class="col">
+    <h1>{{name}}</h1>
 
-<h2>{{created}}</h2>
+    <h4>created at: {{created}}</h4>
+    <h4>last activity: {{last_activity}} </h4>
 
-<div *ngFor="let comment of comments; index as i;">
-    <app-commnet [content]="comments[i].content" [ID]="comments[i].ID" [last_edit]="comments[i].last_edit" created="comments[i].created"></app-commnet>
 
+    <p>status: {{threadStatus}}</p>
+
+    <ng-container *ngIf="comments">
+        <app-commnet *ngFor="let comment of comments" [content]="comment.content" [ID]="comment.ID"
+            [last_edit]="comment.last_edit" created="comment.created"></app-commnet>
+    </ng-container>
 </div>
