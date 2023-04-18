@@ -4,6 +4,8 @@ import { UserService } from '../services/user/user.service';
 import { getTokenUserID } from '../helpers/extractors/token';
 import { profile } from '../models/profile';
 import { thread } from '../models/thread';
+import { reaction } from '../models/reaction';
+import { comment } from '../models/comment';
 
 @Component({
   selector: 'app-profile',
@@ -13,6 +15,7 @@ import { thread } from '../models/thread';
 export class ProfileComponent implements OnInit {
 
   public UserProfile?: profile;
+  public UserProfileThread?:thread;
 
   alias = this.UserProfile?.alias ?? "";
   description = this.UserProfile?.description ?? "";
@@ -62,6 +65,16 @@ export class ProfileComponent implements OnInit {
           medium: data.profile?.medium ?? "",
           profile_reactionlists: data.profile?.profile_reactionlists ?? [],
           thread: data.profile?.thread
+        }
+
+        this.UserProfileThread = {
+          name: data.profile?.thread?.name ?? "",
+          ID: data.profile?.thread?.ID ?? -1,
+          status: data.profile?.thread?.status ?? -1,
+          created: data.profile?.thread?.created ?? new Date(),
+          last_activity: data.profile?.thread?.last_activity ?? new Date(),
+          thread_reactionlist: data.profile?.thread?.thread_reactionlist ?? [{ID:-1,name:"",data:""}],
+          comments: data.profile?.thread?.comments ?? []
         }
 
         this.alias = this.UserProfile?.alias ?? "";
