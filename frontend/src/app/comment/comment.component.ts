@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommentService } from '../services/comment/comment.service';
+import { ReactionService } from '../services/reaction/reaction.service';
 
 @Component({
   selector: 'app-comment',
@@ -8,14 +9,14 @@ import { CommentService } from '../services/comment/comment.service';
 })
 export class CommentComponent {
 
-  constructor(private CommentService: CommentService) {
+  @Input() public content:string = "";
+  @Input() public created:Date = new Date();
+  @Input() public last_edit:Date = new Date();
+  @Input() public user_alias:String = "";  
+
+  constructor(private CommentService: CommentService, private ReactionService:ReactionService) {
 
   };
-
-  content:string = "";
-  created:Date = new Date();
-  last_edit:Date = new Date();
-  user_alias:String = "";
 
   react():void {
     console.log("reaction")
