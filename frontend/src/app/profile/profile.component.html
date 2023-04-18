@@ -1,26 +1,31 @@
 <div class="container mt-5">
     <div class="row">
-        <div class="col-md-3 text-center">
-            <img [src]="profileImage || 'https://via.placeholder.com/150'" alt="Profile Image" class="rounded-circle mb-3 profile-pic">
+        <div class="col-md-4 text-center">
+            <img [src]="profileImage || 'https://via.placeholder.com/200'" alt="Profile Image" class="rounded-circle mb-3 profile-pic">
         </div>
-        <div class="col-md-9">
-            <h2 class="text-primary">{{alias}}</h2>
-            <p class="lead">{{description}}</p>
-            <ul class="list-inline">
-                <li class="list-inline-item">
-                    <strong>{{postCount}}</strong> posts
-                </li>
-                <li class="list-inline-item">
-                    <strong>{{followersCount}}</strong> followers
-                </li>
-                <li class="list-inline-item">
-                    <strong>{{followingCount}}</strong> following
-                </li>
-            </ul>
+        <div class="col-md-8">
+            <h4 class="username"><i class="fa-solid fa-user"></i> {{alias}}</h4>
+            <p class="birthdate"><i class="fa-solid fa-cake-candles"></i> {{birth_date | date:'dd. MM.'}}</p>
+            <div class="col-md-9">
+                <div class="d-flex justify-content-between">
+                    <div id="posts">
+                        <strong>{{postCount}}</strong> posts
+                    </div>
+                    <div id="followers">
+                        <strong>{{followersCount}}</strong> followers
+                    </div>
+                    <div id="following">
+                        <strong>{{followingCount}}</strong> following
+                    </div>
+                </div>
+                <p class="lead">{{description}}</p>
+            </div>
         </div>
+
+        <hr>
+
         <div class="container">
             <button type="button" id="uploadButton" class="btn btn-secondary" (click)="showUploadForm = true">test upload</button>
-            <h2 class="text-center">Posts</h2>
 
             <div class="row mt-3" *ngIf="showUploadForm">
                 <div class="col-md-6 offset-md-3">

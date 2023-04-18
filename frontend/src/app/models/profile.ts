@@ -3,6 +3,7 @@ import { thread } from "./thread";
 
 export interface profile {
     alias: String,
+    birth_date?: Date,
     description: String,
     visibility: String,
     picture_ID: Number,

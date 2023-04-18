@@ -1,12 +1,48 @@
 @import '~@fortawesome/fontawesome-free/css/all.css';
 .container {
-    padding: 100px;
+    max-width: 85%;
 }
 
 .post-image {
     height: 300px;
     width: 300px;
     object-fit: cover;
+}
+
+.birthdate {
+    color: #1f1f1f;
+    font-weight: bold;
+}
+
+.lead {
+    color: #1f1f1f;
+    font-weight: regular;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+.stats-wrapper {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    font-size: 18px;
+}
+
+.list-inline-item {
+    flex: 1;
+}
+
+#posts {
+    text-align: left;
+}
+
+#followers {
+    text-align: center;
+}
+
+#following {
+    text-align: right;
 }
 
 .card-body {
@@ -26,6 +62,7 @@
     width: 100%;
     padding-bottom: 100%;
     overflow: hidden;
+    filter: drop-shadow(0px 0px 3px #1f1f1fa5);
 }
 
 .crop-image {
@@ -34,7 +71,7 @@
     left: 0;
     height: 100%;
     width: 100%;
-    border-radius: 6px;
+    border-radius: 20px;
     object-fit: cover;
     transition: 200ms;
 }
