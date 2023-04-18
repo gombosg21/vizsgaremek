@@ -9,14 +9,14 @@ import { ReactionService } from '../services/reaction/reaction.service';
 })
 export class CommentComponent {
 
-  @Input() public content:string | undefined = "";
-  @Input() public created:Date | undefined = new Date();
-  @Input() public last_edit:Date | undefined = new Date();
-  @Input() public user_alias:String | undefined = "";
-  @Input() public ID:number | undefined = -1;  
+  @Input() public content:string;
+  @Input() public created:Date;
+  @Input() public last_edit:Date;
+  @Input() public user_alias:string;
+  @Input() public ID:number;  
 
   constructor(private CommentService: CommentService, private ReactionService:ReactionService) {
-
+    console.log(this.content)
   };
 
   react():void {
