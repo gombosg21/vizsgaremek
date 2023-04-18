@@ -16,6 +16,7 @@ export class ProfileComponent implements OnInit {
 
   alias = this.UserProfile?.alias ?? "";
   description = this.UserProfile?.description ?? "";
+  birth_date = this.UserProfile?.birth_date ?? "";
   gender = NaN;
   profileImage = this.UserProfile?.medium ?? new Blob(); // fallback image?
   postCount = 0;
@@ -65,6 +66,7 @@ export class ProfileComponent implements OnInit {
 
         this.alias = this.UserProfile?.alias ?? "";
         this.description = this.UserProfile?.description ?? "";
+        this.birth_date = data.birth_date ?? "";
         this.gender = NaN;
         this.profileImage = this.UserProfile?.medium ?? new Blob(); // fallback image?
       }
