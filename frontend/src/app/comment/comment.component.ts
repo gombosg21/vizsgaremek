@@ -9,10 +9,11 @@ import { ReactionService } from '../services/reaction/reaction.service';
 })
 export class CommentComponent {
 
-  @Input() public content:string = "";
-  @Input() public created:Date = new Date();
-  @Input() public last_edit:Date = new Date();
-  @Input() public user_alias:String = "";  
+  @Input() public content:string | undefined = "";
+  @Input() public created:Date | undefined = new Date();
+  @Input() public last_edit:Date | undefined = new Date();
+  @Input() public user_alias:String | undefined = "";
+  @Input() public ID:number | undefined = -1;  
 
   constructor(private CommentService: CommentService, private ReactionService:ReactionService) {
 

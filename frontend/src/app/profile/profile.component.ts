@@ -14,14 +14,14 @@ import { comment } from '../models/comment';
 })
 export class ProfileComponent implements OnInit {
 
-  public UserProfile?: profile;
-  public UserProfileThread?:thread;
+  public UserProfile: profile;
+  public UserProfileThread: thread;
 
-  alias = this.UserProfile?.alias ?? "";
-  description = this.UserProfile?.description ?? "";
-  birth_date = this.UserProfile?.birth_date ?? "";
+  alias = "";
+  description = "";
+  birth_date = new Date();
   gender = NaN;
-  profileImage = this.UserProfile?.medium ?? new Blob(); // fallback image?
+  profileImage = ""; // fallback image?
   postCount = 0;
   followersCount = 0;
   followingCount = 0;
@@ -58,30 +58,33 @@ export class ProfileComponent implements OnInit {
     this.UserService.getProfile(getTokenUserID()).subscribe({
       next: (data) => {
         this.UserProfile = {
-          alias: data.profile?.alias ?? "",
-          description: data.profile?.description ?? "",
-          visibility: data.profile?.visibility ?? "",
-          picture_ID: data.profile?.picture_ID ?? -1,
-          medium: data.profile?.medium ?? "",
-          profile_reactionlists: data.profile?.profile_reactionlists ?? [],
-          thread: data.profile?.thread
+          birth_date: data.birth_date ?? new Date(),
+          alias: data.profile.alias ?? "",
+          description: data.profile.description ?? "",
+          visibility: data.profile.visibility ?? "",
+          picture_ID: data.profile.picture_ID ?? -1,
+          medium: data.profile.medium ?? "",
+          profile_reactionlists: data.profile.profile_reactionlists ?? [],
+          thread: data.profile.thread ?? { name: "", ID: -1, status: -1, created: new Date(), last_activity: new Date(), thread_reactionlist: [], comments: [] }
         }
 
         this.UserProfileThread = {
-          name: data.profile?.thread?.name ?? "",
-          ID: data.profile?.thread?.ID ?? -1,
-          status: data.profile?.thread?.status ?? -1,
-          created: data.profile?.thread?.created ?? new Date(),
-          last_activity: data.profile?.thread?.last_activity ?? new Date(),
-          thread_reactionlist: data.profile?.thread?.thread_reactionlist ?? [{ID:-1,name:"",data:""}],
-          comments: data.profile?.thread?.comments ?? []
+          name: data.profile.thread?.name ?? "",
+          ID: data.profile.thread?.ID ?? -1,
+          status: data.profile.thread.status ?? -1,
+          created: data.profile.thread.created ?? new Date(),
+          last_activity: data.profile.thread.last_activity ?? new Date(),
+          thread_reactionlist: data.profile.thread.thread_reactionlist ?? [{ ID: -1, name: "", data: "" }],
+          comments: data.profile.thread.comments ?? []
         }
 
-        this.alias = this.UserProfile?.alias ?? "";
-        this.description = this.UserProfile?.description ?? "";
-        this.birth_date = data.birth_date ?? "";
-        this.gender = NaN;
-        this.profileImage = this.UserProfile?.medium ?? new Blob(); // fallback image?
+        console.log(this.UserProfileThread.comments)
+
+        this.alias = this.UserProfile.alias ?? "";
+        this.description = this.UserProfile.description ?? "";
+        this.birth_date = this.UserProfile.birth_date ?? new Date();
+        this.gender = data.gender ?? -1;
+        this.profileImage = this.UserProfile.medium ?? ""; // fallback image?
       }
     }
     )
