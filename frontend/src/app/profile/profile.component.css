@@ -9,6 +9,10 @@
     object-fit: cover;
 }
 
+#user-icon {
+    font-size: 18px;
+}
+
 .birthdate {
     color: #1f1f1f;
     font-weight: bold;
