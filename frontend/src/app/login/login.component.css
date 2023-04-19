@@ -1,3 +1,4 @@
+@import '~@fortawesome/fontawesome-free/css/all.css';
 .container {
     max-width: 100%;
 }
@@ -10,6 +11,20 @@
 
 .form-group {
     margin-bottom: 0.3em;
+}
+
+.input-group-text {
+    background-color: rgb(240, 240, 240);
+    border: 1px solid #ced4da;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+    max-width: 2.5em;
+}
+
+#user-icon,
+#lock-icon {
+    padding-top: 4px;
+    padding-bottom: 4px;
 }
 
 .haveRegister {

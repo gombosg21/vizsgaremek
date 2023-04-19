@@ -1,3 +1,4 @@
+@import '~@fortawesome/fontawesome-free/css/all.css';
 .container {
     max-width: 100%;
 }
@@ -12,20 +13,48 @@
     margin-bottom: 0.3em;
 }
 
+.picker {
+    display: flex;
+}
+
 .form-check-inline {
-    margin-right: 0.8em;
+    margin-right: 0.2em;
     background-color: #ffffff;
     padding: 0.4em;
-    padding-left: 0.7em;
-    padding-right: 0.7em;
+    padding-left: 0.8em;
+    padding-right: 0.2em;
     border-radius: 6px;
-    border: 1px solid #d7d7d7;
+    border-right: 1px solid #ced4da;
+    border-bottom: 1px solid #ced4da;
+    border-top: 1px solid #ced4da;
+}
+
+.input-group-text {
+    background-color: rgb(240, 240, 240);
+    border: 1px solid #ced4da;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+    max-width: 2.5em;
+}
+
+#picker {
+    border-top-left-radius: 0px !important;
+    border-bottom-left-radius: 0px !important;
+}
+
+#user-icon,
+#lock-icon,
+#email-icon,
+#gender-icon {
+    padding-top: 4px;
+    padding-bottom: 4px;
 }
 
 #male,
 #female,
-#other {
-    margin-right: 0.6em;
+#other,
+.picker {
+    margin-right: 0.2em;
 }
 
 .haveLogin {

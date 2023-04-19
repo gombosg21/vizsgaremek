@@ -6,54 +6,69 @@
                     <h2 class="text-center">Register</h2>
                     <form (ngSubmit)="register()">
                         <div class="form-group">
-                            <input type="text" class="form-control" id="username" placeholder="Username" [(ngModel)]="username" name="username" [ngClass]="usernameClass" (input)="validateUsername()" />
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-user" id="user-icon"></i></span>
+                                </div>
+                                <input type="text" class="form-control" id="username" placeholder="Username" [(ngModel)]="username" name="username" [ngClass]="usernameClass" (input)="validateUsername()" />
+                            </div>
                             <div *ngIf="usernameClass === 'is-invalid'" [ngClass]="usernameClass" class="invalid-feedback">
                                 Please enter a valid username (min. 3 characters).
                             </div>
                         </div>
                         <div class="form-group">
-                            <input type="email" class="form-control" id="email" placeholder="Email" [(ngModel)]="email" name="email" [ngClass]="emailClass" (input)="validateEmail()" />
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-envelope" id="email-icon"></i></span>
+                                </div>
+                                <input type="email" class="form-control" id="email" placeholder="Email" [(ngModel)]="email" name="email" [ngClass]="emailClass" (input)="validateEmail()" />
+                            </div>
                             <div *ngIf="emailClass === 'is-invalid'" [ngClass]="emailClass" class="invalid-feedback">
                                 Please enter a valid email address.
                             </div>
                         </div>
                         <div class="form-group">
-                            <input type="password" class="form-control" placeholder="Password" [(ngModel)]="password" name="password" [ngClass]="passwordClass" (input)="validatePassword()" />
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-lock" id="lock-icon"></i></span>
+                                </div>
+                                <input type="password" class="form-control" placeholder="Password" [(ngModel)]="password" name="password" [ngClass]="passwordClass" (input)="validatePassword()" />
+                            </div>
                             <div *ngIf="passwordClass === 'is-invalid'" [ngClass]="passwordClass" class="invalid-feedback">
                                 Please enter a valid password (min. 8 characters, max. 32).
                             </div>
-
                         </div>
-
                         <div class="form-group">
-                            <input type="password" class="form-control" placeholder="Confirm password" name="confirmPassword" [(ngModel)]="passwordConfirm" [ngClass]="passwordConfirmClass" (input)="validatePasswordConfirm()" />
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-lock" id="lock-icon"></i></span>
+                                </div>
+                                <input type="password" class="form-control" placeholder="Confirm password" name="confirmPassword" [(ngModel)]="passwordConfirm" [ngClass]="passwordConfirmClass" (input)="validatePasswordConfirm()" />
+                            </div>
                             <div *ngIf="passwordConfirmClass === 'is-invalid'" class="invalid-feedback">
                                 Please enter the same password as above.
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <input type="date" class="form-control" [(ngModel)]="birth_date" name="birthDate" id="birthday" [ngClass]="birthDateClass" (input)="validateBirthDate()" />
-                            <div *ngIf="birthDateClass === 'is-invalid'" class="invalid-feedback">
-                                Please enter a valid birth date (not in the future).
-                            </div>
-                        </div>
+                            <div class="picker">
+                                <span class="input-group-text"><i class="fa-solid fa-venus-mars" id="gender-icon"></i></span>
+                                <div class="form-check-inline" id="picker">
+                                    <label class="form-check-label" id="pickGender">Gender</label>
+                                </div>
 
-                        <div class="form-group">
-                            <div class="form-check-inline">
-                                <label class="form-check-label" id="pickGender">Pick gender</label>
-                            </div>
-                            <div class="form-check-inline">
-                                <input class="form-check-input" type="radio" id="male" name="gender" [(ngModel)]="selectedGender" value="male" checked="checked">
-                                <label class="form-check-label" for="male">Male</label>
-                            </div>
-                            <div class="form-check-inline">
-                                <input class="form-check-input" type="radio" id="female" name="gender" [(ngModel)]="selectedGender" value="female">
-                                <label class="form-check-label" for="female">Female</label>
-                            </div>
-                            <div class="form-check-inline">
-                                <input class="form-check-input" type="radio" id="other" name="gender" [(ngModel)]="selectedGender" value="other">
-                                <label class="form-check-label" for="other">Other</label>
+                                <div class="form-check-inline">
+                                    <input class="form-check-input" type="radio" id="male" name="gender" [(ngModel)]="selectedGender" value="male" checked="checked">
+                                    <label class="form-check-label" for="male">Male</label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <input class="form-check-input" type="radio" id="female" name="gender" [(ngModel)]="selectedGender" value="female">
+                                    <label class="form-check-label" for="female">Female</label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <input class="form-check-input" type="radio" id="other" name="gender" [(ngModel)]="selectedGender" value="other">
+                                    <label class="form-check-label" for="other">Other</label>
+                                </div>
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary" [disabled]="!isFormValid()">Register</button>
