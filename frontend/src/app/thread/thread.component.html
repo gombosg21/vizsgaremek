@@ -1,13 +1,25 @@
-<div class="col">
-    <h1>{{name}}</h1>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h4>{{name}}</h4>
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h5>
+                        <i class="far fa-calendar-alt"></i> Created at: {{created | date: 'yyyy. MM. dd. HH:mm'}}
+                    </h5>
+                    <h5>
+                        <i class="far fa-clock"></i> Last activity: {{last_activity | date: 'yyyy. MM. dd. HH:mm'}}
+                    </h5>
+                </div>
+                <div>
+                    <p>Status: <span [ngClass]="{'badge': true, 'bg-primary': threadStatus === 'open', 'bg-danger': threadStatus === 'locked'}">{{threadStatus}}</span></p>
 
-    <h4>created at: {{created}}</h4>
-    <h4>last activity: {{last_activity}} </h4>
-
-
-    <p>status: {{threadStatus}}</p>
-
-    <ng-container *ngIf="comments">
-        <app-commnet *ngFor="let comment of comments; let i = index" [iterator]="i"></app-commnet>
-    </ng-container>
+                </div>
+            </div>
+            <hr>
+            <ng-container *ngIf="comments">
+                <app-commnet *ngFor="let comment of comments; let i = index" [iterator]="i"></app-commnet>
+            </ng-container>
+        </div>
+    </div>
 </div>
