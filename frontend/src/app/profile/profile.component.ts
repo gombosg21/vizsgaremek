@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../services/user/user.service';
 import { getTokenUserID } from '../helpers/extractors/token';
 import { profile } from '../models/profile';
 import { thread } from '../models/thread';
-import { reaction } from '../models/reaction';
-import { comment } from '../models/comment';
+import { ThreadService } from '../services/thread/thread.service';
 
 @Component({
   selector: 'app-profile',
@@ -46,7 +44,7 @@ export class ProfileComponent implements OnInit {
     },
   ];
 
-  constructor(private UserService: UserService, private Router: Router, private Route: ActivatedRoute) {
+  constructor(private UserService: UserService, private ThreadService:ThreadService) {
   };
 
   ngOnInit(): void {
@@ -82,6 +80,8 @@ export class ProfileComponent implements OnInit {
         this.birth_date = this.UserProfile.birth_date ?? new Date();
         this.gender = data.gender ?? -1;
         this.profileImage = this.UserProfile.medium ?? ""; // fallback image?
+
+        this.ThreadService.setLocalData([this.UserProfileThread]);
       }
     }
     )
