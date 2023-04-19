@@ -14,13 +14,12 @@ export class CommentService {
   private ApiPathMain = enviroment.baseUrl + ApiPaths.Thread;
   private ApiPathSecondary = enviroment.baseUrl + ApiPaths.Comment;
 
-  private comments:comment[];
+  private comments: comment[];
 
   constructor(private http: HttpClient) {
-
   }
 
-  setLocalData(comments:comment[]): void {
+  setLocalData(comments: comment[]): void {
     this.comments = comments;
   }
 
