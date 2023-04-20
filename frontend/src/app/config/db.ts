@@ -1,8 +1,8 @@
-import { NgxIndexedDBService, NgxIndexedDBModule, DBConfig } from "ngx-indexed-db";
-import { Injectable, NgModule } from '@angular/core';
+import { DBConfig } from "ngx-indexed-db";
 
 
-const dbConfig: DBConfig = {
+
+export const dbConfig: DBConfig = {
     name: "VisualIndexDB",
     version: 1.0,
     objectStoresMeta: [
