@@ -12,7 +12,7 @@
                     </h5>
                 </div>
                 <div>
-                    <p>Status: <span [ngClass]="{'badge': true, 'bg-primary': threadStatus === 'open', 'bg-danger': threadStatus === 'locked'}">{{threadStatus}}</span></p>
+                    <p>Status: <span [ngClass]="{'badge': true, 'bg-primary': threadStatus === 'open', 'bg-danger': threadStatus === 'locked', 'bg-secondary': threadStatus === 'archived', 'bg-warning': threadStatus === 'error'}">{{threadStatus}}</span></p>
                 </div>
             </div>
             <hr>

@@ -12,13 +12,20 @@ export class SearchComponent {
 
   constructor(private router: Router) {}
 
+  toggleBodyScroll(): void {
+    document.body.classList.toggle('no-scroll');
+  }
+  
   closeSearch(): void {
+    this.toggleBodyScroll();
     this.close.emit();
   }
-
+  
   search(query: string): void {
+    this.toggleBodyScroll();
     this.searchQuery.emit(query);
     this.close.emit();
     this.router.navigate(['/query'], { queryParams: { searchTerm: query } });
   }
+  
 }
