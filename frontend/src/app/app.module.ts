@@ -24,6 +24,9 @@ import { FriendsComponent } from './friends/friends.component';
 import { TagsComponent } from './tags/tags.component';
 import { ReactionsComponent } from './reactions/reactions.component';
 import { ImageComponent } from './image/image.component';
+import { dbConfig } from './config/db';
+import { NgxIndexedDBModule } from 'ngx-indexed-db';
+
 
 @NgModule({
   declarations: [
@@ -50,8 +53,8 @@ import { ImageComponent } from './image/image.component';
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
-    ReactiveFormsModule
-
+    ReactiveFormsModule,
+    NgxIndexedDBModule.forRoot(dbConfig)
   ],
   providers: [
     {
