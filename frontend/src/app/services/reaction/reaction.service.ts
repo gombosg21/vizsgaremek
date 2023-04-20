@@ -10,13 +10,26 @@ import { reaction } from 'src/app/models/reaction';
 })
 export class ReactionService {
 
-  private controllerUrl: string = enviroment.baseUrl + ApiPaths.Reaction;
+  private controllerUrl: string = enviroment.baseUrl;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
 
-  getAllreactions():Observable<reaction[]> {
-    const targetUrl = this.controllerUrl;
+  }
 
-    return this.http.get<reaction[]>(targetUrl);
+  getAllreactions(ID: number, TargetType: string): Observable<reaction[]> {
+
+    return this.http.get<reaction[]>(this.controllerUrl + TargetType + "/" + ID + "/" + ApiPaths.Reaction);
   };
-}
+
+  getLocalDBReactions() {
+
+  };
+
+  addReactionInstance(reactionID: number, targetID: number, TargetType: string): Observable<any> {
+    return this.http.post(this.controllerUrl + TargetType + "/" + targetID + "/" + ApiPaths.Reaction, { ID: reactionID });
+  };
+
+  removeReactionInstance(reactionID: number, targetID: number, TargetType: string): Observable<any> {
+    return this.http.post(this.controllerUrl + TargetType + "/" + targetID + "/" + ApiPaths.Reaction, { ID: reactionID });
+  };
+};
