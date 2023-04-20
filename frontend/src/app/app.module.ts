@@ -23,6 +23,7 @@ import { StoryComponent } from './story/story.component';
 import { FriendsComponent } from './friends/friends.component';
 import { TagsComponent } from './tags/tags.component';
 import { ReactionsComponent } from './reactions/reactions.component';
+import { ImageComponent } from './image/image.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { ReactionsComponent } from './reactions/reactions.component';
     FriendsComponent,
     TagsComponent,
     ReactionsComponent,
+    ImageComponent,
   ],
   imports: [
     BrowserModule,
