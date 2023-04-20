@@ -1,1 +1,5 @@
-<p>reactions works!</p>
+<ul class="list-group list-group-flush">
+    <li class="list-group-item" *NgFor="let reaction of reactions; index as i">
+        <img src="data[i].data" alt="data[i].name">
+    </li>
+</ul>
