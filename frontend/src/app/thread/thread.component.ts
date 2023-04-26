@@ -3,6 +3,7 @@ import { ThreadService } from '../services/thread/thread.service';
 import { comment } from '../models/comment';
 import { thread } from '../models/thread';
 import { CommentService } from '../services/comment/comment.service';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-thread',
@@ -12,6 +13,9 @@ import { CommentService } from '../services/comment/comment.service';
 export class ThreadComponent implements OnInit {
 
   private data: thread;
+  pageSize = 5;
+  pageIndex = 0;
+  paginatedComments: comment[] = [];
 
   @Input() public name: string;
   @Input() public created: Date;
@@ -35,6 +39,8 @@ export class ThreadComponent implements OnInit {
   };
 
   ngOnInit(): void {
+
+    this.paginateComments();
     switch (this.status) {
       case 0:
         this.threadStatus = "open"
@@ -70,5 +76,17 @@ export class ThreadComponent implements OnInit {
   react(): void {
 
   };
+
+  pageChanged(event: PageEvent): void {
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.paginateComments();
+  }
+
+  paginateComments(): void {
+    const startIndex = this.pageIndex * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
+    this.paginatedComments = this.comments.slice(startIndex, endIndex);
+  }
 
 };

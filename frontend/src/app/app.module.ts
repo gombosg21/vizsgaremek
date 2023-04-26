@@ -26,6 +26,9 @@ import { ReactionsComponent } from './reactions/reactions.component';
 import { ImageComponent } from './image/image.component';
 import { dbConfig } from './config/db';
 import { NgxIndexedDBModule } from 'ngx-indexed-db';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatPaginatorModule } from '@angular/material/paginator';
+
 
 
 @NgModule({
@@ -46,7 +49,7 @@ import { NgxIndexedDBModule } from 'ngx-indexed-db';
     FriendsComponent,
     TagsComponent,
     ReactionsComponent,
-    ImageComponent,
+    ImageComponent
   ],
   imports: [
     BrowserModule,
@@ -54,7 +57,9 @@ import { NgxIndexedDBModule } from 'ngx-indexed-db';
     FormsModule,
     HttpClientModule,
     ReactiveFormsModule,
-    NgxIndexedDBModule.forRoot(dbConfig)
+    NgxIndexedDBModule.forRoot(dbConfig),
+    BrowserAnimationsModule,
+    MatPaginatorModule
   ],
   providers: [
     {
