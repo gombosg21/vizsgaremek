@@ -35,7 +35,7 @@ exports.checkIfTagIDDoesNotExsits = async (req, res, next) => {
 };
 
 exports.checkIfTagNameAlreadyExsits = async (req, res, next) => {
-    const tagName = req.body.tag_name;
+    const tagName = req.body.name;
     
     try {
         const conflictObject = await tag.findOne({ where: { name: tagName } });
