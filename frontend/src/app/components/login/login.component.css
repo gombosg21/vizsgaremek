@@ -1,0 +1,37 @@
+@import '~@fortawesome/fontawesome-free/css/all.css';
+.container {
+    max-width: 100%;
+}
+
+.card {
+    background: linear-gradient(45deg, rgb(186, 230, 255), #e7eeff);
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+    margin-bottom: 0.3em;
+}
+
+.input-group-text {
+    background-color: rgb(240, 240, 240);
+    border: 1px solid #ced4da;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+    max-width: 2.5em;
+}
+
+#user-icon,
+#lock-icon {
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+.haveRegister {
+    margin-top: 1em;
+}
+
+a {
+    color: #0079d5;
+    text-decoration: none;
+}

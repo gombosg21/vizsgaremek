@@ -4,7 +4,7 @@ export interface media {
     created:Date,
     last_edit:Date,
     visibility:number,
-    descriptin:string,
+    description:string,
     placeholder:string,
     tags?:any[],
     reactions?: any[]

@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { reaction } from '../models/reaction';
-import { ReactionService } from '../services/reaction/reaction.service';
+import { reaction } from '../../models/reaction';
+import { ReactionService } from '../../services/reaction/reaction.service';
 
 @Component({
   selector: 'app-reactions',

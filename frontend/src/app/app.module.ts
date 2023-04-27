@@ -4,28 +4,29 @@ import { FormsModule } from '@angular/forms';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { RegisterComponent } from './register/register.component';
-import { LoginComponent } from './login/login.component';
-import { FeedComponent } from './feed/feed.component';
-import { ProfileComponent } from './profile/profile.component';
-import { NavbarComponent } from './navbar/navbar.component';
-import { SearchComponent } from './search/search.component';
-import { UploadComponent } from './upload/upload.component';
-import { ImageModalComponent } from './image-modal/image-modal.component';
-import { QueryComponent } from './query/query.component';
+import { RegisterComponent } from './components/register/register.component';
+import { LoginComponent } from './components/login/login.component';
+import { FeedComponent } from './components/feed/feed.component';
+import { ProfileComponent } from './components/profile/profile.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { SearchComponent } from './components/search/search.component';
+import { UploadComponent } from './components/modals/upload-modal/upload.component';
+import { ImageModalComponent } from './components/modals/image-modal/image-modal.component';
+import { QueryComponent } from './components/query/query.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TokenInterceptor } from './auth/token.interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { ThreadComponent } from './thread/thread.component';
-import { CommentComponent } from './comment/comment.component';
-import { StoryComponent } from './story/story.component';
-import { FriendsComponent } from './friends/friends.component';
-import { TagsComponent } from './tags/tags.component';
-import { ReactionsComponent } from './reactions/reactions.component';
-import { ImageComponent } from './image/image.component';
+import { ThreadComponent } from './components/thread/thread.component';
+import { CommentComponent } from './components/comment/comment.component';
+import { StoryComponent } from './components/story/story.component';
+import { FriendsComponent } from './components/friends/friends.component';
+import { TagsComponent } from './components/tags/tags.component';
+import { ReactionsComponent } from './components/reactions/reactions.component';
+import { ImageComponent } from './components/image/image.component';
 import { dbConfig } from './config/db';
 import { NgxIndexedDBModule } from 'ngx-indexed-db';
+import { EditModalComponent } from './edit-modal/edit-modal.component';
 
 
 @NgModule({
@@ -47,6 +48,7 @@ import { NgxIndexedDBModule } from 'ngx-indexed-db';
     TagsComponent,
     ReactionsComponent,
     ImageComponent,
+    EditModalComponent,
   ],
   imports: [
     BrowserModule,

@@ -11,12 +11,20 @@ export class DbService {
 
   }
 
-  addItem(table: string, item: Object): Observable<any> {
-    return this.dbService.add(table, item);
-  };
+  flushReactions():Observable<any> {
+    return this.dbService.bulkDelete("reactions",[]);
+  }
 
-  removeItem(table: string, keyData: any): Observable<any> {
-    return this.dbService.delete(table, keyData)
+  fillReactions() {
+
+  }
+
+  flushTags() {
+
+  }
+
+  fillTags() {
+
   }
 
 }

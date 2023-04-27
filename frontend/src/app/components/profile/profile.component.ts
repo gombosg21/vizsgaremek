@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '../services/user/user.service';
-import { getTokenUserID } from '../helpers/extractors/token';
-import { profile } from '../models/profile';
-import { thread } from '../models/thread';
-import { ThreadService } from '../services/thread/thread.service';
+import { UserService } from '../../services/user/user.service';
+import { getTokenUserID } from '../../helpers/extractors/token';
+import { profile } from '../../models/profile';
+import { thread } from '../../models/thread';
+import { ThreadService } from '../../services/thread/thread.service';
 
 @Component({
   selector: 'app-profile',

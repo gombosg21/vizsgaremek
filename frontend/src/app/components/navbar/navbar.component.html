@@ -16,8 +16,14 @@
                 <li *ngIf="isSession" class="nav-item">
                     <a class="nav-link" (click)="toggleUpload()">Upload</a>
                 </li>
-                <li *ngIf="isSession">
+                <li *ngIf="isSession" class="nav-item">
                     <a class="nav-link" (click)="logout()">Logout</a>
+                </li>
+                <li *ngIf="isSession" class="nav-item">
+                    <a class="nav-link">Friends</a>
+                </li>
+                <li *ngIf="isSession" class="nav-item">
+                    <a class="nav-link">Followed</a>
                 </li>
             </ul>
         </div>

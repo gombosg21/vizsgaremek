@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ThreadService } from '../services/thread/thread.service';
-import { comment } from '../models/comment';
-import { thread } from '../models/thread';
-import { CommentService } from '../services/comment/comment.service';
+import { ThreadService } from '../../services/thread/thread.service';
+import { comment } from '../../models/comment';
+import { thread } from '../../models/thread';
+import { CommentService } from '../../services/comment/comment.service';
 
 @Component({
   selector: 'app-thread',

@@ -17,15 +17,15 @@ export class MediaService {
   }
 
 
-  getAllMediaFromUserID(ID: number): Observable<any> {
-    return this.http.get(this.ApiPath + "/all/" + ID);
+  getAllMediaFromUserID(ID: number): Observable<media[]> {
+    return this.http.get<media[]>(this.ApiPath + "/user/" + ID);
   };
 
   getOneFromUserID(ID: number): Observable<media> {
     return this.http.get<media>(this.ApiPath + "/" + ID);
   };
 
-  uploadMedia(data: media): Observable<media> {
-    return this.http.post<media>(this.ApiPath, data);
+  uploadMedia(data: any): Observable<any> {
+    return this.http.post<any>(this.ApiPath, data);
   };
 }
