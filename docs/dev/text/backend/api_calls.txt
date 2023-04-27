@@ -61,16 +61,20 @@ Eredményt JSON tömbként visszaadja, értékek {ID, name}.
 POST /api/v/0.1/tag
 Belépés után elérhető...
 Létrehoz egy új cédulát.
-A {tag_name} JSON mezőt követeli.
+A {name} JSON mezőt követeli.
+Siker esetén az {ID, name} mezőkkel tér vissza;
 
 PATCH /api/v/0.1/tag/{ID}
 Belépés után elérhető...
 A cédula nevét átírja ID alapján.
-JSON-ba a {tag_name} mezőt követeli.
+JSON-ba a {name} mezőt követeli.
+Siker esetén az {ID, name} mezőkkel tér vissza;
 
 DELETE /api/v/0.1/tag/{ID}
 Belépés után elérhető...
 Eltöröl egy cédulát ID alapján.
+Siker esetén az {ID, name} mezőkkel tér vissza;
+
 
 GET /api/v/0.1/media/{ID}
 Visszaad egy képet base64-es kódolással, asszociált adatokkal : 
