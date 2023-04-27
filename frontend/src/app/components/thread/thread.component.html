@@ -17,8 +17,7 @@
             </div>
             <hr>
             <ng-container *ngIf="comments">
-                <app-comment *ngFor="let comment of comments; let i = index" [iterator]="i"></app-comment>
+                <app-comment *ngFor="let comment of paginatedComments; let i = index" [iterator]="i"></app-comment>
             </ng-container>
+            <mat-paginator [length]="comments.length" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 25, 50]" (page)="pageChanged($event)"></mat-paginator>
         </div>
-    </div>
-</div>
