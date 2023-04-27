@@ -21,7 +21,7 @@ router.route('/media/:mediaID')
     .get(mediaValidator.checkIfMediaIDExsist, auth.optionalAuth, mediaController.getMediaByID);
 
 // view ALL media with user_ID
-router.get('/media/all/:userID', userValidator.checkIfUserIDExsits, auth.optionalAuth, mediaController.getAllMediaFromUser);
+router.get('/media/user/:userID', userValidator.checkIfUserIDExsits, auth.optionalAuth, mediaController.getAllMediaFromUser);
 
 // view media by tags, search function
 router.get('/media/search/tags', auth.optionalAuth, mediaController.getAllMediaByTags);

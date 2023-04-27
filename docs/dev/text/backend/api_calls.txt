@@ -77,7 +77,7 @@ Visszaad egy képet base64-es kódolással, asszociált adatokkal :
 {uploader, file, uploaded, description, placeholder_text, tags[name]},
 csak a file van base64-ben.
 
-GET /api/v/0.1/media/all/{ID}
+GET /api/v/0.1/media/user/{ID}
 Visszaadja az adott ID-jű user összes képét listaként base64-es kódolással, asszociált adatokkal:
 {uploader, file, uploaded, description, placeholder_text, tags[name]},
 csak a file van base64-ben.
