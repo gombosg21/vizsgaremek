@@ -26,12 +26,10 @@ import { ReactionsComponent } from './components/reactions/reactions.component';
 import { ImageComponent } from './components/image/image.component';
 import { dbConfig } from './config/db';
 import { NgxIndexedDBModule } from 'ngx-indexed-db';
-<<<<<<< HEAD
-import { EditModalComponent } from './edit-modal/edit-modal.component';=======
+import { EditModalComponent } from './edit-modal/edit-modal.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatPaginatorModule } from '@angular/material/paginator';
 
->>>>>>> 75a43e62ee7bd8195cb6c735e6f887b30fc5c5f0
 
 
 @NgModule({
@@ -52,11 +50,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     FriendsComponent,
     TagsComponent,
     ReactionsComponent,
-<<<<<<< HEAD
     ImageComponent,
     EditModalComponent,
-=======
->>>>>>> 75a43e62ee7bd8195cb6c735e6f887b30fc5c5f0
   ],
   imports: [
     BrowserModule,
