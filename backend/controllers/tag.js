@@ -3,11 +3,11 @@ const media_taglist = require("../models").media_taglist;
 const { Op, col, fn } = require("sequelize");
 
 exports.createTag = async (req, res, next) => {
-    const tagName = req.body.tag_name;
+    const Name = req.body.name;
 
     try {
         const newTag = await tag.build({
-            name: tagName
+            name: Name
         });
 
         await newTag.save();
@@ -26,19 +26,19 @@ exports.createTag = async (req, res, next) => {
 
 exports.updateTag = async (req, res, next) => {
     const ID = req.params.ID;
-    const tagName = req.body.tag_name;
+    const NewName = req.body.name;
 
     try {
         const UpdateTag = await tag.findByPk(ID, { attributes: ['name', 'ID'] });
 
         UpdateTag.update({
-            name: tagName
+            name: NewName
         });
 
         await UpdateTag.save();
 
         return res.status(200)
-            .json(UpdateTag);
+            .json({ UpdateTag });
     } catch (error) {
         console.error(error);
         return res.status(500);
@@ -53,7 +53,10 @@ exports.deleteTag = async (req, res, next) => {
 
         await deleteTag.destroy();
         return res.status(200)
-            .json({ ID: deleteTag.ID });
+            .json({
+                ID: deleteTag.ID,
+                name: deleteTag.name
+            });
 
     } catch (error) {
         console.error(error);
