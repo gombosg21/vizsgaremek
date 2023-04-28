@@ -16,6 +16,7 @@
                 </div>
             </div>
             <hr>
+            <app-reactions *ngIf="reactions" [reactions]="reactions"></app-reactions>
             <ng-container *ngIf="comments">
                 <app-comment *ngFor="let comment of paginatedComments; let i = index" [iterator]="i"></app-comment>
             </ng-container>
