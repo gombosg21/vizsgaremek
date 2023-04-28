@@ -29,24 +29,23 @@ export class ThreadComponent implements OnInit {
 
   public threadStatus: string;
 
-  constructor(private ThreadService: ThreadService, private CommenctService:CommentService, private DBService:DbService ) {
+  constructor(private ThreadService: ThreadService, private CommenctService: CommentService, private DBService: DbService) {
     this.data = this.ThreadService.getLocalData()[this.iterator];
-    
+
     this.name = this.data.name ?? this.name;
     this.created = this.data.created ?? this.created;
     this.last_activity = this.data.last_activity ?? this.last_activity;
     this.status = this.data.status ?? this.status;
     this.comments = this.data.comments ?? this.comments;
-    
-    if(this.data.thread_reactionlist.length != 0) {
-          this.DBService.getCacheReactions(this.data.thread_reactionlist!.map(reaction => (reaction.ID))).subscribe({
-            next: (value) => {this.reactions = this.reactions ?? value},
-            error: (error) => {console.error(error);
-            }
-          })
-    }
 
-
+    if (this.data.thread_reactionlist.length != 0) {
+      this.DBService.getCacheReactions(this.data.thread_reactionlist!.map(reaction => (reaction.ID))).subscribe({
+        next: (value) => { this.reactions = this.reactions ?? value },
+        error: (error) => {
+          console.error(error);
+        }
+      });
+    };
 
     this.CommenctService.setLocalData(this.comments);
   };
