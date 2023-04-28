@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { CommentService } from '../../services/comment/comment.service';
 import { ReactionService } from '../../services/reaction/reaction.service';
 import { comment } from '../../models/comment';
-import { reaction } from 'src/app/models/reaction';
+import { reaction_local } from 'src/app/models/reaction';
 import { DbService } from 'src/app/services/db/db.service';
 import { Observable } from 'rxjs'
 
@@ -21,7 +21,7 @@ export class CommentComponent implements OnInit {
   @Input() public user_alias: string;
   @Input() public ID: number;
   @Input() public iterator: number = 0;
-  @Input() public reactions: reaction[];
+  @Input() public reactions: reaction_local[];
 
   constructor(private CommentService: CommentService, private ReactionService: ReactionService, private DBService: DbService) {
     this.data = this.CommentService.getLocalData()[this.iterator];
