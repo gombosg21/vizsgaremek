@@ -1,30 +1,42 @@
 import { Injectable } from '@angular/core';
 import { NgxIndexedDBService } from 'ngx-indexed-db';
-import { Observable } from 'rxjs'
+import { Observable, firstValueFrom, lastValueFrom } from 'rxjs'
+import { tag } from 'src/app/models/tag';
+import { reaction } from 'src/app/models/reaction';
+import { TagsService } from '../tags/tags.service';
+import { ReactionService } from '../reaction/reaction.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DbService {
 
-  constructor(private dbService: NgxIndexedDBService) {
-
+  constructor(private dbService: NgxIndexedDBService, private TagsService: TagsService, private ReactionsService: ReactionService) {
   }
 
-  flushReactions():Observable<any> {
-    return this.dbService.bulkDelete("reactions",[]);
-  }
+  flushReactions(): Observable<any> {
+    return this.dbService.bulkDelete("reactions", []);
+  };
 
-  fillReactions() {
+  getCacheReactions(IDs: number[]): Observable<reaction[]> {
+    return this.dbService.bulkGet("reactions", IDs);
+  };
 
-  }
+  async fillReactions(): Promise<Observable<number[]>> {
+    const dataSource = this.ReactionsService.getAllReactions()
+    const data = await firstValueFrom(dataSource);
+    console.log(data)
+    return this.dbService.bulkAdd("reactions", data);
+  };
 
-  flushTags() {
+  flushTags(): Observable<any> {
+    return this.dbService.bulkDelete("tags", []);
+  };
 
-  }
-
-  fillTags() {
-
-  }
-
+  async fillTags(): Promise<Observable<number[]>> {
+    const dataSource = this.TagsService.getAllTags();
+    const data = await firstValueFrom(dataSource);
+    console.log(data)
+    return this.dbService.bulkAdd("tags", data);
+  };
 }
