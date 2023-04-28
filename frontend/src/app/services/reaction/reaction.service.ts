@@ -16,13 +16,12 @@ export class ReactionService {
 
   }
 
-  getAllreactions(ID: number, TargetType: string): Observable<reaction[]> {
-
+  getAllItemReactions(ID: number, TargetType: string): Observable<reaction[]> {
     return this.http.get<reaction[]>(this.controllerUrl + TargetType + "/" + ID + "/" + ApiPaths.Reaction);
   };
 
-  getLocalDBReactions() {
-
+  getAllReactions():Observable<reaction[]> {
+    return this.http.get<reaction[]>(this.controllerUrl + ApiPaths.Reaction);
   };
 
   addReactionInstance(reactionID: number, targetID: number, TargetType: string): Observable<any> {
