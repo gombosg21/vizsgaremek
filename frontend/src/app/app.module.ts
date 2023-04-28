@@ -31,6 +31,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { APP_INITIALIZER } from '@angular/core';
 import { DbService } from './services/db/db.service';
+import { ReactionModalComponent } from './components/modals/reaction-modal/reaction-modal.component';
 
 
 
@@ -54,6 +55,7 @@ import { DbService } from './services/db/db.service';
     ReactionsComponent,
     ImageComponent,
     EditModalComponent,
+    ReactionModalComponent,
   ],
   imports: [
     BrowserModule,
