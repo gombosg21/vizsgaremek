@@ -4,7 +4,7 @@ import { FeedComponent } from './components/feed/feed.component';
 import { LoginComponent } from './components/login/login.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { AuthGuard } from './services/auth/auth-guard.service';
-
+import { MediaTilesetComponent } from './components/media-tileset/media-tileset.component';
 import { RegisterComponent } from './components/register/register.component';
 import { QueryComponent } from './components/query/query.component';
 
@@ -38,6 +38,15 @@ const routes: Routes = [
   {
     path: 'profile/:id',
     component: ProfileComponent
+  }, 
+  {
+    path: 'medias',
+    component: MediaTilesetComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'medias/:id',
+    component:MediaTilesetComponent
   }
 
 ];
