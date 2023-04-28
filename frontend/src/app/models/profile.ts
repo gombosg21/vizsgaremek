@@ -1,4 +1,5 @@
 import { thread } from "./thread";
+import { reaction_short } from "./reaction";
 
 export interface profile {
     alias: string,
@@ -7,6 +8,6 @@ export interface profile {
     visibility: string,
     picture_ID: number,
     medium: string,
-    profile_reactionlists: number[],
+    profile_reactionlists: reaction_short[],
     thread: thread,
 };
