@@ -20,7 +20,7 @@ exports.getMediaByID = async (req, res, next) => {
             {
                 ID: mediaID,
             },
-            attributes: ["ID", "file_data", "uploaded", "description", "placeholder_text", "visibility"],
+            attributes: ["ID", "file_data", "uploaded", "description", "placeholder_text", "visibility", "last_edit"],
             include: [
                 {
                     model: user,
@@ -62,7 +62,7 @@ exports.getAllMediaFromUser = async (req, res, next) => {
             where: {
                 user_ID: mediaOwner,
             },
-            attributes: ["ID", "file_data", "uploaded", "description", "placeholder_text", "visibility"],
+            attributes: ["ID", "file_data", "uploaded", "description", "placeholder_text", "visibility", "last_edit"],
             include: [
                 {
                     model: user,
