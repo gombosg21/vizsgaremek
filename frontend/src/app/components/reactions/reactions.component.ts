@@ -18,11 +18,10 @@ export class ReactionsComponent {
 
   constructor(private ReactionService: ReactionService) {
     this.ReactionService.getAllItemReactions(this.ID, this.targetType).subscribe({
-      next: (value) => { this.data = value },
+      next: (value) => { this.data = value ?? this.reactions },
       error(err) {
         console.log(err);
       },
     })
-    this.reactions = this.data ?? this.reactions;
   };
 };
