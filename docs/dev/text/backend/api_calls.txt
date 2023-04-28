@@ -78,12 +78,12 @@ Siker esetén az {ID, name} mezőkkel tér vissza;
 
 GET /api/v/0.1/media/{ID}
 Visszaad egy képet base64-es kódolással, asszociált adatokkal : 
-{uploader, file, uploaded, description, placeholder_text, tags[name]},
+{uploader, file_data, uploaded, description, placeholder_text, tags[name]},
 csak a file van base64-ben.
 
 GET /api/v/0.1/media/user/{ID}
 Visszaadja az adott ID-jű user összes képét listaként base64-es kódolással, asszociált adatokkal:
-{uploader, file, uploaded, description, placeholder_text, tags[name]},
+{uploader, file_data, uploaded, description, placeholder_text, tags[name]},
 csak a file van base64-ben.
 
 POST /api/v/0.1/media
