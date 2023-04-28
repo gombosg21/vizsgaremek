@@ -9,7 +9,7 @@ export const dbConfig: DBConfig = {
         {
             store: "reactions",
             storeConfig: {
-                keyPath: 'id',
+                keyPath: 'ID',
                 autoIncrement: true,
             },
             storeSchema: [
@@ -24,7 +24,7 @@ export const dbConfig: DBConfig = {
         }, {
             store: "tags",
             storeConfig: {
-                keyPath: 'id',
+                keyPath: 'ID',
                 autoIncrement: true,
             }
             ,
