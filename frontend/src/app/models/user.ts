@@ -1,4 +1,5 @@
 import { profile } from "./profile";
+import { reaction_short } from "./reaction";
 
 export interface user {
     ID: number,
@@ -10,4 +11,10 @@ export interface user {
     birth_date: Date,
     type: number,
     profile: profile,
+    profile_reactionlists : reaction_short[]
+};
+
+export interface user_short {
+    ID:number,
+    alias: string,
 };
