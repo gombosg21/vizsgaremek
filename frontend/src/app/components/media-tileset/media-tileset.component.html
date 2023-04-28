@@ -1,5 +1,11 @@
-<mat-grid-list [cols]="cols">
-    <mat-grid-tile *ngFor="let media of medias;">
-        <app-image [data]="media"></app-image>
-    </mat-grid-tile>
-</mat-grid-list>
+<div *ngIf="medias">
+    <mat-grid-list [cols]="cols">
+        <mat-grid-tile *ngFor="let media of medias;">
+            <app-image [media]="media"></app-image>
+        </mat-grid-tile>
+    </mat-grid-list>
+</div>
+
+<div *ngIf="!medias">
+    <p>Nothing here, but us chickens!</p>
+</div>

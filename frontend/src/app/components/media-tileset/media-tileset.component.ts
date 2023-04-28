@@ -12,15 +12,16 @@ import { getTokenUserID } from '../../helpers/extractors/token';
 export class MediaTilesetComponent {
 
   constructor(private MediaService: MediaService) {
-    if(this.userID == undefined) {
+    if (this.userID == undefined) {
       this.userID = getTokenUserID()
-    }
+    };
 
     if (this.userID) {
       this.MediaService.getAllMediaFromUserID(this.userID).subscribe({
         next: (value) => {
-          this.medias = value ?? this.medias;
-
+          if (value[0] != undefined) {
+            this.medias = value ?? this.medias;
+          }
           switch (true) {
             case (this.windowWidth < 2000): {
               this.cols = 7;
@@ -55,6 +56,7 @@ export class MediaTilesetComponent {
               console.error({ error: "cannot acces display size, using default column counts" })
             }
           }
+          console.log(this.medias)
         },
         error: (err) => {
           console.error(err);
@@ -69,9 +71,5 @@ export class MediaTilesetComponent {
   private windowWidth: number = window.innerWidth;
 
   public cols: number = 0;
-
-
-
-
 
 }
