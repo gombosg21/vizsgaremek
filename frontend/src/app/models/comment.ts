@@ -1,9 +1,7 @@
-import { reaction } from "./reaction"
-
 export interface comment {
     ID: number,
     created: Date,
     last_edit: Date
     content: string,
-    comment_reactionlists: reaction[],
+    comment_reactionlists: number[],
 }

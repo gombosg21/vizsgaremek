@@ -1,4 +1,3 @@
-import { reaction } from "./reaction";
 import { thread } from "./thread";
 
 export interface profile {
@@ -8,6 +7,6 @@ export interface profile {
     visibility: string,
     picture_ID: number,
     medium: string,
-    profile_reactionlists: reaction[],
+    profile_reactionlists: number[],
     thread: thread,
 };

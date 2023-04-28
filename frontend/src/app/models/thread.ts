@@ -1,5 +1,4 @@
 import { comment } from "./comment";
-import { reaction } from "./reaction";
 
 export interface thread {
     name: string,
@@ -7,6 +6,6 @@ export interface thread {
     status: number,
     created: Date,
     last_activity: Date,
-    thread_reactionlist: reaction[],
+    thread_reactionlist: number[],
     comments: comment[],
 }
