@@ -4,6 +4,8 @@ import { comment } from '../../models/comment';
 import { thread } from '../../models/thread';
 import { CommentService } from '../../services/comment/comment.service';
 import { PageEvent } from '@angular/material/paginator';
+import { reaction } from 'src/app/models/reaction';
+import { DbService } from 'src/app/services/db/db.service';
 
 @Component({
   selector: 'app-thread',
@@ -23,10 +25,11 @@ export class ThreadComponent implements OnInit {
   @Input() public status: number;
   @Input() public comments: comment[];
   @Input() public iterator: number = 0;
+  @Input() public reactions: reaction[];
 
   public threadStatus: string;
 
-  constructor(private ThreadService: ThreadService, private CommenctService:CommentService ) {
+  constructor(private ThreadService: ThreadService, private CommenctService:CommentService, private DBService:DbService ) {
     this.data = this.ThreadService.getLocalData()[this.iterator];
     
     this.name = this.data.name ?? this.name;
@@ -34,6 +37,16 @@ export class ThreadComponent implements OnInit {
     this.last_activity = this.data.last_activity ?? this.last_activity;
     this.status = this.data.status ?? this.status;
     this.comments = this.data.comments ?? this.comments;
+    
+    if(this.data.thread_reactionlist.length != 0) {
+          this.DBService.getCacheReactions(this.data.thread_reactionlist!.map(reaction => (reaction.ID))).subscribe({
+            next: (value) => {this.reactions = this.reactions ?? value},
+            error: (error) => {console.error(error);
+            }
+          })
+    }
+
+
 
     this.CommenctService.setLocalData(this.comments);
   };
