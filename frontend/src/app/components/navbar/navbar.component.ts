@@ -24,17 +24,17 @@ export class NavbarComponent {
   toggleSearch(): void {
     this.showSearch = true;
     document.body.style.overflow = 'hidden'; //disable scrolling
-  }
+  };
 
   toggleUpload(): void {
     this.showUpload = !this.showUpload;
     document.body.style.overflow = this.showUpload ? 'hidden' : 'auto'; // disable scrolling 
-  }
+  };
 
   closeSearch(): void {
     this.showSearch = false;
     document.body.style.overflow = 'auto'; // enable scrolling
-  }
+  };
 
   logout() {
     this.Auth.logout().subscribe({
