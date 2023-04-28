@@ -38,7 +38,7 @@ exports.updateTag = async (req, res, next) => {
         await UpdateTag.save();
 
         return res.status(200)
-            .json({ UpdateTag });
+            .json(UpdateTag);
     } catch (error) {
         console.error(error);
         return res.status(500);
@@ -85,7 +85,7 @@ exports.getAllTags = async (req, res, next) => {
     try {
         const tagList = await tag.findAll({ attributes: ['ID', 'name'], include: [{ model: media_taglist, attributes: [[fn('COUNT', 'tag_ID'), 'tag_count']] }], group: ['tag_ID'] });
 
-        return res.status(200).json({ tags: tagList });
+        return res.status(200).json(tagList);
     } catch (error) {
         console.error(error);
         return res.status(500);
