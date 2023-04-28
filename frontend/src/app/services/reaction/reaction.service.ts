@@ -16,10 +16,6 @@ export class ReactionService {
 
   }
 
-  getAllItemReactions(ID: number, TargetType: string): Observable<reaction[]> {
-    return this.http.get<reaction[]>(this.controllerUrl + TargetType + "/" + ID + "/" + ApiPaths.Reaction);
-  };
-
   getAllReactions():Observable<reaction[]> {
     return this.http.get<reaction[]>(this.controllerUrl + ApiPaths.Reaction);
   };
