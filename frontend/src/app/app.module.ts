@@ -26,7 +26,7 @@ import { ReactionsComponent } from './components/reactions/reactions.component';
 import { ImageComponent } from './components/image/image.component';
 import { dbConfig } from './config/db';
 import { NgxIndexedDBModule } from 'ngx-indexed-db';
-import { EditModalComponent } from './edit-modal/edit-modal.component';
+import { EditModalComponent } from './components/modals/edit-modal/edit-modal.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { APP_INITIALIZER } from '@angular/core';
