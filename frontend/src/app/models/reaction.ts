@@ -3,3 +3,8 @@ export interface reaction {
     name: string,
     data: string,
 }
+
+export interface reaction_short {
+    ID: number,
+    count: number,
+}
