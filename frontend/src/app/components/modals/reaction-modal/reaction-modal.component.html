@@ -1,0 +1,8 @@
+<div>
+    <select *ngModel="reactionInstance">
+        <option *ngFor="let reaction of reactions" value="reaction.ID">
+            <img src="reaction.data" alt="reaction.name" title="reaction.name">
+        </option>
+    </select>
+    <button (click)="add">Add</button>
+</div>
