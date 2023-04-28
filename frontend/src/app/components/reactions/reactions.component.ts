@@ -17,7 +17,7 @@ export class ReactionsComponent {
   @Input() targetType: string;
 
   constructor(private ReactionService: ReactionService) {
-    this.ReactionService.getAllreactions(this.ID, this.targetType).subscribe({
+    this.ReactionService.getAllItemReactions(this.ID, this.targetType).subscribe({
       next: (value) => { this.data = value },
       error(err) {
         console.log(err);
