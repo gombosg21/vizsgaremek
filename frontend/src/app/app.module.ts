@@ -32,6 +32,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { APP_INITIALIZER } from '@angular/core';
 import { DbService } from './services/db/db.service';
 import { ReactionModalComponent } from './components/modals/reaction-modal/reaction-modal.component';
+import { MediaTilesetComponent } from './components/media-tileset/media-tileset.component';
 
 
 
@@ -56,6 +57,7 @@ import { ReactionModalComponent } from './components/modals/reaction-modal/react
     ImageComponent,
     EditModalComponent,
     ReactionModalComponent,
+    MediaTilesetComponent,
   ],
   imports: [
     BrowserModule,
