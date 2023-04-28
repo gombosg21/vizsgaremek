@@ -29,6 +29,8 @@ import { NgxIndexedDBModule } from 'ngx-indexed-db';
 import { EditModalComponent } from './edit-modal/edit-modal.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { APP_INITIALIZER } from '@angular/core';
+import { DbService } from './services/db/db.service';
 
 
 
@@ -67,6 +69,21 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
+      multi: true
+    },
+    {
+      provide: DbService
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: (reactions: DbService) => () => { return reactions.fillReactions() },
+      deps: [DbService],
+      multi: true
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: (tags: DbService) => () => { return tags.fillTags() },
+      deps: [DbService],
       multi: true
     }
   ],
