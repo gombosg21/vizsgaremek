@@ -83,7 +83,8 @@ exports.findTags = async (req, res, next) => {
 
 exports.getAllTags = async (req, res, next) => {
     try {
-        const tagList = await tag.findAll({ attributes: ['ID', 'name'], include: [{ model: media_taglist, attributes: [[fn('COUNT', 'tag_ID'), 'tag_count']] }], group: ['tag_ID'] });
+        const tagListRaw = await tag.findAll({ attributes: ['ID', 'name'], include: [{ model: media_taglist, attributes: [[fn('COUNT', 'tag_ID'), 'count']] }], group: ['tag_ID'] });
+        const tagList = tagListRaw.map((obj) => ({ ID: obj.ID, name: obj.name, count: obj.media_taglists[0].dataValues.count }));
 
         return res.status(200).json(tagList);
     } catch (error) {
