@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { RegisterService } from '../../services/register/register.service';
-import { Register } from '../../models/register.model';
+import { Register } from '../../models/register';
 
 @Component({
   selector: 'app-register',
