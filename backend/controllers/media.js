@@ -92,7 +92,7 @@ exports.getAllMediaFromUser = async (req, res, next) => {
         });
 
         const results = await VisibilityArray(userID, mediaOwner, visibilityFlagArray, evalList);
-        return res.status(200).json({ results: results });
+        return res.status(200).json(results);
 
     }
     catch (error) {
