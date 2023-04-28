@@ -1,3 +1,6 @@
+import { tag } from "./tag"
+import { reaction_short } from "./reaction"
+
 export interface media {
     ID?:number,
     data:string,
@@ -6,6 +9,6 @@ export interface media {
     visibility:number,
     description:string,
     placeholder:string,
-    tags?:any[],
-    reactions?: any[]
+    tags?:tag[],
+    reactions?: reaction_short[]
 };
