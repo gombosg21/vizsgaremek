@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { tag } from 'src/app/models/tag';
 
 @Component({
   selector: 'app-tags',
@@ -6,5 +7,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./tags.component.css']
 })
 export class TagsComponent {
+
+  constructor() {
+
+  }
+  @Input() tags: tag[];
 
 }
