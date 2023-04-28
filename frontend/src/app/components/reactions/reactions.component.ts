@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { reaction } from '../../models/reaction';
+import { reaction_local } from '../../models/reaction';
 import { DbService } from 'src/app/services/db/db.service';
 
 @Component({
@@ -10,16 +10,19 @@ import { DbService } from 'src/app/services/db/db.service';
 
 export class ReactionsComponent {
 
-  public reactions: reaction[];
+  public reactions: reaction_local[];
 
   @Input() reactionIDs: number[];
 
   constructor(private DBService: DbService) {
-    this.DBService.getCacheReactions(this.reactionIDs).subscribe({
-      next: (value) => { this.reactions = value ?? this.reactions },
-      error: (err) => {
-        console.log(err);
-      },
-    })
+    if (this.reactionIDs) {
+      this.DBService.getCacheReactions(this.reactionIDs).subscribe({
+        next: (value) => { this.reactions = this.reactions ?? value },
+        error: (err) => {
+          console.log(err);
+        },
+      });
+    }
+
   };
 };
