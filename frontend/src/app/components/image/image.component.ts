@@ -1,6 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { MediaService } from '../../services/media/media.service';
 import { media } from '../../models/media';
+import { tag } from 'src/app/models/tag';
+import { reaction_short } from 'src/app/models/reaction';
 
 @Component({
   selector: 'app-image',
@@ -9,21 +11,20 @@ import { media } from '../../models/media';
 })
 export class ImageComponent {
 
-  private data: media;
-
+  @Input() data: media;
   @Input() public ID: number = -1;
   @Input() public imageData: string;
-  @Input() public created:Date;
-  @Input() public last_edit:Date;
-  @Input() public visibility:number;
-  @Input() public description:string;
-  @Input() public tags?:any[];
-  @Input() public reactions?: any[];
-  @Input() public placeholder:string;
+  @Input() public created: Date;
+  @Input() public last_edit: Date;
+  @Input() public visibility: number;
+  @Input() public description: string;
+  @Input() public tags?: tag[];
+  @Input() public reactions?: reaction_short[];
+  @Input() public placeholder: string;
 
   constructor(private MediaService: MediaService) {
-    this.MediaService.getOneFromUserID(this.ID).subscribe(
-      {
+    if (this.ID) {
+      this.MediaService.getOneFromUserID(this.ID).subscribe({
         next: (value) => {
           this.data = value;
 
@@ -37,11 +38,12 @@ export class ImageComponent {
           this.reactions = this.reactions ?? this.data.reactions;
           this.placeholder = this.placeholder ?? this.data.placeholder;
         },
-        error(err) {
-          console.log(err);
+        error: (err) => {
+          console.error(err);
         },
-      }
-    );
+      });
+    };
+
   };
 
 
