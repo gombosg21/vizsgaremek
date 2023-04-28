@@ -22,6 +22,10 @@ export class DbService {
     return this.dbService.bulkGet("reactions", IDs);
   };
 
+  getAllCahceReactions():Observable<reaction[]> {
+    return this.dbService.getAll("reactions");
+  };
+
   async fillReactions(): Promise<Observable<number[]>> {
     const dataSource = this.ReactionsService.getAllReactions()
     const data = await firstValueFrom(dataSource);
