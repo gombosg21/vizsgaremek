@@ -19,7 +19,7 @@ export function isTokenExpired(): Boolean {
     };
 };
 
-export function getTokenUserID(): Number {
+export function getTokenUserID(): number {
     const token = sessionStorage.getItem("token");
     if (!token) {
         throw new Error("no token, aborting");
