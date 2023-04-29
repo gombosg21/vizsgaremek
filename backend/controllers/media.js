@@ -100,8 +100,6 @@ exports.getAllMediaFromUser = async (req, res, next) => {
             group: [col("reaction_ID"), col("media_ID")]
         });
 
-        console.log(reactionsPre)
-
         if (reactionsPre.length != 0) {
             for (let i = 0; i < MediaList.length; i++) {
                 MediaList[i].dataValues.reactions = [];
