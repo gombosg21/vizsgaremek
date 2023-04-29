@@ -12,10 +12,28 @@ export class MediaService {
 
   private ApiPath = enviroment.baseUrl + ApiPaths.Media;
 
+  private localMediaList:media[];
+  private localMedia:media;
+
   constructor(private http: HttpClient) {
 
   }
 
+  getLocalDataList():media[] {
+    return this.localMediaList;
+  };
+
+  setLocalDataList(mediaList:media[]):void {
+    this.localMediaList = mediaList;
+  };
+
+  setLocalMediaInstance(mediaInstance:media):void {
+    this.localMedia = mediaInstance;
+  };
+
+  getLocalMediaInstance():media {
+    return this.localMedia;
+  };
 
   getAllMediaFromUserID(ID: number): Observable<media[]> {
     return this.http.get<media[]>(this.ApiPath + "/user/" + ID);
