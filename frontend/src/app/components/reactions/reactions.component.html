@@ -1,5 +1,5 @@
 <ul class="list-group list-group-flush">
     <li class="list-group-item" *ngFor="let reaction of reactions">
-        <img src="reaction.data" alt="reaction.name" title="reaction.name">
+        <img src="data:image/jpeg;base64,{{reaction.data}}" alt="reaction.name" title="reaction.name">
     </li>
 </ul>
