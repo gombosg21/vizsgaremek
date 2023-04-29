@@ -24,11 +24,11 @@ export class CommentComponent implements OnInit {
   @Input() public reactions: reaction[];
 
   constructor(private CommentService: CommentService, private ReactionService: ReactionService, private DBService: DbService) {
-    this.data = this.CommentService.getLocalData()[this.iterator];
+    this.data = this.CommentService.getLocalCommentList()[this.iterator];
   };
 
   ngOnInit(): void {
-    this.data = this.CommentService.getLocalData()[this.iterator];
+    this.data = this.CommentService.getLocalCommentList()[this.iterator];
 
     this.content = this.data.content ?? this.content;
     this.ID = this.data.ID ?? this.ID;
