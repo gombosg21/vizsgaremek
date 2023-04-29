@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { reaction_local } from 'src/app/models/reaction';
+import { reaction } from 'src/app/models/reaction';
 import { DbService } from 'src/app/services/db/db.service';
 import { Output } from '@angular/core';
 
@@ -13,9 +13,9 @@ import { Output } from '@angular/core';
 })
 export class ReactionModalComponent {
 
-  @Output() reactionInstance:reaction_local;
+  @Output() reactionInstance:reaction;
 
-  public reactions:reaction_local[];
+  public reactions:reaction[];
 
   constructor(private DBServie:DbService) {
     this.DBServie.getAllCahceReactions().subscribe({
