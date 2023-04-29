@@ -17,7 +17,7 @@ export class ReactionsComponent {
   constructor(private DBService: DbService) {
     if (this.reactionIDs) {
       this.DBService.getCacheReactions(this.reactionIDs).subscribe({
-        next: (value) => { this.reactions = this.reactions ?? value },
+        next: (value) => { this.reactions = value ?? this.reactions; console.log(this.reactions) },
         error: (err) => {
           console.log(err);
         },
