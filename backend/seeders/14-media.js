@@ -20,11 +20,11 @@ module.exports = {
     const mediaFiles = []
 
     for (var Media of rawMediaFiles) {
-      base64Media = await toBase64(Buffer.from(await Media.arrayBuffer()));
+      var base64Media = await toBase64(Buffer.from(await Media.arrayBuffer()));
       mediaFiles.push(base64Media);
     };
 
-    if (mediaFiles) {
+    if (mediaFiles.length != 0) {
       for (let i = 0; i < userIDs.length; i++) {
         var userUploadCount = Math.floor(Math.random() * 10);
         var userID = userIDs[i].ID;
