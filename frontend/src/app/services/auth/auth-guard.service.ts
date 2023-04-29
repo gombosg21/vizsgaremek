@@ -9,15 +9,17 @@ import { isTokenExpired } from 'src/app/helpers/extractors/token';
 export class AuthGuard implements CanActivate {
 
   constructor(public Router: Router, public AuthService: AuthService) {
-
   }
-  canActivate(route :ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | Promise<boolean> {
-    if (!this.AuthService.activeToken()) {
+
+  canActivate(route? :ActivatedRouteSnapshot, state?: RouterStateSnapshot): boolean | Promise<boolean> {
+    if (!(this.AuthService.activeToken())) {
       this.Router.navigate(['login']);
+      console.log("false, no token")
       return false;
     } else {
       if (isTokenExpired()) {
         this.Router.navigate(['login']);
+        console.log("false, expired")
         return false
       } else {
         return true;
