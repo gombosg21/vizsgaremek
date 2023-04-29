@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { reaction_local } from '../../models/reaction';
+import { reaction } from '../../models/reaction';
 import { DbService } from 'src/app/services/db/db.service';
 
 @Component({
@@ -10,7 +10,7 @@ import { DbService } from 'src/app/services/db/db.service';
 
 export class ReactionsComponent {
 
-  public reactions: reaction_local[];
+  public reactions: reaction[];
 
   @Input() reactionIDs: number[];
 
