@@ -14,7 +14,7 @@ const options = {
     jsonWebTokenOptions: {
         complete: false,
         clocktolearnce: '',
-        maxAge: '3h',
+        maxAge: '1h',
         clockTimestamp: 100,
     }
 };
@@ -46,7 +46,7 @@ exports.isAuth = (req, res, next) => {
     passport.authenticate('jwt', { session: false }, (err, user, info, status) => {
 
         if (err) { console.log("error?"); return next(err) };
-        if (!user) { console.log("no payload"); return next(new Error('no token or invalid token')) };
+        if (!user) { console.log("no or invalid or expired payload"); return next(new Error('no token or invalid token')) };
         if (user) {
             req.user = user;
             return next();
