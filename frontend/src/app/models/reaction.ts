@@ -8,9 +8,3 @@ export interface reaction_short {
     ID: number,
     count: number,
 };
-
-export interface reaction_local {
-    ID: number,
-    name: string,
-    data: Blob,
-};
