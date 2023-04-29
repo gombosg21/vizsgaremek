@@ -56,30 +56,30 @@ export class ProfileComponent implements OnInit {
     this.UserService.getProfile(getTokenUserID()).subscribe({
       next: (data) => {
         this.UserProfile = {
-          birth_date: data.birth_date ?? new Date(),
-          alias: data.profile.alias ?? "",
-          description: data.profile.description ?? "",
-          visibility: data.profile.visibility ?? "",
-          picture_ID: data.profile.picture_ID ?? -1,
-          medium: data.profile.medium ?? "",
-          profile_reactionlists: data.profile.profile_reactionlists ?? [],
-          thread: data.profile.thread ?? { name: "", ID: -1, status: -1, created: new Date(), last_activity: new Date(), thread_reactionlist: [], comments: [] }
+          birth_date: data.birth_date,
+          alias: data.profile.alias,
+          description: data.profile.description,
+          visibility: data.profile.visibility,
+          picture_ID: data.profile.picture_ID,
+          medium: data.profile.medium,
+          reactions: data.profile.reactions,
+          thread: data.profile.thread
         }
 
         this.UserProfileThread = {
-          name: data.profile.thread?.name ?? "",
-          ID: data.profile.thread?.ID ?? -1,
-          status: data.profile.thread.status ?? -1,
-          created: data.profile.thread.created ?? new Date(),
-          last_activity: data.profile.thread.last_activity ?? new Date(),
-          thread_reactionlist: data.profile.thread.thread_reactionlist ?? [{ ID: -1, name: "", data: "" }],
-          comments: data.profile.thread.comments ?? []
+          name: data.profile.thread.name ,
+          ID: data.profile.thread.ID,
+          status: data.profile.thread.status,
+          created: data.profile.thread.created,
+          last_activity: data.profile.thread.last_activity ,
+          reactions: data.profile.thread.reactions,
+          comments: data.profile.thread.comments
         }
-        this.alias = this.UserProfile.alias ?? "";
-        this.description = this.UserProfile.description ?? "";
-        this.birth_date = this.UserProfile.birth_date ?? new Date();
-        this.gender = data.gender ?? -1;
-        this.profileImage = this.UserProfile.medium ?? ""; // fallback image?
+        this.alias = this.UserProfile.alias;
+        this.description = this.UserProfile.description;
+        this.birth_date = this.UserProfile.birth_date;
+        this.gender = data.gender;
+        this.profileImage = this.UserProfile.medium; // fallback image?
 
         this.ThreadService.setLocalData([this.UserProfileThread]);
       }
