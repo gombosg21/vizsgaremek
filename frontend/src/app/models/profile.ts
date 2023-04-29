@@ -8,6 +8,6 @@ export interface profile {
     visibility: string,
     picture_ID: number,
     medium: string,
-    profile_reactionlists: reaction_short[],
+    reactions?: reaction_short[],
     thread: thread,
 };
