@@ -121,7 +121,7 @@ exports.generateJWT = async (user_ID) => {
 
     //expiresIn uses UTZ, but verify uses local... Ugh
 
-    const expires = "3h";
+    const expires = "4h";
 
     const privateKey = await this.readPriavteJWT()
 
