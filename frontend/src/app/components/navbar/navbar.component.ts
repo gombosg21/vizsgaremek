@@ -38,8 +38,9 @@ export class NavbarComponent {
 
   logout() {
     this.Auth.logout().subscribe({
-      error: (error) => { console.error({ error: error }) },
-      complete: () => { this.router.navigate(["/login"]) },
+      complete: () => {
+        this.isSession = this.Auth.activeToken();
+      }
     });
   };
 }
