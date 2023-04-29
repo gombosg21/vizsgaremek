@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { NgxIndexedDBService } from 'ngx-indexed-db';
 import { Observable, firstValueFrom } from 'rxjs'
-import { reaction_local } from 'src/app/models/reaction';
+import { reaction } from 'src/app/models/reaction';
 import { TagsService } from '../tags/tags.service';
 import { ReactionService } from '../reaction/reaction.service';
 
@@ -18,19 +18,17 @@ export class DbService {
     return this.dbService.bulkDelete("reactions", []);
   };
 
-  getCacheReactions(IDs: number[]): Observable<reaction_local[]> {
+  getCacheReactions(IDs: number[]): Observable<reaction[]> {
     return this.dbService.bulkGet("reactions", IDs);
   };
 
-  getAllCahceReactions(): Observable<reaction_local[]> {
+  getAllCahceReactions(): Observable<reaction[]> {
     return this.dbService.getAll("reactions");
   };
 
   async fillReactions(): Promise<Observable<number[]>> {
     const dataSource = this.ReactionsService.getAllReactions()
-    const rawData = await firstValueFrom(dataSource);
-    const data:reaction_local[] = rawData.map((reaction) => ({ ID: reaction.ID, name: reaction.name, data: new Blob([atob(reaction.data)])}))
-    console.log(data)
+    const data = await firstValueFrom(dataSource);
     return this.dbService.bulkAdd("reactions", data);
   };
 
