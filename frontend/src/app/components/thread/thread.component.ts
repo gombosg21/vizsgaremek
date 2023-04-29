@@ -48,7 +48,7 @@ export class ThreadComponent implements OnInit {
       });
     };
 
-    this.CommenctService.setLocalData(this.comments);
+    this.CommenctService.setLocalCommentList(this.comments);
   };
 
   ngOnInit(): void {
