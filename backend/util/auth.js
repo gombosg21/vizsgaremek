@@ -119,11 +119,11 @@ exports.generateJWT = async (user_ID) => {
         iat: Date.now()
     };
 
-    const expires = '3d';
+    const expires = '5m';
 
     const privateKey = await this.readPriavteJWT()
 
-    const token = JWT.sign(payload, privateKey, { expiresIn: expires, algorithm: 'RS256' });
+    const token = JWT.sign(payload, privateKey, { expiresIn: expires, noTimestamp: true, algorithm: 'RS256' });
 
     return {
         token: "Bearer:" + token,
