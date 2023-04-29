@@ -40,8 +40,8 @@ exports.getMediaByID = async (req, res, next) => {
 
         const reactions = await media_reactionslist.findAll({
             where: { media_ID: Media.ID },
-            attributes: [["reaction_ID", "ID"], [fn('COUNT', 'media_reactionslist.reaction_ID'), 'count']],
-            group: [col("reaction_ID")]
+            attributes: [["reaction_ID", "ID"], "media_ID", [fn('COUNT', 'media_reactionslist.reaction_ID'), 'count']],
+            group: [col("reaction_ID"), col("media_ID")]
         });
 
         Media.dataValues.reactions = reactions.dataValues;
@@ -95,21 +95,23 @@ exports.getAllMediaFromUser = async (req, res, next) => {
         const mediaIDs = MediaList.map(Media => Media.ID);
 
         const reactionsPre = await media_reactionslist.findAll({
-            where: { media_ID: { [Op.in]: [mediaIDs] } },
+            where: { media_ID: { [Op.in]: mediaIDs } },
             attributes: [["reaction_ID", "ID"], "media_ID", [fn('COUNT', 'media_reactionslist.reaction_ID'), 'count']],
-            group: [col("reaction_ID")]
+            group: [col("reaction_ID"), col("media_ID")]
         });
+
+        console.log(reactionsPre)
 
         if (reactionsPre.length != 0) {
             for (let i = 0; i < MediaList.length; i++) {
                 MediaList[i].dataValues.reactions = [];
                 for (let j = 0; j < reactionsPre.length; j++) {
                     if (MediaList[i].ID == reactionsPre[j].media_ID) {
-                        var reactionObj = {
+                        MediaList[i].dataValues.reactions.push({
                             count: reactionsPre[j].dataValues.count,
                             ID: reactionsPre[j].dataValues.ID
-                        }
-                        MediaList[i].dataValues.reactions.push(reactionObj);
+                        });
+
                     };
                 };
             };
@@ -213,7 +215,7 @@ exports.getAllMediaByTags = async (req, res, next) => {
         const reactionsPre = await media_reactionslist.findAll({
             where: { media_ID: { [Op.in]: [MediaIDList] } },
             attributes: [["reaction_ID", "ID"], "media_ID", [fn('COUNT', 'media_reactionslist.reaction_ID'), 'count']],
-            group: [col("reaction_ID")]
+            group: [col("reaction_ID"), col("media_ID")]
         });
 
         if (reactionsPre.length != 0) {
