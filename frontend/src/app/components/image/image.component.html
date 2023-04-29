@@ -2,9 +2,11 @@
     <div class="row">
         <div class="col-12 col-lg-6" id="img">
             <div class="card">
-                <img src="data:image/jpeg;base64,{{media.file_data}}" [alt]="media.placeholder_text" class="card-img-top">
+                <img src="data:image/jpeg;base64,{{media.file_data}}" [alt]="media.placeholder_text"
+                    [title]="media.placeholder_text" class="card-img-top">
                 <div class="card-body">
                     <p class="card-text">{{media.description}}</p>
+                    <!-- <a href="#" (click)=react class="btn btn-primary">react</a> -->
                 </div>
                 <div class="card-footer text-muted d-flex justify-content-between align-items-center">
                     <div>
@@ -13,6 +15,7 @@
                     </div>
                     <app-reactions *ngIf="reactionIDs" [reactionIDs]="reactionIDs"></app-reactions>
                 </div>
+
             </div>
         </div>
         <div class="col-12 col-lg-6 d-flex align-items-start mt-3 mt-lg-0">

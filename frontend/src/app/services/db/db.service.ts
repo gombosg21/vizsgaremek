@@ -31,9 +31,6 @@ export class DbService {
     const dataSource = this.ReactionsService.getAllReactions()
     const data = await firstValueFrom(dataSource);
     const blobData = data.map(img => ({ ID: img.ID, data: (new Blob([Buffer.from(img.data)])), name: img.name }));
-
-    console.log(blobData)
-
     return this.dbService.bulkAdd("reactions", blobData);
   };
 

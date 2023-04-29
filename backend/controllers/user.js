@@ -56,16 +56,17 @@ exports.getProfile = async (req, res, next) => {
             const comment_reactions = await comment_reactionlist.findAll({
                 where: { comment_ID: { [Op.in]: commentIDs } },
                 attributes: [['reaction_ID', 'ID'], "comment_ID", [fn('COUNT', 'reaction_ID'), 'count']],
-                group: [col('reaction_ID')]
+                group: [col('reaction_ID'), col("comment_ID")]
             });
 
             for (let i = 0; i < User.dataValues.profile.thread.comments.length; i++) {
+                User.dataValues.profile.thread.comments[i].reactions = [];
                 for (let j = 0; j < comment_reactions.length; j++) {
                     if (comment_reactions[j].comment_ID == User.dataValues.profile.thread.comments[i].ID) {
-                        User.dataValues.profile.thread.comments.reactions = {
+                        User.dataValues.profile.thread.comments[i].reactions.push({
                             ID: comment_reactions.ID,
                             count: comment_reactions.count
-                        };
+                        });
                     };
                 };
             };
@@ -166,8 +167,13 @@ exports.login = async (req, res, next) => {
     };
 };
 
-exports.refresh = (req, res, next) => {
+exports.refresh = async (req, res, next) => {
     try {
+        const ID = req.user.ID;
+
+        const tokenResults = await getJWT(ID);
+
+        return res.status(200).json({ token: tokenResults.token, token_expires: tokenResults.expires })
 
     } catch (error) {
         console.error(error);

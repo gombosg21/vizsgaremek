@@ -35,6 +35,13 @@ export class AuthService {
       {
         next: (data) => {
           sessionStorage.removeItem("token")
+        },
+        error(err) {
+          console.log(err);
+          throw new Error(err);
+        },
+        complete: () => {
+          this.router.navigate(["/login"])
         }
       });
 
