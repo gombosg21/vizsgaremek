@@ -11,13 +11,22 @@ export class ImageComponent {
 
   @Input() mediaID: number;
   @Input() media: media;
-
+  public reactionIDs: number[];
 
   constructor(private MediaService: MediaService) {
+    if (this.media) {
+      if (this.media.reactions) {
+        this.reactionIDs = this.media.reactions!.map(reaction => reaction.ID);
+      };
+    };
+
     if (this.mediaID) {
       this.MediaService.getOneFromUserID(this.mediaID).subscribe({
         next: (value) => {
           this.media = value;
+          if (this.media.reactions) {
+            this.reactionIDs = this.media.reactions!.map(reaction => reaction.ID);
+          };
         },
         error: (err) => {
           console.error(err);
