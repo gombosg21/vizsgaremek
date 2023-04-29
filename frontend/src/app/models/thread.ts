@@ -7,6 +7,6 @@ export interface thread {
     status: number,
     created: Date,
     last_activity: Date,
-    thread_reactionlist: reaction_short[],
+    reactions?: reaction_short[],
     comments: comment[],
 }
