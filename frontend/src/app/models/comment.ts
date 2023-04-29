@@ -6,6 +6,6 @@ export interface comment {
     created: Date,
     last_edit: Date
     content: string,
-    comment_reactionlists?: reaction_short[],
+    reactions?: reaction_short[],
     user: user_short;
 }
