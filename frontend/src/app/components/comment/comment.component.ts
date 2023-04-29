@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { CommentService } from '../../services/comment/comment.service';
 import { ReactionService } from '../../services/reaction/reaction.service';
 import { comment } from '../../models/comment';
-import { reaction_local } from 'src/app/models/reaction';
+import { reaction } from 'src/app/models/reaction';
 import { DbService } from 'src/app/services/db/db.service';
 import { Observable } from 'rxjs'
 
@@ -21,7 +21,7 @@ export class CommentComponent implements OnInit {
   @Input() public user_alias: string;
   @Input() public ID: number;
   @Input() public iterator: number = 0;
-  @Input() public reactions: reaction_local[];
+  @Input() public reactions: reaction[];
 
   constructor(private CommentService: CommentService, private ReactionService: ReactionService, private DBService: DbService) {
     this.data = this.CommentService.getLocalData()[this.iterator];
@@ -34,8 +34,8 @@ export class CommentComponent implements OnInit {
     this.ID = this.data.ID ?? this.ID;
     this.last_edit = this.data.last_edit ?? this.last_edit;
     this.created = this.data.created ?? this.created;
-    if (this.data.comment_reactionlists?.length != 0) {
-      this.DBService.getCacheReactions(this.data.comment_reactionlists!.map((reaction) => (reaction.ID))).subscribe({
+    if (this.data.reactions) {
+      this.DBService.getCacheReactions(this.data.reactions!.map((reaction) => (reaction.ID))).subscribe({
         next: (value) => {
           this.reactions = value ?? this.reactions;
         }
