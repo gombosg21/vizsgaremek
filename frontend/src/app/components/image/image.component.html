@@ -1,19 +1,25 @@
 <div class="container">
-    <div class="col">
-        <app-tags *ngIf="media.tags" [tags]="media.tags"></app-tags>
-    </div>
-    <div class="col">
-        <div class="card" style="width: 18rem;">
-            <img src="data:image/jpeg;base64,{{media.file_data}}" [alt]="media.placeholder_text" [title]="media.placeholder_text" class="card-img-top">
-            <div class="card-body">
-                <p class="card-text">{{media.description}}</p>
-                <!-- <a href="#" (click)=react class="btn btn-primary">react</a> -->
+    <div class="row">
+        <div class="col-12 col-lg-6" id="img">
+            <div class="card">
+                <img src="data:image/jpeg;base64,{{media.file_data}}" [alt]="media.placeholder_text"
+                    [title]="media.placeholder_text" class="card-img-top">
+                <div class="card-body">
+                    <p class="card-text">{{media.description}}</p>
+                    <!-- <a href="#" (click)=react class="btn btn-primary">react</a> -->
+                </div>
+                <div class="card-footer text-muted d-flex justify-content-between align-items-center">
+                    <div>
+                        <p><i class="fas fa-pencil-alt"></i> Last edit: {{media.last_edit}}</p>
+                        <p><i class="fas fa-calendar"></i> Created: {{media.uploaded}}</p>
+                    </div>
+                    <app-reactions *ngIf="reactionIDs" [reactionIDs]="reactionIDs"></app-reactions>
+                </div>
+
             </div>
-            <div class="card-footer">
-                <p>last edit: {{media.last_edit}}</p>
-                <p>created: {{media.uploaded}}</p>
-                <app-reactions *ngIf="reactionIDs" [reactionIDs]="reactionIDs"></app-reactions>
-            </div>
+        </div>
+        <div class="col-12 col-lg-6 d-flex align-items-start mt-3 mt-lg-0">
+            <app-tags *ngIf="media.tags" [tags]="media.tags"></app-tags>
         </div>
     </div>
 </div>
