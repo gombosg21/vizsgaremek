@@ -12,6 +12,7 @@
             <div class="card-footer">
                 <p>last edit: {{media.last_edit}}</p>
                 <p>created: {{media.uploaded}}</p>
+                <app-reactions *ngIf="reactionIDs" [reactionIDs]="reactionIDs"></app-reactions>
             </div>
         </div>
     </div>
