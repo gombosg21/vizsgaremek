@@ -12,9 +12,19 @@ export class ReactionService {
 
   private controllerUrl: string = enviroment.baseUrl;
 
+  private reactionIDs:number[];
+
   constructor(private http: HttpClient) {
 
   }
+
+  getStoredIDs():number[] {
+    return this.reactionIDs;
+  };
+
+  setStoredIDs(IDList:number[]):void {
+    this.reactionIDs = IDList;
+  };
 
   getAllReactions():Observable<reaction[]> {
     return this.http.get<reaction[]>(this.controllerUrl + ApiPaths.Reaction);
