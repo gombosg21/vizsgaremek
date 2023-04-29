@@ -119,11 +119,13 @@ exports.generateJWT = async (user_ID) => {
         iat: Date.now()
     };
 
-    const expires = '5m';
+    //expiresIn uses UTZ, but verify uses local... Ugh
+
+    const expires = "3h";
 
     const privateKey = await this.readPriavteJWT()
 
-    const token = JWT.sign(payload, privateKey, { expiresIn: expires, noTimestamp: true, algorithm: 'RS256' });
+    const token = JWT.sign(payload, privateKey, { expiresIn: expires, noTimestamp: false, algorithm: 'RS256' });
 
     return {
         token: "Bearer:" + token,
