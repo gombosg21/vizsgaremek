@@ -60,12 +60,13 @@ exports.getProfile = async (req, res, next) => {
             });
 
             for (let i = 0; i < User.dataValues.profile.thread.comments.length; i++) {
+                User.dataValues.profile.thread.comment[i].reactions = [];
                 for (let j = 0; j < comment_reactions.length; j++) {
                     if (comment_reactions[j].comment_ID == User.dataValues.profile.thread.comments[i].ID) {
-                        User.dataValues.profile.thread.comments.reactions = {
+                        User.dataValues.profile.thread.comments.reactions.push({
                             ID: comment_reactions.ID,
                             count: comment_reactions.count
-                        };
+                        });
                     };
                 };
             };
@@ -166,8 +167,13 @@ exports.login = async (req, res, next) => {
     };
 };
 
-exports.refresh = (req, res, next) => {
+exports.refresh = async (req, res, next) => {
     try {
+        const ID = req.user.ID;
+
+        const tokenResults = await getJWT(ID);
+
+        return res.status(200).json({ token: tokenResults.token, token_expires: tokenResults.expires })
 
     } catch (error) {
         console.error(error);
