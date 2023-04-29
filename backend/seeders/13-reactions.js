@@ -11,13 +11,25 @@ module.exports = {
 
         const reactionsData = await mediaData.getImgFolder(10, "./temp/reaction-data");
 
+        const mediaFiles = []
+
         for (let i = 0; i < reactionsData.length; i++) {
-            const newReaction = {
-                name: fake.faker.word.noun(),
-                data: await toBase64(Buffer.from(await reactionsData[i].arrayBuffer()))
-            };
-            reactionList.push(newReaction)
+
+            var base64Media = await toBase64(Buffer.from(await reactionsData[i].arrayBuffer()));
+            mediaFiles.push(base64Media);
         };
+
+        if (mediaFiles.length != 0) {
+            mediaFiles.forEach(Base64File => {
+
+                const newReaction = {
+                    name: fake.faker.word.noun(),
+                    data: Base64File
+                };
+                reactionList.push(newReaction);
+            });
+        };
+
         await queryInterface.bulkInsert('reactions', reactionList);
     },
     async down(queryInterface, Sequelize) {
