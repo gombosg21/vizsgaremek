@@ -102,13 +102,14 @@ exports.getAllMediaFromUser = async (req, res, next) => {
 
         if (reactionsPre.length != 0) {
             for (let i = 0; i < MediaList.length; i++) {
+                MediaList[i].dataValues.reactions = [];
                 for (let j = 0; j < reactionsPre.length; j++) {
                     if (MediaList[i].ID == reactionsPre[j].media_ID) {
                         var reactionObj = {
                             count: reactionsPre[j].dataValues.count,
                             ID: reactionsPre[j].dataValues.ID
                         }
-                        MediaList[i].dataValues.reactions = reactionObj;
+                        MediaList[i].dataValues.reactions.push(reactionObj);
                     };
                 };
             };
@@ -217,13 +218,14 @@ exports.getAllMediaByTags = async (req, res, next) => {
 
         if (reactionsPre.length != 0) {
             for (let i = 0; i < MediaList.length; i++) {
+                MediaList[i].dataValues.reactions = [];
                 for (let j = 0; j < reactionsPre.length; j++) {
                     if (MediaList[i].ID == reactionsPre[j].media_ID) {
                         var reactionObj = {
                             count: reactionsPre[j].dataValues.count,
                             ID: reactionsPre[j].dataValues.ID
                         }
-                        MediaList[i].dataValues.reactions = reactionObj;
+                        MediaList[i].dataValues.reactions.push(reactionObj);
                     };
                 };
             };
