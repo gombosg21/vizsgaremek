@@ -8,11 +8,10 @@ export function isTokenExpired(): Boolean {
     };
 
     const decodedToken:JWTdecode.JwtPayload = JWTdecode.default(token);
+
     const expiry = decodedToken!.exp!;
 
-    const tokenDate = new Date(expiry);
-
-    if(tokenDate < new Date()) {
+    if(expiry < (new Date()).getTime()) {
         return true;
     } else {
         return false;
