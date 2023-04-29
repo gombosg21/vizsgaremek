@@ -1,7 +1,8 @@
 <div class="container mt-5">
     <div class="row">
         <div class="col-md-4 text-center">
-            <img [src]="profileImage || 'https://via.placeholder.com/200'" alt="Profile Image" class="rounded-circle mb-3 profile-pic">
+            <img [src]="profileImage || 'https://via.placeholder.com/200'" alt="Profile Image"
+                class="rounded-circle mb-3 profile-pic">
         </div>
         <div class="col-md-8">
             <h4 class="username"><i class="fa-solid fa-user" id="user-icon"></i> {{alias}}</h4>
@@ -23,7 +24,9 @@
         </div>
 
         <ng-container *ngIf="UserProfileThread">
-            <app-thread [name]="UserProfileThread.name" [status]="UserProfileThread.status" [comments]="UserProfileThread.comments" [last_activity]="UserProfileThread.last_activity" [created]="UserProfileThread.created" [ID]="UserProfileThread.ID"></app-thread>
+            <app-thread [name]="UserProfileThread.name" [status]="UserProfileThread.status"
+                [comments]="UserProfileThread.comments" [last_activity]="UserProfileThread.last_activity"
+                [created]="UserProfileThread.created" [ID]="UserProfileThread.ID"></app-thread>
         </ng-container>
 
         <hr>
@@ -39,37 +42,42 @@
                             <form (submit)="onSubmit($event)">
                                 <div class="mb-3">
                                     <label for="imageInput" class="form-label">Select Image</label>
-                                    <input type="file" class="form-control" id="imageInput" accept="image/*" (change)="onFileSelected($event)">
+                                    <input type="file" class="form-control" id="imageInput" accept="image/*"
+                                        (change)="onFileSelected($event)">
                                 </div>
                                 <div class="mb-3">
                                     <label for="descriptionInput" class="form-label">Description</label>
-                                    <input type="text" class="form-control" id="descriptionInput" placeholder="Enter a description" [(ngModel)]="newPost.description">
+                                    <input type="text" class="form-control" id="descriptionInput"
+                                        placeholder="Enter a description" [(ngModel)]="newPost.description">
                                 </div>
                                 <button type="submit" class="btn btn-secondary">Submit</button>
-                                <button type="button" id="cancelButton" class="btn btn-secondary" (click)="showUploadForm = false">Cancel</button>
+                                <button type="button" id="cancelButton" class="btn btn-secondary"
+                                    (click)="showUploadForm = false">Cancel</button>
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="row">
+            <!-- <div class="row">
                 <div class="col-md-4" *ngFor="let post of posts">
                     <div class="card mb-3">
                         <div class="card-body">
                             <div class="crop-container">
-                                <img class="card-img-top crop-image" [src]="post.image" alt="Post Image" (click)="openImageModal(post.image)">
+                                <img class="card-img-top crop-image" [src]="post.image" alt="Post Image"
+                                    (click)="openImageModal(post.image)">
                             </div>
-                            <!-- <div class="like-overlay">
+                            <div class="like-overlay">
                                 <p class="text-muted">{{ post.likes }} Likes</p>
-                            </div> -->
-                            <!-- Ez még hibás -->
+                            </div>
+                                Ez még hibás
                         </div>
                     </div>
                 </div>
 
-                <app-image-modal [imageSrc]="selectedImage" [isSmallImage]="isSmallImage" *ngIf="showModal" (close)="closeModal()"></app-image-modal>
+                <app-image-modal [imageSrc]="selectedImage" [isSmallImage]="isSmallImage" *ngIf="showModal"
+                    (close)="closeModal()"></app-image-modal>
             </div>
         </div>
     </div>
-</div>
+</div> -->
