@@ -4,7 +4,7 @@ import { comment } from '../../models/comment';
 import { thread } from '../../models/thread';
 import { CommentService } from '../../services/comment/comment.service';
 import { PageEvent } from '@angular/material/paginator';
-import { reaction_local } from 'src/app/models/reaction';
+import { reaction } from 'src/app/models/reaction';
 import { DbService } from 'src/app/services/db/db.service';
 
 @Component({
@@ -25,7 +25,7 @@ export class ThreadComponent implements OnInit {
   @Input() public status: number;
   @Input() public comments: comment[];
   @Input() public iterator: number = 0;
-  @Input() public reactions: reaction_local[];
+  @Input() public reactions: reaction[];
 
   public threadStatus: string;
 
@@ -38,9 +38,9 @@ export class ThreadComponent implements OnInit {
     this.status = this.data.status ?? this.status;
     this.comments = this.data.comments ?? this.comments;
 
-    if (this.data.thread_reactionlist.length != 0) {
+    if (this.data.reactions) {
 
-      this.DBService.getCacheReactions(this.data.thread_reactionlist!.map(reaction => (reaction.ID))).subscribe({
+      this.DBService.getCacheReactions(this.data.reactions!.map(reaction => (reaction.ID))).subscribe({
         next: (value) => { this.reactions = this.reactions ?? value },
         error: (error) => {
           console.error(error);
