@@ -30,9 +30,6 @@ exports.getProfile = async (req, res, next) => {
                         model: media,
                         attributes: ['file_data']
                     }, {
-                        model: profile_reactionlist,
-                        attributes: [['reaction_ID', 'ID'], [fn('COUNT', 'profile_reactionlist.reaction_ID'), 'reaction_count']],
-                    }, {
                         model: thread,
                         attributes: ['ID', 'name', 'status', 'created', 'last_activity'],
                         include: [
@@ -44,21 +41,52 @@ exports.getProfile = async (req, res, next) => {
                                         model: user,
                                         attributes: ['ID'],
                                         include: [{ model: profile, attributes: ['alias'] }]
-                                    }, {
-                                        model: comment_reactionlist,
-                                        attributes: [['reaction_ID', 'ID'], [fn('COUNT', 'comment_reactionlist.reaction_ID'), 'reaction_count']]
                                     }
                                 ]
-                            }, {
-                                model: thread_reactionlist,
-                                attributes: [['reaction_ID', 'ID'], [fn('COUNT', 'thread_reactionlist.reaction_ID'), 'reaction_count']]
-                            }
+                            },
                         ]
                     }
                 ]
             }],
-            group: [col('profile.profile_reactionlists.reaction_ID'), col('profile.thread.thread_reactionlists.reaction_ID'), col('profile.thread.comments.comment_reactionlists.reaction_ID')]
         });
+
+        if (User.dataValues.profile.thread.comments) {
+            const commentIDs = User.dataValues.profile.thread.comments.map(comment => comment.ID);
+
+            const comment_reactions = await comment_reactionlist.findAll({
+                where: { comment_ID: { [Op.in]: commentIDs } },
+                attributes: [['reaction_ID', 'ID'], "comment_ID", [fn('COUNT', 'reaction_ID'), 'count']],
+                group: [col('reaction_ID')]
+            });
+
+            for (let i = 0; i < User.dataValues.profile.thread.comments.length; i++) {
+                for (let j = 0; j < comment_reactions.length; j++) {
+                    if (comment_reactions[j].comment_ID == User.dataValues.profile.thread.comments[i].ID) {
+                        User.dataValues.profile.thread.comments.reactions = {
+                            ID: comment_reactions.ID,
+                            count: comment_reactions.count
+                        };
+                    };
+                };
+            };
+        };
+
+
+
+        const profile_reactions = await profile_reactionlist.findAll({
+            where: { profile_ID: User.ID },
+            attributes: [['reaction_ID', 'ID'], [fn('COUNT', 'reaction_ID'), 'count']],
+            group: [col('reaction_ID')]
+        });
+
+        const thread_reactions = await thread_reactionlist.findAll({
+            where: { thread_ID: User.profile.thread.ID },
+            attributes: [['reaction_ID', 'ID'], [fn('COUNT', 'reaction_ID'), 'count']],
+            group: [col('reaction_ID')]
+        });
+
+        User.dataValues.profile.reactions = profile_reactions.dataValues;
+        User.dataValues.profile.thread.reactions = thread_reactions.dataValues;
 
         const visibility = User.profile.visibility;
 
