@@ -80,13 +80,13 @@ import { MediaTilesetComponent } from './components/media-tileset/media-tileset.
     },
     {
       provide: APP_INITIALIZER,
-      useFactory: (reactions: DbService) => () => { return reactions.fillReactions() },
+      useFactory: (reactions: DbService) => async () => { return await reactions.fillReactions() },
       deps: [DbService],
       multi: true
     },
     {
       provide: APP_INITIALIZER,
-      useFactory: (tags: DbService) => () => { return tags.fillTags() },
+      useFactory: (tags: DbService) => async () => { return await tags.fillTags() },
       deps: [DbService],
       multi: true
     }
