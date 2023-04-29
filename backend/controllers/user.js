@@ -56,7 +56,7 @@ exports.getProfile = async (req, res, next) => {
             const comment_reactions = await comment_reactionlist.findAll({
                 where: { comment_ID: { [Op.in]: commentIDs } },
                 attributes: [['reaction_ID', 'ID'], "comment_ID", [fn('COUNT', 'reaction_ID'), 'count']],
-                group: [col('reaction_ID')]
+                group: [col('reaction_ID'), col("comment_ID")]
             });
 
             for (let i = 0; i < User.dataValues.profile.thread.comments.length; i++) {
