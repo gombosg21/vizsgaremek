@@ -16,16 +16,26 @@ export class CommentService {
 
   private comments: comment[];
 
+  private comment:comment;
+
   constructor(private http: HttpClient) {
   }
 
-  setLocalData(comments: comment[]): void {
+  setLocalCommentList(comments: comment[]): void {
     this.comments = comments;
-  }
+  };
 
-  getLocalData(): comment[] {
+  getLocalCommentList(): comment[] {
     return this.comments;
-  }
+  };
+
+  getLocalCommentInstance():comment {
+    return this.comment;
+  };
+
+  setLocalCommentInstance(comment:comment):void {
+    this.comment = comment;
+  };
 
   postCommnet(data: comment, targetThreadID: Number): Observable<any> {
     return this.http.post(this.ApiPathMain + "/" + targetThreadID, data);
