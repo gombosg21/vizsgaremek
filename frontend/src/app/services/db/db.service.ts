@@ -4,6 +4,7 @@ import { Observable, firstValueFrom } from 'rxjs'
 import { reaction } from 'src/app/models/reaction';
 import { TagsService } from '../tags/tags.service';
 import { ReactionService } from '../reaction/reaction.service';
+import { Buffer } from 'buffer'
 
 
 @Injectable({
@@ -29,7 +30,11 @@ export class DbService {
   async fillReactions(): Promise<Observable<number[]>> {
     const dataSource = this.ReactionsService.getAllReactions()
     const data = await firstValueFrom(dataSource);
-    return this.dbService.bulkAdd("reactions", data);
+    const blobData = data.map(img => ({ ID: img.ID, data: (new Blob([Buffer.from(img.data)])), name: img.name }));
+
+    console.log(blobData)
+
+    return this.dbService.bulkAdd("reactions", blobData);
   };
 
   flushTags(): Observable<any> {
