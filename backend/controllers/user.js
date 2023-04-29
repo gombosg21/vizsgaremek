@@ -60,10 +60,10 @@ exports.getProfile = async (req, res, next) => {
             });
 
             for (let i = 0; i < User.dataValues.profile.thread.comments.length; i++) {
-                User.dataValues.profile.thread.comment[i].reactions = [];
+                User.dataValues.profile.thread.comments[i].reactions = [];
                 for (let j = 0; j < comment_reactions.length; j++) {
                     if (comment_reactions[j].comment_ID == User.dataValues.profile.thread.comments[i].ID) {
-                        User.dataValues.profile.thread.comments.reactions.push({
+                        User.dataValues.profile.thread.comments[i].reactions.push({
                             ID: comment_reactions.ID,
                             count: comment_reactions.count
                         });
