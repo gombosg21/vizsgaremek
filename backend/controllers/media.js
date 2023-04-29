@@ -2,8 +2,9 @@ const media = require("../models").media;
 const profile = require("../models").profile;
 const tag = require("../models").tag;
 const media_taglist = require("../models").media_taglist;
+const media_reactionslist = require("../models").media_reactionlist;
 const user = require("../models").user;
-const { Op, fn } = require("sequelize");
+const { Op, fn, col } = require("sequelize");
 const { determineMixedArrayVisibility } = require("../helpers/authorization/visibility");
 const Visibility = require('../helpers/authorization/visibility').determineVisibility;
 const VisibilityArray = require('../helpers/authorization/visibility').determineArrayVisibility;
@@ -33,8 +34,17 @@ exports.getMediaByID = async (req, res, next) => {
                 {
                     model: tag,
                     attributes: ["ID", "name"]
-                }]
+                },
+            ],
         });
+
+        const reactions = await media_reactionslist.findAll({
+            where: { media_ID: Media.ID },
+            attributes: [["reaction_ID", "ID"], [fn('COUNT', 'media_reactionslist.reaction_ID'), 'count']],
+            group: [col("reaction_ID")]
+        });
+
+        Media.dataValues.reactions = reactions.dataValues;
 
         var userID = -1;
         if (req.user) { userID = req.user.ID; };
@@ -76,10 +86,33 @@ exports.getAllMediaFromUser = async (req, res, next) => {
                 {
                     model: tag,
                     attributes: ["ID", "name"]
-                }]
+                },
+            ],
         });
 
         if (MediaList.length == 0) { return res.status(200).json({ message: "user has no uploads" }); };
+
+        const mediaIDs = MediaList.map(Media => Media.ID);
+
+        const reactionsPre = await media_reactionslist.findAll({
+            where: { media_ID: { [Op.in]: [mediaIDs] } },
+            attributes: [["reaction_ID", "ID"], "media_ID", [fn('COUNT', 'media_reactionslist.reaction_ID'), 'count']],
+            group: [col("reaction_ID")]
+        });
+
+        if (reactionsPre.length != 0) {
+            for (let i = 0; i < MediaList.length; i++) {
+                for (let j = 0; j < reactionsPre.length; j++) {
+                    if (MediaList[i].ID == reactionsPre[j].media_ID) {
+                        var reactionObj = {
+                            count: reactionsPre[j].dataValues.count,
+                            ID: reactionsPre[j].dataValues.ID
+                        }
+                        MediaList[i].dataValues.reactions = reactionObj;
+                    };
+                };
+            };
+        };
 
         var userID = -1;
         if (req.user) { userID = req.user.ID; };
@@ -174,6 +207,26 @@ exports.getAllMediaByTags = async (req, res, next) => {
 
         if (MediaList.length == 0) {
             return res.status(200).json({ message: "no hits found" });
+        };
+
+        const reactionsPre = await media_reactionslist.findAll({
+            where: { media_ID: { [Op.in]: [MediaIDList] } },
+            attributes: [["reaction_ID", "ID"], "media_ID", [fn('COUNT', 'media_reactionslist.reaction_ID'), 'count']],
+            group: [col("reaction_ID")]
+        });
+
+        if (reactionsPre.length != 0) {
+            for (let i = 0; i < MediaList.length; i++) {
+                for (let j = 0; j < reactionsPre.length; j++) {
+                    if (MediaList[i].ID == reactionsPre[j].media_ID) {
+                        var reactionObj = {
+                            count: reactionsPre[j].dataValues.count,
+                            ID: reactionsPre[j].dataValues.ID
+                        }
+                        MediaList[i].dataValues.reactions = reactionObj;
+                    };
+                };
+            };
         };
 
         const visibilityFlagArray = [];
