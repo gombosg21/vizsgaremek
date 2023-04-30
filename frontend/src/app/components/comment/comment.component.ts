@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { CommentService } from '../../services/comment/comment.service';
 import { ReactionService } from '../../services/reaction/reaction.service';
 import { comment } from '../../models/comment';
-import { reaction } from 'src/app/models/reaction';
+import { reaction_short } from 'src/app/models/reaction';
 import { DbService } from 'src/app/services/db/db.service';
 import { Observable } from 'rxjs'
 
@@ -21,7 +21,7 @@ export class CommentComponent implements OnInit {
   @Input() public user_alias: string;
   @Input() public ID: number;
   @Input() public iterator: number = 0;
-  @Input() public reactions: reaction[];
+  @Input() public reactions: reaction_short[];
 
   constructor(private CommentService: CommentService, private ReactionService: ReactionService, private DBService: DbService) {
     this.data = this.CommentService.getLocalCommentList()[this.iterator];
@@ -35,7 +35,8 @@ export class CommentComponent implements OnInit {
     this.last_edit = this.data.last_edit ?? this.last_edit;
     this.created = this.data.created ?? this.created;
     if (this.data.reactions) {
-      this.ReactionService.setStoredInstanceList(this.data.reactions);
+      this.reactions = this.data.reactions;
+      this.ReactionService.setStoredInstanceList(this.reactions);
     };
   };
 
@@ -46,9 +47,6 @@ export class CommentComponent implements OnInit {
       next: (value) => {
         this.DBService.getCacheReactions([ID]).subscribe({
           next: (localValue) => {
-            localValue.forEach(reaction => {
-              this.reactions.push(reaction)
-            });
           },
           error: (error) => { console.error(error) }
         })
