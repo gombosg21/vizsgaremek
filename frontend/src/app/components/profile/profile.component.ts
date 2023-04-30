@@ -4,6 +4,7 @@ import { getTokenUserID } from '../../helpers/extractors/token';
 import { profile } from '../../models/profile';
 import { thread } from '../../models/thread';
 import { ThreadService } from '../../services/thread/thread.service';
+import { ReactionService } from 'src/app/services/reaction/reaction.service';
 
 @Component({
   selector: 'app-profile',
@@ -44,7 +45,7 @@ export class ProfileComponent implements OnInit {
     },
   ];
 
-  constructor(private UserService: UserService, private ThreadService:ThreadService) {
+  constructor(private UserService: UserService, private ThreadService: ThreadService, private ReactionsService: ReactionService) {
   };
 
   ngOnInit(): void {
@@ -67,11 +68,11 @@ export class ProfileComponent implements OnInit {
         }
 
         this.UserProfileThread = {
-          name: data.profile.thread.name ,
+          name: data.profile.thread.name,
           ID: data.profile.thread.ID,
           status: data.profile.thread.status,
           created: data.profile.thread.created,
-          last_activity: data.profile.thread.last_activity ,
+          last_activity: data.profile.thread.last_activity,
           reactions: data.profile.thread.reactions,
           comments: data.profile.thread.comments
         }
@@ -82,10 +83,18 @@ export class ProfileComponent implements OnInit {
         this.profileImage = this.UserProfile.medium; // fallback image?
 
         this.ThreadService.setLocalData([this.UserProfileThread]);
-      }
-    }
-    )
-  }
+        if (this.UserProfile.reactions) {
+          this.ReactionsService.setStoredInstanceList(this.UserProfile.reactions);
+        };
+      },
+      error:(err) => {
+        console.log(err)
+      },
+      complete() {
+        
+      },
+    });
+  };
 
 
 
