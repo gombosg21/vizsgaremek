@@ -13,28 +13,29 @@ export class NavbarComponent {
   isSession = false;
 
   constructor(private Auth: AuthService, private router: Router) {
-
     router.events.subscribe({
       next: (value) => {
         this.isSession = this.Auth.activeToken();
       }
-    })
+    });
   }
 
   toggleSearch(): void {
-    this.showSearch = true;
-    document.body.style.overflow = 'hidden'; //disable scrolling
-  };
+    this.showSearch = !this.showSearch;
+    this.showUpload = false;
+    // document.body.style.overflow = this.showSearch ? 'hidden' : 'auto'; // disable scrolling
+  }
 
   toggleUpload(): void {
     this.showUpload = !this.showUpload;
-    document.body.style.overflow = this.showUpload ? 'hidden' : 'auto'; // disable scrolling 
-  };
+    this.showSearch = false;
+    document.body.style.overflow = this.showUpload ? 'hidden' : 'auto'; // disable scrolling
+  }
 
   closeSearch(): void {
     this.showSearch = false;
     document.body.style.overflow = 'auto'; // enable scrolling
-  };
+  }
 
   logout() {
     this.Auth.logout().subscribe({
@@ -42,5 +43,5 @@ export class NavbarComponent {
         this.isSession = this.Auth.activeToken();
       }
     });
-  };
+  }
 }
