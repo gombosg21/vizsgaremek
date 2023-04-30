@@ -19,11 +19,11 @@ export class MediaService {
 
   }
 
-  getLocalDataList():media[] {
+  getLocalMediaList():media[] {
     return this.localMediaList;
   };
 
-  setLocalDataList(mediaList:media[]):void {
+  setLocalMediaList(mediaList:media[]):void {
     this.localMediaList = mediaList;
   };
 
@@ -43,7 +43,7 @@ export class MediaService {
     return this.http.get<media>(this.ApiPath + "/" + ID);
   };
 
-  uploadMedia(data: any): Observable<any> {
+  postMedia(data: FormData): Observable<any> {
     return this.http.post<any>(this.ApiPath, data);
   };
 }

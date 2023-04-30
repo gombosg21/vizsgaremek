@@ -3,7 +3,7 @@ import { enviroment } from 'src/enviroments/enviroment';
 import { ApiPaths } from '../../enums/api-paths';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { reaction } from 'src/app/models/reaction';
+import { reaction, reaction_short } from 'src/app/models/reaction';
 
 @Injectable({
   providedIn: 'root'
@@ -12,21 +12,21 @@ export class ReactionService {
 
   private controllerUrl: string = enviroment.baseUrl;
 
-  private reactionIDs:number[];
+  private reactionInstances: reaction_short[];
 
   constructor(private http: HttpClient) {
 
   }
 
-  getStoredIDs():number[] {
-    return this.reactionIDs;
+  getStoredInstanceList(): reaction_short[] {
+    return this.reactionInstances;
   };
 
-  setStoredIDs(IDList:number[]):void {
-    this.reactionIDs = IDList;
+  setStoredInstanceList(instanceList: reaction_short[]): void {
+    this.reactionInstances = instanceList;
   };
 
-  getAllReactions():Observable<reaction[]> {
+  getAllReactions(): Observable<reaction[]> {
     return this.http.get<reaction[]>(this.controllerUrl + ApiPaths.Reaction);
   };
 
