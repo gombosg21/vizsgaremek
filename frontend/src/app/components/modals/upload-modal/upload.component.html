@@ -7,12 +7,46 @@
             <div class="card-body">
                 <form (submit)="onSubmit($event)">
                     <div class="mb-3">
-                        <label for="imageInput" class="form-label">Select Image</label>
-                        <input type="file" class="form-control" id="imageInput" accept="image/*" (change)="onFileSelected($event)">
+                        <label for="image" class="form-label">Select Image</label>
+                        <input type="file" class="form-control" id="image" accept="image/*"
+                            [(ngModel)]="mediaInstance.image" required>
                     </div>
                     <div class="mb-3">
-                        <label for="descriptionInput" class="form-label">Description</label>
-                        <input type="text" class="form-control" id="descriptionInput" placeholder="Enter a description" [(ngModel)]="newPost.description">
+                        <label for="description" class="form-label">Description</label>
+                        <input type="text" class="form-control" id="description" placeholder="Enter a description"
+                            required [(ngModel)]="mediaInstance.description">
+                    </div>
+                    <div class="mb-3">
+                        <label for="placeholder" class="form-label">Placeholder Text</label>
+                        <input type="text" class="form-control" id="placeholder" placeholder="Enter a placeholder"
+                            required [(ngModel)]="mediaInstance.placeholder_text">
+                    </div>
+                    <div class="mb-3">
+                        <label for="visibility" class="form-label">Visibility</label>
+                        <select [(ngModel)]="mediaInstance.visibility" id="visibility" class="form-select">
+                            <option value="0" selected>Private</option>
+                            <option value="1">Friends Only</option>
+                            <option value="2">Registered Only</option>
+                            <option value="3">Public</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="tags" class="form-label">Select a tag to add</label>
+                        <select id="tags" class="form-select">
+                            <option selected [(ngModel)]="selectedTag">please select a tag</option>
+                            <option *ngFor="tag of validTags; let i = index" [value]="validTags[i].id">
+                                {{validTags[i].name}}</option>
+                        </select>
+                        <button class="btn btn-secondary" (click)="addTag()">Add tag</button>
+                    </div>
+                    <div class="mb-3">
+                        <label for="current-tags" class="form-label">Current tags</label>
+                        <ul>
+                            <li *ngFor="let tag of currentTags; let i = index">
+                                <p>{{currentTags[i].name}}</p>
+                                <button class="btn btn-secondary" (click)="removeTag(currentTags[i])">Remove</button>
+                            </li>
+                        </ul>
                     </div>
                     <button type="submit" class="btn btn-secondary">Submit</button>
                     <button type="button" id="cancelButton" class="btn btn-secondary" (click)="cancel()">Cancel</button>
