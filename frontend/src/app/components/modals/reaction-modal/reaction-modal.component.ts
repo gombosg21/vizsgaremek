@@ -34,7 +34,7 @@ export class ReactionModalComponent {
   };
 
   add(): void {
-    this.ReactionsService.addReactionInstance(this.selectedIterator + 1, this.parentID, this.parentType).subscribe({
+    this.ReactionsService.addReactionInstance([this.selectedIterator + 1], this.parentID, this.parentType).subscribe({
       error: (error) => {
         console.log(error)
       },

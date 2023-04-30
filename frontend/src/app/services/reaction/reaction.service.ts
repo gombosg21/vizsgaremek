@@ -30,8 +30,8 @@ export class ReactionService {
     return this.http.get<reaction[]>(this.controllerUrl + ApiPaths.Reaction);
   };
 
-  addReactionInstance(reactionID: number, targetID: number, TargetType: string): Observable<any> {
-    return this.http.post(this.controllerUrl + TargetType + "/" + targetID + "/" + ApiPaths.Reaction, { ID: reactionID });
+  addReactionInstance(reactionIDs:number[], targetID: number, TargetType: string): Observable<any> {
+    return this.http.post(this.controllerUrl + TargetType + "/" + targetID + "/" + ApiPaths.Reaction, { reactions: reactionIDs });
   };
 
   removeReactionInstance(reactionID: number, targetID: number, TargetType: string): Observable<any> {
