@@ -6,11 +6,19 @@ exports.validate = async (req, res, next) => {
 
     if (errors.isEmpty()) { return next(); };
 
+    console.log(errors)
+
     const errorList = [];
     errors.array().map(err => errorList.push({ [err.param]: err.msg }));
 
     try {
-        errors.array().flatMap((_error) => _error.map(err => errorList.push({ [err.param]: err.msg })));
+        if(errors.array().indexOf("_error") != undefined) {
+        var nestedErrors = errors.array().indexOf("_error");
+        console.log(nestedErrors);
+    
+        
+        };
+        // .flatMap((_error) => _error.map(err => errorList.push({ [err.param]: err.msg })));
     } catch (err) { console.error(err) };
 
     return res.status(400).json({ error: errorList });
