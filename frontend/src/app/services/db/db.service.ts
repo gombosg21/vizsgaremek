@@ -5,6 +5,7 @@ import { reaction } from 'src/app/models/reaction';
 import { TagsService } from '../tags/tags.service';
 import { ReactionService } from '../reaction/reaction.service';
 import { Buffer } from 'buffer'
+import { tag } from 'src/app/models/tag';
 
 
 @Injectable({
@@ -25,6 +26,10 @@ export class DbService {
 
   getAllCahceReactions(): Observable<reaction[]> {
     return this.dbService.getAll("reactions");
+  };
+
+  getAllCacheTags():Observable<tag[]> {
+    return this.dbService.getAll("tags");
   };
 
   async fillReactions(): Promise<Observable<number[]>> {
