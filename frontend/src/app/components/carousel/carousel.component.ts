@@ -25,6 +25,7 @@ export class CarouselComponent implements OnInit {
         },
         next:(value) => {
           this.carousel = value;
+          this.carousel.carousel_medialist[0].media
         },
         complete:() => {
         },
