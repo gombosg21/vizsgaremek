@@ -9,41 +9,37 @@
                     <div class="mb-3">
                         <label for="image" class="form-label">Select Image</label>
                         <input type="file" class="form-control" id="image" accept="image/*"
-                            [(ngModel)]="mediaInstance.image" required>
+                            [(ngModel)]="mediaInstance.image" required name="image">
                     </div>
                     <div class="mb-3">
                         <label for="description" class="form-label">Description</label>
                         <input type="text" class="form-control" id="description" placeholder="Enter a description"
-                            required [(ngModel)]="mediaInstance.description">
+                            required [(ngModel)]="mediaInstance.description" name="description">
                     </div>
                     <div class="mb-3">
                         <label for="placeholder" class="form-label">Placeholder Text</label>
                         <input type="text" class="form-control" id="placeholder" placeholder="Enter a placeholder"
-                            required [(ngModel)]="mediaInstance.placeholder_text">
+                            required [(ngModel)]="mediaInstance.placeholder_text" name="placeholder_text">
                     </div>
                     <div class="mb-3">
                         <label for="visibility" class="form-label">Visibility</label>
-                        <select [(ngModel)]="mediaInstance.visibility" id="visibility" class="form-select">
-                            <option value="0" selected>Private</option>
-                            <option value="1">Friends Only</option>
-                            <option value="2">Registered Only</option>
-                            <option value="3">Public</option>
+                        <select [(ngModel)]="mediaInstance.visibility" id="visibility" class="form-select" name="visibility">
+                            <option *ngFor="let option of visibilityOptions; index as i;" [value]="visibilityOptions[i].value">{{visibilityOptions[i].name}}</option>
                         </select>
                     </div>
                     <div class="mb-3">
                         <label for="tags" class="form-label">Select a tag to add</label>
-                        <select id="tags" class="form-select">
-                            <option selected [(ngModel)]="selectedTag">please select a tag</option>
-                            <option *ngFor="tag of validTags; let i = index" [value]="validTags[i].id">
+                        <select id="tags" class="form-select" [(ngModel)]="selectedIterator" name="selectedIterator">
+                            <option *ngFor="let tag of validTags; index as i;" [value]="i">
                                 {{validTags[i].name}}</option>
                         </select>
                         <button class="btn btn-secondary" (click)="addTag()">Add tag</button>
                     </div>
                     <div class="mb-3">
                         <label for="current-tags" class="form-label">Current tags</label>
-                        <ul>
-                            <li *ngFor="let tag of currentTags; let i = index">
-                                <p>{{currentTags[i].name}}</p>
+                        <ul *ngIf="currentTags">
+                            <li *ngFor="let tag of currentTags; index as i;">
+                                {{currentTags[i].name}}
                                 <button class="btn btn-secondary" (click)="removeTag(currentTags[i])">Remove</button>
                             </li>
                         </ul>
