@@ -13,7 +13,7 @@
                         <p><i class="fas fa-pencil-alt"></i> Last edit: {{media.last_edit | date: 'yyyy. MM. dd. HH:mm'}}</p>
                         <p><i class="fas fa-calendar"></i> Created: {{media.uploaded | date: 'yyyy. MM. dd. HH:mm'}}</p>
                     </div>
-                    <app-reactions *ngIf="reactionIDs" [reactionIDs]="reactionIDs"></app-reactions>
+                    <app-reactions *ngIf="media.reactions"></app-reactions>
                 </div>
 
             </div>
