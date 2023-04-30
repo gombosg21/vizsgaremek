@@ -31,52 +31,28 @@
 
         <hr>
 
-        <div class="container">
-            <button type="button" id="uploadButton" class="btn btn-secondary" (click)="showUploadForm = true">test
-                upload</button>
 
-            <div class="row mt-3" *ngIf="showUploadForm">
-                <div class="col-md-6 offset-md-3">
-                    <div class="card" id="uploadForm">
-                        <div class="card-body">
-                            <form (submit)="onSubmit($event)">
-                                <div class="mb-3">
-                                    <label for="imageInput" class="form-label">Select Image</label>
-                                    <input type="file" class="form-control" id="imageInput" accept="image/*"
-                                        (change)="onFileSelected($event)">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="descriptionInput" class="form-label">Description</label>
-                                    <input type="text" class="form-control" id="descriptionInput"
-                                        placeholder="Enter a description" [(ngModel)]="newPost.description">
-                                </div>
-                                <button type="submit" class="btn btn-secondary">Submit</button>
-                                <button type="button" id="cancelButton" class="btn btn-secondary"
-                                    (click)="showUploadForm = false">Cancel</button>
-                            </form>
-                        </div>
+        <!-- <div class="row mt-3" *ngIf="showUploadForm">
+            <div class="col-md-6 offset-md-3">
+                <div class="card" id="uploadForm">
+                    <div class="card-body">
+                        <form (submit)="onSubmit($event)">
+                            <div class="mb-3">
+                                <label for="imageInput" class="form-label">Select Image</label>
+                                <input type="file" class="form-control" id="imageInput" accept="image/*"
+                                    (change)="onFileSelected($event)">
+                            </div>
+                            <div class="mb-3">
+                                <label for="descriptionInput" class="form-label">Description</label>
+                                <input type="text" class="form-control" id="descriptionInput"
+                                    placeholder="Enter a description" [(ngModel)]="newPost.description">
+                            </div>
+                            <button type="submit" class="btn btn-secondary">Submit</button>
+                            <button type="button" id="cancelButton" class="btn btn-secondary"
+                                (click)="showUploadForm = false">Cancel</button>
+                        </form>
                     </div>
                 </div>
-            </div>
-
-            <!-- <div class="row">
-                <div class="col-md-4" *ngFor="let post of posts">
-                    <div class="card mb-3">
-                        <div class="card-body">
-                            <div class="crop-container">
-                                <img class="card-img-top crop-image" [src]="post.image" alt="Post Image"
-                                    (click)="openImageModal(post.image)">
-                            </div>
-                            <div class="like-overlay">
-                                <p class="text-muted">{{ post.likes }} Likes</p>
-                            </div>
-                                Ez még hibás
-                        </div>
-                    </div>
-                </div>
-
-                <app-image-modal [imageSrc]="selectedImage" [isSmallImage]="isSmallImage" *ngIf="showModal"
-                    (close)="closeModal()"></app-image-modal>
             </div>
         </div>
     </div>
