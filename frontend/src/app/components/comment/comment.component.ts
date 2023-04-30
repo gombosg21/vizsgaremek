@@ -35,13 +35,9 @@ export class CommentComponent implements OnInit {
     this.last_edit = this.data.last_edit ?? this.last_edit;
     this.created = this.data.created ?? this.created;
     if (this.data.reactions) {
-      this.DBService.getCacheReactions(this.data.reactions!.map((reaction) => (reaction.ID))).subscribe({
-        next: (value) => {
-          this.reactions = value ?? this.reactions;
-        }
-      });
-    }
-  }
+      this.ReactionService.setStoredInstanceList(this.data.reactions);
+    };
+  };
 
   react(ID: number): Observable<any> {
     const reactEvent = this.ReactionService.addReactionInstance(ID, this.ID, "comment");
