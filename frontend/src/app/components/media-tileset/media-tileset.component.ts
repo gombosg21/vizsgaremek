@@ -21,6 +21,7 @@ export class MediaTilesetComponent {
         next: (value) => {
           if (value[0] != undefined) {
             this.medias = value ?? this.medias;
+            this.MediaService.setLocalMediaList(this.medias);
           }
           switch (true) {
             case (this.windowWidth < 2000): {
@@ -56,7 +57,6 @@ export class MediaTilesetComponent {
               console.error({ error: "cannot acces display size, using default column counts" })
             }
           }
-          console.log(this.medias)
         },
         error: (err) => {
           console.error(err);
