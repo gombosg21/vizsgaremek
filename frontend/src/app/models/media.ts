@@ -14,9 +14,9 @@ export interface media {
 };
 
 export interface upload {
-    image: Blob,
-    description: string,
-    placeholder_text: string,
-    visibility: string,
-    tag_id_array: number[]
+    image?: Blob,
+    description?: string,
+    placeholder_text?: string,
+    visibility?: string,
+    tag_id_array?: number[]
 };
