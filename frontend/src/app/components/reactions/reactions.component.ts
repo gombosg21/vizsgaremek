@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { reaction, reaction_short } from '../../models/reaction';
 import { DbService } from 'src/app/services/db/db.service';
 import { ReactionService } from 'src/app/services/reaction/reaction.service';
@@ -9,16 +9,18 @@ import { ReactionService } from 'src/app/services/reaction/reaction.service';
   styleUrls: ['./reactions.component.css']
 })
 
-export class ReactionsComponent {
+export class ReactionsComponent implements OnInit {
 
   public reactions: reaction[];
 
   @Input() reactionInstanceList: reaction_short[];
 
   constructor(private DBService: DbService, private ReactionService: ReactionService) {
-    this.reactionInstanceList = this.ReactionService.getStoredInstanceList() ?? this.reactionInstanceList;
 
-    console.log(this.reactionInstanceList)
+  };
+
+  ngOnInit(): void {
+    this.reactionInstanceList = this.ReactionService.getStoredInstanceList() ?? this.reactionInstanceList;
 
     const IDList: number[] = this.reactionInstanceList.map(reaction => reaction.ID);
     this.DBService.getCacheReactions(IDList).subscribe({
