@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
-import { reaction } from '../../models/reaction';
+import { reaction, reaction_short } from '../../models/reaction';
 import { DbService } from 'src/app/services/db/db.service';
+import { ReactionService } from 'src/app/services/reaction/reaction.service';
 
 @Component({
   selector: 'app-reactions',
@@ -12,17 +13,19 @@ export class ReactionsComponent {
 
   public reactions: reaction[];
 
-  @Input() reactionIDs: number[];
+  @Input() reactionInstanceList: reaction_short[];
 
-  constructor(private DBService: DbService) {
-    if (this.reactionIDs) {
-      this.DBService.getCacheReactions(this.reactionIDs).subscribe({
-        next: (value) => { this.reactions = value ?? this.reactions; console.log(this.reactions) },
-        error: (err) => {
-          console.log(err);
-        },
-      });
-    }
+  constructor(private DBService: DbService, private ReactionService: ReactionService) {
+    this.reactionInstanceList =  this.ReactionService.getStoredInstanceList() ?? this.reactionInstanceList;
 
+    console.log(this.reactionInstanceList)
+
+    const IDList: number[] = this.reactionInstanceList.map(reaction => reaction.ID);
+    this.DBService.getCacheReactions(IDList).subscribe({
+      next: (value) => { this.reactions = value ?? this.reactions; console.log(this.reactions) },
+      error: (err) => {
+        console.log(err);
+      },
+    });
   };
 };
