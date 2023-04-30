@@ -33,6 +33,8 @@ import { APP_INITIALIZER } from '@angular/core';
 import { DbService } from './services/db/db.service';
 import { ReactionModalComponent } from './components/modals/reaction-modal/reaction-modal.component';
 import { MediaTilesetComponent } from './components/media-tileset/media-tileset.component';
+import { CarouselComponent } from './components/carousel/carousel.component';
+import { CarouselTilesetComponent } from './components/carousel-tileset/carousel-tileset.component';
 
 
 
@@ -58,6 +60,8 @@ import { MediaTilesetComponent } from './components/media-tileset/media-tileset.
     EditModalComponent,
     ReactionModalComponent,
     MediaTilesetComponent,
+    CarouselComponent,
+    CarouselTilesetComponent,
   ],
   imports: [
     BrowserModule,

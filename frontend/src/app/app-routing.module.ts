@@ -7,6 +7,8 @@ import { AuthGuard } from './services/auth/auth-guard.service';
 import { MediaTilesetComponent } from './components/media-tileset/media-tileset.component';
 import { RegisterComponent } from './components/register/register.component';
 import { QueryComponent } from './components/query/query.component';
+import { CarouselComponent } from './components/carousel/carousel.component';
+import { CarouselTilesetComponent } from './components/carousel-tileset/carousel-tileset.component';
 
 const routes: Routes = [
   {
@@ -38,7 +40,7 @@ const routes: Routes = [
   {
     path: 'profile/:id',
     component: ProfileComponent
-  }, 
+  },
   {
     path: 'medias',
     component: MediaTilesetComponent,
@@ -46,7 +48,15 @@ const routes: Routes = [
   },
   {
     path: 'medias/:id',
-    component:MediaTilesetComponent
+    component: MediaTilesetComponent
+  },
+  {
+    path: 'carousel/:id',
+    component: CarouselComponent
+  },
+  {
+    path: 'carousels',
+    component: CarouselTilesetComponent
   }
 
 ];
