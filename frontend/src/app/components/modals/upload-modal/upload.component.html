@@ -5,11 +5,11 @@
     <div class="col-md-6 offset-md-3">
         <div class="card" id="uploadForm">
             <div class="card-body">
-                <form (submit)="onSubmit($event)">
+                <form>
                     <div class="mb-3">
                         <label for="image" class="form-label">Select Image</label>
                         <input type="file" class="form-control" id="image" accept="image/*"
-                            [(ngModel)]="mediaInstance.image" required name="image">
+                            (change)="onImageSelected($event)" required name="image">
                     </div>
                     <div class="mb-3">
                         <label for="description" class="form-label">Description</label>
@@ -44,7 +44,7 @@
                             </li>
                         </ul>
                     </div>
-                    <button type="submit" class="btn btn-secondary">Submit</button>
+                    <button type="button" (click)="onSubmit()" class="btn btn-secondary">Submit</button>
                     <button type="button" id="cancelButton" class="btn btn-secondary" (click)="cancel()">Cancel</button>
                 </form>
             </div>

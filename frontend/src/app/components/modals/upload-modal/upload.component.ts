@@ -33,9 +33,9 @@ export class UploadComponent implements OnInit {
 
   });
 
-  public mediaInstance:upload = {};
-  public validTags:tag[];
-  public selectedIterator:number;
+  public mediaInstance: upload = {};
+  public validTags: tag[];
+  public selectedIterator: number;
 
   public visibilityOptions: { name: string, value: number }[] = [
     { name: "Private", value: 0 },
@@ -44,17 +44,17 @@ export class UploadComponent implements OnInit {
     { name: "Public", value: 3 }
   ];
 
-  public currentTags: tag[] = [];
+  //somehow it gets ID as an attr instead of id, likely due to IDB...
+  public currentTags: any[] = [];
 
 
   @Output() upload = new EventEmitter<upload>();
   @Output() cancelUpload = new EventEmitter<void>();
 
   addTag(): void {
-    console.log(this.selectedIterator)
     // TODO: alert user that selected tag is a duplicate, or theres no selection
     if (this.selectedIterator) {
-      const selectedTag:tag = this.validTags[this.selectedIterator];
+      const selectedTag: tag = this.validTags[this.selectedIterator];
       if (!(this.currentTags.includes(selectedTag))) {
         this.currentTags.push(selectedTag);
       };
@@ -69,31 +69,38 @@ export class UploadComponent implements OnInit {
     };
   };
 
-  onSubmit(event: Event): void {
+  onImageSelected(event: any) {
+
+    console.log(event.target.files[0])
+    this.mediaInstance.image = event.target.files[0];
+  };
+
+  onSubmit(): void {
     if (this.mediaInstance) {
-      var tagIDs: number[] = this.currentTags!.map(tag => tag.id);
+
+      var tagIDs: number[] = this.currentTags!.map(tag => tag.ID);
       this.mediaInstance.tag_id_array = tagIDs;
 
       // TODO: input validation
 
-
-      event.preventDefault();
       this.upload.emit(this.mediaInstance);
       var uploadForm = new FormData();
-
 
       uploadForm.append("image", this.mediaInstance.image!);
       uploadForm.append("placeholder_text", this.mediaInstance.placeholder_text!);
       uploadForm.append("description", this.mediaInstance.description!);
       uploadForm.append("visibility", this.mediaInstance.visibility!);
-      uploadForm.append("tag_id_array", JSON.stringify(this.mediaInstance.tag_id_array!));
+
+      this.mediaInstance.tag_id_array.forEach(ID => {
+        uploadForm.append("tag_id_array[]", String(ID));
+      });
 
       this.MediaService.postMedia(uploadForm).subscribe({
         next: (value) => {
           console.log(value);
         },
         error: (err) => {
-          alert(err);
+          alert(JSON.stringify(err.error));
         },
         complete: () => {
           console.log("done")
