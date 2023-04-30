@@ -15,6 +15,8 @@ export class CommentComponent implements OnInit {
 
   private data: comment;
 
+  public showAddReactions:boolean = false;
+
   @Input() public content: string;
   @Input() public created: Date;
   @Input() public last_edit: Date;
@@ -40,22 +42,15 @@ export class CommentComponent implements OnInit {
     };
   };
 
-  react(ID: number): Observable<any> {
-    const reactEvent = this.ReactionService.addReactionInstance(ID, this.ID, "comment");
+  react() {
+    this.showAddReactions = true;
+  };
 
-    reactEvent.subscribe({
-      next: (value) => {
-        this.DBService.getCacheReactions([ID]).subscribe({
-          next: (localValue) => {
-          },
-          error: (error) => { console.error(error) }
-        })
-      },
-      error: (error) => {
-        console.error(error)
-      }
-    })
+  edit() {
 
-    return reactEvent;
+  };
+
+  delete() {
+
   };
 };
