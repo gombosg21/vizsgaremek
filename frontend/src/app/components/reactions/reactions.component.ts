@@ -16,13 +16,13 @@ export class ReactionsComponent {
   @Input() reactionInstanceList: reaction_short[];
 
   constructor(private DBService: DbService, private ReactionService: ReactionService) {
-    this.reactionInstanceList =  this.ReactionService.getStoredInstanceList() ?? this.reactionInstanceList;
+    this.reactionInstanceList = this.ReactionService.getStoredInstanceList() ?? this.reactionInstanceList;
 
     console.log(this.reactionInstanceList)
 
     const IDList: number[] = this.reactionInstanceList.map(reaction => reaction.ID);
     this.DBService.getCacheReactions(IDList).subscribe({
-      next: (value) => { this.reactions = value ?? this.reactions; console.log(this.reactions) },
+      next: (value) => { this.reactions = value; },
       error: (err) => {
         console.log(err);
       },
