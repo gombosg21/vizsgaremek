@@ -1,0 +1,21 @@
+@import '~@fortawesome/fontawesome-free/css/all.css';
+@import '~bootstrap/dist/css/bootstrap.min.css';
+
+img {
+    height: 100px;
+    width: 100px;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    display: inline-block;
+    border: 1px solid #8484847c;
+    color: var(--text-color);
+    border-radius: 20px;
+    padding: 5px 10px;
+    margin: 2px;
+}
