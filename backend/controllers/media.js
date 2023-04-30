@@ -257,6 +257,10 @@ exports.getAllMediaByTags = async (req, res, next) => {
 
 exports.uploadMedia = async (req, res, next) => {
 
+    if (!req.file) {
+        return res.status(400).json({ error: "no file data vas given" });
+    };
+
     const userID = req.user.ID
     const data = req.file.buffer;
     const description = req.body.description;
@@ -269,6 +273,8 @@ exports.uploadMedia = async (req, res, next) => {
         if (!(tagArray instanceof Array)) {
             tagArray = [tagArray];
         };
+
+        tagArray = tagArray.map(ID => Number(ID));
 
         const tagIDs = (await tag.findAll({ attributes: ['ID'] })).map(Tag => Tag.ID);
 
@@ -284,7 +290,7 @@ exports.uploadMedia = async (req, res, next) => {
         });
 
         if (filteredIDArray.length == 0) {
-            return res.status(400).json({ error: "no valid tags given, aborting" })
+            return res.status(400).json({ error: "no valid tags given, aborting", bad_ids: badIDArray });
         };
 
         const upload = await media.create({
