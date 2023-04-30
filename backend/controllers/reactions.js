@@ -74,7 +74,7 @@ exports.addReaction = async (req, res, next) => {
 
         switch (target) {
             case ("media"): {
-                const exsistingUserReactions = (await media_reactions.findAll({ where: { [Op.and]: [{ user_ID: userID }, { media_ID: ID }] } })).map(Reaction => Reaction.reaction_ID);
+                const exsistingUserReactions = (await media_reactions.findAll({ where: { [Op.and]: [{ user_ID: userID }, { media_ID: ID }] }, attributes: ["reaction_ID"] })).map(Reaction => Reaction.reaction_ID);
 
                 filteredReactionIDs.forEach(reactionID => {
                     if (exsistingUserReactions.includes(reactionID)) {
@@ -95,7 +95,7 @@ exports.addReaction = async (req, res, next) => {
                 break;
             }
             case ("story"): {
-                const exsistingUserReactions = (await carousel_reactionlist.findAll({ where: { [Op.and]: [{ user_ID: userID }, { carousel_ID: ID }] } })).map(Reaction => Reaction.reaction_ID);
+                const exsistingUserReactions = (await carousel_reactionlist.findAll({ where: { [Op.and]: [{ user_ID: userID }, { carousel_ID: ID }] }, attributes: ["reaction_ID"] })).map(Reaction => Reaction.reaction_ID);
 
                 filteredReactionIDs.forEach(reactionID => {
                     if (exsistingUserReactions.includes(reactionID)) {
@@ -116,7 +116,7 @@ exports.addReaction = async (req, res, next) => {
                 break;
             }
             case ("comment"): {
-                const exsistingUserReactions = (await comment_reactions.findAll({ where: { [Op.and]: [{ user_ID: userID }, { comment_ID: ID }] } })).map(Reaction => Reaction.reaction_ID);
+                const exsistingUserReactions = (await comment_reactions.findAll({ where: { [Op.and]: [{ user_ID: userID }, { comment_ID: ID }] }, attributes: ["reaction_ID"] })).map(Reaction => Reaction.reaction_ID);
 
                 filteredReactionIDs.forEach(reactionID => {
                     if (exsistingUserReactions.includes(reactionID)) {
@@ -137,7 +137,7 @@ exports.addReaction = async (req, res, next) => {
                 break;
             }
             case ("thread"): {
-                const exsistingUserReactions = (await thread_reactions.findAll({ where: { [Op.and]: [{ user_ID: userID }, { thread_ID: ID }] } })).map(Reaction => Reaction.reaction_ID);
+                const exsistingUserReactions = (await thread_reactions.findAll({ where: { [Op.and]: [{ user_ID: userID }, { thread_ID: ID }] }, attributes: ["reaction_ID"] })).map(Reaction => Reaction.reaction_ID);
 
                 filteredReactionIDs.forEach(reactionID => {
                     if (exsistingUserReactions.includes(reactionID)) {
@@ -158,7 +158,7 @@ exports.addReaction = async (req, res, next) => {
                 break;
             }
             case ("profile"): {
-                const exsistingUserReactions = (await profile_reactions.findAll({ where: { [Op.and]: [{ user_ID: userID }, { profile_ID: ID }] } })).map(Reaction => Reaction.reaction_ID);
+                const exsistingUserReactions = (await profile_reactions.findAll({ where: { [Op.and]: [{ user_ID: userID }, { profile_ID: ID }] }, attributes: ["reaction_ID"] })).map(Reaction => Reaction.reaction_ID);
 
                 filteredReactionIDs.forEach(reactionID => {
                     if (exsistingUserReactions.includes(reactionID)) {
