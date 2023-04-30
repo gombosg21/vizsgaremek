@@ -10,6 +10,8 @@ import { ReactionService } from 'src/app/services/reaction/reaction.service';
 })
 export class ImageComponent implements OnInit {
 
+  public showImageModal:boolean = false;
+
   @Input() public mediaID: number;
   @Input() public media: media;
   @Input() public iterator: number = 0;
@@ -31,6 +33,10 @@ export class ImageComponent implements OnInit {
     if (this.media.reactions) {
       this.ReactionService.setStoredInstanceList(this.media.reactions);
     };
+  };
+
+  showModal() {
+    this.showImageModal = true;
   };
 
 };
