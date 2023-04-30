@@ -1,5 +1,96 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import '~bootstrap/dist/css/bootstrap.css';
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+:root {
+    --bg-color-light: #fafafa;
+    --bg-color-dark: #1c1c1c;
+    --bg2-color-light: #fafafa;
+    --bg2-color-dark: #1c1c1c;
+    --text-color-light: #333333;
+    --text-color-dark: #f1f1f1;
+    --border-color-light: #D2D2D2;
+    --border-color-dark: #747474;
+    --background-light: #f1f1f1;
+    --background-dark: #1c1c1c;
+    --tagbg-color-light: #dfdfdf;
+    --tagbg-color-dark: #585858;
+}
+
+.light-theme {
+    --bg-color: var(--bg-color-light);
+    --bg2-color: var(--bg-color-light);
+    --text-color: var(--text-color-light);
+    --border-color: var(--border-color-light);
+    --background: var(--background-light);
+    --tagbg-color: var(--tagbg-color-light);
+}
+
+.dark-theme {
+    --bg-color: var(--bg-color-dark);
+    --bg2-color: var(--bg-color-dark);
+    --text-color: var(--text-color-dark);
+    --border-color: var(--border-color-dark);
+    --background: var(--background-dark);
+    --tagbg-color: var(--tagbg-color-dark: );
+}
+
+body.dark-theme {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+
+/* custm scrollbar for dark and light mode */
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: none;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #4a4a4a75
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #4a4a4a75
+}
+
+::-webkit-scrollbar-thumb:active {
+    background: #4a4a4a83
+}
+
+::-webkit-scrollbar-thumb:vertical {
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:horizontal {
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-corner {
+    background: var(--background);
+}
+
+::-webkit-scrollbar-button {
+    display: none;
+}
+
+::-webkit-scrollbar-button:start:decrement,
+::-webkit-scrollbar-button:end:increment {
+    height: 5px;
+    display: block;
+    background-color: transparent;
+}

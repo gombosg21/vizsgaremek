@@ -50,3 +50,8 @@ input.group-append {
     overflow: hidden;
     height: 100%;
 }
+
+.search-box {
+    background: var(--background);
+    color: var(--text-color);
+}

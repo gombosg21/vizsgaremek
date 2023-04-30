@@ -14,12 +14,12 @@
 }
 
 .birthdate {
-    color: #1f1f1f;
+    color: var(--text-color);
     font-weight: bold;
 }
 
 .lead {
-    color: #1f1f1f;
+    color: var(--text-color);
     font-weight: regular;
     font-family: 'Roboto', sans-serif;
     font-size: 16px;
