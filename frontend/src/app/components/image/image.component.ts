@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MediaService } from '../../services/media/media.service';
 import { media } from '../../models/media';
 import { ReactionService } from 'src/app/services/reaction/reaction.service';
@@ -8,7 +8,7 @@ import { ReactionService } from 'src/app/services/reaction/reaction.service';
   templateUrl: './image.component.html',
   styleUrls: ['./image.component.css']
 })
-export class ImageComponent {
+export class ImageComponent implements OnInit {
 
   @Input() public mediaID: number;
   @Input() public media: media;
@@ -19,21 +19,18 @@ export class ImageComponent {
       this.MediaService.getOneFromUserID(this.mediaID).subscribe({
         next: (value) => {
           this.media = value;
-          if (this.media.reactions) {
-            this.ReactionService.setStoredInstanceList(this.media.reactions);
-            console.log(this.media.reactions)
-          };
         },
         error: (err) => {
           console.error(err);
         },
       });
     };
-    if (this.media) {
-      if (this.media.reactions) {
-        this.ReactionService.setStoredInstanceList(this.media.reactions);
-        console.log(this.media.reactions)
-      };
+  };
+
+  ngOnInit(): void {
+    if (this.media.reactions) {
+      this.ReactionService.setStoredInstanceList(this.media.reactions);
     };
   };
+
 };
