@@ -27,6 +27,10 @@
                 <li *ngIf="isSession" class="nav-item">
                     <a class="nav-link" routerLink="/carousels"><i class="fa fa-film" aria-hidden="true"></i> My Stories</a>
                 </li>
+                <div class="nav-item" (click)="toggleDarkMode()" id="themeSwitch">
+                    <i *ngIf="!isDarkMode" class="fa fa-moon nav-link" aria-hidden="true"></i>
+                    <i *ngIf="isDarkMode" class="fa fa-sun nav-link" aria-hidden="true"></i>
+                </div>
             </ul>
             <div class="ms-auto">
                 <ul class="navbar-nav">

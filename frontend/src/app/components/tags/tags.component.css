@@ -5,8 +5,8 @@ ul {
 
 li {
     display: inline-block;
-    background-color: #f8f9fa;
-    border: 1px solid #dee2e6;
+    border: 1px solid #8484847c;
+    color: var(--text-color);
     border-radius: 20px;
     padding: 5px 10px;
     margin: 2px;
