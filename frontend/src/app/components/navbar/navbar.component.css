@@ -1,40 +1,16 @@
-.search-active {
-    overflow: hidden;
-}
-
-.search-overlay {
-    position: fixed;
+@import '~@fortawesome/fontawesome-free/css/all.css';
+.sticky-navbar {
+    position: sticky;
     top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1;
+    z-index: 1030;
+    background-color: white;
 }
 
-.search-container {
-    background-color: #fff;
-    width: 50%;
-    min-width: 400px;
-    padding: 20px;
-    border-radius: 6px;
-    z-index: 2;
+.nav-link {
+    transition: color 0.3s;
 }
 
-.search-input {
-    width: 100%;
-    padding: 10px;
-    font-size: 16px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-}
-
-.search-close {
-    position: absolute;
-    top: 10px;
-    right: 10px;
+.nav-link:hover {
+    color: #007bff;
     cursor: pointer;
 }
