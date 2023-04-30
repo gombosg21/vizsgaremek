@@ -137,22 +137,71 @@ exports.getAllStoryFromUser = async (req, res, next) => {
     try {
         const StoryList = await carousel.findAll({
             where: { user_ID: userID },
-            include: [
-                {
-                    model: media, include: [
-                        { model: tag, attributes: ['ID', 'name'] }
-                    ]
-                }, {
-                    model: carousel_reactionlist, attributes: [['reaction_ID', 'ID'], [fn('COUNT', 'carousel_reactionlists.reaction_ID'), 'reaction_count']]
-                }, {
-                    model: thread, attributes: ['ID', 'name', 'created', 'last_activity', 'status']
-                }],
-            group: ['carousel_reactionlists.reaction_ID']
+            attributes: { exclude: ["deleted", "deletedAt", "user_ID"] },
+            include:
+                [
+                    {
+                        model: carousel_medialist,
+                        attributes: { exclude: ["carousel_ID", "media_ID"] },
+                        include:
+                            [
+                                {
+                                    model: media,
+                                    attributes: ["ID", "file_data", "uploaded", "description", "placeholder_text", "visibility", "last_edit"],
+                                    include:
+                                        [
+                                            {
+                                                model: tag,
+                                                attributes: ['ID', 'name']
+                                            },
+                                            {
+                                                model: user,
+                                                attributes: ["ID"],
+                                                include:
+                                                    [
+                                                        {
+                                                            model: profile,
+                                                            attributes: ["alias"]
+                                                        }
+                                                    ]
+                                            }
+                                        ]
+                                }
+                            ]
+                    },
+                    {
+                        model: thread,
+                        attributes: ['ID', 'name', 'created', 'last_activity', 'status'],
+                        include:
+                            [
+                                {
+                                    model: user,
+                                    attributes: ["ID"],
+                                    include:
+                                        [
+                                            {
+                                                model: profile,
+                                                attributes: ["alias"]
+                                            }
+                                        ]
+                                }
+                            ]
+                    }
+                ]
         });
 
         if (StoryList.length == 0) {
             return res.status(200).json({ message: "user has no stories" });
         };
+
+        const storyIDs = StoryList.map(Story => Story.dataValues.ID);
+
+        const story_reactions = await carousel_reactionlist.findAll({
+            where: { carousel_ID: { [Op.in]: storyIDs } },
+            attributes: [['reaction_ID', 'ID',], 'carousel_ID', [fn('COUNT', 'reaction_ID'), 'count']],
+            group: ['reaction_ID']
+        });
+
 
         var userContextID = -1
         if (req.user) {
@@ -164,32 +213,20 @@ exports.getAllStoryFromUser = async (req, res, next) => {
 
         StoryList.forEach(story => {
             visibilityArray.push(story.visibility);
-        });
+            dataArray.push(story.dataValues);
+            story.dataValues.reactions = [];
 
-
-        StoryList.forEach(story => {
-            var storyMediaList = [];
-            story.media.forEach(Media => {
-                var mediaTagList = [];
-                Media.tags.forEach(tag => { mediaTagList.push({ "name": tag.name }) });
-                storyMediaList.push({
-                    ID: Media.ID,
-                    file: Media.file_data,
-                    uploaded: Media.uploaded,
-                    description: Media.description,
-                    placeholder_text: Media.placeholder_text,
-                    tags: mediaTagList
+            if (story_reactions.length != 0) {
+                story_reactions.forEach(reactions => {
+                    console.log(reactions)
+                    if (story.dataValues.ID == reactions.dataValues.carousel_ID) {
+                        story.dataValues.reactions.push({
+                            ID: reactions.dataValues.ID,
+                            count: reactions.dataValues.count
+                        });
+                    };
                 });
-            });
-            var storyItem = {
-                ID: story.ID,
-                name: story.name,
-                description: story.description,
-                created: story.created_date,
-                updated: story.modified_date,
-                media_list: storyMediaList
             };
-            dataArray.push(storyItem);
         });
 
         const resultArray = await visibility.determineArrayVisibility(userContextID, userID, visibilityArray, dataArray);
