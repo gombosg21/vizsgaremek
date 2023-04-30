@@ -60,12 +60,12 @@ exports.getProfile = async (req, res, next) => {
             });
 
             for (let i = 0; i < User.dataValues.profile.thread.comments.length; i++) {
-                User.dataValues.profile.thread.comments[i].reactions = [];
+                User.dataValues.profile.thread.comments[i].dataValues.reactions = [];
                 for (let j = 0; j < comment_reactions.length; j++) {
                     if (comment_reactions[j].comment_ID == User.dataValues.profile.thread.comments[i].ID) {
-                        User.dataValues.profile.thread.comments[i].reactions.push({
-                            ID: comment_reactions.ID,
-                            count: comment_reactions.count
+                        User.dataValues.profile.thread.comments[i].dataValues.reactions.push({
+                            ID: comment_reactions[j].dataValues.ID,
+                            count: comment_reactions[j].dataValues.count
                         });
                     };
                 };
@@ -86,8 +86,8 @@ exports.getProfile = async (req, res, next) => {
             group: [col('reaction_ID')]
         });
 
-        User.dataValues.profile.reactions = profile_reactions.dataValues;
-        User.dataValues.profile.thread.reactions = thread_reactions.dataValues;
+        User.dataValues.profile.dataValues.reactions = profile_reactions;
+        User.dataValues.profile.thread.dataValues.reactions = thread_reactions;
 
         const visibility = User.profile.visibility;
 
