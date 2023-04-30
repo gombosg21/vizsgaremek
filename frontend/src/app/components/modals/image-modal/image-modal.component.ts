@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { media } from 'src/app/models/media';
 
 @Component({
   selector: 'app-image-modal',
@@ -6,12 +7,11 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrls: ['./image-modal.component.css']
 })
 export class ImageModalComponent {
-  @Input() imageSrc = '';
-  @Input() description = '';
-  @Input() likes = 0;
+
+  @Input() public media:media;
   @Output() close = new EventEmitter<void>();
 
   onClose(): void {
     this.close.emit();
-  }
-}
+  };
+};
