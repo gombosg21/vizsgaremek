@@ -1,1 +1,11 @@
-<p>carousel-tileset works!</p>
+<div *ngIf="carousels">
+    <mat-grid-list [cols]="cols">
+        <mat-grid-tile *ngFor="let carousel of carousels | async;">
+            <app-carousel [carousel]="carousel"></app-carousel>
+        </mat-grid-tile>
+    </mat-grid-list>
+</div>
+
+<div *ngIf="!carousels">
+    <p>Nothing here, but us chickens!</p>
+</div>
