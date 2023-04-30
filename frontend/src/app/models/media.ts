@@ -14,7 +14,7 @@ export interface media {
 };
 
 export interface upload {
-    image?: Blob,
+    image?: any,
     description?: string,
     placeholder_text?: string,
     visibility?: string,
