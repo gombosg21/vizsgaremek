@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 })
 export class CarouselTilesetComponent {
 
-  public carousels: Observable<carousel[]>;
+  public carousels: carousel[];
   public cols: number = 1;
   private windowWidth: number = window.innerWidth;
   @Input() userID: number;
@@ -24,7 +24,7 @@ export class CarouselTilesetComponent {
           next: (value) => {
             if (value[0] != undefined) {
               this.carousels = value ?? this.carousels;
-              //this.CarouselService.setLocalStoryList(this.carousels);
+              this.CarouselService.setLocalStoryList(this.carousels);
             }
             switch (true) {
               case (this.windowWidth < 2000): {
