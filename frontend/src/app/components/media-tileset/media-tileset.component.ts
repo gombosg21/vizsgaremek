@@ -1,5 +1,4 @@
 import { Component, Input } from '@angular/core';
-import { MatGridListModule } from '@angular/material/grid-list';
 import { media } from 'src/app/models/media';
 import { MediaService } from 'src/app/services/media/media.service';
 import { getTokenUserID } from '../../helpers/extractors/token';
@@ -70,6 +69,6 @@ export class MediaTilesetComponent {
 
   private windowWidth: number = window.innerWidth;
 
-  public cols: number = 0;
+  public cols: number = 1;
 
 }
