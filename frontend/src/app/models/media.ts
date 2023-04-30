@@ -12,3 +12,11 @@ export interface media {
     tags?: tag[],
     reactions?: reaction_short[]
 };
+
+export interface upload {
+    image: Blob,
+    description: string,
+    placeholder_text: string,
+    visibility: string,
+    tag_id_array: number[]
+};
