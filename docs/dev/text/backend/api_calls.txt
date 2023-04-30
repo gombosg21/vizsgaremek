@@ -153,7 +153,7 @@ Eltöröl egy kommentet ID alapján.
 Siker esetén visszaadja a komment ID-jét.
 
 GET /api/v/0.1/story/{ID}
-Visszaad egy képtörténetet ID alapján.
+Visszaad egy képtörténetet ID alapján adatok: [{ID, created , name , updated,description, media_list:[ {ID, uploaded,description, file, placeholder_text, tags:[{ID, name}]}]}].
 
 GET /api/v/0.1/story/user/{ID}/all
 Visszaadja az összes képtörténetet egy adott ID-jű usertől.
