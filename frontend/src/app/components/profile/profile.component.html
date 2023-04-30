@@ -1,12 +1,11 @@
 <div class="container mt-5">
     <div class="row">
         <div class="col-md-4 text-center">
-            <img [src]="profileImage || 'https://via.placeholder.com/200'" alt="Profile Image"
-                class="rounded-circle mb-3 profile-pic">
+            <img [src]="profileImage || 'https://via.placeholder.com/200'" alt="Profile Image" class="rounded-circle mb-3 profile-pic">
         </div>
         <div class="col-md-8">
             <h4 class="username"><i class="fa-solid fa-user" id="user-icon"></i> {{alias}}</h4>
-            <p class="birthdate"><i class="fa-solid fa-cake-candles"></i> {{birth_date | date:'dd. MM.'}}</p>
+            <p class="birthdate"><i class="fa-solid fa-cake-candles"></i> {{birth_date | date:'dd. MMMM'}}</p>
             <div class="col-md-9">
                 <div class="d-flex justify-content-between">
                     <div id="posts">
@@ -24,9 +23,7 @@
         </div>
 
         <ng-container *ngIf="UserProfileThread">
-            <app-thread [name]="UserProfileThread.name" [status]="UserProfileThread.status"
-                [comments]="UserProfileThread.comments" [last_activity]="UserProfileThread.last_activity"
-                [created]="UserProfileThread.created" [ID]="UserProfileThread.ID"></app-thread>
+            <app-thread [name]="UserProfileThread.name" [status]="UserProfileThread.status" [comments]="UserProfileThread.comments" [last_activity]="UserProfileThread.last_activity" [created]="UserProfileThread.created" [ID]="UserProfileThread.ID"></app-thread>
         </ng-container>
 
         <hr>
