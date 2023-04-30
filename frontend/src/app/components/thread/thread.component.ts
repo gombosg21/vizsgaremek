@@ -37,14 +37,16 @@ export class ThreadComponent implements OnInit {
     this.last_activity = this.data.last_activity ?? this.last_activity;
     this.status = this.data.status ?? this.status;
     this.comments = this.data.comments ?? this.comments;
-    if (this.data.reactions) {
-      this.ReactionService.setStoredInstanceList(this.data.reactions!)
-    };
-
-    this.CommenctService.setLocalCommentList(this.comments);
   };
 
   ngOnInit(): void {
+
+    if (this.data.reactions) {
+      console.log(this.data.reactions)
+      this.ReactionService.setStoredInstanceList(this.data.reactions);
+    };
+
+    this.CommenctService.setLocalCommentList(this.comments);
 
     this.paginateComments();
     switch (this.status) {
