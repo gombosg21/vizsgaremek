@@ -29,10 +29,6 @@ export class UploadComponent implements OnInit {
     });
   };
 
-  public mediaUploadForm: FormGroup = this.FormBuilder.group({
-
-  });
-
   public mediaInstance: upload = {};
   public validTags: tag[];
   public selectedIterator: number;
@@ -70,8 +66,6 @@ export class UploadComponent implements OnInit {
   };
 
   onImageSelected(event: any) {
-
-    console.log(event.target.files[0])
     this.mediaInstance.image = event.target.files[0];
   };
 
