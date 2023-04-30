@@ -4,7 +4,7 @@ import { comment } from '../../models/comment';
 import { thread } from '../../models/thread';
 import { CommentService } from '../../services/comment/comment.service';
 import { PageEvent } from '@angular/material/paginator';
-import { reaction } from 'src/app/models/reaction';
+import { reaction_short } from 'src/app/models/reaction';
 import { ReactionService } from 'src/app/services/reaction/reaction.service';
 
 @Component({
@@ -25,7 +25,7 @@ export class ThreadComponent implements OnInit {
   @Input() public status: number;
   @Input() public comments: comment[];
   @Input() public iterator: number = 0;
-  @Input() public reactions: reaction[];
+  @Input() public reactions: reaction_short[];
 
   public threadStatus: string;
 
@@ -42,8 +42,8 @@ export class ThreadComponent implements OnInit {
   ngOnInit(): void {
 
     if (this.data.reactions) {
-      console.log(this.data.reactions)
-      this.ReactionService.setStoredInstanceList(this.data.reactions);
+      this.reactions = this.data.reactions;
+      this.ReactionService.setStoredInstanceList(this.reactions);
     };
 
     this.CommenctService.setLocalCommentList(this.comments);
