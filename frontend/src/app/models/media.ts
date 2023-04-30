@@ -1,5 +1,6 @@
 import { tag } from "./tag"
 import { reaction_short } from "./reaction"
+import { user_short } from "./user"
 
 export interface media {
     ID?: number,
@@ -10,7 +11,8 @@ export interface media {
     description: string,
     placeholder_text: string,
     tags?: tag[],
-    reactions?: reaction_short[]
+    reactions?: reaction_short[],
+    user?: user_short
 };
 
 export interface upload {
