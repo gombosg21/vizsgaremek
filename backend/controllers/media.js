@@ -246,7 +246,7 @@ exports.getAllMediaByTags = async (req, res, next) => {
             results.bad_tag_ids = badIDList;
         };
 
-        return res.status(200).json({ results: results });
+        return res.status(200).json(results);
     }
     catch (error) {
         console.error(error);
