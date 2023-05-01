@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { UserService } from '../../services/user/user.service';
-import { getTokenUserID } from '../../helpers/extractors/token';
 import { profile } from '../../models/profile';
 import { thread } from '../../models/thread';
 import { ThreadService } from '../../services/thread/thread.service';
 import { ReactionService } from 'src/app/services/reaction/reaction.service';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-profile',
@@ -16,14 +16,8 @@ export class ProfileComponent implements OnInit {
   public UserProfile: profile;
   public UserProfileThread: thread;
 
-  alias = "";
-  description = "";
-  birth_date = new Date();
-  gender = NaN;
-  profileImage = ""; // fallback image?
-  postCount = 0;
-  followersCount = 0;
-  followingCount = 0;
+  @Input() public userID:number;
+
   showUploadForm = false;
 
   selectedImage = '';
@@ -45,7 +39,7 @@ export class ProfileComponent implements OnInit {
     },
   ];
 
-  constructor(private UserService: UserService, private ThreadService: ThreadService, private ReactionsService: ReactionService) {
+  constructor(private AuthService:AuthService ,private UserService: UserService, private ThreadService: ThreadService, private ReactionsService: ReactionService) {
   };
 
   ngOnInit(): void {
@@ -54,7 +48,8 @@ export class ProfileComponent implements OnInit {
 
 
   onLoad(): void {
-    this.UserService.getProfile(getTokenUserID()).subscribe({
+    this.userID = this.AuthService.getUserID() ?? this.userID;
+    this.UserService.getProfile(this.userID).subscribe({
       next: (data) => {
         this.UserProfile = {
           birth_date: data.birth_date,
@@ -76,11 +71,6 @@ export class ProfileComponent implements OnInit {
           reactions: data.profile.thread.reactions,
           comments: data.profile.thread.comments
         }
-        this.alias = this.UserProfile.alias;
-        this.description = this.UserProfile.description;
-        this.birth_date = this.UserProfile.birth_date;
-        this.gender = data.gender;
-        this.profileImage = this.UserProfile.medium; // fallback image?
 
         this.ThreadService.setLocalData([this.UserProfileThread]);
         if (this.UserProfile.reactions) {
