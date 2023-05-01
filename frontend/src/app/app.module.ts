@@ -10,7 +10,7 @@ import { FeedComponent } from './components/feed/feed.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { SearchComponent } from './components/search/search.component';
-import { UploadImageModalComponent } from './components/modals/upload-modal/upload-image-modal.component';
+import { UploadImageModalComponent } from './components/modals/upload-image-modal/upload-image-modal.component';
 import { ImageModalComponent } from './components/modals/image-modal/image-modal.component';
 import { QueryComponent } from './components/query/query.component';
 import { HttpClientModule } from '@angular/common/http';

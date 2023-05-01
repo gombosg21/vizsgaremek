@@ -7,31 +7,17 @@ import { DbService } from 'src/app/services/db/db.service';
 import { MediaService } from 'src/app/services/media/media.service';
 
 @Component({
-  selector: 'app-upload',
+  selector: 'app-upload-image-modal',
   templateUrl: './upload-image-modal.component.html',
   styleUrls: ['./upload-image-modal.component.css'],
+  providers: [
+    { provide: MAT_DIALOG_DATA, useValue: {} },
+  ]
 })
 
 export class UploadImageModalComponent implements OnInit {
 
   public title: string = "Upload";
-
-  constructor( private MediaService: MediaService, private DBService: DbService, @Inject(MAT_DIALOG_DATA) public data:any) {
-  };
-
-  async ngOnInit(): Promise<void> {
-    this.DBService.getAllCacheTags().subscribe({
-      error: (err) => {
-        alert(err);
-      },
-      complete: () => {
-      },
-      next: (value) => {
-        this.validTags = value;
-      },
-    });
-  };
-
   public mediaInstance: upload = {};
   public validTags: tag[];
   public selectedIterator: number;
@@ -49,6 +35,23 @@ export class UploadImageModalComponent implements OnInit {
 
   @Output() upload = new EventEmitter<upload>();
   @Output() cancelUpload = new EventEmitter<void>();
+
+  constructor(private MediaService: MediaService, private DBService: DbService, @Inject(MAT_DIALOG_DATA) public data: any) {
+    console.log("up ctor")
+  };
+
+  async ngOnInit(): Promise<void> {
+    this.DBService.getAllCacheTags().subscribe({
+      error: (err) => {
+        alert(err);
+      },
+      complete: () => {
+      },
+      next: (value) => {
+        this.validTags = value;
+      },
+    });
+  };
 
   addTag(): void {
     // TODO: alert user that selected tag is a duplicate, or theres no selection
