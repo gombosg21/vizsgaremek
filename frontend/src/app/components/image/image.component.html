@@ -2,8 +2,7 @@
     <div class="row">
         <div class="col-12 col-lg-6" id="img">
             <div class="card">
-                <img src="data:image/jpeg;base64,{{media.file_data}}" [alt]="media.placeholder_text"
-                    [title]="media.placeholder_text" class="card-img-top" (click)="showModal()">
+                <img src="data:image/jpeg;base64,{{media.file_data}}" [alt]="media.placeholder_text" [title]="media.placeholder_text" class="card-img-top" (click)="showModal()">
                 <div class="card-body">
                     <p class="card-text">{{media.description}}</p>
                     <!-- <a href="#" (click)=react class="btn btn-primary">react</a> -->
@@ -24,4 +23,4 @@
     </div>
 </div>
 
-<app-image-modal *ngIf="showImageModal" [media]="media"></app-image-modal>
+<app-image-modal *ngIf="showImageModal" [media]="media" (close)="hideModal()"></app-image-modal>
