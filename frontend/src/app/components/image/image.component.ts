@@ -27,6 +27,10 @@ export class ImageComponent implements OnInit {
         },
       });
     };
+
+    if(this.iterator) {
+      this.media = (this.MediaService.getLocalMediaList()[this.iterator]) ?? this.media;
+    };
   };
 
   ngOnInit(): void {
