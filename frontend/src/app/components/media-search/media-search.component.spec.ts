@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MediaSearchModalComponent } from './media-search-modal.component';
+import { MediaSearchComponent } from './media-search.component';
 
 describe('MediaSearchModalComponent', () => {
-  let component: MediaSearchModalComponent;
-  let fixture: ComponentFixture<MediaSearchModalComponent>;
+  let component: MediaSearchComponent;
+  let fixture: ComponentFixture<MediaSearchComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MediaSearchModalComponent ]
+      declarations: [ MediaSearchComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(MediaSearchModalComponent);
+    fixture = TestBed.createComponent(MediaSearchComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

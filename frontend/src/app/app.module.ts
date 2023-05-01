@@ -38,7 +38,7 @@ import { CarouselTilesetComponent } from './components/carousel-tileset/carousel
 import { UserSearchModalComponent } from './components/modals/user-search-modal/user-search-modal.component';
 import { ThreadSearchModalComponent } from './components/modals/thread-search-modal/thread-search-modal.component';
 import { CarouselSearchModalComponent } from './components/modals/carousel-search-modal/carousel-search-modal.component';
-import { MediaSearchModalComponent } from './components/modals/media-search-modal/media-search-modal.component';
+import { MediaSearchComponent } from './components/media-search/media-search.component';
 import { MatDialogModule } from '@angular/material/dialog';
 
 
@@ -70,7 +70,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     UserSearchModalComponent,
     ThreadSearchModalComponent,
     CarouselSearchModalComponent,
-    MediaSearchModalComponent,
+    MediaSearchComponent,
   ],
   imports: [
     BrowserModule,
