@@ -7,7 +7,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto">
                 <li *ngIf="isSession" class="nav-item">
-                    <a class="nav-link" routerLink="/profile"><i class="fa fa-user" aria-hidden="true"></i> My Profile</a>
+                    <a class="nav-link" [routerLink]="userProfileLink"><i class="fa fa-user" aria-hidden="true"></i> My Profile</a>
                 </li>
                 <li *ngIf="isSession" class="nav-item">
                     <a class="nav-link"><i class="fa fa-users" aria-hidden="true"></i> Friends</a>
@@ -16,10 +16,16 @@
                     <a class="nav-link"><i class="fa fa-star" aria-hidden="true"></i> Followed</a>
                 </li>
                 <li *ngIf="isSession" class="nav-item">
-                    <a class="nav-link" routerLink="/medias"><i class="fa fa-upload" aria-hidden="true"></i> My Uploads</a>
+                    <a class="nav-link" [routerLink]="userMediasLink"><i class="fa fa-upload" aria-hidden="true"></i> My Uploads</a>
                 </li>
                 <li *ngIf="isSession" class="nav-item">
-                    <a class="nav-link" routerLink="/carousels"><i class="fa fa-film" aria-hidden="true"></i> My Stories</a>
+                    <a class="nav-link" [routerLink]="userStoriesLink"><i class="fa fa-film" aria-hidden="true"></i> My Stories</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link">Browse Images</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link">Browse Stories</a>
                 </li>
                 <div class="nav-item" (click)="toggleDarkMode()" id="themeSwitch">
                     <i *ngIf="!isDarkMode" class="fa fa-moon nav-link" aria-hidden="true"></i>

@@ -11,8 +11,15 @@ import { Subscription } from 'rxjs';
 })
 export class NavbarComponent implements OnInit, OnDestroy {
   public isSession: boolean = false;
+  public sessionID?:number;
   public isDarkMode: boolean = false;
+
+  public userProfileLink:string = "/profile";
+  public userMediasLink:string = "/medias";
+  public userStoriesLink:string = "/carousels";
+
   private authSub: Subscription;
+  private userSub: Subscription;
 
   constructor(private Auth: AuthService, private router: Router) {
     this.router.events.subscribe({
@@ -20,12 +27,22 @@ export class NavbarComponent implements OnInit, OnDestroy {
         this.authSub = this.Auth.getSessionStatus().subscribe({
           next: (value) => {
             this.isSession = value;
-            console.log("session:", this.isSession)
           },
           error: (err) => {
             console.error(err);
           }
         });
+        this.userSub = this.Auth.getUserID().subscribe({
+          next:(value)=>{
+            this.sessionID = value;
+            this.userMediasLink += "/" + this.sessionID;
+            this.userProfileLink += "/" + this.sessionID;
+            this.userStoriesLink += "/" + this.sessionID;
+          },
+          error:(err) => {
+            console.error(err)
+          },
+        })
       },
       error: (err) => {
         console.error(err)
@@ -39,6 +56,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.authSub.unsubscribe();
+    this.userSub.unsubscribe();
   };
 
 

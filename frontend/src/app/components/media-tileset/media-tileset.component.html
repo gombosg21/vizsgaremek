@@ -1,7 +1,9 @@
-<div>
-    <button class="btn btn-primary" (click)="showModal()">Upload</button>
+<div *ngIf="!foreign">
+    <div>
+        <button class="btn btn-primary" (click)="showModal()">Upload</button>
+    </div>
+    <app-upload-image-modal *ngIf="showUploadModal" (close)="hideModal()"></app-upload-image-modal>
 </div>
-
 
 <div *ngIf="medias">
     <mat-grid-list cols="cols">
@@ -15,4 +17,6 @@
     <p>Nothing here, but us chickens!</p>
 </div>
 
-<app-upload-image-modal *ngIf="showUploadModal" (close)="hideModal()"></app-upload-image-modal>
+<div *ngIf="foreign">
+    <app-media-search></app-media-search>
+</div>

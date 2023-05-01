@@ -4,6 +4,8 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 import { MediaService } from 'src/app/services/media/media.service';
 import { MatDialog } from '@angular/material/dialog';
 import { UploadImageModalComponent } from '../modals/upload-image-modal/upload-image-modal.component';
+import { ActivatedRoute } from '@angular/router';
+
 
 @Component({
   selector: 'app-media-tileset',
@@ -15,24 +17,16 @@ export class MediaTilesetComponent implements OnInit {
   @Input() userID?: number;
   @Input() medias: media[];
 
-  public showUploadModal:boolean = false;
+  public showUploadModal: boolean = false;
+  public foreign: boolean = false;
 
   private windowWidth: number = window.innerWidth;
 
   public cols: number;
 
-  constructor(private DialogRef: MatDialog, private MediaService: MediaService, private AuthService: AuthService) {
+  constructor(private route: ActivatedRoute, private DialogRef: MatDialog, private MediaService: MediaService, private AuthService: AuthService) {
 
-    if (this.userID == undefined) {
-      this.AuthService.getUserID().subscribe({
-        next: (value) => {
-          this.userID = value;
-        },
-        error: (err) => {
-          console.error(err)
-        },
-      });
-    };
+    this.userID = this.route.snapshot.params['id'] ?? this.userID;
     switch (true) {
       case (this.windowWidth > 2000): {
         this.cols = 6;
@@ -65,7 +59,7 @@ export class MediaTilesetComponent implements OnInit {
     };
   };
 
-  showModal():void { 
+  showModal(): void {
     this.showUploadModal = true;
     this.DialogRef.open(UploadImageModalComponent);
   };
@@ -89,9 +83,9 @@ export class MediaTilesetComponent implements OnInit {
           console.error(err);
         }
       });
+    } else {
+      this.foreign = true;
     };
-    console.log("a", this.cols)
-    console.log(this.windowWidth);
   };
 
 };
