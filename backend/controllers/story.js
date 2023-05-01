@@ -218,7 +218,6 @@ exports.getAllStoryFromUser = async (req, res, next) => {
 
             if (story_reactions.length != 0) {
                 story_reactions.forEach(reactions => {
-                    console.log(reactions)
                     if (story.dataValues.ID == reactions.dataValues.carousel_ID) {
                         story.dataValues.reactions.push({
                             ID: reactions.dataValues.ID,
