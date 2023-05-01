@@ -11,12 +11,15 @@ export class LoginComponent {
   username: string;
   password: string;
   errorMessage: string;
+  isDarkMode: boolean;
 
   constructor(
     private titleService: Title,
     private authService: AuthService,
   ) {
     this.titleService.setTitle('VisualPosting - Login');
+  this.isDarkMode = authService.getIsDarkMode();
+  
 
   };
 
