@@ -46,4 +46,8 @@ export class MediaService {
   postMedia(data: FormData): Observable<any> {
     return this.http.post<any>(this.ApiPath, data);
   };
-}
+
+  getQueryMedia(query:string):Observable<media[]>{
+    return this.http.get<media[]>(this.ApiPath + "/search/tags?" + query);
+  };
+};
