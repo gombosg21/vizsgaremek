@@ -1,3 +1,8 @@
+<div>
+    <button class="btn btn-primary" (click)="upload()">Upload</button>
+</div>
+
+
 <div *ngIf="medias">
     <mat-grid-list cols="cols">
         <mat-grid-tile *ngFor="let media of medias; index as i;">

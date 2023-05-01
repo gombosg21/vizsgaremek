@@ -2,6 +2,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import { media } from 'src/app/models/media';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { MediaService } from 'src/app/services/media/media.service';
+import { MatDialog } from '@angular/material/dialog';
+import { UploadImageModalComponent } from '../modals/upload-modal/upload-image-modal.component';
 
 @Component({
   selector: 'app-media-tileset',
@@ -17,7 +19,8 @@ export class MediaTilesetComponent implements OnInit {
 
   public cols: number;
 
-  constructor(private MediaService: MediaService, private AuthService: AuthService) {
+  constructor(private DialogRef: MatDialog, private MediaService: MediaService, private AuthService: AuthService) {
+
     if (this.userID == undefined) {
       this.AuthService.getUserID().subscribe({
         next: (value) => {
@@ -58,6 +61,10 @@ export class MediaTilesetComponent implements OnInit {
         console.error({ error: "cannot acces display size, using default column counts" })
       }
     };
+  };
+
+  upload():void {
+    this.DialogRef.open(UploadImageModalComponent);
   };
 
 
