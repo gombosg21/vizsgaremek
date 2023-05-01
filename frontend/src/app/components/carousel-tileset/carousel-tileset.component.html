@@ -1,7 +1,7 @@
 <div *ngIf="carousels">
-    <mat-grid-list [cols]="cols">
-        <mat-grid-tile *ngFor="let carousel of carousels;">
-            <app-carousel [carousel]="carousel"></app-carousel>
+    <mat-grid-list cols="cols">
+        <mat-grid-tile *ngFor="let carousel of carousels; index as i;">
+            <app-carousel [carousel]="carousel" [iterator]="i"></app-carousel>
         </mat-grid-tile>
     </mat-grid-list>
 </div>
