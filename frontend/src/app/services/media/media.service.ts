@@ -47,7 +47,17 @@ export class MediaService {
     return this.http.post<any>(this.ApiPath, data);
   };
 
-  getQueryMedia(query:string):Observable<media[]>{
+  getQueryMedia(tagids:number[]):Observable<media[]>{
+    var query = "";
+
+    for (let i = 0; i < tagids.length; i++) {
+      if(i == 0) {
+        query += "tagids=" + tagids[i];
+      } else {
+        query += "&tagids=" + tagids[i];
+      };
+    };
+
     return this.http.get<media[]>(this.ApiPath + "/search/tags?" + query);
   };
 };

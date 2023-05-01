@@ -70,7 +70,9 @@ export class MediaTilesetComponent implements OnInit {
     this.showUploadModal = false;
   };
 
-
+setMedias(mediaList:media[]):void {
+  this.medias = mediaList;
+}
 
   ngOnInit(): void {
     if (this.userID) {

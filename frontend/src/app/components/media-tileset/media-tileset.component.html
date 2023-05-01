@@ -18,5 +18,5 @@
 </div>
 
 <div *ngIf="foreign">
-    <app-media-search></app-media-search>
+    <app-media-search (searchResults)="setMedias($event)"></app-media-search>
 </div>
