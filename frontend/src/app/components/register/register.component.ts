@@ -141,5 +141,11 @@ export class RegisterComponent implements OnInit {
       console.log('Form is invalid');
     }
   }
+
+  onThemeSwitchChange(event: any) {
+    const theme = event.target.checked ? 'dark-theme' : 'light-theme';
+    document.documentElement.setAttribute('data-theme', theme);
+  }
+  
 }
 
