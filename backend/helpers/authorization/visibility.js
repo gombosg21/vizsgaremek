@@ -1,3 +1,6 @@
+const friends = require("../../models").friends;
+const { Op } = require('sequelize')
+
 exports.determineVisibility = async (userContextID, dataOwnerID, visbilityFlag, data) => {
     //  visibility levels
     //  0 = private
@@ -24,15 +27,28 @@ exports.determineVisibility = async (userContextID, dataOwnerID, visbilityFlag, 
     if (Object.keys(data).length == 0) { throw new Error("data cannot be an empty JSON object"); };
     if (!(data.hasOwnProperty('ID'))) { throw new Error("data must have a field 'ID'"); };
 
+    const userFriends = await friends.findAll({
+        [Op.or]:
+            [
+                {
+                    where:
+                        { [Op.and]: [{ where: { user_ID: userContextID } }, { where: { friend_ID: dataOwnerID } }] }
+                },
+                {
+                    [Op.and]: [{ where: { friend_ID: userContextID } }, { where: { user_ID: dataOwnerID } }]
+                }
+            ]
+    });
+
     const returnData = {
         status: 0,
         data: ""
     };
 
-    switch (visbilityFlag) {
+    decisiontree: switch (visbilityFlag) {
         case 0: {
             if (userContextID != dataOwnerID) {
-                returnData.status = 403, returnData.data = { "ID": data.ID, "msg": "private content" };
+                returnData.status = 401, returnData.data = { "ID": data.ID, "msg": "private content" };
                 break;
             } else {
                 returnData.status = 200, returnData.data = data;
@@ -45,7 +61,14 @@ exports.determineVisibility = async (userContextID, dataOwnerID, visbilityFlag, 
                 break;
             };
 
-            returnData.status = 501, returnData.data = { "ID": data.ID, "msg": "not implemented" };
+            for (let i = 0; i < userFriends.length; i++) {
+                if (userFriends[i].user_ID == userContextID || userFriends[i].friend_ID == userContextID) {
+                    returnData.status = 200, returnData.data = data;
+                    break decisiontree;
+                };
+            };
+
+            returnData.status = 401, returnData.data = { "ID": data.ID, "msg": "friends only" };
             break;
         }
         case 2: {
@@ -107,15 +130,28 @@ exports.determineArrayVisibility = async (userContextID, dataOwnerID, visibiltyA
         throw new Error("visibiltyArray must be as long as dataArray, not more nor less");
     };
 
+    const userFriends = await friends.findAll({
+        [Op.or]:
+            [
+                {
+                    where:
+                        { [Op.and]: [{ where: { user_ID: userContextID } }, { where: { friend_ID: dataOwnerID } }] }
+                },
+                {
+                    [Op.and]: [{ where: { friend_ID: userContextID } }, { where: { user_ID: dataOwnerID } }]
+                }
+            ]
+    });
+
     const returnDataArray = [];
 
     for (let i = 0; i < visibiltyArray.length; i++) {
 
         //  internally associate visibility with data
-        switch (visibiltyArray[i]) {
+        decisiontree: switch (visibiltyArray[i]) {
             case (0): {
                 if (userContextID != dataOwnerID) {
-                    returnDataArray.push({ "ID": dataArray[i].ID, "msg": "private content" });
+                    returnDataArray.push({ "ID": dataArray[i].ID, "error": "private content" });
                     break;
                 } else {
                     returnDataArray.push(dataArray[i]);
@@ -127,7 +163,14 @@ exports.determineArrayVisibility = async (userContextID, dataOwnerID, visibiltyA
                     returnDataArray.push(dataArray[i]);
                     break;
                 };
-                returnDataArray.push({ "ID": dataArray[i].ID, "msg": "not implemented" });
+                for (let i = 0; i < userFriends.length; i++) {
+                    if (userFriends[i].user_ID == userContextID || userFriends[i].friend_ID == userContextID) {
+                        returnDataArray.push(dataArray[i]);
+                        break decisiontree;
+                    };
+                };
+
+                returnDataArray.push({ "ID": dataArray[i].ID, "error": "friends only" });
                 break;
             }
             case (2): {
@@ -135,7 +178,7 @@ exports.determineArrayVisibility = async (userContextID, dataOwnerID, visibiltyA
                     returnDataArray.push(dataArray[i]);
                     break;
                 } else {
-                    returnDataArray.push({ "ID": dataArray[i].ID, "msg": "registered members only" });
+                    returnDataArray.push({ "ID": dataArray[i].ID, "error": "registered members only" });
                     break;
                 };
             }
@@ -199,7 +242,7 @@ exports.determineMixedArrayVisibility = async (userContextID, dataOwnerIDArray, 
 
     for (let i = 0; i < visibiltyArray.length; i++) {
 
-        switch (visibiltyArray[i]) {
+        decisiontree: switch (visibiltyArray[i]) {
             case (0): {
                 if (userContextID != dataOwnerIDArray[i]) {
                     returnDataArray.push({ "ID": dataArray[i].ID, "error": "private content" });
@@ -210,11 +253,32 @@ exports.determineMixedArrayVisibility = async (userContextID, dataOwnerIDArray, 
                 };
             }
             case (1): {
+
+                const userFriends = await friends.findAll({
+                    [Op.or]:
+                        [
+                            {
+                                where:
+                                    { [Op.and]: [{ where: { user_ID: userContextID } }, { where: { friend_ID: dataOwnerIDArray[i] } }] }
+                            },
+                            {
+                                [Op.and]: [{ where: { friend_ID: userContextID } }, { where: { user_ID: dataOwnerIDArray[i] } }]
+                            }
+                        ]
+                });
+
                 if (userContextID == dataOwnerIDArray[i]) {
                     returnDataArray.push(dataArray[i]);
                     break;
                 };
-                returnDataArray.push({ "ID": dataArray[i].ID, "msg": "not implemented" });
+                for (let i = 0; i < userFriends.length; i++) {
+                    if (userFriends[i].user_ID == userContextID || userFriends[i].friend_ID == userContextID) {
+                        returnDataArray.push(dataArray[i]);
+                        break decisiontree;
+                    };
+                };
+
+                returnDataArray.push({ "ID": dataArray[i].ID, "error": "friends only" });
                 break;
             }
             case (2): {
