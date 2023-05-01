@@ -57,6 +57,10 @@ const routes: Routes = [
   {
     path: 'carousels',
     component: CarouselTilesetComponent
+  },
+  {
+    path: 'carousels/:id',
+    component: CarouselTilesetComponent
   }
 
 ];

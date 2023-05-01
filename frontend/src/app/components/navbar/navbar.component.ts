@@ -11,12 +11,16 @@ import { Subscription } from 'rxjs';
 })
 export class NavbarComponent implements OnInit, OnDestroy {
   public isSession: boolean = false;
-  public sessionID?:number;
+  public sessionID?: number;
   public isDarkMode: boolean = false;
 
-  public userProfileLink:string = "/profile";
-  public userMediasLink:string = "/medias";
-  public userStoriesLink:string = "/carousels";
+  public userProfileLinkBase: string = "/profile";
+  public userMediasLinkBase: string = "/medias";
+  public userStoriesLinkBase: string = "/carousels";
+
+  public userProfileLink: string;
+  public userMediasLink: string;
+  public userStoriesLink: string;
 
   private authSub: Subscription;
   private userSub: Subscription;
@@ -33,15 +37,18 @@ export class NavbarComponent implements OnInit, OnDestroy {
           }
         });
         this.userSub = this.Auth.getUserID().subscribe({
-          next:(value)=>{
+          next: (value) => {
             this.sessionID = value;
-            this.userMediasLink += "/" + this.sessionID;
-            this.userProfileLink += "/" + this.sessionID;
-            this.userStoriesLink += "/" + this.sessionID;
+
           },
-          error:(err) => {
+          error: (err) => {
             console.error(err)
           },
+          complete: () => {
+            this.userMediasLink = this.userMediasLinkBase + "/" + this.sessionID;
+            this.userProfileLink = this.userProfileLinkBase + "/" + this.sessionID;
+            this.userStoriesLink = this.userStoriesLinkBase + "/" + this.sessionID;
+          }
         })
       },
       error: (err) => {
