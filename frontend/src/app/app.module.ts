@@ -40,6 +40,8 @@ import { ThreadSearchModalComponent } from './components/modals/thread-search-mo
 import { CarouselSearchModalComponent } from './components/modals/carousel-search-modal/carousel-search-modal.component';
 import { MediaSearchComponent } from './components/media-search/media-search.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatChipsModule } from '@angular/material/chips';
 
 
 
@@ -81,7 +83,9 @@ import { MatDialogModule } from '@angular/material/dialog';
     NgxIndexedDBModule.forRoot(dbConfig),
     BrowserAnimationsModule,
     MatPaginatorModule,
-    MatDialogModule
+    MatDialogModule,
+    MatAutocompleteModule,
+    MatChipsModule
   ],
   providers: [
     {
