@@ -13,6 +13,12 @@ export class AuthService {
   constructor(private http: HttpClient, private router: Router,) {
   };
 
+  private userID?:number;
+
+  getUserID():number | undefined {
+    return this.userID;
+  };
+
   login(username: string, password: string): Observable<any> {
     const uriResult = this.http.post<any>(enviroment.baseUrl + ApiPaths.User + "/login", { name: username, password: password });
     uriResult.subscribe({
@@ -24,6 +30,7 @@ export class AuthService {
         throw new Error(err);
       },
       complete: () => {
+        this.userID = getTokenUserID();
         this.router.navigate(["/profile/" + getTokenUserID() ])}
     });
     return uriResult;
