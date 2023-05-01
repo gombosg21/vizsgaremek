@@ -67,12 +67,13 @@ export class NavbarComponent implements OnInit, OnDestroy {
       document.body.classList.add('dark-theme');
       document.body.classList.remove('light-theme');
       this.setFormControlsTheme('dark-theme');
+
     } else {
       document.body.classList.add('light-theme');
       document.body.classList.remove('dark-theme');
       this.setFormControlsTheme('light-theme');
-    };
-  };
+    }
+  }
 
   setFormControlsTheme(themeClass: string): void {
     const formControls = document.querySelectorAll('.form-control');

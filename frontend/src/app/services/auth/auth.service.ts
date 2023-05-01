@@ -29,6 +29,11 @@ export class AuthService implements OnDestroy {
   private routerSub: Subscription;
   private userID: Observable<number | undefined>;
   private session: Observable<boolean>;
+  public isDarkMode: boolean = JSON.parse(localStorage.getItem('isDarkMode') || 'false');
+
+  getIsDarkMode(): boolean {
+    return this.isDarkMode;
+  }
 
   ngOnDestroy(): void {
     this.routerSub.unsubscribe();
