@@ -10,7 +10,7 @@ import { FeedComponent } from './components/feed/feed.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { SearchComponent } from './components/search/search.component';
-import { UploadComponent } from './components/modals/upload-modal/upload.component';
+import { UploadImageModalComponent } from './components/modals/upload-modal/upload-image-modal.component';
 import { ImageModalComponent } from './components/modals/image-modal/image-modal.component';
 import { QueryComponent } from './components/query/query.component';
 import { HttpClientModule } from '@angular/common/http';
@@ -39,6 +39,7 @@ import { UserSearchModalComponent } from './components/modals/user-search-modal/
 import { ThreadSearchModalComponent } from './components/modals/thread-search-modal/thread-search-modal.component';
 import { CarouselSearchModalComponent } from './components/modals/carousel-search-modal/carousel-search-modal.component';
 import { MediaSearchModalComponent } from './components/modals/media-search-modal/media-search-modal.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 
 
@@ -51,7 +52,7 @@ import { MediaSearchModalComponent } from './components/modals/media-search-moda
     ProfileComponent,
     NavbarComponent,
     SearchComponent,
-    UploadComponent,
+    UploadImageModalComponent,
     ImageModalComponent,
     QueryComponent,
     ThreadComponent,
@@ -79,7 +80,8 @@ import { MediaSearchModalComponent } from './components/modals/media-search-moda
     ReactiveFormsModule,
     NgxIndexedDBModule.forRoot(dbConfig),
     BrowserAnimationsModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatDialogModule
   ],
   providers: [
     {

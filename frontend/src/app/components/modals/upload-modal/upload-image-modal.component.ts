@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Output, OnInit } from '@angular/core';
+import { Component, EventEmitter, Output, OnInit, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { upload } from 'src/app/models/media';
 import { tag } from 'src/app/models/tag';
 import { DbService } from 'src/app/services/db/db.service';
@@ -7,13 +8,15 @@ import { MediaService } from 'src/app/services/media/media.service';
 
 @Component({
   selector: 'app-upload',
-  templateUrl: './upload.component.html',
-  styleUrls: ['./upload.component.css'],
+  templateUrl: './upload-image-modal.component.html',
+  styleUrls: ['./upload-image-modal.component.css'],
 })
 
-export class UploadComponent implements OnInit {
+export class UploadImageModalComponent implements OnInit {
 
-  constructor(private MediaService: MediaService, private DBService: DbService, private FormBuilder: FormBuilder) {
+  public title: string = "Upload";
+
+  constructor( private MediaService: MediaService, private DBService: DbService, @Inject(MAT_DIALOG_DATA) public data:any) {
   };
 
   async ngOnInit(): Promise<void> {
