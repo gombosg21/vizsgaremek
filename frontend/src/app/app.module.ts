@@ -35,6 +35,10 @@ import { ReactionModalComponent } from './components/modals/reaction-modal/react
 import { MediaTilesetComponent } from './components/media-tileset/media-tileset.component';
 import { CarouselComponent } from './components/carousel/carousel.component';
 import { CarouselTilesetComponent } from './components/carousel-tileset/carousel-tileset.component';
+import { UserSearchModalComponent } from './components/modals/user-search-modal/user-search-modal.component';
+import { ThreadSearchModalComponent } from './components/modals/thread-search-modal/thread-search-modal.component';
+import { CarouselSearchModalComponent } from './components/modals/carousel-search-modal/carousel-search-modal.component';
+import { MediaSearchModalComponent } from './components/modals/media-search-modal/media-search-modal.component';
 
 
 
@@ -62,6 +66,10 @@ import { CarouselTilesetComponent } from './components/carousel-tileset/carousel
     MediaTilesetComponent,
     CarouselComponent,
     CarouselTilesetComponent,
+    UserSearchModalComponent,
+    ThreadSearchModalComponent,
+    CarouselSearchModalComponent,
+    MediaSearchModalComponent,
   ],
   imports: [
     BrowserModule,
