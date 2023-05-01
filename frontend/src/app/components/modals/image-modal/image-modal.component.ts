@@ -16,16 +16,14 @@ export class ImageModalComponent {
   ngOnChanges(): void {
     if (this.modalContent) {
       this.scrollToModal();
-    }
-  }
+    };
+  };
 
   onClose(): void {
     this.close.emit();
-  }
+  };
 
   private scrollToModal(): void {
     this.renderer.selectRootElement(this.modalContent.nativeElement).scrollIntoView({ behavior: 'smooth' });
-  }
-
-  
-}
+  };
+};
