@@ -51,6 +51,18 @@
                         </div>
 
                         <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-birthday-cake" id="birthdate-icon"></i></span>
+                                </div>
+                                <input type="date" class="form-control" id="birth_date" placeholder="Birth Date" [(ngModel)]="birth_date" name="birth_date" [ngClass]="birthDateClass" (input)="validateBirthDate()" />
+                            </div>
+                            <div *ngIf="birthDateClass === 'is-invalid'" [ngClass]="birthDateClass" class="invalid-feedback">
+                                Please enter a valid birth date.
+                            </div>
+                        </div>
+
+                        <div class="form-group">
                             <div class="picker">
                                 <span class="input-group-text"><i class="fa-solid fa-venus-mars" id="gender-icon"></i></span>
                                 <div class="form-check-inline" id="picker">

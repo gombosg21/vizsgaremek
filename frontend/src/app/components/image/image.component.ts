@@ -43,4 +43,9 @@ export class ImageComponent implements OnInit {
     this.showImageModal = true;
   };
 
+
+  hideModal() {
+    this.showImageModal = false;
+  };
+
 };

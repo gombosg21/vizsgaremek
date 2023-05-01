@@ -4,7 +4,7 @@
 }
 
 .card {
-    background: linear-gradient(45deg, rgb(186, 230, 255), #e7eeff);
+    background: linear-gradient(45deg, rgba(37, 175, 255, 0.219), #2f6dff31);
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
@@ -19,17 +19,18 @@
 
 .form-check-inline {
     margin-right: 0.2em;
-    background-color: #ffffff;
+    background-color: var(--bg-color);
     padding: 0.4em;
     border-radius: 6px;
-    border-right: 1px solid #ced4da;
-    border-bottom: 1px solid #ced4da;
-    border-top: 1px solid #ced4da;
+    border-right: 1px solid #8484847c;
+    border-bottom: 1px solid #8484847c;
+    border-top: 1px solid #8484847c;
 }
 
 .input-group-text {
-    background-color: rgb(240, 240, 240);
-    border: 1px solid #ced4da;
+    background-color: var(--bg-color);
+    border: 1px solid #8484847c;
+    color: var(--text-color);
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
     max-width: 2.5em;
@@ -55,20 +56,21 @@
     border-top-left-radius: 0px !important;
     border-bottom-left-radius: 0px !important;
     margin-right: 0.2em;
-    background-color: #ffffff;
+    background-color: var(--bg-color);
     padding: 0.4em;
     padding-left: 0.8em;
     padding-right: 0.2em;
     border-radius: 6px;
-    border-right: 1px solid #ced4da;
-    border-bottom: 1px solid #ced4da;
-    border-top: 1px solid #ced4da;
+    border-right: 1px solid #8484847c;
+    border-bottom: 1px solid #8484847c;
+    border-top: 1px solid #8484847c;
 }
 
 #user-icon,
 #lock-icon,
 #email-icon,
-#gender-icon {
+#gender-icon,
+#birthdate-icon {
     padding-top: 4px;
     padding-bottom: 4px;
 }
@@ -87,4 +89,22 @@
 a {
     color: #0079d5;
     text-decoration: none;
+}
+
+.input-group:is(.light-theme, .dark-theme) {
+    background-color: var(--bg-color);
+    border: 1px solid #8484847c;
+}
+
+.form-control:is(.light-theme, .dark-theme) {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    border: 1px solid #8484847c;
+}
+
+.form-control:focus:is(.light-theme, .dark-theme) {
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    border: 1px solid #8484847c;
 }
