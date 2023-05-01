@@ -1,8 +1,10 @@
 <div>
-    <div id="carouselExample" class="carousel slide">
+    <div id="carousel" class="carousel slide">
+        <p>{{carousel.name}}</p>
         <div class="carousel-inner">
-            <div class="carousel-item active">
-                <app-image *ngFor="let mediaItem of carousel.carousel_medialist; index as i;" [media]="carousel.carousel_medialist[i].media"></app-image>
+            <div class="carousel-item" *ngFor="let mediaItem of carousel.carousel_medialist; index as i ;"
+                [ngClass]="{'active': i == 0}">
+                <app-image [media]="carousel.carousel_medialist[i].media" [iterator]="i"></app-image>
             </div>
         </div>
         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
@@ -13,6 +15,9 @@
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Next</span>
         </button>
+        <p>created: {{carousel.created_date}}</p>
+        <p>last edit: {{carousel.modified_date}}</p>
+        <p>{{carousel.description}}</p>
     </div>
 
     <app-reactions *ngIf="reactions"></app-reactions>
