@@ -60,9 +60,11 @@ export class MediaTilesetComponent implements OnInit {
   };
 
   showModal(): void {
-    this.showUploadModal = true;
-    this.DialogRef.open(UploadImageModalComponent);
-  };
+    const dialogRef = this.DialogRef.open(UploadImageModalComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+    });
+};
 
   hideModal() {
     this.showUploadModal = false;
@@ -87,5 +89,5 @@ export class MediaTilesetComponent implements OnInit {
       this.foreign = true;
     };
   };
-
+  
 };

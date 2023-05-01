@@ -5,6 +5,8 @@ import { upload } from 'src/app/models/media';
 import { tag } from 'src/app/models/tag';
 import { DbService } from 'src/app/services/db/db.service';
 import { MediaService } from 'src/app/services/media/media.service';
+import { MatDialogRef } from '@angular/material/dialog';
+
 
 @Component({
   selector: 'app-upload-image-modal',
@@ -36,9 +38,11 @@ export class UploadImageModalComponent implements OnInit {
   @Output() upload = new EventEmitter<upload>();
   @Output() cancelUpload = new EventEmitter<void>();
 
-  constructor(private MediaService: MediaService, private DBService: DbService, @Inject(MAT_DIALOG_DATA) public data: any) {
-    console.log("up ctor")
-  };
+  constructor(private MediaService: MediaService, private DBService: DbService, @Inject(MAT_DIALOG_DATA) public data: any, public dialogRef: MatDialogRef<UploadImageModalComponent>) {
+    console.log("up ctor");
+};
+
+
 
   async ngOnInit(): Promise<void> {
     this.DBService.getAllCacheTags().subscribe({
@@ -112,5 +116,7 @@ export class UploadImageModalComponent implements OnInit {
 
   cancel(): void {
     this.cancelUpload.emit();
-  };
+    this.dialogRef.close();
+};
+
 };
