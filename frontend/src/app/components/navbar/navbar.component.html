@@ -9,12 +9,6 @@
                 <li *ngIf="isSession" class="nav-item">
                     <a class="nav-link" routerLink="/profile"><i class="fa fa-user" aria-hidden="true"></i> My Profile</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" (click)="toggleSearch()"><i class="fa fa-search" aria-hidden="true"></i> Search</a>
-                </li>
-                <li *ngIf="isSession" class="nav-item">
-                    <a class="nav-link" (click)="toggleUpload()"><i class="fa fa-cloud-upload" aria-hidden="true"></i> Upload</a>
-                </li>
                 <li *ngIf="isSession" class="nav-item">
                     <a class="nav-link"><i class="fa fa-users" aria-hidden="true"></i> Friends</a>
                 </li>
@@ -42,6 +36,3 @@
         </div>
     </div>
 </nav>
-
-<app-search *ngIf="showSearch" (close)="showSearch=false"></app-search>
-<app-upload *ngIf="showUpload" (cancelUpload)="toggleUpload()"></app-upload>

@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { media } from 'src/app/models/media';
+import { AuthService } from 'src/app/services/auth/auth.service';
 import { MediaService } from 'src/app/services/media/media.service';
-import { getTokenUserID } from '../../helpers/extractors/token';
 
 @Component({
   selector: 'app-media-tileset',
@@ -10,16 +10,23 @@ import { getTokenUserID } from '../../helpers/extractors/token';
 })
 export class MediaTilesetComponent implements OnInit {
 
-  @Input() userID: number;
+  @Input() userID?: number;
   @Input() medias: media[];
 
   private windowWidth: number = window.innerWidth;
 
   public cols: number;
 
-  constructor(private MediaService: MediaService) {
+  constructor(private MediaService: MediaService, private AuthService: AuthService) {
     if (this.userID == undefined) {
-      this.userID = getTokenUserID()
+      this.AuthService.getUserID().subscribe({
+        next: (value) => {
+          this.userID = value;
+        },
+        error: (err) => {
+          console.error(err)
+        },
+      });
     };
     switch (true) {
       case (this.windowWidth > 2000): {

@@ -16,7 +16,7 @@ export class ProfileComponent implements OnInit {
   public UserProfile: profile;
   public UserProfileThread: thread;
 
-  @Input() public userID:number;
+  @Input() public userID: number;
 
   showUploadForm = false;
 
@@ -39,7 +39,7 @@ export class ProfileComponent implements OnInit {
     },
   ];
 
-  constructor(private AuthService:AuthService ,private UserService: UserService, private ThreadService: ThreadService, private ReactionsService: ReactionService) {
+  constructor(private AuthService: AuthService, private UserService: UserService, private ThreadService: ThreadService, private ReactionsService: ReactionService) {
   };
 
   ngOnInit(): void {
@@ -48,40 +48,49 @@ export class ProfileComponent implements OnInit {
 
 
   onLoad(): void {
-    this.userID = this.AuthService.getUserID() ?? this.userID;
-    this.UserService.getProfile(this.userID).subscribe({
-      next: (data) => {
-        this.UserProfile = {
-          birth_date: data.birth_date,
-          alias: data.profile.alias,
-          description: data.profile.description,
-          visibility: data.profile.visibility,
-          picture_ID: data.profile.picture_ID,
-          medium: data.profile.medium,
-          reactions: data.profile.reactions,
-          thread: data.profile.thread
-        }
+    this.AuthService.getUserID().subscribe({
+      next: (value) => {
 
-        this.UserProfileThread = {
-          name: data.profile.thread.name,
-          ID: data.profile.thread.ID,
-          status: data.profile.thread.status,
-          created: data.profile.thread.created,
-          last_activity: data.profile.thread.last_activity,
-          reactions: data.profile.thread.reactions,
-          comments: data.profile.thread.comments
-        }
+        this.userID = value ?? this.userID;
 
-        this.ThreadService.setLocalData([this.UserProfileThread]);
-        if (this.UserProfile.reactions) {
-          this.ReactionsService.setStoredInstanceList(this.UserProfile.reactions);
-        };
+        this.UserService.getProfile(this.userID).subscribe({
+          next: (data) => {
+            this.UserProfile = {
+              birth_date: data.birth_date,
+              alias: data.profile.alias,
+              description: data.profile.description,
+              visibility: data.profile.visibility,
+              picture_ID: data.profile.picture_ID,
+              medium: data.profile.medium,
+              reactions: data.profile.reactions,
+              thread: data.profile.thread
+            }
+
+            this.UserProfileThread = {
+              name: data.profile.thread.name,
+              ID: data.profile.thread.ID,
+              status: data.profile.thread.status,
+              created: data.profile.thread.created,
+              last_activity: data.profile.thread.last_activity,
+              reactions: data.profile.thread.reactions,
+              comments: data.profile.thread.comments
+            }
+
+            this.ThreadService.setLocalData([this.UserProfileThread]);
+            if (this.UserProfile.reactions) {
+              this.ReactionsService.setStoredInstanceList(this.UserProfile.reactions);
+            };
+          },
+          error: (err) => {
+            console.error(err);
+          }
+        });
       },
-      error:(err) => {
+      error: (err) => {
         console.log(err)
       },
-      complete() {
-        
+      complete: () => {
+
       },
     });
   };

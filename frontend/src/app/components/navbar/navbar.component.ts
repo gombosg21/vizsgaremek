@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthService } from '../../services/auth/auth.service';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -8,52 +9,57 @@ import { Router } from '@angular/router';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
-export class NavbarComponent implements OnInit {
-  showSearch = false;
-  showUpload = false;
-  isSession = false;
-  isDarkMode = false;
+export class NavbarComponent implements OnInit, OnDestroy {
+  public isSession: boolean = false;
+  public isDarkMode: boolean = false;
+  private authSub: Subscription;
 
   constructor(private Auth: AuthService, private router: Router) {
-    router.events.subscribe({
+    this.router.events.subscribe({
       next: (value) => {
-        this.isSession = this.Auth.activeToken();
+        this.authSub = this.Auth.getSessionStatus().subscribe({
+          next: (value) => {
+            this.isSession = value;
+            console.log("session:", this.isSession)
+          },
+          error: (err) => {
+            console.error(err);
+          }
+        });
+      },
+      error: (err) => {
+        console.error(err)
+      },
+      complete: () => {
         this.isDarkMode = JSON.parse(localStorage.getItem('isDarkMode') || 'false');
-    this.setDarkMode(this.isDarkMode);
+        this.setDarkMode(this.isDarkMode);
       }
     });
-  }
+  };
 
-  toggleSearch(): void {
-    this.showSearch = !this.showSearch;
-    this.showUpload = false;
-    // document.body.style.overflow = this.showSearch ? 'hidden' : 'auto'; // disable scrolling
-  }
+  ngOnDestroy(): void {
+    this.authSub.unsubscribe();
+  };
 
-  toggleUpload(): void {
-    this.showUpload = !this.showUpload;
-    this.showSearch = false;
-    document.body.style.overflow = this.showUpload ? 'hidden' : 'auto'; // disable scrolling
-  }
 
-  closeSearch(): void {
-    this.showSearch = false;
-    document.body.style.overflow = 'auto'; // enable scrolling
-  }
 
-  logout() {
+
+
+  logout(): void {
     this.Auth.logout().subscribe({
       complete: () => {
-        this.isSession = this.Auth.activeToken();
+      },
+      error: (err) => {
+        console.error(err);
       }
     });
-  }
+  };
 
 
   toggleDarkMode(): void {
     this.isDarkMode = !this.isDarkMode;
     this.setDarkMode(this.isDarkMode);
-  }
+  };
 
   setDarkMode(isDarkMode: boolean): void {
     localStorage.setItem('isDarkMode', JSON.stringify(isDarkMode));
@@ -65,8 +71,8 @@ export class NavbarComponent implements OnInit {
       document.body.classList.add('light-theme');
       document.body.classList.remove('dark-theme');
       this.setFormControlsTheme('light-theme');
-    }
-  }
+    };
+  };
 
   setFormControlsTheme(themeClass: string): void {
     const formControls = document.querySelectorAll('.form-control');
@@ -74,10 +80,11 @@ export class NavbarComponent implements OnInit {
       formControl.classList.remove('light-theme', 'dark-theme');
       formControl.classList.add(themeClass);
     });
-  }
+  };
+
+
   ngOnInit(): void {
     this.isDarkMode = JSON.parse(localStorage.getItem('isDarkMode') || 'false');
     this.setDarkMode(this.isDarkMode);
-  }
-  
-}
+  };
+};

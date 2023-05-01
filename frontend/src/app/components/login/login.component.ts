@@ -17,8 +17,8 @@ export class LoginComponent {
     private authService: AuthService,
   ) {
     this.titleService.setTitle('VisualPosting - Login');
-    ;
-  }
+
+  };
 
 
   isFormValid() {
@@ -26,8 +26,6 @@ export class LoginComponent {
   };
 
   login() {
-    this.authService.login(this.username, this.password).subscribe({
-      error: (error) => { console.error({ error: error }) }
-    });
+    this.authService.login(this.username, this.password);
   };
 };

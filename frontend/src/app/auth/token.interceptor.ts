@@ -5,17 +5,17 @@ import {
     HttpEvent,
     HttpInterceptor
 } from '@angular/common/http';
-import { AuthService } from '../services/auth/auth.service';
 import { Observable } from 'rxjs';
+import { getToken } from '../helpers/extractors/token';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
-    constructor(public auth: AuthService) { }
+    constructor() { }
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-
+        const token = getToken();
         request = request.clone({
             setHeaders: {
-                Authorization: `Bearer ${this.auth.getToken()}`
+                Authorization: `Bearer ${token}`
             }
         });
         return next.handle(request);
