@@ -3,7 +3,7 @@ import { media } from 'src/app/models/media';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { MediaService } from 'src/app/services/media/media.service';
 import { MatDialog } from '@angular/material/dialog';
-import { UploadImageModalComponent } from '../modals/upload-modal/upload-image-modal.component';
+import { UploadImageModalComponent } from '../modals/upload-image-modal/upload-image-modal.component';
 
 @Component({
   selector: 'app-media-tileset',
@@ -14,6 +14,8 @@ export class MediaTilesetComponent implements OnInit {
 
   @Input() userID?: number;
   @Input() medias: media[];
+
+  public showUploadModal:boolean = false;
 
   private windowWidth: number = window.innerWidth;
 
@@ -63,8 +65,13 @@ export class MediaTilesetComponent implements OnInit {
     };
   };
 
-  upload():void {
+  showModal():void { 
+    this.showUploadModal = true;
     this.DialogRef.open(UploadImageModalComponent);
+  };
+
+  hideModal() {
+    this.showUploadModal = false;
   };
 
 
