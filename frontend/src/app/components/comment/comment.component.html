@@ -1,26 +1,26 @@
 <div class="comment-card card mb-3">
     <div class="card-body">
-        <h5 class="card-title mb-0" id="alias"><i class="fa-solid fa-user" id="user-icon"></i>{{user?.profile?.alias}}
+        <h5 class="card-title mb-0" id="alias"><i class="fa-solid fa-user" id="user-icon"></i>{{data.user.profile.alias}}
         </h5>
-        <p *ngIf="!showEdit" class="card-text mt-2">{{content}}</p>
+        <p *ngIf="!showEdit" class="card-text mt-2">{{data.content}}</p>
         <form *ngIf="showEdit">
             <div class="mb3">
                 <label for="content">Edit Comment</label>
-                <textarea [(ngModel)]="content" name="content" id="content"></textarea>
+                <textarea [(ngModel)]="data.content" name="content" id="content"></textarea>
                 <button (click)="sendEdit()">OK</button>
             </div>
         </form>
     </div>
     <div class="card-footer text-muted d-flex justify-content-between align-items-center">
         <div>
-            <p id="createdAt"><i class="far fa-calendar-alt"></i> Created: {{created | date: 'yyyy. MM. dd. HH:mm'}}</p>
-            <p class="mb-1"><i class="far fa-edit"></i> Last edit: {{last_edit | date: 'yyyy. MM. dd. HH:mm'}}</p>
+            <p id="createdAt"><i class="far fa-calendar-alt"></i> Created: {{data.created | date: 'yyyy. MM. dd. HH:mm'}}</p>
+            <p class="mb-1"><i class="far fa-edit"></i> Last edit: {{data.last_edit | date: 'yyyy. MM. dd. HH:mm'}}</p>
         </div>
-        <app-reactions *ngIf="reactions"></app-reactions>
+        <app-reactions *ngIf="data.reactions"></app-reactions>
         <button class="btn btn-dark btn-sm" (click)="react()">
             <i class="fas fa-thumbs-up"></i> React
         </button>
-        <div *ngIf="commentUserID == sessionID">
+        <div *ngIf="data.user.ID == sessionID">
             <button class="btn btn-dark btn-sm" (click)="edit()">Edit</button>
             <button class="btn btn-dark btn-sm" (click)="delete()">Delete</button>
         </div>
@@ -28,4 +28,4 @@
 </div>
 
 <app-reaction-modal *ngIf="showAddReactions" (canceled)="showAddReactions = false" parentType="comment"
-    [parentID]="ID"></app-reaction-modal>
+    [parentID]="data.ID"></app-reaction-modal>
