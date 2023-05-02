@@ -9,7 +9,7 @@ A felhasználó profilbeszédszállát és a hozzá tartozó kommenteket is viss
 Visszatérési értéke egy JSON állomány.
 
 PATCH /api/v/0.1/user
-bejelentkezés után, ID alapján frissíti a profiladatokat : {profile_description, profile_picture, profile_visibility, alias}
+bejelentkezés után, ID alapján frissíti a profiladatokat : {description, picture_ID, visibility, alias}
 JSON állományt vár el, a fent írt mezőkkel, opcionálisan, legalább egyet meg kell adni.
 
 DELETE /api/v/0.1/user
