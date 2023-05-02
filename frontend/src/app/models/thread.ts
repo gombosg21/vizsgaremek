@@ -10,6 +10,7 @@ export interface thread {
     last_activity: Date,
     reactions?: reaction_short[],
     comments: comment[],
+    user: user_short
 };
 
 export interface thread_short {
