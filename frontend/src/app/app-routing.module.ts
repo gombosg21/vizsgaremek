@@ -44,11 +44,11 @@ const routes: Routes = [
   {
     path: 'medias',
     component: MediaTilesetComponent,
-    canActivate: [AuthGuard]
   },
   {
     path: 'medias/:id',
-    component: MediaTilesetComponent
+    component: MediaTilesetComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'carousel/:id',
