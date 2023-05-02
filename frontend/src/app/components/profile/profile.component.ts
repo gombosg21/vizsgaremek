@@ -47,10 +47,11 @@ export class ProfileComponent implements OnInit {
               created: data.profile.thread.created,
               last_activity: data.profile.thread.last_activity,
               reactions: data.profile.thread.reactions,
-              comments: data.profile.thread.comments
+              comments: data.profile.thread.comments,
+              user: data.profile.thread.user
             }
 
-            this.ThreadService.setLocalData([this.UserProfileThread]);
+            this.ThreadService.setLocalData(this.UserProfileThread);
             if (this.UserProfile.reactions) {
               this.ReactionsService.setStoredInstanceList(this.UserProfile.reactions);
             };
