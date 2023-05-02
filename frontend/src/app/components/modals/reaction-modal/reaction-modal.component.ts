@@ -18,8 +18,6 @@ export class ReactionModalComponent {
   @Output() reacted = new EventEmitter<reaction>();
   @Output() close = new EventEmitter<void>();
 
-
-  public selectedIterator: number;
   public reactions: reaction[];
 
   constructor(private DBServie: DbService, private ReactionsService: ReactionService) {
@@ -33,13 +31,13 @@ export class ReactionModalComponent {
     })
   };
 
-  add(): void {
-    this.ReactionsService.addReactionInstance([this.selectedIterator + 1], this.parentID, this.parentType).subscribe({
+  add(index: number): void {
+    this.ReactionsService.addReactionInstance([index + 1], this.parentID, this.parentType).subscribe({
       error: (error) => {
         console.log(error)
       },
       next: (value) => {
-        this.reacted.emit(this.reactions[this.selectedIterator]);
+        this.reacted.emit(this.reactions[index]);
       },
       complete: () => {
 

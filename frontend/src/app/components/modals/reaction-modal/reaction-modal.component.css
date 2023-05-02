@@ -1,3 +1,6 @@
+@import '~@fortawesome/fontawesome-free/css/all.css';
+@import '~bootstrap/dist/css/bootstrap.min.css';
+
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -21,4 +24,23 @@
     overflow-y: auto;
     max-height: 90vh;
     padding: 0.5em;
+}
+
+img {
+    height: 40px;
+    width: 40px;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    display: inline-block;
+    border: 1px solid #8484847c;
+    color: var(--text-color);
+    border-radius: 20px;
+    padding: 5px 10px;
+    margin: 2px;
 }
