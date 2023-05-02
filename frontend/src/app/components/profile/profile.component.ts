@@ -15,6 +15,7 @@ export class ProfileComponent implements OnInit {
 
   public UserProfile: profile;
   public UserProfileThread: thread;
+  public showAddReactions: boolean = false;
 
   @Input() public userID: number;
 
@@ -67,5 +68,20 @@ export class ProfileComponent implements OnInit {
       complete: () => {
       },
     });
+  };
+
+  addReaction(event: any) {
+    this.UserProfile.reactions?.forEach(reaction => {
+      if (event.target.value.ID == reaction.ID) {
+        reaction.count++;
+      };
+    });
+    if (this.UserProfile.reactions) {
+      this.ReactionsService.setStoredInstanceList(this.UserProfile.reactions);
+    };
+  };
+
+  react() {
+    this.showAddReactions = true;
   };
 };
