@@ -6,15 +6,17 @@ export interface user {
     name: string,
     password: string,
     re_password: string,
-    register_date: Date ,
+    register_date: Date,
     gender: number,
     birth_date: Date,
     type: number,
     profile: profile,
-    profile_reactionlists : reaction_short[]
+    profile_reactionlists: reaction_short[]
 };
 
 export interface user_short {
-    ID:number,
-    alias: string,
+    ID: number,
+    profile: {
+        alias: string,
+    }
 };
