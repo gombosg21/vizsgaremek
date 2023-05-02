@@ -41,7 +41,7 @@ export class CommentService {
     return this.http.post(this.ApiPathMain + "/" + targetThreadID, data);
   };
 
-  editComment(data: comment, commentID: Number): Observable<comment> {
+  editComment(data: object, commentID: Number): Observable<comment> {
     return this.http.patch<comment>(this.ApiPathSecondary + "/" + commentID, data);
   };
 
