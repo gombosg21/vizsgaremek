@@ -30,7 +30,7 @@
             <hr>
             <app-reactions *ngIf="thread.reactions"></app-reactions>
             <ng-container *ngIf="thread.comments">
-                <app-comment *ngFor="let comment of paginatedComments; let i = index" [iterator]="i"></app-comment>
+                <app-comment *ngFor="let comment of paginatedComments; let i = index" [iterator]="i" (isDeleted)="removeComment($event)"></app-comment>
             </ng-container>
             <form *ngIf="showNewComment">
                 <label for="commentContent">New Comment</label>
@@ -45,5 +45,5 @@
         <i class="fas fa-thumbs-up"></i> React
     </button>
     <app-reaction-modal *ngIf="showAddReactions" (close)="showAddReactions = false" parentType="thread"
-    [parentID]="thread.ID"></app-reaction-modal>
+    [parentID]="thread.ID" (reacted)="addReaction($event)"></app-reaction-modal>
 </div>

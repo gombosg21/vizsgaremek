@@ -20,7 +20,7 @@ export class UserService {
     return this.http.get<user>(targetURL);
   };
 
-  updateProfile(ID: Number, Data: any): Observable<Object> {
+  updateProfile(ID: Number, Data: { description: string, visibility: number, picture_ID: number, alias: string }): Observable<Object> {
     const targetURL = this.controllerUrl + "/" + String(ID);
 
     return this.http.patch<Object>(targetURL, Data);
@@ -40,7 +40,7 @@ export class UserService {
     return this.http.delete(targetURL);
   };
 
-  updatePassword(password: String, re_password:string): Observable<Object> {
+  updatePassword(password: String, re_password: string): Observable<Object> {
     const targetURL = this.controllerUrl + "/change-password";
 
     //TODO export validation OUTSIDE of service

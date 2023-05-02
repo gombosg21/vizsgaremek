@@ -16,7 +16,9 @@
                     </div>
                     <app-reactions *ngIf="media.reactions && !ErrorInstance"></app-reactions>
                 </div>
-
+                <button class="btn btn-dark btn-sm" (click)="react()">
+                    <i class="fas fa-thumbs-up"></i> React
+                </button>
             </div>
         </div>
         <div class="col-12 col-lg-6 d-flex align-items-start mt-3 mt-lg-0">
@@ -29,3 +31,5 @@
 </div>
 
 <app-image-modal *ngIf="showImageModal && !ErrorInstance" [media]="media" (close)="hideModal()"></app-image-modal>
+<app-reaction-modal *ngIf="showAddReactions && !ErrorInstance" (close)="showAddReactions = false" parentType="thread"
+    [parentID]="media.ID!" (reacted)="addReaction($event)"></app-reaction-modal>

@@ -18,6 +18,7 @@ export class ImageComponent implements OnInit {
   @Input() public media: media;
   @Input() public iterator: number = 0;
   @Input() public ErrorInstance: ErrorModel;
+  public showAddReactions: boolean = false;
 
   constructor(private MediaService: MediaService, private ReactionService: ReactionService) {
     if (this.mediaID) {
@@ -64,12 +65,30 @@ export class ImageComponent implements OnInit {
     }
   };
 
-  showModal() {
+  react(): void {
+    this.showAddReactions = true;
+  };
+
+  addReaction(reactionID: number): void {
+    if (this.media) {
+      if (this.media.reactions) {
+        for (let i = 0; i < this.media.reactions.length; i++) {
+          if (this.media.reactions[i].ID == reactionID) {
+            this.media.reactions[i].count++;
+          };
+        };
+      };
+      this.media.reactions = [{ ID: reactionID, count: 1 }];
+      this.ReactionService.setStoredInstanceList(this.media.reactions);
+    };
+  };
+
+  showModal(): void {
     this.showImageModal = true;
   };
 
 
-  hideModal() {
+  hideModal(): void {
     this.showImageModal = false;
   };
 

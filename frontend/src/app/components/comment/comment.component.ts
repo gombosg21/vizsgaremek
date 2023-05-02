@@ -2,7 +2,6 @@ import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angu
 import { CommentService } from '../../services/comment/comment.service';
 import { ReactionService } from '../../services/reaction/reaction.service';
 import { comment } from '../../models/comment';
-import { reaction_short } from 'src/app/models/reaction';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/auth/auth.service';
 
@@ -20,7 +19,7 @@ export class CommentComponent implements OnInit, OnDestroy {
   @Input() public iterator: number = 0;
 
   //TODO: delete comment
-  @Output() isDeleted: EventEmitter<boolean> = new EventEmitter();
+  @Output() isDeleted: EventEmitter<comment> = new EventEmitter();
 
   public sessionID: number = -1;
   public showEdit: boolean = false;
@@ -53,7 +52,7 @@ export class CommentComponent implements OnInit, OnDestroy {
     this.userSub.unsubscribe();
   };
 
-  react() {
+  react():void {
     this.showAddReactions = true;
   };
 
@@ -85,7 +84,7 @@ export class CommentComponent implements OnInit, OnDestroy {
 
     this.CommentService.deleteComment(this.data.ID).subscribe({
       next: (value) => {
-        this.isDeleted.emit(true);
+        this.isDeleted.emit(this.data);
       },
       error: (error) => {
         console.error(error);

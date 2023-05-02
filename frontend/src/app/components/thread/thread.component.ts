@@ -88,6 +88,23 @@ export class ThreadComponent implements OnInit, OnDestroy {
     })
   };
 
+  removeComment(comment: comment): void {
+    this.thread.comments.splice(this.thread.comments.indexOf(comment), 1);
+    this.CommenctService.setLocalCommentList(this.thread.comments);
+  };
+
+  addReaction(reactionID: number): void {
+    if (this.thread.reactions) {
+      for (let i = 0; i < this.thread.reactions.length; i++) {
+        if(this.thread.reactions[i].ID == reactionID) {
+          this.thread.reactions[i].count++;
+        };
+      };
+    };
+    this.thread.reactions = [{ID:reactionID, count:1}];
+    this.ReactionService.setStoredInstanceList(this.thread.reactions);
+  };
+
   react() {
     this.showAddReactions = true;
   };
@@ -96,7 +113,7 @@ export class ThreadComponent implements OnInit, OnDestroy {
     this.showEdit = true;
   };
 
-  cancelEdit():void {
+  cancelEdit(): void {
     this.showEdit = false;
   };
 

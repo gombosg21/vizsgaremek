@@ -11,11 +11,10 @@ import { ReactionService } from 'src/app/services/reaction/reaction.service';
 })
 export class ReactionModalComponent {
 
-  @Output() public reactionInstance: reaction;
   @Input() public parentType: string;
   @Input() public parentID: number;
 
-  @Output() reacted = new EventEmitter<reaction>();
+  @Output() reacted = new EventEmitter<number>();
   @Output() close = new EventEmitter<void>();
 
   public reactions: reaction[];
@@ -37,7 +36,7 @@ export class ReactionModalComponent {
         console.log(error)
       },
       next: (value) => {
-        this.reacted.emit(this.reactions[index]);
+        this.reacted.emit(this.reactions[index].ID);
       },
       complete: () => {
 

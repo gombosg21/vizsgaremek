@@ -70,18 +70,20 @@ export class ProfileComponent implements OnInit {
     });
   };
 
-  addReaction(event: any) {
-    this.UserProfile.reactions?.forEach(reaction => {
-      if (event.target.value.ID == reaction.ID) {
-        reaction.count++;
-      };
-    });
+  addReaction(reactionID: number):void {
     if (this.UserProfile.reactions) {
-      this.ReactionsService.setStoredInstanceList(this.UserProfile.reactions);
+      for (let i = 0; i < this.UserProfile.reactions.length; i++) {
+        if (this.UserProfile.reactions[i].ID == reactionID) {
+          this.UserProfile.reactions[i].count++;
+        };
+      };
     };
+    this.UserProfile.reactions = [{ ID: reactionID, count: 1 }];
+    this.ReactionsService.setStoredInstanceList(this.UserProfile.reactions);
   };
 
-  react() {
+
+  react():void {
     this.showAddReactions = true;
   };
 };
