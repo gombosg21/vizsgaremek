@@ -116,16 +116,25 @@ exports.editProfile = async (req, res, next) => {
 
     const ID = req.user.ID;
 
-    const profilePicture = req.body.profile_picture;
-    const profileDescription = req.body.profile_description;
-    const profileVisibility = req.body.profile_visibility;
+    const profilePicture = req.body.picture_ID;
+    const profileDescription = req.body.description;
+    const profileVisibility = req.body.visibility;
     const userAlias = req.body.alias;
 
     try {
         const UserProfile = await profile.findByPk(ID);
         var CurrDate = Date.now()
         var lastUpdate = Date(UserProfile.last_updated);
-        if ((lastUpdate + (60 * 5)) < CurrDate) {
+        if ((lastUpdate + (60 * 60 * 5)) < CurrDate) {
+
+            const userMediaIDs = (await media.findAll({ where: { user_ID: ID }, attributes: ['ID'] })).map(Media => Media.ID);
+
+            if (profilePicture) {
+                if (!(userMediaIDs.includes(profilePicture))) {
+                    return res.status(400).json({ error: "invalid picture ID" });
+                };
+            };
+
             await UserProfile.update({
                 profile_description: profileDescription ?? UserProfile.profile_picture,
                 profile_visibility: profileVisibility ?? UserProfile.profile_visibility,
