@@ -23,7 +23,5 @@
         <app-reactions *ngIf="UserProfile.reactions"></app-reactions>
 
         <ng-container *ngIf="UserProfileThread">
-            <app-thread [name]="UserProfileThread.name" [status]="UserProfileThread.status"
-                [comments]="UserProfileThread.comments" [last_activity]="UserProfileThread.last_activity"
-                [created]="UserProfileThread.created" [ID]="UserProfileThread.ID"></app-thread>
+            <app-thread [thread]="UserProfileThread"></app-thread>
         </ng-container>

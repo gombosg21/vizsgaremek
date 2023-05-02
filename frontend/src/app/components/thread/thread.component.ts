@@ -1,55 +1,63 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { ThreadService } from '../../services/thread/thread.service';
 import { comment } from '../../models/comment';
 import { thread } from '../../models/thread';
 import { CommentService } from '../../services/comment/comment.service';
 import { PageEvent } from '@angular/material/paginator';
-import { reaction_short } from 'src/app/models/reaction';
 import { ReactionService } from 'src/app/services/reaction/reaction.service';
+import { Subscription } from 'rxjs';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-thread',
   templateUrl: './thread.component.html',
   styleUrls: ['./thread.component.css'],
 })
-export class ThreadComponent implements OnInit {
+export class ThreadComponent implements OnInit, OnDestroy {
 
-  private data: thread;
   pageSize = 5;
   pageIndex = 0;
   paginatedComments: comment[] = [];
 
-  @Input() public name: string;
-  @Input() public created: Date;
-  @Input() public last_activity: Date;
-  @Input() public status: number;
-  @Input() public comments: comment[];
   @Input() public iterator: number = 0;
-  @Input() public reactions: reaction_short[];
+  @Input() public thread: thread;
 
   public threadStatus: string;
+  public showAddReactions: boolean;
+  private userSub: Subscription;
+  public sessionId: number;
+  public showNewComment: boolean = false;
+  public showEdit: boolean;
+  public newCommentContent: string;
 
-  constructor(private ThreadService: ThreadService, private CommenctService: CommentService, private ReactionService: ReactionService) {
-    this.data = this.ThreadService.getLocalData()[this.iterator];
+  constructor(private ThreadService: ThreadService, private CommenctService: CommentService, private ReactionService: ReactionService, private Auth: AuthService) {
+    this.thread = this.ThreadService.getLocalData() ?? this.thread;
+    this.userSub = this.Auth.getUserID().subscribe({
+      error: (err) => {
+        console.error(err);
+      },
+      next: (value) => {
+        this.sessionId = value ?? -1;
+        if (this.sessionId != -1) {
+          this.showNewComment = true;
+        }
+      }, complete: () => {
 
-    this.name = this.data.name ?? this.name;
-    this.created = this.data.created ?? this.created;
-    this.last_activity = this.data.last_activity ?? this.last_activity;
-    this.status = this.data.status ?? this.status;
-    this.comments = this.data.comments ?? this.comments;
+      },
+    })
   };
 
   ngOnInit(): void {
 
-    if (this.data.reactions) {
-      this.reactions = this.data.reactions;
-      this.ReactionService.setStoredInstanceList(this.reactions);
+    if (this.thread.reactions) {
+
+      this.ReactionService.setStoredInstanceList(this.thread.reactions);
     };
 
-    this.CommenctService.setLocalCommentList(this.comments);
+    this.CommenctService.setLocalCommentList(this.thread.comments);
 
     this.paginateComments();
-    switch (this.status) {
+    switch (this.thread.status) {
       case 0:
         this.threadStatus = "open"
         break;
@@ -70,31 +78,47 @@ export class ThreadComponent implements OnInit {
 
 
   comment(): void {
+    this.CommenctService.postComment(this.newCommentContent, this.thread.ID).subscribe({
+      next: (value) => {
+        this.thread.comments.push(value);
+      }, error: (err) => {
+        console.error(err);
+      }, complete: () => {
 
+      },
+    })
   };
 
-  editComment(): void {
-
+  edit(): void {
+    this.showEdit = true;
   };
 
-  deleteComment(): void {
+  cancelEdit():void {
+    this.showEdit = false;
+  };
 
+  sendEdit(): void {
+    this.ThreadService.patchThreadName(this.thread.name, this.thread.ID);
+  };
+
+  ngOnDestroy(): void {
+    this.userSub.unsubscribe();
   };
 
   react(): void {
-
+    this.showAddReactions = true;
   };
 
   pageChanged(event: PageEvent): void {
     this.pageIndex = event.pageIndex;
     this.pageSize = event.pageSize;
     this.paginateComments();
-  }
+  };
 
   paginateComments(): void {
     const startIndex = this.pageIndex * this.pageSize;
     const endIndex = startIndex + this.pageSize;
-    this.paginatedComments = this.comments.slice(startIndex, endIndex);
-  }
+    this.paginatedComments = this.thread.comments.slice(startIndex, endIndex);
+  };
 
 };

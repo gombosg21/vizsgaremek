@@ -1,24 +1,44 @@
 <div class="container">
     <div class="row">
         <div class="col">
-            <h4>{{name}}</h4>
+            <div *ngIf="thread.user.ID == sessionId">
+                <button class="btn btn-dark" (click)="edit()">Edit</button>
+            </div>
+            <form *ngIf="showEdit">
+                <label for="name">Edit Name</label>
+                <input type="text" id="name" [(ngModel)]="thread.name">
+                <button class="btn btn-dark" (click)="sendEdit()">Submit</button>
+                <button class="btn btn-dark" (click)="cancelEdit()">Cancel</button>
+            </form>
+            <h4>{{thread.name}}</h4>
             <div class="d-flex justify-content-between align-items-center">
                 <div>
                     <h5>
-                        <i class="far fa-calendar-alt"></i> Created at: {{created | date: 'yyyy. MM. dd. HH:mm'}}
+                        <i class="far fa-calendar-alt"></i> Created at: {{thread.created | date: 'yyyy. MM. dd. HH:mm'}}
                     </h5>
                     <h5>
-                        <i class="far fa-clock"></i> Last activity: {{last_activity | date: 'yyyy. MM. dd. HH:mm'}}
+                        <i class="far fa-clock"></i> Last activity: {{thread.last_activity | date: 'yyyy. MM. dd.
+                        HH:mm'}}
                     </h5>
                 </div>
                 <div>
-                    <p>Status: <span [ngClass]="{'badge': true, 'bg-primary': threadStatus === 'open', 'bg-danger': threadStatus === 'locked', 'bg-secondary': threadStatus === 'archived', 'bg-warning': threadStatus === 'error'}">{{threadStatus}}</span></p>
+                    <p>Status: <span
+                            [ngClass]="{'badge': true, 'bg-primary': threadStatus === 'open', 'bg-danger': threadStatus === 'locked', 'bg-secondary': threadStatus === 'archived', 'bg-warning': threadStatus === 'error'}">{{threadStatus}}</span>
+                    </p>
                 </div>
             </div>
             <hr>
-            <app-reactions *ngIf="reactions"></app-reactions>
-            <ng-container *ngIf="comments">
-                <app-comment *ngFor="let comment of paginatedComments; let i = index" [iterator]="i" [user]="comment.user"></app-comment>
+            <app-reactions *ngIf="thread.reactions"></app-reactions>
+            <ng-container *ngIf="thread.comments">
+                <app-comment *ngFor="let comment of paginatedComments; let i = index" [iterator]="i"></app-comment>
             </ng-container>
-            <mat-paginator [length]="comments.length" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 25, 50]" (page)="pageChanged($event)"></mat-paginator>
+            <form *ngIf="showNewComment">
+                <label for="commentContent">New Comment</label>
+                <textarea [(ngModel)]="newCommentContent" name="commentContent" id="commentContent"></textarea>
+                <button class="btn btn-dark btn-sm" (click)="comment()">Submit</button>
+            </form>
+            <mat-paginator [length]="thread.comments.length" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 25, 50]"
+                (page)="pageChanged($event)"></mat-paginator>
         </div>
+    </div>
+</div>
