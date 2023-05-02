@@ -12,17 +12,18 @@ export class ThreadService {
 
   private ApiPath = enviroment.baseUrl + ApiPaths.Thread;
 
-  private threadData: thread[];
+  private threadData: thread;
+  private threadList: thread[];
 
   constructor(private http: HttpClient) {
 
   }
 
-  setLocalData(threads: thread[]): void {
-    this.threadData = threads;
+  setLocalData(thread: thread): void {
+    this.threadData = thread;
   };
 
-  getLocalData(): thread[] {
+  getLocalData(): thread {
     return this.threadData;
   };
 
@@ -33,4 +34,8 @@ export class ThreadService {
   createThread(data: thread): Observable<any> {
     return this.http.post(this.ApiPath, data);
   };
-}
+
+  patchThreadName(name: string, ID: number): Observable<any> {
+    return this.http.patch(this.ApiPath + "/" + ID, { name: name });
+  };
+};
