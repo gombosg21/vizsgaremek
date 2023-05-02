@@ -3,6 +3,8 @@ import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { RegisterService } from '../../services/register/register.service';
 import { Register } from '../../models/register';
+import { AuthService } from '../../services/auth/auth.service';
+
 
 @Component({
   selector: 'app-register',
@@ -21,14 +23,19 @@ export class RegisterComponent implements OnInit {
   passwordConfirmClass: string = '';
   birth_date: string = '';
   birthDateClass: string = '';
+  isDarkMode: boolean;
+
+  
 
 
   constructor(
     private titleService: Title,
     private registerService: RegisterService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {
-    this.titleService.setTitle('VisualPosting - Regisztráció');
+    this.titleService.setTitle('VisualPosting - Register');
+    this.isDarkMode = authService.getIsDarkMode();
   }
 
   ngOnInit(): void {}

@@ -20,7 +20,7 @@ export class CommentComponent implements OnInit, OnDestroy {
   @Input() public content: string;
   @Input() public created: Date;
   @Input() public last_edit: Date;
-  @Input() public user_alias: string;
+  @Input() public user: any;
   @Input() public ID: number;
   @Input() public iterator: number = 0;
   @Input() public reactions: reaction_short[];
