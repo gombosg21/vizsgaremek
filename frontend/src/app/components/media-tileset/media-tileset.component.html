@@ -8,7 +8,7 @@
 <div *ngIf="medias">
     <mat-grid-list cols="cols">
         <mat-grid-tile *ngFor="let media of medias; index as i;">
-            <app-image [media]="media" [iterator]="i"></app-image>
+            <app-image [data]="media" [iterator]="i"></app-image>
         </mat-grid-tile>
     </mat-grid-list>
 </div>

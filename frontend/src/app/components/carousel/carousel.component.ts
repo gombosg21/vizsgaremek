@@ -6,6 +6,7 @@ import { MediaService } from 'src/app/services/media/media.service';
 import { ReactionService } from 'src/app/services/reaction/reaction.service';
 import { StoryService } from 'src/app/services/story/story.service';
 import { CarouselComponent as NgxCarouselComponent } from 'ngx-bootstrap/carousel';
+import { ErrorModel } from 'src/app/models/error';
 
 @Component({
   selector: 'app-carousel',

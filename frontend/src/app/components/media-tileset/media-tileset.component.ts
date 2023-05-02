@@ -5,6 +5,7 @@ import { MediaService } from 'src/app/services/media/media.service';
 import { MatDialog } from '@angular/material/dialog';
 import { UploadImageModalComponent } from '../modals/upload-image-modal/upload-image-modal.component';
 import { ActivatedRoute } from '@angular/router';
+import { ErrorModel } from 'src/app/models/error';
 
 
 @Component({
@@ -15,7 +16,7 @@ import { ActivatedRoute } from '@angular/router';
 export class MediaTilesetComponent implements OnInit {
 
   @Input() userID?: number;
-  @Input() medias: media[];
+  @Input() medias: (media | ErrorModel)[];
 
   public showUploadModal: boolean = false;
   public foreign: boolean = false;
@@ -70,7 +71,7 @@ export class MediaTilesetComponent implements OnInit {
     this.showUploadModal = false;
   };
 
-setMedias(mediaList:media[]):void {
+setMedias(mediaList:(media | ErrorModel)[]):void {
   this.medias = mediaList;
 }
 

@@ -8,6 +8,7 @@ import { tag } from 'src/app/models/tag';
 import { DbService } from 'src/app/services/db/db.service';
 import { MediaService } from 'src/app/services/media/media.service';
 import { Observable, map, startWith, of } from 'rxjs';
+import { ErrorModel } from 'src/app/models/error';
 
 
 @Component({
@@ -18,7 +19,7 @@ import { Observable, map, startWith, of } from 'rxjs';
 export class MediaSearchComponent implements OnInit {
 
   @Output() close = new EventEmitter<void>();
-  @Output() searchResults = new EventEmitter<media[]>();
+  @Output() searchResults = new EventEmitter<(media | ErrorModel)[]>();
 
   @ViewChild("tagNameInput") tagInput: ElementRef<HTMLInputElement>;
 
