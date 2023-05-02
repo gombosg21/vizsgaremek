@@ -7,7 +7,8 @@
             <div class="mb3">
                 <label for="content">Edit Comment</label>
                 <textarea [(ngModel)]="data.content" name="content" id="content"></textarea>
-                <button (click)="sendEdit()">OK</button>
+                <button class="btn btn-dark btn-sm" (click)="sendEdit()">Submit</button>
+                <button class="btn btn-dark btn-sm" (click)="cancelEdit()">Cancel</button>
             </div>
         </form>
     </div>

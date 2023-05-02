@@ -61,6 +61,10 @@ export class CommentComponent implements OnInit, OnDestroy {
     this.showEdit = true;
   };
 
+  cancelEdit():void {
+    this.showEdit = false;
+  };
+
   sendEdit(): void {
     this.showEdit = false;
     this.CommentService.editComment(this.data.content, this.data.ID).subscribe({
