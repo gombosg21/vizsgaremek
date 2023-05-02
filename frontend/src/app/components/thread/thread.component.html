@@ -6,7 +6,7 @@
             </div>
             <form *ngIf="showEdit">
                 <label for="name">Edit Name</label>
-                <input type="text" id="name" [(ngModel)]="thread.name">
+                <input type="text" id="name" [(ngModel)]="thread.name" name="name">
                 <button class="btn btn-dark" (click)="sendEdit()">Submit</button>
                 <button class="btn btn-dark" (click)="cancelEdit()">Cancel</button>
             </form>
