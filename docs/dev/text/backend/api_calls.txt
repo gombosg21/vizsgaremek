@@ -5,7 +5,7 @@ GET /api/v/0.1/user/{ID}
 ID alapján visszad egy nézetet a felhasználótól: {alias, register_date, gender,birth_date, profile_description, profile_pic, profile_visibility, type}
 Ha profile_visibility nem publikus (3), akkor nem minden körülmény között érhető el.
 Ha a felhasználó kiválasztott egy profilképet, a profile_pic egy base64 kódolású kép egyébként meg üres, egyébként mező értéke null.
-A felhasználó profilbeszédszállát és a hozzá tartozó kommenteket is visszaadja.
+A felhasználó profilbeszédszállát és a hozzá tartozó kommenteket is visszaadja, lásd get thread-ot.
 Visszatérési értéke egy JSON állomány.
 
 PATCH /api/v/0.1/user
@@ -116,6 +116,11 @@ Media ID-re létrehoz egy beszédszálat.
 Body-ba kéri a {name} mezőt.
 Siker esetén visszaadja a beszédszál ID-jét JSON-ban.
 
+PATCH /api/v/0.1/thread/{ID}
+Belépés után elérhető...
+Frissíti a beszédszál nevét.
+A {name} mezőt kéri.
+
 GET /api/v/0.1/thread/{ID}
 Lekérdez egy beszédszálat ID alapján.
 Siker esetén visszatér egy JSON-nal:
@@ -137,7 +142,7 @@ POST /api/v/0.1/thread/{ID}/comment
 Belépés után elérhető...
 Létrehoz egy kommentet az ID azonosítójú beszédszálon.
 A {content} JSON mezőt kéri, ASCII karakterek megengedettek.
-Siker esetén visszaadja a {ID, content, last_edit, created } mezőket.
+Siker esetén visszaadja a {ID, content, last_edit, created, user:{ID, profile:{alias}}, thread:{ID}, reactions:[{ID,count}]} mezőket.
 
 PATCH /api/v/0.1/comment/{ID}
 Belépés után elérhető...
