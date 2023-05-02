@@ -43,6 +43,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
+import { CarouselModule } from 'ngx-bootstrap/carousel';
 
 
 
@@ -87,7 +88,8 @@ import { MatIconModule } from '@angular/material/icon';
     MatDialogModule,
     MatAutocompleteModule,
     MatChipsModule,
-    MatIconModule
+    MatIconModule,
+    CarouselModule.forRoot()
   ],
   providers: [
     {

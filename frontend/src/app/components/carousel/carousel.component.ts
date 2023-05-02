@@ -1,10 +1,11 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { carousel } from 'src/app/models/carousel';
 import { media } from 'src/app/models/media';
 import { reaction_short } from 'src/app/models/reaction';
 import { MediaService } from 'src/app/services/media/media.service';
 import { ReactionService } from 'src/app/services/reaction/reaction.service';
 import { StoryService } from 'src/app/services/story/story.service';
+import { CarouselComponent as NgxCarouselComponent } from 'ngx-bootstrap/carousel';
 
 @Component({
   selector: 'app-carousel',
@@ -15,6 +16,7 @@ export class CarouselComponent implements OnInit {
 
   public reactions: reaction_short[];
 
+  @ViewChild(NgxCarouselComponent) ngxCarousel: NgxCarouselComponent;
   @Input() public carousel: carousel;
   @Input() public iterator: number;
   @Input() public storyID: number;
