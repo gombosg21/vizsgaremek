@@ -1,9 +1,9 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, Output, EventEmitter,OnInit, OnDestroy } from '@angular/core';
 import { CommentService } from '../../services/comment/comment.service';
 import { ReactionService } from '../../services/reaction/reaction.service';
 import { comment } from '../../models/comment';
 import { reaction_short } from 'src/app/models/reaction';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
@@ -25,6 +25,10 @@ export class CommentComponent implements OnInit, OnDestroy {
   @Input() public iterator: number = 0;
   @Input() public reactions: reaction_short[];
   @Input() public commentUserID: number;
+
+          //TODO: delete comment
+  @Output() isDeleted:EventEmitter<boolean> = new EventEmitter();
+
   public sessionID: number = -1;
   public showEdit: boolean = false;
 
@@ -72,9 +76,8 @@ export class CommentComponent implements OnInit, OnDestroy {
   };
 
   sendEdit(): void {
-    const data = { content: this.content };
     this.showEdit = false;
-    this.CommentService.editComment(data, this.ID).subscribe({
+    this.CommentService.editComment(this.content, this.ID).subscribe({
       next: (value) => {
         console.log(this.data);
         this.data = value;
@@ -92,7 +95,7 @@ export class CommentComponent implements OnInit, OnDestroy {
 
     this.CommentService.deleteComment(this.ID).subscribe({
       next: (value) => {
-
+        this.isDeleted.emit(true);
       },
       error: (error) => {
         console.error(error);

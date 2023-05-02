@@ -16,7 +16,7 @@ export class CommentService {
 
   private comments: comment[];
 
-  private comment:comment;
+  private comment: comment;
 
   constructor(private http: HttpClient) {
   }
@@ -29,20 +29,20 @@ export class CommentService {
     return this.comments;
   };
 
-  getLocalCommentInstance():comment {
+  getLocalCommentInstance(): comment {
     return this.comment;
   };
 
-  setLocalCommentInstance(comment:comment):void {
+  setLocalCommentInstance(comment: comment): void {
     this.comment = comment;
   };
 
-  postCommnet(data: comment, targetThreadID: Number): Observable<any> {
-    return this.http.post(this.ApiPathMain + "/" + targetThreadID, data);
+  postComment(content: string, targetThreadID: Number): Observable<any> {
+    return this.http.post(this.ApiPathMain + "/" + targetThreadID + "/comment", { content: content });
   };
 
-  editComment(data: object, commentID: Number): Observable<comment> {
-    return this.http.patch<comment>(this.ApiPathSecondary + "/" + commentID, data);
+  editComment(content: string, commentID: Number): Observable<comment> {
+    return this.http.patch<comment>(this.ApiPathSecondary + "/" + commentID, { content: content });
   };
 
   deleteComment(commentID: number): Observable<any> {
