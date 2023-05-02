@@ -1,6 +1,6 @@
 <div class="comment-card card mb-3">
     <div class="card-body">
-        <h5 class="card-title mb-0">{{user_alias}}</h5>
+        <h5 class="card-title mb-0" id="alias"><i class="fa-solid fa-user" id="user-icon"></i>{{user?.profile?.alias}}</h5>
         <p class="card-text mt-2">{{content}}</p>
     </div>
     <div class="card-footer text-muted d-flex justify-content-between align-items-center">
@@ -15,5 +15,4 @@
     </div>
 </div>
 
-<app-reaction-modal *ngIf="showAddReactions" (canceled)="showAddReactions = false" parentType="comment"
-    [parentID]="ID"></app-reaction-modal>
+<app-reaction-modal *ngIf="showAddReactions" (canceled)="showAddReactions = false" parentType="comment" [parentID]="ID"></app-reaction-modal>

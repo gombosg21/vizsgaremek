@@ -51,3 +51,8 @@ p {
     background-color: var(--bg-color) !important;
     color: var(--text-color) !important;
 }
+
+#user-icon {
+    font-size: 16px;
+    margin-right: 2px;
+}
