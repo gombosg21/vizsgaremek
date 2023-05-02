@@ -15,6 +15,7 @@ export class ImageComponent implements OnInit {
   @Input() public mediaID: number;
   @Input() public media: media;
   @Input() public iterator: number = 0;
+  public errorText:string;
 
   constructor(private MediaService: MediaService, private ReactionService: ReactionService) {
     if (this.mediaID) {
