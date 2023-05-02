@@ -4,10 +4,9 @@ const tag = require("../models").tag;
 const media_taglist = require("../models").media_taglist;
 const media_reactionslist = require("../models").media_reactionlist;
 const user = require("../models").user;
+const thread = require("../models").thread;
 const { Op, fn, col } = require("sequelize");
-const { determineMixedArrayVisibility } = require("../helpers/authorization/visibility");
-const Visibility = require('../helpers/authorization/visibility').determineVisibility;
-const VisibilityArray = require('../helpers/authorization/visibility').determineArrayVisibility;
+const { determineMixedArrayVisibility, determineVisibility, determineArrayVisibility } = require("../helpers/authorization/visibility");
 const toBase64 = require("../util/serialize-file").getBase64;
 
 exports.getMediaByID = async (req, res, next) => {
@@ -35,6 +34,24 @@ exports.getMediaByID = async (req, res, next) => {
                     model: tag,
                     attributes: ["ID", "name"]
                 },
+                {
+                    model: thread,
+                    attributes: ['ID', 'name', 'created', 'last_activity', 'status'],
+                    include:
+                        [
+                            {
+                                model: user,
+                                attributes: ["ID"],
+                                include:
+                                    [
+                                        {
+                                            model: profile,
+                                            attributes: ["alias"]
+                                        }
+                                    ]
+                            }
+                        ]
+                }
             ],
         });
 
@@ -52,7 +69,7 @@ exports.getMediaByID = async (req, res, next) => {
         const itemVisibility = Media.visibility;
         const mediaOwner = Media.user.ID;
 
-        const results = await Visibility(userID, mediaOwner, itemVisibility, Media.dataValues);
+        const results = await determineVisibility(userID, mediaOwner, itemVisibility, Media.dataValues);
 
         return res.status(results.status).json(results.data);
     }
@@ -87,6 +104,24 @@ exports.getAllMediaFromUser = async (req, res, next) => {
                     model: tag,
                     attributes: ["ID", "name"]
                 },
+                {
+                    model: thread,
+                    attributes: ['ID', 'name', 'created', 'last_activity', 'status'],
+                    include:
+                        [
+                            {
+                                model: user,
+                                attributes: ["ID"],
+                                include:
+                                    [
+                                        {
+                                            model: profile,
+                                            attributes: ["alias"]
+                                        }
+                                    ]
+                            }
+                        ]
+                }
             ],
         });
 
@@ -125,7 +160,7 @@ exports.getAllMediaFromUser = async (req, res, next) => {
             visibilityFlagArray.push(Media.visibility);
         });
 
-        const results = await VisibilityArray(userID, mediaOwner, visibilityFlagArray, evalList);
+        const results = await determineArrayVisibility(userID, mediaOwner, visibilityFlagArray, evalList);
         return res.status(200).json(results);
 
     }
@@ -195,15 +230,37 @@ exports.getAllMediaByTags = async (req, res, next) => {
                     {
                         model: user,
                         attributes: ["ID"],
-                        include: [{
-                            model: profile,
-                            attributes: ['alias']
-                        }]
+                        include:
+                            [
+                                {
+                                    model: profile,
+                                    attributes: ['alias']
+                                }
+                            ]
                     },
                     {
                         model: tag,
                         attributes: ["ID", "name"]
-                    }],
+                    },
+                    {
+                        model: thread,
+                        attributes: ['ID', 'name', 'created', 'last_activity', 'status'],
+                        include:
+                            [
+                                {
+                                    model: user,
+                                    attributes: ["ID"],
+                                    include:
+                                        [
+                                            {
+                                                model: profile,
+                                                attributes: ["alias"]
+                                            }
+                                        ]
+                                }
+                            ]
+                    }
+                ]
             });
 
         if (MediaList.length == 0) {
