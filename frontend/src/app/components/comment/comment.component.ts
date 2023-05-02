@@ -13,7 +13,7 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 })
 export class CommentComponent implements OnInit, OnDestroy {
 
-  private data: comment;
+  public data: comment;
 
   public showAddReactions: boolean = false;
 
@@ -52,6 +52,7 @@ export class CommentComponent implements OnInit, OnDestroy {
     this.last_edit = this.data.last_edit ?? this.last_edit;
     this.created = this.data.created ?? this.created;
     this.commentUserID = this.data.user.ID ?? this.commentUserID;
+    this.user = this.data.user ?? this.user;
     if (this.data.reactions) {
       this.reactions = this.data.reactions;
       this.ReactionService.setStoredInstanceList(this.reactions);
@@ -68,7 +69,6 @@ export class CommentComponent implements OnInit, OnDestroy {
 
   edit(): void {
     this.showEdit = true;
-
   };
 
   sendEdit(): void {
@@ -76,7 +76,9 @@ export class CommentComponent implements OnInit, OnDestroy {
     this.showEdit = false;
     this.CommentService.editComment(data, this.ID).subscribe({
       next: (value) => {
+        console.log(this.data);
         this.data = value;
+        console.log(value);
       },
       error: (err) => {
         console.error(err);
