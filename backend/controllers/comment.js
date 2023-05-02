@@ -55,7 +55,33 @@ exports.createComment = async (req, res, next) => {
 
         const Thread = await thread.findByPk(threadID);
         await Thread.update({ last_activity: Comment.created });
-        return res.status(200).json(Comment);
+
+        const responseData = await comment.findByPk(Comment.ID,
+            {
+                attributes: ['content', 'ID', 'created', 'last_edit'],
+                include: [
+                    {
+                        model: user,
+                        attributes: ['ID'],
+                        include: [{ model: profile, attributes: ['alias'] }]
+                    },
+                    {
+                        model: thread,
+                        attributes: ['ID']
+                    },
+                ]
+            });
+
+        const reactions = await comment_reactions.findAll({
+            where: { comment_ID: Comment.ID },
+            attributes: [['reaction_ID', 'ID'], "comment_ID", [fn('COUNT', 'reaction_ID'), 'count']],
+            group: [col('reaction_ID')]
+        });
+
+        responseData.dataValues.reactions = reactions;
+
+
+        return res.status(200).json(responseData);
     }
     catch (error) {
         console.error(error);
