@@ -34,6 +34,17 @@ exports.getProfile = async (req, res, next) => {
                         attributes: ['ID', 'name', 'status', 'created', 'last_activity'],
                         include: [
                             {
+                                model: user,
+                                attributes: ['ID'],
+                                include:
+                                    [
+                                        {
+                                            model: profile,
+                                            attributes: ['alias']
+                                        }
+                                    ]
+                            },
+                            {
                                 model: comment,
                                 attributes: ['content', 'ID', 'created', 'last_edit'],
                                 include: [
