@@ -41,4 +41,9 @@
                 (page)="pageChanged($event)"></mat-paginator>
         </div>
     </div>
+    <button class="btn btn-dark btn-sm" (click)="react()">
+        <i class="fas fa-thumbs-up"></i> React
+    </button>
+    <app-reaction-modal *ngIf="showAddReactions" (close)="showAddReactions = false" parentType="thread"
+    [parentID]="thread.ID"></app-reaction-modal>
 </div>

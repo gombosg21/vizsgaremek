@@ -16,7 +16,7 @@ export class ReactionModalComponent {
   @Input() public parentID: number;
 
   @Output() reacted = new EventEmitter<reaction>();
-  @Output() canceled = new EventEmitter<void>();
+  @Output() close = new EventEmitter<void>();
 
 
   public selectedIterator: number;
@@ -45,6 +45,10 @@ export class ReactionModalComponent {
 
       }
     });
+  };
+
+  onClose(): void {
+    this.close.emit();
   };
 
 };

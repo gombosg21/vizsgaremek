@@ -1,13 +1,13 @@
-<div>
+<div class="modal-overlay" (click)="onClose()">
     <form>
         <div class="mb-3">
-            <label for="new-reaction"></label>
+            <label for="new-reaction">Select a reaction</label>
             <select id="new-reaction" [(ngModel)]="selectedIterator" name="selectedIterator">
                 <option *ngFor="let reaction of reactions; index as i;" [value]="i">
                     <img src="data:image/jpeg;base64,{{reaction.data}}" [alt]="reaction.name" [title]="reaction.name">
                 </option>
             </select>
-            <button (click)="add()">Add</button>
+            <button class="btn btn-dark btn-sm" (click)="add()">Add</button>
         </div>
     </form>
 </div>

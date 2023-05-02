@@ -23,7 +23,7 @@ export class ThreadComponent implements OnInit, OnDestroy {
   @Input() public thread: thread;
 
   public threadStatus: string;
-  public showAddReactions: boolean;
+  public showAddReactions: boolean = false;
   private userSub: Subscription;
   public sessionId: number;
   public showNewComment: boolean = false;
@@ -76,7 +76,6 @@ export class ThreadComponent implements OnInit, OnDestroy {
     }
   }
 
-
   comment(): void {
     this.CommenctService.postComment(this.newCommentContent, this.thread.ID).subscribe({
       next: (value) => {
@@ -87,6 +86,10 @@ export class ThreadComponent implements OnInit, OnDestroy {
 
       },
     })
+  };
+
+  react() {
+    this.showAddReactions = true;
   };
 
   edit(): void {
@@ -103,10 +106,6 @@ export class ThreadComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.userSub.unsubscribe();
-  };
-
-  react(): void {
-    this.showAddReactions = true;
   };
 
   pageChanged(event: PageEvent): void {

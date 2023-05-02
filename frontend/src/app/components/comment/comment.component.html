@@ -27,5 +27,5 @@
     </div>
 </div>
 
-<app-reaction-modal *ngIf="showAddReactions" (canceled)="showAddReactions = false" parentType="comment"
+<app-reaction-modal *ngIf="showAddReactions" (close)="showAddReactions = false" parentType="comment"
     [parentID]="data.ID"></app-reaction-modal>
