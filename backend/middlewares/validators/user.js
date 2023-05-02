@@ -59,7 +59,7 @@ exports.updateProfileRules = () => {
             validator.body("profile_description").isAscii().optional({ nullable: true, checkFalsy: true }).withMessage("only numbers, letters and special characters are allowed"),
             validator.body("alias").isAscii().optional({ nullable: true, checkFalsy: true }).withMessage("only numbers, letters and special characters are allowed"),
             validator.body("profile_visibility").isInt({ min: 0, max: 3 }).optional({ nullable: true, checkFalsy: true }).withMessage("unknown visibility level"),
-            validator.body("profile_picture").isInt().optional({ nullable: true, checkFalsy: true }).withMessage("profile picture must be a numeric ID")
+            validator.body("profile_picture").isInt({ min: 1 }).optional({ nullable: true, checkFalsy: true }).withMessage("profile picture must be a numeric ID")
         ]
     ]
 };
