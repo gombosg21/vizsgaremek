@@ -1,7 +1,12 @@
 <div class="comment-card card mb-3">
     <div class="card-body">
         <h5 class="card-title mb-0">{{user_alias}}</h5>
-        <p class="card-text mt-2">{{content}}</p>
+        <p *ngIf="!showEdit" class="card-text mt-2">{{content}}</p>
+        <div *ngIf="showEdit">
+            <label for="content"></label>
+            <input  [(NgModel)]="content" type="text" name="content" id="content">
+            <button (click)="sendEdit()">OK</button>
+        </div>
     </div>
     <div class="card-footer text-muted d-flex justify-content-between align-items-center">
         <div>
@@ -12,6 +17,10 @@
         <button class="btn btn-dark btn-sm" (click)="react()">
             <i class="fas fa-thumbs-up"></i> React
         </button>
+        <div *ngIf="commentUserID == sessionID">
+            <button class="btn btn-dark btn-sm">Edit</button>
+            <button class="btn btn-dark btn-sm" (click)="delete()">Delete</button>
+        </div>
     </div>
 </div>
 
