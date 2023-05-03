@@ -29,7 +29,6 @@ body {
     font-size: 0.8rem;
     background-color: rgba(133, 133, 133, 0.171);
     border-top: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: 20px;
 }
 
 .card-footer>p {

@@ -1,35 +1,68 @@
-    @import '~@fortawesome/fontawesome-free/css/all.css';
-    body {
-        font-family: 'Roboto', sans-serif;
-    }
-    
-    h3 {
-        font-weight: bold;
-        margin-bottom: 15px;
-    }
-    
-    h4 {
-        font-weight: 500;
-        margin-bottom: 5px;
-    }
-    
-    h4 i {
-        margin-right: 5px;
-    }
-    
-    .badge {
-        font-size: 14px;
-        font-weight: 500;
-        padding: 5px 10px;
-    }
-    
-    .container {
-        border: 1px solid #8484847c;
-        margin-bottom: 10px;
-        border-radius: 10px;
-    }
-    
-    .mat-mdc-paginator {
-        color: var(--text-color) !important;
-        background-color: var(--background-color) !important;
-    }
+@import '~@fortawesome/fontawesome-free/css/all.css';
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+h3 {
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+h4 {
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+h4 i {
+    margin-right: 5px;
+}
+
+.badge {
+    font-size: 14px;
+    font-weight: 500;
+    padding: 5px 10px;
+}
+
+.container {
+    border: 1px solid #8484847c;
+    margin-bottom: 10px;
+    border-radius: 10px;
+}
+
+.mat-mdc-paginator {
+    color: var(--text-color) !important;
+    background-color: var(--background-color) !important;
+}
+
+textarea.form-control {
+    resize: none;
+    border-radius: 5px;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border: 1px solid #8484847c;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+}
+
+.form-label {
+    font-weight: 500;
+}
+
+.form-control {
+    border-radius: 5px;
+    border: 1px solid #8484847c;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    padding: 0.375rem 0.75rem;
+}
+
+.form-control:focus {
+    outline: none;
+    box-shadow: 0 0 0 0.25rem rgba(33, 37, 41, 0.25);
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border-color: #adadad7c;
+}
+
+#threadEditBtn {
+    margin-top: 3px;
+}
