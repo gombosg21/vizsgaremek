@@ -57,8 +57,11 @@ export class CommentComponent implements OnInit, OnDestroy {
   };
 
   ngOnDestroy(): void {
+    if (this.commentSub) {
+      this.commentSub.unsubscribe();
+    };
     this.userSub.unsubscribe();
-    this.commentSub.unsubscribe();
+
   };
 
   react(): void {
