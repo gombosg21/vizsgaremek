@@ -1,22 +1,25 @@
 <div *ngIf="!foreign">
     <div>
-        <button class="btn btn-primary" (click)="showModal()">Upload</button>
-    </div>
-    <app-upload-image-modal *ngIf="showUploadModal" (close)="hideModal()"></app-upload-image-modal>
-</div>
 
-<div *ngIf="medias">
-    <mat-grid-list cols="cols">
-        <mat-grid-tile *ngFor="let media of medias; index as i;">
-            <app-image [data]="media" [iterator]="i"></app-image>
-        </mat-grid-tile>
-    </mat-grid-list>
-</div>
+        <div>
+            <button class="btn btn-primary btn-sm" (click)="showModal()">
+            <i class="fas fa-upload"></i> Upload
+        </button>
+        </div>
 
-<div *ngIf="!medias">
-    <p>Nothing here, but us chickens!</p>
-</div>
 
-<div *ngIf="foreign">
-    <app-media-search (searchResults)="setMedias($event)"></app-media-search>
-</div>
+        <div *ngIf="medias">
+            <mat-grid-list cols="cols">
+                <mat-grid-tile *ngFor="let media of medias; index as i;">
+                    <app-image [data]="media" [iterator]="i"></app-image>
+                </mat-grid-tile>
+            </mat-grid-list>
+        </div>
+
+        <div *ngIf="!medias">
+            <p>Nothing here, but us chickens!</p>
+        </div>
+
+        <div *ngIf="foreign">
+            <app-media-search (searchResults)="setMedias($event)"></app-media-search>
+        </div>
