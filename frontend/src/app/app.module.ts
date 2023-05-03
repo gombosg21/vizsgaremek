@@ -9,7 +9,6 @@ import { LoginComponent } from './components/login/login.component';
 import { FeedComponent } from './components/feed/feed.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
-import { SearchComponent } from './components/search/search.component';
 import { UploadImageModalComponent } from './components/modals/upload-image-modal/upload-image-modal.component';
 import { ImageModalComponent } from './components/modals/image-modal/image-modal.component';
 import { QueryComponent } from './components/query/query.component';
@@ -44,6 +43,12 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { CarouselModule } from 'ngx-bootstrap/carousel';
+import { EditProfileComponent } from './components/edit-profile/edit-profile.component';
+import { EditImageComponent } from './components/edit-image/edit-image.component';
+import { ImageEditTagsModalComponent } from './components/modals/image-edit-tags-modal/image-edit-tags-modal.component';
+import { FollowedComponent } from './components/followed/followed.component';
+import { ImagePickerModalComponent } from './components/modals/image-picker-modal/image-picker-modal.component';
+import { AuthService } from './services/auth/auth.service';
 
 
 
@@ -55,7 +60,6 @@ import { CarouselModule } from 'ngx-bootstrap/carousel';
     FeedComponent,
     ProfileComponent,
     NavbarComponent,
-    SearchComponent,
     UploadImageModalComponent,
     ImageModalComponent,
     QueryComponent,
@@ -75,6 +79,11 @@ import { CarouselModule } from 'ngx-bootstrap/carousel';
     ThreadSearchModalComponent,
     CarouselSearchModalComponent,
     MediaSearchComponent,
+    EditProfileComponent,
+    EditImageComponent,
+    ImageEditTagsModalComponent,
+    FollowedComponent,
+    ImagePickerModalComponent,
   ],
   imports: [
     BrowserModule,
@@ -99,6 +108,9 @@ import { CarouselModule } from 'ngx-bootstrap/carousel';
     },
     {
       provide: DbService
+    },
+    {
+      provide: AuthService
     },
     {
       provide: APP_INITIALIZER,
