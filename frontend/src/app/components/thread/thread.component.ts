@@ -30,6 +30,7 @@ export class ThreadComponent implements OnInit, OnDestroy {
   public showNewComment: boolean = false;
   public showEdit: boolean;
   public newCommentContent: string;
+  public newName:string;
 
   constructor(private ThreadService: ThreadService, private CommenctService: CommentService, private ReactionService: ReactionService, private Auth: AuthService) {
     this.threadSub = this.ThreadService.getLocalData().subscribe({
@@ -118,6 +119,7 @@ export class ThreadComponent implements OnInit, OnDestroy {
 
   edit(): void {
     this.showEdit = true;
+    this.newName = this.thread.name;
   };
 
   cancelEdit(): void {
@@ -126,8 +128,17 @@ export class ThreadComponent implements OnInit, OnDestroy {
 
   sendEdit(): void {
     this.showEdit = false;
-    console.log(this.thread.name)
-    this.ThreadService.patchThreadName(this.thread.name, this.thread.ID).subscribe({});
+    this.ThreadService.patchThreadName(this.newName, this.thread.ID).subscribe({
+      next:(value) => {
+        this.thread.name = this.newName;
+      },
+      error:(err)=>{
+        console.log(err)
+      },
+      complete:()=>{
+
+      }
+    });
   };
 
   ngOnDestroy(): void {
