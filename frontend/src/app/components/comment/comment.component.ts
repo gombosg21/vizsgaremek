@@ -16,7 +16,7 @@ export class CommentComponent implements OnInit, OnDestroy {
 
   public showAddReactions: boolean = false;
 
-  @Input() public iterator: number = 0;
+  @Input() public iterator: number;
 
   //TODO: delete comment
   @Output() isDeleted: EventEmitter<comment> = new EventEmitter<comment>();
@@ -53,7 +53,7 @@ export class CommentComponent implements OnInit, OnDestroy {
       complete: () => { }
     });
 
-
+console.log(this.iterator)
   };
 
   ngOnDestroy(): void {
@@ -61,7 +61,6 @@ export class CommentComponent implements OnInit, OnDestroy {
       this.commentSub.unsubscribe();
     };
     this.userSub.unsubscribe();
-
   };
 
   react(): void {
@@ -80,9 +79,7 @@ export class CommentComponent implements OnInit, OnDestroy {
     this.showEdit = false;
     this.CommentService.editComment(this.data.content, this.data.ID).subscribe({
       next: (value) => {
-        console.log(this.data);
         this.data = value;
-        console.log(value);
       },
       error: (err) => {
         console.error(err);

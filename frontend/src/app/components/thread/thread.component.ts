@@ -11,13 +11,12 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 @Component({
   selector: 'app-thread',
   templateUrl: './thread.component.html',
-  styleUrls: ['./thread.component.css'],
+  styleUrls: ['./thread.component.css']
 })
 export class ThreadComponent implements OnInit, OnDestroy {
 
   pageSize = 5;
   pageIndex = 0;
-  paginatedComments: comment[] = [];
 
   @Input() public iterator: number = 0;
   @Input() public thread: thread;
@@ -30,7 +29,7 @@ export class ThreadComponent implements OnInit, OnDestroy {
   public showNewComment: boolean = false;
   public showEdit: boolean;
   public newCommentContent: string;
-  public newName:string;
+  public newName: string;
 
   constructor(private ThreadService: ThreadService, private CommenctService: CommentService, private ReactionService: ReactionService, private Auth: AuthService) {
     this.threadSub = this.ThreadService.getLocalData().subscribe({
@@ -64,7 +63,6 @@ export class ThreadComponent implements OnInit, OnDestroy {
 
     this.CommenctService.setLocalCommentList(this.thread.comments);
 
-    this.paginateComments();
     switch (this.thread.status) {
       case 0:
         this.threadStatus = "open"
@@ -129,13 +127,13 @@ export class ThreadComponent implements OnInit, OnDestroy {
   sendEdit(): void {
     this.showEdit = false;
     this.ThreadService.patchThreadName(this.newName, this.thread.ID).subscribe({
-      next:(value) => {
+      next: (value) => {
         this.thread.name = this.newName;
       },
-      error:(err)=>{
+      error: (err) => {
         console.log(err)
       },
-      complete:()=>{
+      complete: () => {
 
       }
     });
@@ -145,17 +143,4 @@ export class ThreadComponent implements OnInit, OnDestroy {
     this.userSub.unsubscribe();
     this.threadSub.unsubscribe();
   };
-
-  pageChanged(event: PageEvent): void {
-    this.pageIndex = event.pageIndex;
-    this.pageSize = event.pageSize;
-    this.paginateComments();
-  };
-
-  paginateComments(): void {
-    const startIndex = this.pageIndex * this.pageSize;
-    const endIndex = startIndex + this.pageSize;
-    this.paginatedComments = this.thread.comments.slice(startIndex, endIndex);
-  };
-
 };

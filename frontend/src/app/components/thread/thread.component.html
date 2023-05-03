@@ -36,7 +36,9 @@
             <hr>
             <app-reactions *ngIf="thread.reactions"></app-reactions>
             <ng-container *ngIf="thread.comments">
-                <app-comment *ngFor="let comment of paginatedComments; let i = index" [iterator]="i" (isDeleted)="removeComment($event)"></app-comment>
+                <app-comment *ngFor="let comment of thread.comments | slice:
+                (paginator.pageIndex*paginator.pageSize):
+                ((paginator.pageIndex+1)*paginator.pageSize); let i = index" [iterator]="(paginator.pageIndex*paginator.pageSize) + i" (isDeleted)="removeComment($event)"></app-comment>
             </ng-container>
             <form *ngIf="showNewComment" class="mt-3">
                 <label for="commentContent">New Comment</label>
@@ -45,7 +47,7 @@
                     <i class="fas fa-paper-plane"></i> Submit
                 </button>
             </form>
-            <mat-paginator [length]="thread.comments.length" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 25, 50]" (page)="pageChanged($event)"></mat-paginator>
+            <mat-paginator #paginator [length]="thread.comments.length" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 25, 50]"></mat-paginator>
         </div>
     </div>
     <app-reaction-modal *ngIf="showAddReactions" (close)="showAddReactions = false" parentType="thread" [parentID]="thread.ID" (reacted)="addReaction($event)"></app-reaction-modal>
