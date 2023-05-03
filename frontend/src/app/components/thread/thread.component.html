@@ -34,7 +34,6 @@
                 </div>
             </div>
             <hr>
-            <app-reactions *ngIf="thread.reactions"></app-reactions>
             <ng-container *ngIf="thread.comments">
                 <app-comment *ngFor="let comment of paginatedComments; let i = index" [iterator]="i" (isDeleted)="removeComment($event)"></app-comment>
             </ng-container>
