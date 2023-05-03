@@ -18,7 +18,8 @@ module.exports = (sequelize, DataTypes) => {
         visibility: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 0 },
         picture_ID: { type: DataTypes.INTEGER, allowNull: true, references: { model: 'media', key: 'ID' } },
         last_updated: { type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW },
-        deletedAt: { type: DataTypes.DATE, allowNull: true, defaultValue: null }
+        deletedAt: { type: DataTypes.DATE, allowNull: true, defaultValue: null },
+        alias: { allowNull: true, type: DataTypes.STRING },
     }, {
         sequelize,
         timestamps: true,
