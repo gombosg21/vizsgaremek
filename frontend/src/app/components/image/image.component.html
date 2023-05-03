@@ -2,23 +2,23 @@
     <div class="row" *ngIf="!ErrorInstance">
         <div class="col-12 col-lg-6" id="img">
             <div class="card">
-                <img src="data:image/jpeg;base64,{{media.file_data}}" [alt]="media.placeholder_text"
-                    [title]="media.placeholder_text" class="card-img-top" (click)="showModal()">
+                <img src="data:image/jpeg;base64,{{media.file_data}}" [alt]="media.placeholder_text" [title]="media.placeholder_text" class="card-img-top" (click)="showModal()">
                 <div class="card-body">
                     <p class="card-text">{{media.description}}</p>
-                    <!-- <a href="#" (click)=react class="btn btn-primary">react</a> -->
                 </div>
                 <div class="card-footer text-muted d-flex justify-content-between align-items-center">
                     <div>
-                        <p><i class="fas fa-pencil-alt"></i> Last edit: {{media.last_edit | date: 'yyyy. MM. dd.
-                            HH:mm'}}</p>
+                        <p><i class="fas fa-pencil-alt"></i> Last edit: {{media.last_edit | date: 'yyyy. MM. dd. HH:mm'}}
+                        </p>
                         <p><i class="fas fa-calendar"></i> Created: {{media.uploaded | date: 'yyyy. MM. dd. HH:mm'}}</p>
                     </div>
-                    <app-reactions *ngIf="media.reactions && !ErrorInstance"></app-reactions>
+                    <div>
+                        <app-reactions *ngIf="media.reactions && !ErrorInstance"></app-reactions>
+                        <button class="btn btn-secondary btn-sm" (click)="react()">
+                            <i class="fas fa-thumbs-up"></i> React
+                        </button>
+                    </div>
                 </div>
-                <button class="btn btn-dark btn-sm" (click)="react()">
-                    <i class="fas fa-thumbs-up"></i> React
-                </button>
             </div>
         </div>
         <div class="col-12 col-lg-6 d-flex align-items-start mt-3 mt-lg-0">
@@ -32,5 +32,4 @@
 
 <app-image-modal *ngIf="showImageModal && !ErrorInstance" [media]="media" (close)="hideModal()"></app-image-modal>
 <app-image-edit-tags-modal *ngIf="sessionId && showEditTags && !ErrorInstance" [media]="media" (closed)="hideEditTags()" (addedTags)="addTags($event)" (removedTags)="removeTags($event)" ></app-image-edit-tags-modal>
-<app-reaction-modal *ngIf="showAddReactions && !ErrorInstance" (close)="showAddReactions = false" parentType="thread"
-    [parentID]="media.ID!" (reacted)="addReaction($event)"></app-reaction-modal>
+<app-reaction-modal *ngIf="showAddReactions && !ErrorInstance" (close)="showAddReactions = false" parentType="thread" [parentID]="media.ID!" (reacted)="addReaction($event)"></app-reaction-modal>

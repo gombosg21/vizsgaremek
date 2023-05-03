@@ -2,8 +2,7 @@
     <div class="row">
         <div class="col-md-4 text-center">
             <ng-container *ngIf="UserProfile.medium">
-                <img src="data:image/jpeg;base64,{{UserProfile.medium}}" alt="Profile Image"
-                    class="rounded-circle mb-3 profile-pic">
+                <img src="data:image/jpeg;base64,{{UserProfile.medium}}" alt="Profile Image" class="rounded-circle mb-3 profile-pic">
             </ng-container>
             <ng-container *ngIf="!UserProfile.medium">
                 <img src="https://via.placeholder.com/200" alt="Profile Image" class="rounded-circle mb-3 profile-pic">
@@ -19,15 +18,21 @@
                 <p class="lead">{{UserProfile.description}}</p>
             </div>
         </div>
-        <div>
-            <app-reactions *ngIf="UserProfile.reactions"></app-reactions>
-            <button class="btn btn-dark btn-sm" (click)="react()">
-                <i class="fas fa-thumbs-up"></i> React
-            </button>
+        <div class="col-md-12 mt-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5>Profile Reactions</h5>
+                <button class="btn btn-secondary btn-sm" (click)="react()">
+                    <i class="fas fa-thumbs-up"></i> React
+                </button>
+            </div>
+            <div>
+                <app-reactions *ngIf="UserProfile.reactions"></app-reactions>
+            </div>
         </div>
 
-        <app-reaction-modal *ngIf="showAddReactions" (close)="showAddReactions = false" parentType="user"
-            [parentID]="userID" (reacted)="addReaction($event)"></app-reaction-modal>
+        <hr>
+
+        <app-reaction-modal *ngIf="showAddReactions" (close)="showAddReactions = false" parentType="user" [parentID]="userID" (reacted)="addReaction($event)"></app-reaction-modal>
 
         <ng-container *ngIf="UserProfileThread">
             <app-thread [thread]="UserProfileThread"></app-thread>
