@@ -1,0 +1,23 @@
+<div class="modal-overlay">
+    <form class="modal-content">
+        <div class="mb-3">
+            <mat-chip-grid #editTagChipGrid>
+                <mat-chip-row *ngFor="let currentTag of currentTags;" (removed)="removeTag(currentTag)">{{currentTag.name}}
+                    <button matChipRemove>
+                        <mat-icon>cancel</mat-icon>
+                    </button>
+                </mat-chip-row>
+            </mat-chip-grid>
+            <label for="tags_query" class="form-label">Search by tags</label>
+            <input type="text" class="form-control" id="tags_query" name="query_string"
+                placeholder="Add Tag to Search..." #tagNameInput [matChipInputFor]="editTagChipGrid"
+                [matAutocomplete]="auto" [matChipInputSeparatorKeyCodes]="keycodes"
+                (matChipInputTokenEnd)="addTag($event)">
+            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectedTag($event)">
+                <mat-option *ngFor="let filteredTag of filteredTags | async;"
+                    [value]="filteredTag">{{filteredTag.name}}</mat-option>
+            </mat-autocomplete>
+        </div>
+        <button class="btn btn-primary" (click)="submit()">Submit</button>
+    </form>
+</div>
