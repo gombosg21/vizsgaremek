@@ -71,8 +71,12 @@ export class ImageComponent implements OnInit, OnDestroy {
   };
 
   ngOnDestroy(): void {
-    this.userSub.unsubscribe();
-    this.mediaSub.unsubscribe();
+    if (this.userSub) {
+      this.userSub.unsubscribe();
+    };
+    if (this.mediaSub) {
+      this.mediaSub.unsubscribe();
+    };
   };
 
   hideEditTags(): void {
