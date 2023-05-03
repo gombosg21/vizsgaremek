@@ -19,40 +19,49 @@ export class CommentComponent implements OnInit, OnDestroy {
   @Input() public iterator: number = 0;
 
   //TODO: delete comment
-  @Output() isDeleted: EventEmitter<comment> = new EventEmitter();
+  @Output() isDeleted: EventEmitter<comment> = new EventEmitter<comment>();
 
   public sessionID: number = -1;
   public showEdit: boolean = false;
 
 
   private userSub: Subscription;
+  private commentSub: Subscription;
 
   constructor(private CommentService: CommentService, private ReactionService: ReactionService, private Auth: AuthService) {
-    this.data = this.CommentService.getLocalCommentList()[this.iterator];
-
     this.userSub = this.Auth.getUserID().subscribe({
       next: (value) => {
         this.sessionID = value ?? -1;
       },
       error: (err) => { console.error(err); },
       complete: () => {
-
       },
-    })
+    });
   };
 
   ngOnInit(): void {
-    this.data = this.CommentService.getLocalCommentList()[this.iterator];
-    if (this.data.reactions) {
-      this.ReactionService.setStoredInstanceList(this.data.reactions);
-    };
+    this.CommentService.getLocalCommentList().subscribe({
+      next: (value) => {
+        this.data = value[this.iterator];
+        if (this.data.reactions) {
+          this.ReactionService.setStoredInstanceList(this.data.reactions);
+        };
+      },
+      error: (err) => {
+        console.error(err)
+      },
+      complete: () => { }
+    });
+
+
   };
 
   ngOnDestroy(): void {
     this.userSub.unsubscribe();
+    this.commentSub.unsubscribe();
   };
 
-  react():void {
+  react(): void {
     this.showAddReactions = true;
   };
 
@@ -60,7 +69,7 @@ export class CommentComponent implements OnInit, OnDestroy {
     this.showEdit = true;
   };
 
-  cancelEdit():void {
+  cancelEdit(): void {
     this.showEdit = false;
   };
 

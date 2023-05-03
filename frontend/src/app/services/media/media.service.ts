@@ -1,46 +1,66 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy, OnInit } from '@angular/core';
 import { enviroment } from 'src/enviroments/enviroment';
 import { ApiPaths } from '../../enums/api-paths';
-import { Observable } from 'rxjs';
+import { Observable, Subscription, of, throwError } from 'rxjs';
 import { media } from 'src/app/models/media';
 import { ErrorModel } from 'src/app/models/error';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class MediaService {
+export class MediaService implements OnInit, OnDestroy {
 
   private ApiPath = enviroment.baseUrl + ApiPaths.Media;
 
-  private localMediaList: (media | ErrorModel)[];
-  private localMedia: media;
+  private localMediaList: Observable<(media | ErrorModel)[]>;
+  private localMedia: Observable<media>;
+  private userSub: Subscription;
+  private sessionID?: number;
 
-  constructor(private http: HttpClient) {
+
+  constructor(private http: HttpClient, private Auth: AuthService) {
 
   }
 
-  getLocalMediaList(): (media | ErrorModel)[] {
+  ngOnDestroy(): void {
+    this.userSub.unsubscribe();
+  };
+
+  ngOnInit(): void {
+    this.userSub = this.Auth.getUserID().subscribe({
+      next: (value) => { this.sessionID = value },
+      error: (error) => { console.error(error) },
+      complete: () => { }
+    });
+  };
+
+  getLocalMediaList(): Observable<(media | ErrorModel)[]> {
     return this.localMediaList;
   };
 
   setLocalMediaList(mediaList: (media | ErrorModel)[]): void {
-    this.localMediaList = mediaList;
+    this.localMediaList = of(mediaList);
   };
 
   setLocalMediaInstance(mediaInstance: media): void {
-    this.localMedia = mediaInstance;
+    this.localMedia = of(mediaInstance);
   };
 
-  getLocalMediaInstance(): media {
+  getLocalMediaInstance(): Observable<media> {
     return this.localMedia;
   };
 
-  getAllMediaFromUserID(ID: number): Observable<(media | ErrorModel)[]> {
-    return this.http.get<[media | ErrorModel]>(this.ApiPath + "/user/" + ID);
+  getAllMediaFromUserID(userID?: number): Observable<(media | ErrorModel)[]> {
+    if (this.sessionID || userID) {
+      const ID = userID ?? this.sessionID;
+      return this.http.get<(media | ErrorModel)[]>(this.ApiPath + "/user/" + ID);
+    }
+    return throwError(() => { new Error("called w/o userID or valid sessionID!") });
   };
 
-  getOneFromUserID(ID: number): Observable<media | ErrorModel> {
+  getOneByID(ID: number): Observable<media | ErrorModel> {
     return this.http.get<media | ErrorModel>(this.ApiPath + "/" + ID);
   };
 
@@ -60,5 +80,23 @@ export class MediaService {
     };
 
     return this.http.get<media[]>(this.ApiPath + "/search/tags?" + query);
+  };
+
+  postUpdateMediaTags(ID: number, addTagIDArray?: number[], removeTagIDArray?: number[]): Observable<any> {
+    const dataObj: any = {};
+
+    if (addTagIDArray) {
+      dataObj.tag_id_list_remove = removeTagIDArray;
+    };
+
+    if (removeTagIDArray) {
+      dataObj.tag_id_list_add = addTagIDArray;
+    };
+
+    if (!addTagIDArray && !removeTagIDArray) {
+      return throwError(() => { new Error("no changes supplied, aborting.") })
+    };
+
+    return this.http.post(this.ApiPath + "/" + ID + "/tags", dataObj);
   };
 };

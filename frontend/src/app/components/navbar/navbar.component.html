@@ -9,6 +9,9 @@
                 <li *ngIf="isSession" class="nav-item">
                     <a class="nav-link" [routerLink]="userProfileLink"><i class="fa fa-user" aria-hidden="true"></i> My Profile</a>
                 </li>
+                <li  *ngIf="!isSession" class="nav-item">
+                    <a class="nav-link" routerLink="login">Login</a>
+                </li>
                 <li *ngIf="isSession" class="nav-item">
                     <a class="nav-link"><i class="fa fa-users" aria-hidden="true"></i> Friends</a>
                 </li>

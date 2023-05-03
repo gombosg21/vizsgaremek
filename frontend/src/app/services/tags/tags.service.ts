@@ -10,29 +10,29 @@ import { ApiPaths } from 'src/app/enums/api-paths';
 })
 export class TagsService {
 
-  private ApiPath:string = enviroment.baseUrl + ApiPaths.Tags;
+  private ApiPath: string = enviroment.baseUrl + ApiPaths.Tags;
 
-  constructor(private http:HttpClient) {
+  constructor(private http: HttpClient) {
 
   }
 
-  getAllTags():Observable<tag[]> {
+  getAllTags(): Observable<tag[]> {
     return this.http.get<tag[]>(this.ApiPath + "/all");
   };
 
-  createTag(tag:tag):Observable<tag> {
+  createTag(tag: tag): Observable<tag> {
     return this.http.post<tag>(this.ApiPath, tag);
   };
 
-  editTag(tag:tag):Observable<tag> {
-    return this.http.patch<tag>(this.ApiPath + "/" + tag.id, {name : tag.name})
+  editTag(tag: tag): Observable<tag> {
+    return this.http.patch<tag>(this.ApiPath + "/" + tag.ID, { name: tag.name })
   };
 
-  deleteTag(tag:tag):Observable<tag> {
-    return this.http.delete<tag>(this.ApiPath + "/" + tag.id);
+  deleteTag(tag: tag): Observable<tag> {
+    return this.http.delete<tag>(this.ApiPath + "/" + tag.ID);
   };
 
-  searchTags(namelike:string):Observable<tag[]> {
+  searchTags(namelike: string): Observable<tag[]> {
     return this.http.get<tag[]>(this.ApiPath + "?" + "name=" + namelike);
   };
 }

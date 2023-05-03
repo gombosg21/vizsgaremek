@@ -60,7 +60,7 @@ export class AuthService implements OnDestroy {
         complete: () => {
           this.session = of(true);
           this.userID = of(getTokenUserID());
-          this.router.navigate(["/profile/" + this.userID])
+          this.router.navigate(["/profile/" + getTokenUserID()])
         }
       });
   };

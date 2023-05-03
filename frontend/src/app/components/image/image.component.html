@@ -31,5 +31,6 @@
 </div>
 
 <app-image-modal *ngIf="showImageModal && !ErrorInstance" [media]="media" (close)="hideModal()"></app-image-modal>
+<app-image-edit-tags-modal *ngIf="sessionId && showEditTags && !ErrorInstance" [media]="media" (closed)="hideEditTags()" (addedTags)="addTags($event)" (removedTags)="removeTags($event)" ></app-image-edit-tags-modal>
 <app-reaction-modal *ngIf="showAddReactions && !ErrorInstance" (close)="showAddReactions = false" parentType="thread"
     [parentID]="media.ID!" (reacted)="addReaction($event)"></app-reaction-modal>

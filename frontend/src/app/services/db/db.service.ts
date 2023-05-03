@@ -28,15 +28,20 @@ export class DbService {
     return this.dbService.getAll("reactions");
   };
 
-  getAllCacheTags():Observable<tag[]> {
+  getAllCacheTags(): Observable<tag[]> {
     return this.dbService.getAll("tags");
   };
 
   async fillReactions(): Promise<Observable<number[]>> {
     const dataSource = this.ReactionsService.getAllReactions()
     const data = await firstValueFrom(dataSource);
-    const blobData = data.map(img => ({ ID: img.ID, data: (new Blob([Buffer.from(img.data)])), name: img.name }));
-    return this.dbService.bulkAdd("reactions", blobData);
+    const mappedInput = data.map(img => (
+      {
+        ID: img.ID,
+        data: img.data,
+        name: img.name
+      }));
+    return this.dbService.bulkAdd("reactions", mappedInput);
   };
 
   flushTags(): Observable<any> {

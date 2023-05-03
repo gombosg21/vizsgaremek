@@ -1,5 +1,5 @@
 export interface tag {
-    id:number;
+    ID:number;
     name:string;
     count?: number;
 }

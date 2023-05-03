@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { ApiPaths } from 'src/app/enums/api-paths';
 import { thread } from 'src/app/models/thread';
 import { enviroment } from 'src/enviroments/enviroment'
@@ -12,19 +12,27 @@ export class ThreadService {
 
   private ApiPath = enviroment.baseUrl + ApiPaths.Thread;
 
-  private threadData: thread;
-  private threadList: thread[];
+  private threadData: Observable<thread>;
+  private threadList: Observable<thread[]>;
 
   constructor(private http: HttpClient) {
 
   }
 
   setLocalData(thread: thread): void {
-    this.threadData = thread;
+    this.threadData = of(thread);
   };
 
-  getLocalData(): thread {
+  getLocalData(): Observable<thread> {
     return this.threadData;
+  };
+
+  setLocalDataList(threads: thread[]): void {
+    this.threadList = of(threads);
+  };
+
+  getLocalDataList(): Observable<thread[]> {
+    return this.threadList;
   };
 
   getThreadByID(ID: number): Observable<thread> {

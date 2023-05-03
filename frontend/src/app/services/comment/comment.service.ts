@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Injectable} from '@angular/core';
+import { Observable, of } from 'rxjs';
 import { ApiPaths } from 'src/app/enums/api-paths';
 import { comment } from 'src/app/models/comment';
 import { enviroment } from 'src/enviroments/enviroment'
@@ -14,27 +14,28 @@ export class CommentService {
   private ApiPathMain = enviroment.baseUrl + ApiPaths.Thread;
   private ApiPathSecondary = enviroment.baseUrl + ApiPaths.Comment;
 
-  private comments: comment[];
+  private comments: Observable<comment[]>;
 
-  private comment: comment;
+  private comment: Observable<comment>;
 
   constructor(private http: HttpClient) {
-  }
-
-  setLocalCommentList(comments: comment[]): void {
-    this.comments = comments;
   };
 
-  getLocalCommentList(): comment[] {
+
+  setLocalCommentList(comments: comment[]): void {
+    this.comments = of(comments);
+  };
+
+  getLocalCommentList(): Observable<comment[]> {
     return this.comments;
   };
 
-  getLocalCommentInstance(): comment {
+  getLocalCommentInstance(): Observable<comment> {
     return this.comment;
   };
 
   setLocalCommentInstance(comment: comment): void {
-    this.comment = comment;
+    this.comment = of(comment);
   };
 
   postComment(content: string, targetThreadID: Number): Observable<any> {
@@ -48,5 +49,4 @@ export class CommentService {
   deleteComment(commentID: number): Observable<any> {
     return this.http.delete(this.ApiPathSecondary + "/" + commentID);
   };
-
 };

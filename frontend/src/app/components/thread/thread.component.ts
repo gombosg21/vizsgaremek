@@ -25,13 +25,20 @@ export class ThreadComponent implements OnInit, OnDestroy {
   public threadStatus: string;
   public showAddReactions: boolean = false;
   private userSub: Subscription;
+  private threadSub: Subscription;
   public sessionId: number;
   public showNewComment: boolean = false;
   public showEdit: boolean;
   public newCommentContent: string;
 
   constructor(private ThreadService: ThreadService, private CommenctService: CommentService, private ReactionService: ReactionService, private Auth: AuthService) {
-    this.thread = this.ThreadService.getLocalData() ?? this.thread;
+    this.threadSub = this.ThreadService.getLocalData().subscribe({
+      next: (value) => {
+        this.thread = value ?? this.thread
+      },
+      error: (err) => { console.error(err) },
+      complete: () => { }
+    });
     this.userSub = this.Auth.getUserID().subscribe({
       error: (err) => {
         console.error(err);
@@ -96,12 +103,12 @@ export class ThreadComponent implements OnInit, OnDestroy {
   addReaction(reactionID: number): void {
     if (this.thread.reactions) {
       for (let i = 0; i < this.thread.reactions.length; i++) {
-        if(this.thread.reactions[i].ID == reactionID) {
+        if (this.thread.reactions[i].ID == reactionID) {
           this.thread.reactions[i].count++;
         };
       };
     };
-    this.thread.reactions = [{ID:reactionID, count:1}];
+    this.thread.reactions = [{ ID: reactionID, count: 1 }];
     this.ReactionService.setStoredInstanceList(this.thread.reactions);
   };
 
@@ -123,6 +130,7 @@ export class ThreadComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.userSub.unsubscribe();
+    this.threadSub.unsubscribe();
   };
 
   pageChanged(event: PageEvent): void {

@@ -1,15 +1,18 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { MediaService } from '../../services/media/media.service';
 import { media } from '../../models/media';
 import { ReactionService } from 'src/app/services/reaction/reaction.service';
 import { ErrorModel } from 'src/app/models/error';
+import { Subscription } from 'rxjs';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { tag } from 'src/app/models/tag';
 
 @Component({
   selector: 'app-image',
   templateUrl: './image.component.html',
   styleUrls: ['./image.component.css']
 })
-export class ImageComponent implements OnInit {
+export class ImageComponent implements OnInit, OnDestroy {
 
   public showImageModal: boolean = false;
 
@@ -18,11 +21,15 @@ export class ImageComponent implements OnInit {
   @Input() public media: media;
   @Input() public iterator: number = 0;
   @Input() public ErrorInstance: ErrorModel;
+  public sessionId?: number;
+  private userSub: Subscription;
   public showAddReactions: boolean = false;
+  public showEditTags: boolean = false;
+  private mediaSub: Subscription;
 
-  constructor(private MediaService: MediaService, private ReactionService: ReactionService) {
+  constructor(private MediaService: MediaService, private ReactionService: ReactionService, private Auth: AuthService) {
     if (this.mediaID) {
-      this.MediaService.getOneFromUserID(this.mediaID).subscribe({
+      this.MediaService.getOneByID(this.mediaID).subscribe({
         next: (value) => {
           if (value.hasOwnProperty('file_data')) {
             this.media = value as media;
@@ -35,18 +42,52 @@ export class ImageComponent implements OnInit {
           console.error(err);
         },
       });
+      this.userSub = this.Auth.getUserID().subscribe({
+        next: (value) => { this.sessionId = value },
+        error: (err) => { console.error(err) },
+        complete: () => { }
+      })
     };
 
     if (this.iterator) {
-      const ListItem = (this.MediaService.getLocalMediaList()[this.iterator]);
 
-      if (ListItem as media) {
-        this.media = ListItem as media;
-      };
+      this.mediaSub = this.MediaService.getLocalMediaList().subscribe({
+        next: (value) => {
+          const ListItem = value[this.iterator];
+          if (ListItem.hasOwnProperty('file_data')) {
+            this.media = ListItem as media;
+            if (this.media.reactions) {
+              this.ReactionService.setStoredInstanceList(this.media.reactions);
+            };
+          };
+          if (ListItem.hasOwnProperty('error')) {
+            this.ErrorInstance = ListItem as ErrorModel;
+          };
+        },
+        error: (err) => { console.error(err) },
+        complete: () => { }
+      });
+    };
+  };
 
-      if (ListItem as ErrorModel) {
-        this.ErrorInstance = ListItem as ErrorModel;
-      };
+  ngOnDestroy(): void {
+    this.userSub.unsubscribe();
+    this.mediaSub.unsubscribe();
+  };
+
+  hideEditTags(): void {
+    this.showEditTags = false;
+  };
+
+  addTags(tags: tag[]): void {
+    if (this.media.tags) {
+      this.media.tags = this.media.tags.concat(tags);
+    };
+  };
+
+  removeTags(tags: tag[]): void {
+    if (this.media.tags) {
+      this.media.tags = this.media.tags.filter(tag => !(tags.includes(tag)));
     };
   };
 
