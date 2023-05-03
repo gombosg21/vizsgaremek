@@ -10,7 +10,7 @@
             <form *ngIf="showEdit" class="mt-3">
                 <div class="mb-3">
                     <label for="name" class="form-label">Edit Name</label>
-                    <input type="text" id="name" [(ngModel)]="thread.name" name="name" class="form-control">
+                    <input type="text" id="name" [(ngModel)]="newName" name="name" class="form-control">
                 </div>
                 <button class="btn btn-secondary btn-sm" (click)="sendEdit()">
                     <i class="fas fa-check"></i> Submit
