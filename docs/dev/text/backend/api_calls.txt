@@ -294,7 +294,7 @@ GET /api/v/0.1/friends/pending
 Belépés után elérhető...
 Kilistázza az összes függőben lévő barátkérést, {id, date} értékekkel.
 
-POST /api/v/0.1/friends/{ID}/confrim
+PATCH /api/v/0.1/friends/{ID}/confrim
 Belépés után elérhető...
 Megerősít egy függőben lévő barátkérelmet ID alapján.
 Siker esetén visszaadja a {friend:{ID, date}} értékeket.

@@ -13,7 +13,7 @@ router.get("/friends/:userID", userValidator.checkIfUserIDExsits, auth.optionalA
 router.post("/friends/:userID/add", auth.isAuth, userValidator.checkIfUserIDExsits, userValidator.checkIfNotSelf, friendController.requestFriend);
 
 // confirm friend
-router.post("/friends/:userID/confirm", auth.isAuth, userValidator.checkIfUserIDExsits, userValidator.checkIfNotSelf, friendController.verifyFriendRequest);
+router.patch("/friends/:userID/confirm", auth.isAuth, userValidator.checkIfUserIDExsits, userValidator.checkIfNotSelf, friendController.verifyFriendRequest);
 
 //reject friend
 router.delete("/friends/:userID/confirm", auth.isAuth, userValidator.checkIfUserIDExsits, userValidator.checkIfNotSelf, friendController.rejectFriendRequest);
