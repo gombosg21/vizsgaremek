@@ -105,8 +105,9 @@ Csak a file van base64-ben.
 PATCH /api/v/0.1/media/{ID}/tags
 Belépés után elérhető..
 ID alapján szerkeszti egy kép cédulalistáját
-A {tag_id_list_remove:[]} és vagy {tag_id_list_add:[]} mezőket kéri.
-A tömbökben csak pozitív egész csámok lehetnek, 0 kivételével.
+A {tag_id_list_remove:[ID]} és vagy {tag_id_list_add:[ID]} mezőket kéri.
+A tömbökben csak pozitív egész csámok lehetnek, 0 kivételével, természetesen érvényes cédulaazonosítókkal, 
+mely a remove esetén a képhez tartozó cédulákat, az add esetén létező, a képhez nem tartozó cédulákat jelent.
 A {tag_id_list_remove} eltávolít cédulákat a képről, a {tag_id_list_add} hozzáad.
 Siker esetén visszadja a kép frissített cédulalistáját {ID, name} tömbösített json-ban.
 
