@@ -44,7 +44,7 @@ exports.isMyThread = async (req, res, next) => {
     const threadID = req.params.threadID;
 
     try {
-        const threadOwner = await thread.findOne({ where: { [Op.and]: [{ user_ID: userID }, { ID: threadID }] } }).user_ID;
+        const threadOwner = await thread.findOne({ where: { [Op.and]: [{ user_ID: userID }, { ID: threadID }] } });
         if (!threadOwner) {
             return res.status(403).json({ "error": "insufficienct privilegdes" });
         } else {

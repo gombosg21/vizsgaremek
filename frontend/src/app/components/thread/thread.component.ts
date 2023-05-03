@@ -125,7 +125,9 @@ export class ThreadComponent implements OnInit, OnDestroy {
   };
 
   sendEdit(): void {
-    this.ThreadService.patchThreadName(this.thread.name, this.thread.ID);
+    this.showEdit = false;
+    console.log(this.thread.name)
+    this.ThreadService.patchThreadName(this.thread.name, this.thread.ID).subscribe({});
   };
 
   ngOnDestroy(): void {
