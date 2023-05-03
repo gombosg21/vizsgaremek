@@ -124,3 +124,9 @@
     position: relative;
     margin: auto;
 }
+
+@media (max-width: 992px) {
+    .container {
+        max-width: 100%;
+    }
+}

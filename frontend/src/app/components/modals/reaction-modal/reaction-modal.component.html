@@ -4,8 +4,7 @@
             <p>Select a reaction</p>
             <ul class="list-group list-group-horizontal">
                 <li class="list-group-item" *ngFor="let reaction of reactions; let i = index;">
-                    <img src="data:image/jpeg;base64,{{reaction.data}}" [alt]="reaction.name" [title]="reaction.name"
-                        (click)="add(i)">
+                    <img class="reaction-image" src="data:image/jpeg;base64,{{reaction.data}}" [alt]="reaction.name" [title]="reaction.name" (click)="add(i)">
                 </li>
             </ul>
         </div>

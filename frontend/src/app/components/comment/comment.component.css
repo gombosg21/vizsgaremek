@@ -72,3 +72,20 @@ p {
     color: var(--text-color);
     border-color: #adadad7c;
 }
+
+.small-screen-only {
+    display: none;
+}
+
+.large-screen-only {
+    display: inline-block;
+}
+
+@media (max-width: 1200px) {
+    .small-screen-only {
+        display: inline-block;
+    }
+    .large-screen-only {
+        display: none;
+    }
+}
