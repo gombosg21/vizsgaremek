@@ -4,6 +4,7 @@ import { Observable, Subscription, throwError } from 'rxjs'
 import { ApiPaths } from 'src/app/enums/api-paths';
 import { enviroment } from 'src/enviroments/enviroment';
 import { AuthService } from '../auth/auth.service';
+import { pending_friend, verified_friend } from 'src/app/models/friend';
 
 @Injectable({
   providedIn: 'root'
@@ -15,9 +16,6 @@ export class FriendsService implements OnDestroy, OnInit {
   private sessionID?: number;
 
   constructor(private http: HttpClient, private Auth: AuthService) {
-  };
-
-  ngOnInit(): void {
     this.userSub = this.Auth.getUserID().subscribe({
       next: (value) => { this.sessionID = value },
       error: (error) => { console.error(error) },
@@ -25,20 +23,23 @@ export class FriendsService implements OnDestroy, OnInit {
     });
   };
 
+  ngOnInit(): void {
+  };
+
   ngOnDestroy(): void {
     this.userSub.unsubscribe();
   };
 
-  getFriendList(userID?: number): Observable<any> {
+  getFriendList(userID?: number): Observable<verified_friend[]> {
     if (this.sessionID || userID) {
       const ID = userID ?? this.sessionID;
-      return this.http.get(this.BaseUrl + "/" + ID);
+      return this.http.get<verified_friend[]>(this.BaseUrl + "/" + ID);
     };
     return throwError(() => { new Error("called w/o userID or valid sessionID!!!") });
   };
 
-  getPendingList(): Observable<any> {
-    return this.http.get(this.BaseUrl + "/pending");
+  getPendingList(): Observable<pending_friend[]> {
+    return this.http.get<pending_friend[]>(this.BaseUrl + "/pending");
   };
 
   postRequestFriend(targetUserID: number): Observable<any> {

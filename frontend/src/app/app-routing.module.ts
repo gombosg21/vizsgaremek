@@ -10,6 +10,7 @@ import { QueryComponent } from './components/query/query.component';
 import { CarouselComponent } from './components/carousel/carousel.component';
 import { CarouselTilesetComponent } from './components/carousel-tileset/carousel-tileset.component';
 import { EditProfileComponent } from './components/edit-profile/edit-profile.component';
+import { FriendsComponent } from './components/friends/friends.component';
 
 const routes: Routes = [
   {
@@ -68,6 +69,10 @@ const routes: Routes = [
     path: 'carousels/:id',
     component: CarouselTilesetComponent
   },
+  {
+    path: 'friends',
+    component: FriendsComponent
+  }
 ];
 
 @NgModule({

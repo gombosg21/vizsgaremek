@@ -1,1 +1,17 @@
-<p>friends works!</p>
+<div>
+    <h2>Fiends</h2>
+    <ul *ngIf="filteredFriendList">
+        <li *ngFor="let friend of filteredFriendList;">
+            <p>{{friend.profile.alias}}</p>
+            <button>Unfriend</button>
+        </li>
+    </ul>
+    <h2>Pending requests</h2>
+    <ul *ngIf="pendingList">
+        <li *ngFor="let pending of pendingList;">
+            <p>{{pending.friend_ID.profile.alias}}</p>
+            <button>Accept</button>
+            <button>Reject</button>
+        </li>
+    </ul>
+</div>
