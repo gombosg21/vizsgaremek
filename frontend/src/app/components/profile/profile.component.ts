@@ -52,7 +52,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
               reactions: data.profile.reactions,
               thread: data.profile.thread
             }
-            console.log(this.UserProfile.medium)
             this.UserProfileThread = data.profile.thread;
 
             this.ThreadService.setLocalData(this.UserProfileThread);
