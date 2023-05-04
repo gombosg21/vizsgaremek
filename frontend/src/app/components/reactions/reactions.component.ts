@@ -41,6 +41,21 @@ export class ReactionsComponent implements OnInit, OnDestroy {
         console.error(err);
       }
     });
+  };
 
+  added(reactionID: number): void {
+    var index: number = -1;
+    for (let i = 0; i < this.reactionInstanceList.length; i++) {
+      if (this.reactionInstanceList[i].ID == reactionID) {
+        index = i;
+      };
+    };
+    if (index != -1) { 
+      this.reactionInstanceList[index].count++;
+      this.reactionInstanceList = [...this.reactionInstanceList];
+    }else{
+      this.reactionInstanceList.push({ID:reactionID,count:1});
+      this.reactionInstanceList = [...this.reactionInstanceList];
+    };
   };
 };

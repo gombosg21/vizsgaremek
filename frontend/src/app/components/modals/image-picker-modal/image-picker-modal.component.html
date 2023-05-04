@@ -1,1 +1,9 @@
-
+<div class="modal-overlay">
+    <div class="modal-content">
+        <div *ngFor="let media of medias">
+            <img src="data:image/jpeg;base64,{{media.file_data}}" [alt]="media.placeholder_text"
+                title="media.placeholder_text" (click)="picked(media)">
+        </div>
+        <button class="btn" (click)="close()">Cancel</button>
+    </div>
+</div>

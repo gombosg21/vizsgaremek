@@ -48,12 +48,10 @@ export class CommentComponent implements OnInit, OnDestroy {
         };
       },
       error: (err) => {
-        console.error(err)
+        console.error(err);
       },
       complete: () => { }
     });
-
-console.log(this.iterator)
   };
 
   ngOnDestroy(): void {

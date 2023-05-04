@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule, CanActivate } from '@angular/router';
+import { Routes, RouterModule } from '@angular/router';
 import { FeedComponent } from './components/feed/feed.component';
 import { LoginComponent } from './components/login/login.component';
 import { ProfileComponent } from './components/profile/profile.component';
@@ -9,6 +9,7 @@ import { RegisterComponent } from './components/register/register.component';
 import { QueryComponent } from './components/query/query.component';
 import { CarouselComponent } from './components/carousel/carousel.component';
 import { CarouselTilesetComponent } from './components/carousel-tileset/carousel-tileset.component';
+import { EditProfileComponent } from './components/edit-profile/edit-profile.component';
 
 const routes: Routes = [
   {
@@ -18,6 +19,11 @@ const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent
+  },
+  {
+    path: 'profile/edit',
+    component: EditProfileComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'profile',
@@ -61,8 +67,7 @@ const routes: Routes = [
   {
     path: 'carousels/:id',
     component: CarouselTilesetComponent
-  }
-
+  },
 ];
 
 @NgModule({

@@ -1,8 +1,10 @@
 <div class="container">
     <div class="row">
         <div class="col-md-4 text-center">
+            <a *ngIf="isSession" class="btn btn-secondary" (click)="editProfile()">Edit profile
+            </a>
             <ng-container *ngIf="UserProfile.medium">
-                <img src="data:image/jpeg;base64,{{UserProfile.medium}}" alt="Profile Image" class="rounded-circle mb-3 profile-pic">
+                <img src="data:image/jpeg;base64,{{UserProfile.medium.file_data}}" alt="Profile Image" class="rounded-circle mb-3 profile-pic">
             </ng-container>
             <ng-container *ngIf="!UserProfile.medium">
                 <img src="https://via.placeholder.com/200" alt="Profile Image" class="rounded-circle mb-3 profile-pic">

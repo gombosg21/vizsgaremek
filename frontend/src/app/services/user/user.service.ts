@@ -15,18 +15,20 @@ export class UserService implements OnInit, OnDestroy {
   private userSub: Subscription;
   private sessionID?: number;
 
-  constructor(private http: HttpClient, private Auth: AuthService) { }
+  constructor(private http: HttpClient, private Auth: AuthService) {
+    this.userSub = this.Auth.getUserID().subscribe({
+      next: (value) => { this.sessionID = value },
+      error: (error) => { console.error(error) },
+      complete: () => { }
+    });
+  }
 
   ngOnDestroy(): void {
     this.userSub.unsubscribe();
   };
 
   ngOnInit(): void {
-    this.userSub = this.Auth.getUserID().subscribe({
-      next: (value) => { this.sessionID = value },
-      error: (error) => { console.error(error) },
-      complete: () => { }
-    });
+
   };
 
   getProfile(userID?: Number): Observable<user> {
@@ -39,7 +41,7 @@ export class UserService implements OnInit, OnDestroy {
 
   updateProfile(Data: { description: string, visibility: number, picture_ID: number, alias: string }): Observable<Object> {
     if (this.sessionID) {
-      return this.http.patch<Object>(this.controllerUrl + "/" + this.sessionID, Data);
+      return this.http.patch<Object>(this.controllerUrl, Data);
     };
     return throwError(() => { new Error("called w/o a valid sessionID") })
   };

@@ -5,9 +5,9 @@ export interface profile {
     alias: string,
     birth_date: Date,
     description: string,
-    visibility: string,
+    visibility: number,
     picture_ID: number,
-    medium: string,
+    medium?: { file_data: string },
     reactions?: reaction_short[],
     thread: thread,
 };

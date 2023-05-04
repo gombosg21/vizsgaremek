@@ -21,19 +21,19 @@ export class MediaService implements OnInit, OnDestroy {
 
 
   constructor(private http: HttpClient, private Auth: AuthService) {
-
-  }
+    this.userSub = this.Auth.getUserID().subscribe({
+      next: (value) => { this.sessionID = value },
+      error: (error) => { console.error(error) },
+      complete: () => { }
+    });
+  };
 
   ngOnDestroy(): void {
     this.userSub.unsubscribe();
   };
 
   ngOnInit(): void {
-    this.userSub = this.Auth.getUserID().subscribe({
-      next: (value) => { this.sessionID = value },
-      error: (error) => { console.error(error) },
-      complete: () => { }
-    });
+
   };
 
   getLocalMediaList(): Observable<(media | ErrorModel)[]> {
@@ -56,8 +56,9 @@ export class MediaService implements OnInit, OnDestroy {
     if (this.sessionID || userID) {
       const ID = userID ?? this.sessionID;
       return this.http.get<(media | ErrorModel)[]>(this.ApiPath + "/user/" + ID);
-    }
-    return throwError(() => { new Error("called w/o userID or valid sessionID!") });
+    } else {
+      return throwError(() => { new Error("called w/o userID or valid sessionID!") });
+    };
   };
 
   getOneByID(ID: number): Observable<media | ErrorModel> {

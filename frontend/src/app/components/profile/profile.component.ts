@@ -1,31 +1,43 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { UserService } from '../../services/user/user.service';
 import { profile } from '../../models/profile';
 import { thread } from '../../models/thread';
 import { ThreadService } from '../../services/thread/thread.service';
 import { ReactionService } from 'src/app/services/reaction/reaction.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { Subscription } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent implements OnInit, OnDestroy {
 
   public UserProfile: profile;
   public UserProfileThread: thread;
   public showAddReactions: boolean = false;
+  public isSession: boolean = false;
+  private userSub: Subscription;
 
   @Input() public userID: number;
 
-  constructor(private AuthService: AuthService, private UserService: UserService, private ThreadService: ThreadService, private ReactionsService: ReactionService) {
+  constructor(private router:Router,private AuthService: AuthService, private UserService: UserService, private ThreadService: ThreadService, private ReactionsService: ReactionService) {
   };
 
-  ngOnInit(): void {
-    this.AuthService.getUserID().subscribe({
-      next: (value) => {
 
+  ngOnDestroy(): void {
+    if (this.userSub) {
+      this.userSub.unsubscribe();
+    };
+  };
+
+
+  ngOnInit(): void {
+    this.userSub = this.AuthService.getUserID().subscribe({
+      next: (value) => {
+        this.isSession = true;
         this.userID = value ?? this.userID;
 
         this.UserService.getProfile(this.userID).subscribe({
@@ -40,17 +52,8 @@ export class ProfileComponent implements OnInit {
               reactions: data.profile.reactions,
               thread: data.profile.thread
             }
-
-            this.UserProfileThread = {
-              name: data.profile.thread.name,
-              ID: data.profile.thread.ID,
-              status: data.profile.thread.status,
-              created: data.profile.thread.created,
-              last_activity: data.profile.thread.last_activity,
-              reactions: data.profile.thread.reactions,
-              comments: data.profile.thread.comments,
-              user: data.profile.thread.user
-            }
+            console.log(this.UserProfile.medium)
+            this.UserProfileThread = data.profile.thread;
 
             this.ThreadService.setLocalData(this.UserProfileThread);
             if (this.UserProfile.reactions) {
@@ -70,7 +73,7 @@ export class ProfileComponent implements OnInit {
     });
   };
 
-  addReaction(reactionID: number):void {
+  addReaction(reactionID: number): void {
     if (this.UserProfile.reactions) {
       for (let i = 0; i < this.UserProfile.reactions.length; i++) {
         if (this.UserProfile.reactions[i].ID == reactionID) {
@@ -82,8 +85,11 @@ export class ProfileComponent implements OnInit {
     this.ReactionsService.setStoredInstanceList(this.UserProfile.reactions);
   };
 
+  editProfile():void {
+    this.router.navigate(["profile/edit"]);
+  };
 
-  react():void {
+  react(): void {
     this.showAddReactions = true;
   };
 };
