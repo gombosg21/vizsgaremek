@@ -45,6 +45,7 @@ import { ImageEditTagsModalComponent } from './components/modals/image-edit-tags
 import { FollowedComponent } from './components/followed/followed.component';
 import { ImagePickerModalComponent } from './components/modals/image-picker-modal/image-picker-modal.component';
 import { AuthService } from './services/auth/auth.service';
+import { ThreadShortComponent } from './components/thread-short/thread-short.component';
 
 
 
@@ -80,6 +81,7 @@ import { AuthService } from './services/auth/auth.service';
     ImageEditTagsModalComponent,
     FollowedComponent,
     ImagePickerModalComponent,
+    ThreadShortComponent,
   ],
   imports: [
     BrowserModule,

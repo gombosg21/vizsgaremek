@@ -33,6 +33,7 @@ export class ImageComponent implements OnInit, OnDestroy {
         next: (value) => {
           if (value.hasOwnProperty('file_data')) {
             this.media = value as media;
+            console.log(this.media)
           };
           if (value.hasOwnProperty('error')) {
             this.ErrorInstance = value as ErrorModel;
