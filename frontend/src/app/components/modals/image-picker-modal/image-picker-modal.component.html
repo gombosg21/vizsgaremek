@@ -1,9 +1,15 @@
 <div class="modal-overlay">
     <div class="modal-content">
-        <div *ngFor="let media of medias">
-            <img src="data:image/jpeg;base64,{{media.file_data}}" [alt]="media.placeholder_text"
-                title="media.placeholder_text" (click)="picked(media)">
+        <h4 class="text-center mb-3">Select a profile picture</h4>
+        <div class="row">
+            <div *ngFor="let media of medias" class="col-sm-6 col-md-4 col-lg-3 mb-3">
+                <div class="image-container">
+                    <img src="data:image/jpeg;base64,{{media.file_data}}" [alt]="media.placeholder_text" title="media.placeholder_text" (click)="picked(media)" class="img-thumbnail">
+                </div>
+            </div>
         </div>
-        <button class="btn" (click)="close()">Cancel</button>
+        <div class="text-center mt-3">
+            <button class="btn btn-secondary" (click)="close()">Cancel</button>
+        </div>
     </div>
 </div>

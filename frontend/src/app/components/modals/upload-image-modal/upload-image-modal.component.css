@@ -115,3 +115,7 @@ body.modal-open {
     background: none;
     border: none !important;
 }
+
+#addTag {
+    margin-top: 2px;
+}

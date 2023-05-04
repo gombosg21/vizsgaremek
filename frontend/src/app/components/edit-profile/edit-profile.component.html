@@ -1,4 +1,4 @@
-<div>
+<div class="edit-profile">
     <form [formGroup]="ProfileGroup">
         <div class="mb-3">
             <label for="alias" class="form-label">Your alias</label>
@@ -8,40 +8,37 @@
             <button class="btn btn-primary" (click)="showPicker()">Change Profile Image</button>
         </div>
         <div>
+            <p class="form-label">Your visibility</p>
             <div class="form-check">
-                <p>Your visbility</p>
-                <input class="form-check-input" type="radio" name="visibilityControl" id="visibilityRadio0"
-                    formControlName="visibilityControl" value="0">
+                <input class="form-check-input" type="radio" name="visibilityControl" id="visibilityRadio0" formControlName="visibilityControl" value="0">
                 <label class="form-check-label" for="visibilityRadio0">
                     Private
                 </label>
             </div>
             <div class="form-check">
-                <input class="form-check-input" type="radio" name="visibilityControl" id="visibilityRadio1"
-                    formControlName="visibilityControl" value="1">
+                <input class="form-check-input" type="radio" name="visibilityControl" id="visibilityRadio1" formControlName="visibilityControl" value="1">
                 <label class="form-check-label" for="visibilityRadio1">
                     Friends Only
                 </label>
             </div>
             <div class="form-check">
-                <input class="form-check-input" type="radio" name="visibilityControl" id="visibilityRadio2"
-                    formControlName="visibilityControl" value="2">
+                <input class="form-check-input" type="radio" name="visibilityControl" id="visibilityRadio2" formControlName="visibilityControl" value="2">
                 <label class="form-check-label" for="visibilityRadio2">
                     Registered Only
                 </label>
             </div>
             <div class="form-check">
-                <input class="form-check-input" type="radio" name="visibilityControl" id="visibilityRadio3"
-                    formControlName="visibilityControl" value="3">
+                <input class="form-check-input" type="radio" name="visibilityControl" id="visibilityRadio3" formControlName="visibilityControl" value="3">
                 <label class="form-check-label" for="visibilityRadio3">
                     Public
                 </label>
             </div>
         </div>
 
-        <button class="btn btn-primary" (click)="finishEdit()">Submit</button>
+        <div class="text-center mt-3">
+            <button class="btn btn-primary" (click)="finishEdit()">Submit</button>
+        </div>
     </form>
 </div>
 
-<app-image-picker-modal *ngIf="showImagePicker" (mediaID)="setImageID($event)"
-    (mediaData)="setImageData($event)" (closed)="hidePicker()"></app-image-picker-modal>
+<app-image-picker-modal *ngIf="showImagePicker" (mediaID)="setImageID($event)" (mediaData)="setImageData($event)" (closed)="hidePicker()"></app-image-picker-modal>
