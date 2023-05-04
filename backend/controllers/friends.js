@@ -1,5 +1,7 @@
 const friend = require("../models").friends;
 const activity = require("../models").activity;
+const user = require("../models").user;
+const profile = require("../models").profile;
 const { Op } = require("sequelize");
 
 exports.requestFriend = async (req, res, next) => {
@@ -31,13 +33,20 @@ exports.getPendingFriends = async (req, res, next) => {
     const userID = req.user.ID;
 
     try {
-        const pendingList = await friend.findAll({ where: { [Op.and]: [{ pending: true }, { friend_ID: userID }] }, attributes: ['date', ['user_ID', 'ID']] });
+        const pendingList = await friend.findAll({
+            where: { [Op.and]: [{ pending: true }, { friend_ID: userID }] },
+            attributes: ['date', ['user_ID', 'ID']],
+            include: [
+                {
+                    model: user, as: 'friendship_starter', attributes: ['ID'],
+                    include: [
+                        { model: profile, attributes: ['alias'] }
+                    ]
+                }
+            ]
+        });
 
-        if (!pendingList) {
-            return res.status(200).json({ pending_friends: "no pending friend requests" });
-        };
-
-        return res.status(200).json({ pending_friends: pendingList });
+        return res.status(200).json(pendingList);
     } catch (error) {
         console.error(error);
         return res.status(500);
@@ -52,7 +61,7 @@ exports.verifyFriendRequest = async (req, res, next) => {
         const updateFriend = await friend.findOne({ where: { [Op.and]: [{ user_ID: friendID }, { friend_ID: userID }, { pending: true }] }, attributes: [['user_ID', 'ID'], 'date'] });
 
         if (!updateFriend) {
-            return res.status(400).json({ error: `cannot accept, user has no pending friend request with id of  ${friendID}` });
+            return res.status(400).json({ error: `cannot accept, user has no pending friend request with id of ${friendID}` });
         };
 
         await updateFriend.update({
@@ -145,24 +154,26 @@ exports.getFriends = async (req, res, next) => {
                         ]
                 },
                 { pending: false }]
-            }, attributes: { exclude: ['pending'] }, group: 'user_ID'
+            }, attributes: { exclude: ['pending'] },
+            include: [
+                {
+                    model: user, as: 'friendship_starter', attributes: ['ID'],
+                    include: [
+                        { model: profile, attributes: ['alias'] }
+                    ]
+                },
+                {
+                    model: user, as: 'friendship_recepient', attributes: ['ID'],
+                    include: [
+                        { model: profile, attributes: ['alias'] }
+                    ]
+                }
+            ]
         });
 
-        const friends = [];
+        console.log(friendList)
 
-        friendList.forEach(Friend => {
-            var FormattedFriend = {
-                date: Friend.date
-            };
-            if (Friend.user_ID != userID) {
-                FormattedFriend.id = Friend.user_ID;
-            } else {
-                FormattedFriend.id = Friend.friend_ID;
-            };
-            friends.push(FormattedFriend);
-        });
-
-        return res.status(200).json({ friend_list: friends });
+        return res.status(200).json(friendList);
     } catch (error) {
         console.error(error);
         return res.status(500);
