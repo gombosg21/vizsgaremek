@@ -1,8 +1,6 @@
 <div class="container">
     <div class="row">
         <div class="col-md-4 text-center">
-            <a *ngIf="isSession" class="btn btn-secondary" (click)="editProfile()">Edit profile
-            </a>
             <ng-container *ngIf="UserProfile.medium">
                 <img src="data:image/jpeg;base64,{{UserProfile.medium.file_data}}" alt="Profile Image" class="rounded-circle mb-3 profile-pic">
             </ng-container>
@@ -11,7 +9,11 @@
             </ng-container>
         </div>
         <div class="col-md-8">
-            <h4 class="username"><i class="fa-solid fa-user" id="user-icon"></i> {{UserProfile.alias}}</h4>
+            <div class="d-flex justify-content-between align-items-center">
+                <h4 class="username"><i class="fa-solid fa-user" id="user-icon"></i> {{UserProfile.alias}}</h4>
+                <a *ngIf="isSession" class="btn btn-secondary" (click)="editProfile()"><i class="fa-solid fa-gear"></i> Edit profile
+                </a>
+            </div>
             <p class="birthdate"><i class="fa-solid fa-cake-candles"></i> {{UserProfile.birth_date | date:'dd. MMMM'}}
             </p>
             <div class="col-md-9">
@@ -20,24 +22,24 @@
                 <p class="lead">{{UserProfile.description}}</p>
             </div>
         </div>
-        <div class="col-md-12 mt-3">
-            <div class="d-flex justify-content-between align-items-center">
-                <h5>Profile Reactions</h5>
-                <button class="btn btn-secondary btn-sm" (click)="react()">
+    </div>
+    <div class="col-md-12 mt-3">
+        <div class="d-flex justify-content-between align-items-center">
+            <h5>Profile Reactions</h5>
+            <button class="btn btn-secondary btn-sm" (click)="react()">
                     <i class="fas fa-thumbs-up"></i> React
                 </button>
-            </div>
-            <div>
-                <app-reactions *ngIf="UserProfile.reactions"></app-reactions>
-            </div>
         </div>
-
-        <hr>
-
-        <app-reaction-modal *ngIf="showAddReactions" (close)="showAddReactions = false" parentType="user" [parentID]="userID" (reacted)="addReaction($event)"></app-reaction-modal>
-
-        <ng-container *ngIf="UserProfileThread">
-            <app-thread [thread]="UserProfileThread"></app-thread>
-        </ng-container>
+        <div>
+            <app-reactions *ngIf="UserProfile.reactions"></app-reactions>
+        </div>
     </div>
+
+    <hr>
+
+    <app-reaction-modal *ngIf="showAddReactions" (close)="showAddReactions = false" parentType="user" [parentID]="userID" (reacted)="addReaction($event)"></app-reaction-modal>
+
+    <ng-container *ngIf="UserProfileThread">
+        <app-thread [thread]="UserProfileThread"></app-thread>
+    </ng-container>
 </div>

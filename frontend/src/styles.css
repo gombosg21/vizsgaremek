@@ -12,17 +12,17 @@ body {
 }
 
 :root {
-    --bg-color-light: #fafafa;
+    --bg-color-light: #ffffff;
     --bg-color-dark: #1c1c1c;
-    --bg2-color-light: #fafafa;
+    --bg2-color-light: #ffffff;
     --bg2-color-dark: #1c1c1c;
     --text-color-light: #333333;
-    --text-color-dark: #f1f1f1;
+    --text-color-dark: #ffffff;
     --border-color-light: #D2D2D2;
     --border-color-dark: #747474;
-    --background-light: #f1f1f1;
+    --background-light: #ffffff;
     --background-dark: #1c1c1c;
-    --tagbg-color-light: #dfdfdf;
+    --tagbg-color-light: #ffffff;
     --tagbg-color-dark: #585858;
 }
 
