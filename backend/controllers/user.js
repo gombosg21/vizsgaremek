@@ -123,35 +123,34 @@ exports.editProfile = async (req, res, next) => {
 
     try {
         const UserProfile = await profile.findByPk(ID);
-        var CurrDate = Date.now()
-        var lastUpdate = Date(UserProfile.last_updated);
-        if ((lastUpdate + (60 * 60 * 5)) < CurrDate) {
+        const CurrDate = Date.now()
+        const lastUpdate = Date(UserProfile.last_updated);
 
-            const userMediaIDs = (await media.findAll({ where: { user_ID: ID }, attributes: ['ID'] })).map(Media => Media.ID);
-
-            if (profilePicture) {
-                if (!(userMediaIDs.includes(profilePicture))) {
-                    return res.status(400).json({ error: "invalid picture ID" });
-                };
-            };
-
-            await UserProfile.update({
-                profile_description: profileDescription ?? UserProfile.profile_picture,
-                profile_visibility: profileVisibility ?? UserProfile.profile_visibility,
-                profile_picture: profilePicture ?? UserProfile.profilePicture,
-                alias: userAlias ?? UserProfile.alias,
-                last_updated: Date.now()
-            });
-
-            if (userAlias) {
-                await thread.update({ name: UserProfile.alias + "'s profile thread" }, { where: { profile_ID: UserProfile.ID } });
-            };
-
-            return res.status(200).json({ ID: UserProfile.ID });
-        } else {
+        if ((lastUpdate + (60 * 60 * 5)) > CurrDate) {
             return res.status(400).json({ error: "cannot update, last update was less than 5 minutes ago" });
         };
 
+        const userMediaIDs = (await media.findAll({ where: { user_ID: ID }, attributes: ['ID'] })).map(Media => Media.ID);
+
+        if (profilePicture) {
+            if (!(userMediaIDs.includes(profilePicture))) {
+                return res.status(400).json({ error: "invalid picture ID" });
+            };
+        };
+
+        await UserProfile.update({
+            profile_description: profileDescription ?? UserProfile.profile_picture,
+            profile_visibility: profileVisibility ?? UserProfile.profile_visibility,
+            picture_ID: profilePicture ?? UserProfile.profilePicture,
+            alias: userAlias ?? UserProfile.alias,
+            last_updated: Date.now()
+        });
+
+        if (userAlias) {
+            await thread.update({ name: UserProfile.alias + "'s profile thread" }, { where: { profile_ID: ID } });
+        };
+
+        return res.status(200).json({ ID: UserProfile.ID });
     }
     catch (error) {
         console.error(error);
