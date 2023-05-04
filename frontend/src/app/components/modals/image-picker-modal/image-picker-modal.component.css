@@ -7,13 +7,12 @@
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .modal-content {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     background-color: var(--bg-color);
     color: var(--text-color);
     border-radius: 10px;
@@ -21,5 +20,22 @@
     max-width: 80%;
     overflow-y: auto;
     max-height: 90vh;
-    padding: 0.5em;
+    padding: 1.5em;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.img-thumbnail {
+    width: 100%;
+    height: auto;
+    cursor: pointer;
+    border: 1px solid #8484847c;
+    border-radius: 4px;
+    transition: box-shadow 0.3s;
+}
+
+.img-thumbnail:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
