@@ -17,7 +17,7 @@ exports.searchRules = () => {
     ]
 };
 
-exports.checkIfTagIDDoesNotExsits = async (req, res, next) => {
+exports.checkIfTagIDExsits = async (req, res, next) => {
     const ID = req.params.ID;
 
     try {

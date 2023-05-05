@@ -73,7 +73,7 @@ exports.changePasswordRules = () => {
     ]
 };
 
-exports.checkIfNameConflicts = async (req, res, next) => {
+exports.checkIfUserNameAlreadyExists = async (req, res, next) => {
     const UserName = req.body.name;
 
     try {
@@ -107,22 +107,22 @@ exports.checkIfUserIDExsits = async (req, res, next) => {
     };
 };
 
-exports.checkIfNameExsist = async (req, res, next) => {
-    const Name = req.params.name;
+// exports.checkIfNameExsist = async (req, res, next) => {
+//     const Name = req.params.name;
 
-    try {
-        const User = await user.findOne({ where: { name: Name } });
-        if (!User) {
-            return res.status(404)
-                .json({ "error": `username ${Name} does not exist` });
-        } else {
-            return next();
-        };
-    } catch (error) {
-        console.error(error);
-        res.status(500);
-    };
-};
+//     try {
+//         const User = await user.findOne({ where: { name: Name } });
+//         if (!User) {
+//             return res.status(404)
+//                 .json({ "error": `username ${Name} does not exist` });
+//         } else {
+//             return next();
+//         };
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500);
+//     };
+// };
 
 exports.checkIfNotSelf = (req, res, next) => {
     try {

@@ -9,8 +9,8 @@ const auth = require("../middlewares/authentiaction/auth");
 //change tagname
 //delete tag
 router.route("/tag/:ID")
-    .patch(auth.isAuth, tagValidator.checkIfTagIDDoesNotExsits, tagValidator.tagRules(), commonValidator.validate, tagController.updateTag)
-    .delete(auth.isAuth, tagValidator.checkIfTagIDDoesNotExsits, tagController.deleteTag);
+    .patch(auth.isAuth, tagValidator.checkIfTagIDExsits, tagValidator.tagRules(), commonValidator.validate, tagController.updateTag)
+    .delete(auth.isAuth, tagValidator.checkIfTagIDExsits, tagController.deleteTag);
 
 // get all tags   
 router.get("/tag/all", tagController.getAllTags);

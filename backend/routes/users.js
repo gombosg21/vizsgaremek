@@ -11,7 +11,7 @@ router.post('/user/login', auth.hasAuth, userController.login);
 router.delete('/user/logout', auth.isAuth, userController.logout);
 
 // post create user
-router.post('/user/register', userValidator.checkIfNameConflicts, userValidator.registerRules(), commonValidation.validate, userController.createUser);
+router.post('/user/register', userValidator.checkIfUserNameAlreadyExists, userValidator.registerRules(), commonValidation.validate, userController.createUser);
 
 // get profile
 router.get('/user/:userID', userValidator.checkIfUserIDExsits, auth.optionalAuth, userController.getProfile);
