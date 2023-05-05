@@ -18,11 +18,11 @@ export class CommentComponent implements OnInit, OnDestroy {
 
   @Input() public iterator: number;
 
-  //TODO: delete comment
   @Output() isDeleted: EventEmitter<comment> = new EventEmitter<comment>();
 
   public sessionID: number = -1;
   public showEdit: boolean = false;
+  public newReactionID: number;
 
 
   private userSub: Subscription;
@@ -71,6 +71,21 @@ export class CommentComponent implements OnInit, OnDestroy {
 
   cancelEdit(): void {
     this.showEdit = false;
+  };
+
+  addReaction(reactionID: number) {
+    console.log('add');
+    
+    if (this.data.reactions) {
+      for (let i = 0; i < this.data.reactions.length; i++) {
+        if (this.data.reactions[i].ID == reactionID) {
+          this.data.reactions[i].count++;
+        };
+      };
+    };
+    this.data.reactions = [{ ID: reactionID, count: 1 }];
+    this.ReactionService.setStoredInstanceList(this.data.reactions);
+    this.newReactionID = reactionID;
   };
 
   sendEdit(): void {

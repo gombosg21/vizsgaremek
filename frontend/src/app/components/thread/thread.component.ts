@@ -1,9 +1,8 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { ThreadService } from '../../services/thread/thread.service';
 import { comment } from '../../models/comment';
 import { thread } from '../../models/thread';
 import { CommentService } from '../../services/comment/comment.service';
-import { PageEvent } from '@angular/material/paginator';
 import { ReactionService } from 'src/app/services/reaction/reaction.service';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/auth/auth.service';
@@ -20,6 +19,7 @@ export class ThreadComponent implements OnInit, OnDestroy {
 
   @Input() public iterator: number = 0;
   @Input() public thread: thread;
+  public newReactionID:number;
 
   public threadStatus: string;
   public showAddReactions: boolean = false;
@@ -57,7 +57,6 @@ export class ThreadComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
 
     if (this.thread.reactions) {
-
       this.ReactionService.setStoredInstanceList(this.thread.reactions);
     };
 
@@ -109,6 +108,7 @@ export class ThreadComponent implements OnInit, OnDestroy {
     };
     this.thread.reactions = [{ ID: reactionID, count: 1 }];
     this.ReactionService.setStoredInstanceList(this.thread.reactions);
+    this.newReactionID = reactionID;
   };
 
   react() {
@@ -131,7 +131,7 @@ export class ThreadComponent implements OnInit, OnDestroy {
         this.thread.name = this.newName;
       },
       error: (err) => {
-        console.log(err)
+        console.error(err)
       },
       complete: () => {
 

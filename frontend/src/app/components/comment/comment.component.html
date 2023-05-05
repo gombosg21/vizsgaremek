@@ -39,7 +39,7 @@
                 </div>
             </div>
         </div>
-        <app-reactions *ngIf="data.reactions" [reactionInstanceList]="data.reactions"></app-reactions>
+        <app-reactions *ngIf="data.reactions" [newReaction]="newReactionID"></app-reactions>
         <button class="btn btn-secondary btn-sm large-screen-only" (click)="react()">
             <i class="fas fa-thumbs-up"></i> React
         </button>
@@ -49,4 +49,4 @@
     </div>
 </div>
 
-<app-reaction-modal *ngIf="showAddReactions" (close)="showAddReactions = false" parentType="comment" [parentID]="data.ID"></app-reaction-modal>
+<app-reaction-modal *ngIf="showAddReactions" (close)="showAddReactions = false" parentType="comment" [parentID]="data.ID" (reacted)="addReaction($event)"></app-reaction-modal>

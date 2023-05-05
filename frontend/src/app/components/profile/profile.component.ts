@@ -22,8 +22,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
   private userSub: Subscription;
 
   @Input() public userID: number;
+  public newReactionID: number;
 
-  constructor(private router:Router,private AuthService: AuthService, private UserService: UserService, private ThreadService: ThreadService, private ReactionsService: ReactionService) {
+  constructor(private router: Router, private AuthService: AuthService, private UserService: UserService, private ThreadService: ThreadService, private ReactionsService: ReactionService) {
   };
 
 
@@ -65,7 +66,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
         });
       },
       error: (err) => {
-        console.log(err)
+        console.error(err)
       },
       complete: () => {
       },
@@ -82,9 +83,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
     };
     this.UserProfile.reactions = [{ ID: reactionID, count: 1 }];
     this.ReactionsService.setStoredInstanceList(this.UserProfile.reactions);
+    this.newReactionID = reactionID;
   };
 
-  editProfile():void {
+  editProfile(): void {
     this.router.navigate(["profile/edit"]);
   };
 

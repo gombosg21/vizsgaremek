@@ -14,8 +14,8 @@ export class ReactionModalComponent {
   @Input() public parentType: string;
   @Input() public parentID: number;
 
-  @Output() reacted = new EventEmitter<number>();
-  @Output() close = new EventEmitter<void>();
+  @Output() reacted:EventEmitter<number> = new EventEmitter<number>();
+  @Output() close:EventEmitter<void> = new EventEmitter<void>();
 
   public reactions: reaction[];
 
@@ -33,13 +33,12 @@ export class ReactionModalComponent {
   add(index: number): void {
     this.ReactionsService.addReactionInstance([index + 1], this.parentID, this.parentType).subscribe({
       error: (error) => {
-        console.log(error)
+        console.error(error)
       },
       next: (value) => {
         this.reacted.emit(this.reactions[index].ID);
       },
       complete: () => {
-
       }
     });
   };
@@ -47,5 +46,4 @@ export class ReactionModalComponent {
   onClose(): void {
     this.close.emit();
   };
-
 };

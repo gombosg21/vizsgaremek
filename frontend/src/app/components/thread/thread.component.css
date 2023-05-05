@@ -66,3 +66,11 @@ textarea.form-control {
 #threadEditBtn {
     margin-top: 3px;
 }
+
+.small-screen-only {
+    display: none;
+}
+
+.large-screen-only {
+    display: inline-block;
+}

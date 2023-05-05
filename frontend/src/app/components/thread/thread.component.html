@@ -33,6 +33,11 @@
                     </p>
                 </div>
             </div>
+            <button (click)="react()" class="btn btn-secondary btn-sm  large-screen-only"><i class="fas fa-thumbs-up"></i> React</button>
+            <button class="btn btn-secondary btn-sm small-screen-only" (click)="react()">
+                <i class="fas fa-thumbs-up"></i>
+            </button>
+            <app-reactions *ngIf="thread.reactions" [newReaction]="newReactionID"></app-reactions>
             <hr>
             <ng-container *ngIf="thread.comments">
                 <app-comment *ngFor="let comment of thread.comments | slice:
