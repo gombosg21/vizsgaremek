@@ -118,8 +118,12 @@ exports.removeFrined = async (req, res, next) => {
             await deleteFriend.destroy();
             const activityInstanceOne = await activity.findOne({ where: { [Op.and]: [{ user_ID: userID }, { friend_ID: friendID }, { followed_ID: null }] } });
             const activityInstanceTwo = await activity.findOne({ where: { [Op.and]: [{ user_ID: friendID }, { friend_ID: userID }, { followed_ID: null }] } });
-            await activityInstanceOne.destroy();
-            await activityInstanceTwo.destroy();
+            if (activityInstanceOne) {
+                await activityInstanceOne.destroy();
+            };
+            if (activityInstanceTwo) {
+                await activityInstanceTwo.destroy();
+            };
             return res.status(200).json({ deleted: { ID: deleteFriend.user_ID } });
         } else {
             const deleteFriend2 = await friend.findOne({ where: { [Op.and]: [{ user_ID: friendID }, { friend_ID: userID }] } });
@@ -127,8 +131,12 @@ exports.removeFrined = async (req, res, next) => {
                 await deleteFriend2.destroy();
                 const activityInstanceOne = await activity.findOne({ where: { [Op.and]: [{ user_ID: userID }, { friend_ID: friendID }, { followed_ID: null }] } });
                 const activityInstanceTwo = await activity.findOne({ where: { [Op.and]: [{ user_ID: friendID }, { friend_ID: userID }, { followed_ID: null }] } });
-                await activityInstanceOne.destroy();
-                await activityInstanceTwo.destroy();
+                if (activityInstanceOne) {
+                    await activityInstanceOne.destroy();
+                };
+                if (activityInstanceTwo) {
+                    await activityInstanceTwo.destroy();
+                };
                 return res.status(200).json({ deleted: { ID: deleteFriend2.user_ID } });
             } else {
                 return res.status(400).json({ error: `user has no friend with id of ${friendID}` });
@@ -144,36 +152,46 @@ exports.removeFrined = async (req, res, next) => {
 exports.getFriends = async (req, res, next) => {
     const userID = req.params.userID;
     try {
-        const friendList = await friend.findAll({
+        const friendListPre = await friend.findAll({
             where: {
-                [Op.and]: [{
-                    [Op.or]:
-                        [
-                            { user_ID: userID },
-                            { friend_ID: userID }
-                        ]
-                },
-                { pending: false }]
-            }, attributes: { exclude: ['pending'] },
-            include: [
-                {
-                    model: user, as: 'friendship_starter', attributes: ['ID'],
-                    include: [
-                        { model: profile, attributes: ['alias'] }
-                    ]
-                },
-                {
-                    model: user, as: 'friendship_recepient', attributes: ['ID'],
-                    include: [
-                        { model: profile, attributes: ['alias'] }
-                    ]
-                }
-            ]
+                [Op.and]: [
+                    {
+                        [Op.or]:
+                            [
+                                { user_ID: userID },
+                                { friend_ID: userID }
+                            ]
+                    },
+                    { pending: false }
+                ]
+            },
+            attributes: { exclude: ['pending'] },
+        });
+        const friendIDs = [];
+
+        friendListPre.forEach(element => {
+            if (element.user_ID = !userID) {
+                friendIDs.push(element.user_ID);
+            };
+            if (element.friend_ID != userID) {
+                friendIDs.push(element.friend_ID);;
+            }
         });
 
-        console.log(friendList)
+        if (friendIDs.length != 0) {
+            const friendList = await user.findAll({
+                where: { ID: { [Op.in]: friendIDs } },
+                attributes: ['ID'],
+                include:
+                    [
+                        { model: profile, attributes: ['alias'] }
+                    ]
+            });
+            return res.status(200).json(friendList);
+        } else {
+            return res.status(200).json({});
+        };
 
-        return res.status(200).json(friendList);
     } catch (error) {
         console.error(error);
         return res.status(500);
