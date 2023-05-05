@@ -46,6 +46,7 @@ import { FollowedComponent } from './components/followed/followed.component';
 import { ImagePickerModalComponent } from './components/modals/image-picker-modal/image-picker-modal.component';
 import { AuthService } from './services/auth/auth.service';
 import { ThreadShortComponent } from './components/thread-short/thread-short.component';
+import { ThreadCreateModalComponent } from './components/modals/thread-create-modal/thread-create-modal.component';
 
 
 
@@ -82,6 +83,7 @@ import { ThreadShortComponent } from './components/thread-short/thread-short.com
     FollowedComponent,
     ImagePickerModalComponent,
     ThreadShortComponent,
+    ThreadCreateModalComponent,
   ],
   imports: [
     BrowserModule,
