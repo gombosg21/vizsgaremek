@@ -139,8 +139,8 @@ exports.editProfile = async (req, res, next) => {
         };
 
         await UserProfile.update({
-            profile_description: profileDescription ?? UserProfile.profile_picture,
-            profile_visibility: profileVisibility ?? UserProfile.profile_visibility,
+            description: profileDescription ?? UserProfile.profile_picture,
+            visibility: profileVisibility ?? UserProfile.profile_visibility,
             picture_ID: profilePicture ?? UserProfile.profilePicture,
             alias: userAlias ?? UserProfile.alias,
             last_updated: Date.now()
