@@ -3,7 +3,8 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 import { UserService } from 'src/app/services/user/user.service';
 import { Subscription } from 'rxjs'
 import { profile } from 'src/app/models/profile';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-edit-profile',
@@ -12,10 +13,10 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 })
 export class EditProfileComponent implements OnInit, OnDestroy {
 
-  public description: string;
   public ProfileGroup = new FormGroup({
     visibilityControl: new FormControl(''),
-    aliasControl: new FormControl('', Validators.required)
+    aliasControl: new FormControl(''),
+    descriptionControl: new FormControl('')
   });
 
   public showImagePicker: boolean = false;
@@ -27,7 +28,7 @@ export class EditProfileComponent implements OnInit, OnDestroy {
 
 
 
-  constructor(private UserService: UserService, private Auth: AuthService) {
+  constructor(private UserService: UserService, private Auth: AuthService, private router:Router) {
   };
 
   ngOnInit(): void {
@@ -48,8 +49,7 @@ export class EditProfileComponent implements OnInit, OnDestroy {
               thread: data.profile.thread
             };
             this.picture_ID = this.UserProfile.picture_ID;
-            this.description = this.UserProfile.description;
-            this.ProfileGroup.setValue({ visibilityControl: String(this.UserProfile.visibility), aliasControl: this.UserProfile.alias});
+            this.ProfileGroup.setValue({ visibilityControl: String(this.UserProfile.visibility), aliasControl: this.UserProfile.alias, descriptionControl: String(this.UserProfile.description) });
             this.profileImage = this.UserProfile.medium?.file_data;
           },
           error: (err) => {
@@ -58,7 +58,7 @@ export class EditProfileComponent implements OnInit, OnDestroy {
         });
       },
       error: (err) => {
-        console.log(err)
+        console.error(err)
       },
       complete: () => {
       },
@@ -81,6 +81,7 @@ export class EditProfileComponent implements OnInit, OnDestroy {
   };
 
   setImageID(ID: number): void {
+    console.log("a",ID);
     this.picture_ID = ID;
   };
 
@@ -91,14 +92,16 @@ export class EditProfileComponent implements OnInit, OnDestroy {
   finishEdit(): void {
 
     const Data = {
-      description: this.description,
-      visibility:  Number(this.ProfileGroup.value.visibilityControl),
+      description: this.ProfileGroup.value.descriptionControl!,
+      visibility: Number(this.ProfileGroup.value.visibilityControl),
       alias: this.ProfileGroup.value.aliasControl!,
       picture_ID: this.picture_ID
     };
 
     this.UserService.updateProfile(Data).subscribe({
-      next: (val) => { },
+      next: (val) => { 
+        this.router.navigate(["/profile"]);
+      },
       complete: () => { },
       error: (err) => { console.error(err) }
     });
