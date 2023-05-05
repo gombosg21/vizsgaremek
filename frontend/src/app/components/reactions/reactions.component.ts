@@ -23,16 +23,6 @@ export class ReactionsComponent implements OnInit, OnDestroy, OnChanges {
   };
 
   ngOnChanges(changes: SimpleChanges) {
-    for (const propName in changes) {
-      const changedProp = changes[propName];
-      const to = JSON.stringify(changedProp.currentValue);
-      if (changedProp.isFirstChange()) {
-        console.log(`Initial value of ${propName} set to ${to}`);
-      } else {
-        const from = JSON.stringify(changedProp.previousValue);
-        console.log(`${propName} changed from ${from} to ${to}`);
-      }
-    }
   }
 
   constructor(private DBService: DbService, private ReactionService: ReactionService) {
