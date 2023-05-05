@@ -31,7 +31,6 @@ export class FriendsComponent implements OnDestroy, OnInit {
     this.FriendsService.getFriendList(this.userID).subscribe({
       error: (err) => { console.error(err); },
       next: (value) => {
-        // console.log(value)
         this.friendList = value;
       },
       complete: () => { }
@@ -43,7 +42,6 @@ export class FriendsComponent implements OnDestroy, OnInit {
       },
       next: (value) => {
         this.pendingList = value;
-        console.log(this.pendingList)
       },
       complete: () => {
 
