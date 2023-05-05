@@ -5,6 +5,7 @@ import { ApiPaths } from 'src/app/enums/api-paths';
 import { enviroment } from 'src/enviroments/enviroment';
 import { AuthService } from '../auth/auth.service';
 import { pending_friend, verified_friend } from 'src/app/models/friend';
+import { user_short } from 'src/app/models/user';
 
 @Injectable({
   providedIn: 'root'

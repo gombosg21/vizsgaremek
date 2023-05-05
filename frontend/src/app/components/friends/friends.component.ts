@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { pending_friend, verified_friend } from 'src/app/models/friend';
-import { user_short } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { FriendsService } from 'src/app/services/friends/friends.service';
 
@@ -15,9 +14,8 @@ export class FriendsComponent implements OnDestroy, OnInit {
 
   @Input() public userID: number;
 
-  private friendList: verified_friend[];
+  public friendList: verified_friend[];
   public pendingList: pending_friend[];
-  public filteredFriendList: user_short[];
 
   private userSub: Subscription;
 
@@ -33,7 +31,7 @@ export class FriendsComponent implements OnDestroy, OnInit {
     this.FriendsService.getFriendList(this.userID).subscribe({
       error: (err) => { console.error(err); },
       next: (value) => {
-        console.log(value)
+        // console.log(value)
         this.friendList = value;
       },
       complete: () => { }
@@ -45,18 +43,12 @@ export class FriendsComponent implements OnDestroy, OnInit {
       },
       next: (value) => {
         this.pendingList = value;
+        console.log(this.pendingList)
       },
       complete: () => {
 
       }
     });
-
-    this.friendList.forEach(item => {
-      if (item.friend_ID.ID != this.userID) { this.filteredFriendList.push(item.friend_ID) };
-      if (item.user_ID.ID != this.userID) { this.filteredFriendList.push(item.user_ID) };
-    });
-
-    this.friendList = [...this.friendList];
   };
 
   ngOnDestroy(): void {
