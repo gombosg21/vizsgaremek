@@ -1,0 +1,36 @@
+@import '~@fortawesome/fontawesome-free/css/all.css';
+.friends-component {
+    max-width: 1000px;
+    margin: 0 auto;
+    border: 1px solid #8484847c;
+    border-radius: 10px;
+    padding: 2rem;
+    gap: 2rem;
+}
+
+.friends,
+.pending-requests {
+    flex: 1;
+}
+
+.friend-item,
+.pending-item {
+    border-bottom: 1px solid #8484847c;
+    padding-bottom: 0.5rem;
+}
+
+.pending-item:last-child,
+.friend-item:last-child {
+    border-bottom: none;
+}
+
+.btn-sm {
+    width: 2rem;
+    height: 2rem;
+}
+
+@media (max-width: 999px) {
+    .friends-component {
+        flex-direction: column-reverse;
+    }
+}
