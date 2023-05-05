@@ -38,13 +38,8 @@ exports.getPendingFriends = async (req, res, next) => {
             attributes: ['date', 'user_ID'],
         });
 
-        const pendingIDs = [];
+        const pendingIDs = pendingListRaw.map(item => item.friend_ID);
 
-        pendingListRaw.forEach(element => {
-            if (element.user_ID != userID) {
-                pendingIDs.push(element.user_ID);
-            };
-        });
 
         if (pendingIDs.length != 0) {
             const pendingList = await user.findAll({
@@ -60,7 +55,7 @@ exports.getPendingFriends = async (req, res, next) => {
             pendingList.forEach(element => {
                 pendingListRaw.forEach(secondElement => {
                     if (element.ID == secondElement.user_ID) {
-                        result.push({ ID: element.ID, profile: { alias: element.profile.alias }, date: secondElement.date })
+                        result.push({ ID: element.ID, profile: { alias: element.profile.alias }, date: secondElement.date });
                     };
                 });
             });
