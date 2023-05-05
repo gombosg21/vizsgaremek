@@ -74,8 +74,6 @@ export class CommentComponent implements OnInit, OnDestroy {
   };
 
   addReaction(reactionID: number) {
-    console.log('add');
-    
     if (this.data.reactions) {
       for (let i = 0; i < this.data.reactions.length; i++) {
         if (this.data.reactions[i].ID == reactionID) {
