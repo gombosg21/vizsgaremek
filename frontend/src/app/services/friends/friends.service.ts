@@ -47,8 +47,8 @@ export class FriendsService implements OnDestroy, OnInit {
     return this.http.post(this.BaseUrl + "/" + targetUserID + "/add", "");
   };
 
-  postVerifyRequest(targetUserID: number): Observable<any> {
-    return this.http.post(this.BaseUrl + "/" + targetUserID + "/confirm", "");
+  patchVerifyRequest(targetUserID: number): Observable<any> {
+    return this.http.patch(this.BaseUrl + "/" + targetUserID + "/confirm", "");
   };
 
   deleteRejectFriendRequest(targetUserID: number): Observable<any> {

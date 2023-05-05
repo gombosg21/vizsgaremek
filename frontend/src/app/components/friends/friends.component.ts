@@ -57,4 +57,58 @@ export class FriendsComponent implements OnDestroy, OnInit {
     };
   };
 
+  unFriend(friend: verified_friend): void {
+    this.FriendsService.deleteUnfriend(friend.ID).subscribe({
+      next: (val) => {
+        this.friendList.splice(this.friendList.indexOf(friend), 1);
+        this.friendList = [...this.friendList];
+      },
+      error: (err) => {
+        console.error(err);
+      }, complete: () => {
+
+      }
+    })
+  };
+
+  rejectRequest(friend: pending_friend): void {
+    this.FriendsService.deleteRejectFriendRequest(friend.ID).subscribe({
+      next: (val) => {
+        this.pendingList.splice(this.friendList.indexOf(friend), 1);
+        this.friendList = [...this.friendList];
+      },
+      error: (err) => { console.error(err); },
+      complete: () => { }
+    });
+  };
+
+  acceptRequest(friend: pending_friend): void {
+    this.FriendsService.patchVerifyRequest(friend.ID).subscribe({
+      next: (val) => {
+        this.pendingList.splice(this.friendList.indexOf(friend), 1);
+        this.friendList = [...this.friendList];
+        this.friendList.push(friend as verified_friend);
+        this.friendList = [...this.friendList];
+      },
+      error: (err) => {
+        console.error(err)
+      },
+      complete: () => { }
+    });
+  };
+
+  requestFriendShip(targetID: number): void {
+    this.FriendsService.postRequestFriend(targetID).subscribe({
+      next: (val) => { },
+      error: (err) => { 
+        console.error(err); 
+      },
+      complete: () => { },
+    });
+  };
+
+  visitProfile(friend: verified_friend | pending_friend): void {
+
+  };
+
 };
