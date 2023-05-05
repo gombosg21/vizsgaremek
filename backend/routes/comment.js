@@ -8,13 +8,13 @@ const ownership = require("../middlewares/authentiaction/ownership");
 
 // on thread
 // create comment
-router.post('/thread/:threadID/comment', auth.isAuth, threadValidator.checkIfThreadExsits, commentValidator.commentRules(), commonValidator.validate, commentController.createComment);
+router.post('/thread/:threadID/comment', auth.isAuth, threadValidator.checkIfThreadIDExsits, commentValidator.commentRules(), commonValidator.validate, commentController.createComment);
 
 // edit comment
 // delete comment
 // get
 router.route('/comment/:commentID')
-    .patch(commentValidator.checkIfCommentIDExsist, auth.isAuth, ownership.isMyComment, commentValidator.commentRules(), commonValidator.validate, commentController.editComment)
-    .delete(commentValidator.checkIfCommentIDExsist, auth.isAuth, ownership.isMyComment, commentController.deleteComment)
-    .get(commentValidator.checkIfCommentIDExsist, auth.optionalAuth, commentController.getComment);
+    .patch(commentValidator.checkIfCommentIDExsits, auth.isAuth, ownership.isMyComment, commentValidator.commentRules(), commonValidator.validate, commentController.editComment)
+    .delete(commentValidator.checkIfCommentIDExsits, auth.isAuth, ownership.isMyComment, commentController.deleteComment)
+    .get(commentValidator.checkIfCommentIDExsits, auth.optionalAuth, commentController.getComment);
 module.exports = router;

@@ -44,7 +44,7 @@ exports.searchThreadRules = () => {
     ]
 };
 
-exports.checkIfThreadExsits = async (req, res, next) => {
+exports.checkIfThreadIDExsits = async (req, res, next) => {
     const ID = req.params.threadID;
 
     try {

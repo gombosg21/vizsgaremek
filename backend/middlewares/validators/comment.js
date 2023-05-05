@@ -9,7 +9,7 @@ exports.commentRules = () => {
     ]
 };
 
-exports.checkIfCommentIDExsist = async (req, res, next) => {
+exports.checkIfCommentIDExsits = async (req, res, next) => {
     const ID = req.params.commentID;
 
     try {

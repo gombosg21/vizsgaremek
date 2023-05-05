@@ -29,9 +29,9 @@ router.get('/thread/search', threadValidator.searchThreadRules(), commonValidato
 // view
 // delete
 router.route('/thread/:threadID')
-    .get(threadValidator.checkIfThreadExsits, auth.optionalAuth, threadController.getThread)
-    .patch(threadValidator.checkIfThreadExsits, auth.isAuth, ownership.isMyThread, threadValidator.editThreadRules(), commonValidator.validate, threadController.editThread)
-    .delete(threadValidator.checkIfThreadExsits, auth.isAuth, ownership.isMyThread, threadController.deleteTread);
+    .get(threadValidator.checkIfThreadIDExsits, auth.optionalAuth, threadController.getThread)
+    .patch(threadValidator.checkIfThreadIDExsits, auth.isAuth, ownership.isMyThread, threadValidator.editThreadRules(), commonValidator.validate, threadController.editThread)
+    .delete(threadValidator.checkIfThreadIDExsits, auth.isAuth, ownership.isMyThread, threadController.deleteTread);
 
 
 

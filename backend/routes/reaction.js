@@ -28,8 +28,8 @@ router.route('/media/:mediaID/reaction').post(mediaValidator.checkIfMediaIDExsis
 
 //add reaction to thread ID
 //remove reaction from thread ID
-router.route('/thread/:threadID/reaction').post(threadValidator.checkIfThreadExsits, auth.isAuth, preporcess.setTargetType("thread"), reactionValidator.addRules(), commonValidator.validate, reactionsController.addReaction)
-    .delete(threadValidator.checkIfThreadExsits, auth.isAuth, preporcess.setTargetType("thread"), reactionValidator.removeRules(), commonValidator.validate, reactionsController.removeReaction);
+router.route('/thread/:threadID/reaction').post(threadValidator.checkIfThreadIDExsits, auth.isAuth, preporcess.setTargetType("thread"), reactionValidator.addRules(), commonValidator.validate, reactionsController.addReaction)
+    .delete(threadValidator.checkIfThreadIDExsits, auth.isAuth, preporcess.setTargetType("thread"), reactionValidator.removeRules(), commonValidator.validate, reactionsController.removeReaction);
 
 //add reaction to profile ID
 //remove reaction from profile ID
@@ -43,7 +43,7 @@ router.route('/story/:storyID/reaction').post(storyValidator.checkIfStoryIDExsit
 
 //add reaction to comment ID
 //remove reaction from comment ID
-router.route('/comment/:commentID/reaction').post(commentValidator.checkIfCommentIDExsist, auth.isAuth, preporcess.setTargetType("comment"), reactionValidator.addRules(), commonValidator.validate, reactionsController.addReaction)
-    .delete(commentValidator.checkIfCommentIDExsist, auth.isAuth, preporcess.setTargetType("comment"), reactionValidator.removeRules(), commonValidator.validate, reactionsController.removeReaction);
+router.route('/comment/:commentID/reaction').post(commentValidator.checkIfCommentIDExsits, auth.isAuth, preporcess.setTargetType("comment"), reactionValidator.addRules(), commonValidator.validate, reactionsController.addReaction)
+    .delete(commentValidator.checkIfCommentIDExsits, auth.isAuth, preporcess.setTargetType("comment"), reactionValidator.removeRules(), commonValidator.validate, reactionsController.removeReaction);
 
 module.exports = router;
