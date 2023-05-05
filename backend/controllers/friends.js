@@ -22,7 +22,7 @@ exports.requestFriend = async (req, res, next) => {
             pending: true
         });
 
-        return res.status(201).json({ id: newFriend.friendID, pending: newFriend.pending, date: newFriend.date });
+        return res.status(201).json({ ID: newFriend.friend_ID, pending: newFriend.pending, date: newFriend.date });
     } catch (error) {
         console.error(error);
         return res.status(500);
@@ -33,20 +33,43 @@ exports.getPendingFriends = async (req, res, next) => {
     const userID = req.user.ID;
 
     try {
-        const pendingList = await friend.findAll({
+        const pendingListRaw = await friend.findAll({
             where: { [Op.and]: [{ pending: true }, { friend_ID: userID }] },
-            attributes: ['date', ['user_ID', 'ID']],
-            include: [
-                {
-                    model: user, as: 'friendship_starter', attributes: ['ID'],
-                    include: [
-                        { model: profile, attributes: ['alias'] }
-                    ]
-                }
-            ]
+            attributes: ['date', 'user_ID'],
         });
 
-        return res.status(200).json(pendingList);
+        const pendingIDs = [];
+
+        pendingListRaw.forEach(element => {
+            if (element.user_ID != userID) {
+                pendingIDs.push(element.user_ID);
+            };
+        });
+
+        if (pendingIDs.length != 0) {
+            const pendingList = await user.findAll({
+                where: { ID: { [Op.in]: pendingIDs } },
+                attributes: ['ID'],
+                include:
+                    [
+                        { model: profile, attributes: ['alias'] }
+                    ]
+            });
+
+            const result = [];
+            pendingList.forEach(element => {
+                pendingListRaw.forEach(secondElement => {
+                    if (element.ID == secondElement.user_ID) {
+                        result.push({ ID: element.ID, profile: { alias: element.profile.alias }, date: secondElement.date })
+                    };
+                });
+            });
+
+            return res.status(200).json(result);
+        } else {
+            return res.status(200).json([]);
+        };
+
     } catch (error) {
         console.error(error);
         return res.status(500);
@@ -170,12 +193,12 @@ exports.getFriends = async (req, res, next) => {
         const friendIDs = [];
 
         friendListPre.forEach(element => {
-            if (element.user_ID = !userID) {
+            if (element.user_ID != userID) {
                 friendIDs.push(element.user_ID);
             };
             if (element.friend_ID != userID) {
                 friendIDs.push(element.friend_ID);;
-            }
+            };
         });
 
         if (friendIDs.length != 0) {
@@ -187,9 +210,21 @@ exports.getFriends = async (req, res, next) => {
                         { model: profile, attributes: ['alias'] }
                     ]
             });
-            return res.status(200).json(friendList);
+
+            const result = [];
+            friendList.forEach(element => {
+                friendListPre.forEach(secondElement => {
+                    if (element.ID == secondElement.user_ID) {
+                        result.push({ ID: element.ID, profile: { alias: element.profile.alias }, date: secondElement.date })
+                    };
+                    if (element.ID == secondElement.friend_ID) {
+                        result.push({ ID: element.ID, profile: { alias: element.profile.alias }, date: secondElement.date })
+                    };
+                });
+            });
+            return res.status(200).json(result);
         } else {
-            return res.status(200).json({});
+            return res.status(200).json([]);
         };
 
     } catch (error) {
