@@ -12,10 +12,10 @@ export interface carousel {
     visibility: number,
     description: string,
     reactions?: reaction_short[],
-    carousel_medialist: [{
+    carousel_medialists: [{
         item_number: number,
         item_description: string,
-        media: media
+        media: media[]
     }],
     threads?: thread_short[]
 }
