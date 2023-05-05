@@ -1,19 +1,35 @@
-<div>
-    <h2>Fiends</h2>
-    <ul *ngIf="friendList">
-        <li *ngFor="let friend of friendList;">
-            <p>{{friend.profile.alias}}</p>
-            <p>date: {{friend.date}}</p>
-            <button class="btn btn-dark" (click)="unFriend(friend)">Unfriend</button>
-        </li>
-    </ul>
-    <h2>Pending requests</h2>
-    <ul *ngIf="pendingList">
-        <li *ngFor="let pending of pendingList;">
-            <p>{{pending.profile.alias}}</p>
-            <p>date: {{pending.date}}</p>
-            <button class="btn btn-dark" (click)="acceptRequest(pending)">Accept</button>
-            <button class="btn btn-dark" (click)="rejectRequest(pending)">Reject</button>
-        </li>
-    </ul>
+<div class="friends-component d-md-flex flex-md-row-reverse">
+    <div class="pending-requests">
+        <h2>Pending requests</h2>
+        <ul class="list-unstyled" *ngIf="pendingList">
+            <li *ngFor="let pending of pendingList;" class="pending-item d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <p class="mb-1">{{pending.profile.alias}}</p>
+                    <small class="text-muted">Date: {{pending.date | date: 'yyyy. MM. dd. HH:mm'}}</small>
+                </div>
+                <div>
+                    <button class="btn btn-success btn-sm me-2" title="Accept" (click)="acceptRequest(pending)">
+                        <i class="fas fa-check"></i>
+                    </button>
+                    <button class="btn btn-danger btn-sm" title="Reject" (click)="rejectRequest(pending)">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="friends">
+        <h2>Friends</h2>
+        <ul class="list-unstyled" *ngIf="friendList">
+            <li *ngFor="let friend of friendList;" class="friend-item d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <p class="mb-1">{{friend.profile.alias}}</p>
+                    <small class="text-muted">Date: {{friend.date | date: 'yyyy. MM. dd. HH:mm'}}</small>
+                </div>
+                <button class="btn btn-secondary btn-sm" title="Unfriend" (click)="unFriend(friend)">
+                    <i class="fas fa-user-minus"></i>
+                </button>
+            </li>
+        </ul>
+    </div>
 </div>
