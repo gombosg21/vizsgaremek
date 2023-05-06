@@ -5,10 +5,12 @@ module.exports = {
     await queryInterface.createTable('media_taglists', {
       tag_ID: {
         allowNull: false,
+        unique:"tagkey",
         type: Sequelize.INTEGER
       },
       media_ID: {
         allowNull:false,
+        unique:"tagkey",
         type: Sequelize.INTEGER
       },
     });

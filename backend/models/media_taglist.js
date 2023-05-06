@@ -10,8 +10,8 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   media_taglist.init({
-    tag_ID: { allowNull: false, type: DataTypes.INTEGER, references: { model: 'tag', key: 'ID' } },
-    media_ID: { allowNull: false, type: DataTypes.INTEGER, references: { model: 'media', key: 'ID' } }
+    tag_ID: { allowNull: false, type: DataTypes.INTEGER, references: { model: 'tag', key: 'ID' }, unique: "tagkey" },
+    media_ID: { allowNull: false, type: DataTypes.INTEGER, references: { model: 'media', key: 'ID' }, unique: "tagkey" }
   },
     {
       sequelize,
