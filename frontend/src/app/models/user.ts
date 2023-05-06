@@ -20,3 +20,8 @@ export interface user_short {
         alias: string,
     }
 };
+
+export interface user_search extends user_short {
+    birth_date: Date,
+    gender: number
+};
