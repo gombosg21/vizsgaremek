@@ -1,43 +1,74 @@
 <div class="card" id="uploadForm">
     <div class="card-body">
-        <form>
-
+        <form [formGroup]="uploadFormGroup" (ngSumbit)="onSubmit()">
             <div class="mb-3">
                 <label for="image" class="form-label">Select Image</label>
-                <input type="file" class="form-control" id="image" accept="image/*" (change)="onImageSelected($event)" required name="image">
+                <input type="file" class="form-control" id="image" accept="image/*" (change)="onImageSelected($event)"
+                    name="image">
+                <p *ngIf="image.errors?.['required']" class="text-danger">No Media File selected</p>
             </div>
             <div class="mb-3">
                 <label for="description" class="form-label">Description</label>
-                <input type="text" class="form-control" id="description" placeholder="Enter a description" required [(ngModel)]="mediaInstance.description" name="description">
+                <input type="text" class="form-control" id="description" placeholder="Enter a description"
+                    formControlName="descriptionControl" name="descriptionControl" value="" required>
+                <p *ngIf="description.errors?['required']" class="text-danger">Must Provide a Description</p>
+                <p *ngIf="description.errors?['minLength']" class="text-danger">Description must be least 8 Characters long</p>
+                <p *ngIf="description.errors?['maxLength']" class="text-danger">Description cannot be longer than 300 Characters</p>
             </div>
             <div class="mb-3">
                 <label for="placeholder" class="form-label">Placeholder Text</label>
-                <input type="text" class="form-control" id="placeholder" placeholder="Enter a placeholder" required [(ngModel)]="mediaInstance.placeholder_text" name="placeholder_text">
+                <input type="text" class="form-control" id="placeholder" placeholder="Enter a placeholder"
+                    formControlName="placeholderControl" name="placeholderControl" value="" required>
+                <p *ngIf="placeholder.errors?.['requried']" class="text-danger">Must Provide a Placeholder text</p>
+                <p *ngIf="placeholder.errors?.['minLength']" class="text-danger">Placeholder must be least 8 Characters
+                    long</p>
+                <p *ngIf="placeholder.errors?.['maxLength']" class="text-danger">Placeholder cannot be longer than 50
+                    Characters</p>
             </div>
             <div class="mb-3">
-                <label for="visibility" class="form-label">Visibility</label>
-                <select [(ngModel)]="mediaInstance.visibility" id="visibility" class="form-select" name="visibility">
-                            <option *ngFor="let option of visibilityOptions; index as i;" [value]="visibilityOptions[i].value">{{visibilityOptions[i].name}}</option>
-                        </select>
+                <p for="visibility" class="form-label">Visibility</p>
+                <div class="form-check">
+                    <input type="radio" name="visibilityControl" id="private" formControlName="visibilityControl"
+                        value=0 class="form-check-input" checked>
+                    <label for="private" class="form-label">Private</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" name="visibilityControl" id="friendsOnly" formControlName="visibilityControl"
+                        value=1 class="form-check-input">
+                    <label for="friendsOnly" class="form-label">Friends Only</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" name="visibilityControl" id="registeredOnly" formControlName="visibilityControl"
+                        value=2 class="form-check-input">
+                    <label for="registeredOnly" class="form-label">Registered Only</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" name="visibilityControl" id="public" formControlName="visibilityControl" value=3
+                        class="form-check-input">
+                    <label for="public" class="form-label">Public</label>
+                </div>
             </div>
             <div class="mb-3">
-                <label for="tags" class="form-label">Select a tag to add</label>
-                <select id="tags" class="form-select" [(ngModel)]="selectedIterator" name="selectedIterator">
-                            <option *ngFor="let tag of validTags; index as i;" [value]="i">
-                                {{validTags[i].name}}</option>
-                        </select>
-                <button class="btn btn-secondary" id="addTag" (click)="addTag()">Add tag</button>
+                <mat-chip-grid #tagChipGrid>
+                    <mat-chip-row *ngFor="let uploadTag of uploadTags;"
+                        (removed)="removeTag(uploadTag)">{{uploadTag.name}}
+                        <button matChipRemove>
+                            <mat-icon>cancel</mat-icon>
+                        </button>
+                    </mat-chip-row>
+                </mat-chip-grid>
+                <label for="tags_upload" class="form-label">Search by tags</label>
+                <input type="text" class="form-control" id="tags_upload" name="new_upload_tag_list"
+                    placeholder="Add Tag to Media File" #tagNameInput [matChipInputFor]="tagChipGrid"
+                    [matAutocomplete]="auto" [matChipInputSeparatorKeyCodes]="keycodes"
+                    (matChipInputTokenEnd)="addTag($event)">
+                <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectedTag($event)">
+                    <mat-option *ngFor="let filteredTag of filteredTags | async;"
+                        [value]="filteredTag">{{filteredTag.name}}</mat-option>
+                </mat-autocomplete>
+                <p *ngIf="" class="text-danger"></p>
             </div>
-            <div class="mb-3">
-                <label for="current-tags" class="form-label">Current tags</label>
-                <ul *ngIf="currentTags">
-                    <li *ngFor="let tag of currentTags; index as i;">
-                        {{currentTags[i].name}}
-                        <button class="btn btn-secondary" (click)="removeTag(currentTags[i])">Remove</button>
-                    </li>
-                </ul>
-            </div>
-            <button type="button" (click)="onSubmit()" class="btn btn-secondary">Submit</button>
+            <button type="button" tpye="submit" class="btn btn-secondary">Submit</button>
             <button type="button" id="cancelButton" class="btn btn-secondary" (click)="cancel()">Cancel</button>
         </form>
     </div>
