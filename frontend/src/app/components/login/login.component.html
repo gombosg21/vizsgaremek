@@ -30,7 +30,8 @@
                             </div>
                             <div *ngIf="loginFormGroup.controls['passwordControl'].invalid && (loginFormGroup.controls['passwordControl'].dirty || loginFormGroup.controls['passwordControl'].touched)"
                                 class="alert">
-                                <p *ngIf="loginFormGroup.controls['passwordControl'].errors?.['required']" class="text-danger">No Password given</p>
+                                <p *ngIf="loginFormGroup.controls['passwordControl'].errors?.['required']"
+                                    class="text-danger">No Password given</p>
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary btn-block" [disabled]="!loginFormGroup.valid">Log
