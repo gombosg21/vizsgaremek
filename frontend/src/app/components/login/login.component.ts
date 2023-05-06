@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { AuthService } from '../../services/auth/auth.service';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
@@ -8,9 +9,12 @@ import { AuthService } from '../../services/auth/auth.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-  username: string;
-  password: string;
-  errorMessage: string;
+
+  public loginFormGroup = new FormGroup({
+    userNameControl: new FormControl<string>('', Validators.compose([Validators.required])),
+    passwordControl: new FormControl<string>('', Validators.compose([Validators.required]))
+  });
+
   isDarkMode: boolean;
 
   constructor(
@@ -18,17 +22,12 @@ export class LoginComponent {
     private authService: AuthService,
   ) {
     this.titleService.setTitle('VisualPosting - Login');
-  this.isDarkMode = authService.getIsDarkMode();
-  
-
-  };
-
-
-  isFormValid() {
-    return this.username && this.password;
+    this.isDarkMode = authService.getIsDarkMode();
   };
 
   login() {
-    this.authService.login(this.username, this.password);
+    if (this.loginFormGroup.valid) {
+      this.authService.login(this.loginFormGroup.value.userNameControl!, this.loginFormGroup.value.passwordControl!);
+    };
   };
 };

@@ -4,28 +4,38 @@
             <div class="card">
                 <div class="card-body">
                     <h2 class="text-center">Log in</h2>
-                    <form (ngSubmit)="login()">
+                    <form (ngSubmit)="login()" [formGroup]="loginFormGroup">
                         <div class="form-group">
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-user" id="user-icon"></i></span>
                                 </div>
-                                <input type="text" class="form-control" id="username" placeholder="Username" [(ngModel)]="username" name="username" [ngClass]="{'dark-theme': isDarkMode, 'light-theme': !isDarkMode}" />
+                                <input formControlName="userNameControl" type="text" class="form-control" id="username"
+                                    placeholder="Username" name="username"
+                                    [ngClass]="{'dark-theme': isDarkMode, 'light-theme': !isDarkMode}" />
                             </div>
+                            <div *ngIf="loginFormGroup.controls['userNameControl'].invalid && (loginFormGroup.controls['userNameControl'].dirty || loginFormGroup.controls['userNameControl'].touched)"
+                                class="alert"></div>
+                            <p *ngIf="loginFormGroup.controls['userNameControl'].errors?.['required']"
+                                class="text-danger">No Username given</p>
                         </div>
                         <div class="form-group">
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-lock" id="lock-icon"></i></span>
                                 </div>
-                                <input type="password" class="form-control" id="password" placeholder="Password" [(ngModel)]="password" name="password" [ngClass]="{'dark-theme': isDarkMode, 'light-theme': !isDarkMode}" />
+                                <input formControlName="passwordControl" type="password" class="form-control"
+                                    id="password" placeholder="Password" name="password"
+                                    [ngClass]="{'dark-theme': isDarkMode, 'light-theme': !isDarkMode}" />
+                            </div>
+                            <div *ngIf="loginFormGroup.controls['passwordControl'].invalid && (loginFormGroup.controls['passwordControl'].dirty || loginFormGroup.controls['passwordControl'].touched)"
+                                class="alert">
+                                <p *ngIf="loginFormGroup.controls['passwordControl'].errors?.['required']" class="text-danger">No Password given</p>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-block" [disabled]="!isFormValid()">Log in</button>
+                        <button type="submit" class="btn btn-primary btn-block" [disabled]="!loginFormGroup.valid">Log
+                            in</button>
                     </form>
-                    <div *ngIf="errorMessage" class="alert alert-danger mt-3" role="alert">
-                        {{ errorMessage }}
-                    </div>
                     <div class="haveRegister text-center">
                         <p>Don't have an account? <a routerLink="/register">Sign up</a></p>
                     </div>
