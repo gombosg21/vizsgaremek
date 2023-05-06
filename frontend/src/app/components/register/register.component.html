@@ -4,29 +4,42 @@
             <div class="card">
                 <div class="card-body">
                     <h2 class="text-center">Register</h2>
-                    <form (ngSubmit)="register()">
+                    <form (ngSubmit)="onSubmit()" [formGroup]="registerFromGroup">
                         <div class="form-group">
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-user" id="user-icon"></i></span>
                                 </div>
-                                <input type="text" class="form-control" id="username" placeholder="Username" [(ngModel)]="username" name="username" (keyup)="validateUsername()" [ngClass]="{'is-valid': usernameClass === 'is-valid', 'is-invalid': usernameClass === 'is-invalid', 'dark-theme': isDarkMode, 'light-theme': !isDarkMode}"
-                                />
+                                <input type="text" class="form-control" id="username" placeholder="Username"
+                                    formControlName="nameFormControl" name="nameFormControl"
+                                    [ngClass]="{'dark-theme': isDarkMode, 'light-theme': !isDarkMode}" />
                             </div>
-                            <div *ngIf="usernameClass === 'is-invalid'" [ngClass]="usernameClass" class="invalid-feedback">
-                                Please enter a valid username (min. 3 characters).
+                            <div
+                                *ngIf="registerFromGroup.controls['nameFormControl'].invalid && (registerFromGroup.controls['nameFormControl'].dirty || registerFromGroup.controls['nameFormControl'].touched)">
+                                <p *ngIf="registerFromGroup.controls['nameFormControl'].errors?.['required']">Please
+                                    Enter an Account Name</p>
+                                <p *ngIf="registerFromGroup.controls['nameFormControl'].errors?.['minlength']">Name must
+                                    be least 8 characters long</p>
+                                <p *ngIf="registerFromGroup.controls['nameFormControl'].errors?.['minlength']">Name must
+                                    be max 32 characters long</p>
+                                <p *ngIf="registerFromGroup.controls['nameFormControl'].errors?.['badCharacters']">Name
+                                    cannot contain whitespaces or tabulators</p>
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="input-group">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="fas fa-envelope" id="email-icon"></i></span>
+                                    <span class="input-group-text"><i class="fas fa-envelope"
+                                            id="email-icon"></i></span>
                                 </div>
-                                <input type="email" class="form-control" id="email" placeholder="Email" [(ngModel)]="email" name="email" (keyup)="validateEmail()" [ngClass]="{'is-valid': emailClass === 'is-valid', 'is-invalid': emailClass === 'is-invalid', 'dark-theme': isDarkMode, 'light-theme': !isDarkMode}"
-                                />
+                                <input type="email" class="form-control" id="email" placeholder="Email"
+                                    formControlName="emailFormControl" name="emailFormControl"
+                                    [ngClass]="{'dark-theme': isDarkMode, 'light-theme': !isDarkMode}" />
                             </div>
-                            <div *ngIf="emailClass === 'is-invalid'" [ngClass]="emailClass" class="invalid-feedback">
-                                Please enter a valid email address.
+                            <div
+                                *ngIf="registerFromGroup.controls['emailFormControl'].invalid && (registerFromGroup.controls['emailFormControl'].dirty || registerFromGroup.controls['emailFormControl'].touched)">
+                               <p *ngIf="registerFromGroup.controls['emailFormControl'].errors?.['required']">Please enter an email</p>
+                               <p *ngIf="registerFromGroup.controls['emailFormControl'].errors?.['email']">Invalid email format</p>
                             </div>
                         </div>
                         <div class="form-group">
@@ -34,12 +47,20 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-lock" id="lock-icon"></i></span>
                                 </div>
-                                <input type="password" class="form-control" id="password" placeholder="Password" [(ngModel)]="password" name="password" (keyup)="validatePassword()" [ngClass]="{'is-valid': passwordClass === 'is-valid', 'is-invalid': passwordClass === 'is-invalid', 'dark-theme': isDarkMode, 'light-theme': !isDarkMode}"
-                                />
-
+                                <input type="password" class="form-control" id="password" placeholder="Password"
+                                    formControlName="passwordFormControl" name="passwordFormControl"
+                                    [ngClass]="{'dark-theme': isDarkMode, 'light-theme': !isDarkMode}" />
                             </div>
-                            <div *ngIf="passwordClass === 'is-invalid'" [ngClass]="passwordClass" class="invalid-feedback">
-                                Please enter a valid password (min. 8 characters, max. 32).
+                            <div *ngIf="registerFromGroup.controls['passwordFormControl'].invalid && (registerFromGroup.controls['passwordFormControl'].dirty || registerFromGroup.controls['passwordFormControl'].touched)">
+                                <p *ngIf="registerFromGroup.controls['passwordFormControl'].errors?.['required']">Please enter a password</p>
+                                <p *ngIf="registerFromGroup.controls['passwordFormControl'].errors?.['minlength']">Password must be least 8 characters</p>
+                                <p *ngIf="registerFromGroup.controls['passwordFormControl'].errors?.['maxlength']">Pasword cannot be longer than 32 characters</p>
+                                <p *ngIf="registerFromGroup.controls['passwordFormControl'].errors?.['notAscii']">Invalid characters</p>
+                                <p *ngIf="registerFromGroup.controls['passwordFormControl'].errors?.['missingUpperCase']">Pasword must contain least one uppercase letter</p>
+                                <p *ngIf="registerFromGroup.controls['passwordFormControl'].errors?.['missingLowerCase']">Paswword must contain least one lowercase letter</p>
+                                <p *ngIf="registerFromGroup.controls['passwordFormControl'].errors?.['missingNumber']">Pasword must contain least one number</p>
+                                <p *ngIf="registerFromGroup.controls['passwordFormControl'].errors?.['missingSpecialChars']">Paswword must contain least one special character</p>
+                                <p *ngIf="registerFromGroup.controls['passwordFormControl'].errors?.['passwordMiscMatch']">Password fields must match</p>
                             </div>
                         </div>
                         <div class="form-group">
@@ -47,50 +68,68 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-lock" id="lock-icon"></i></span>
                                 </div>
-                                <input type="password" class="form-control" id="passwordConfirm" placeholder="Password Confirmation" [(ngModel)]="passwordConfirm" name="passwordConfirm" (keyup)="validatePasswordConfirm()" [ngClass]="{'is-valid': passwordConfirmClass === 'is-valid', 'is-invalid': passwordConfirmClass === 'is-invalid', 'dark-theme': isDarkMode, 'light-theme': !isDarkMode}"
-                                />
-
+                                <input type="password" class="form-control" id="passwordConfirm"
+                                    placeholder="Password Confirmation" formControlName="passwordConfirmFormControl"
+                                    name="passwordConfirmFormControl"
+                                    [ngClass]="{'dark-theme': isDarkMode, 'light-theme': !isDarkMode}" />
                             </div>
-                            <div *ngIf="passwordConfirmClass === 'is-invalid'" class="invalid-feedback">
-                                Please enter the same password as above.
+                            <div
+                                *ngIf="registerFromGroup.controls['passwordConfirmFormControl'].invalid && (registerFromGroup.controls['passwordConfirmFormControl'].dirty || registerFromGroup.controls['passwordConfirmFormControl'].touched)">
+                                <p *ngIf="registerFromGroup.controls['passwordConfirmFormControl'].errors?.['required']">Please enter a password</p>
+                                <p *ngIf="registerFromGroup.controls['passwordConfirmFormControl'].errors?.['minlength']">Password must be least 8 characters</p>
+                                <p *ngIf="registerFromGroup.controls['passwordConfirmFormControl'].errors?.['maxlength']">Pasword cannot be longer than 32 characters</p>
+                                <p *ngIf="registerFromGroup.controls['passwordConfirmFormControl'].errors?.['notAscii']">Invalid characters</p>
+                                <p *ngIf="registerFromGroup.controls['passwordConfirmFormControl'].errors?.['missingUpperCase']">Pasword must contain least one uppercase letter</p>
+                                <p *ngIf="registerFromGroup.controls['passwordConfirmFormControl'].errors?.['missingLowerCase']">Paswword must contain least one lowercase letter</p>
+                                <p *ngIf="registerFromGroup.controls['passwordConfirmFormControl'].errors?.['missingNumber']">Pasword must contain least one number</p>
+                                <p *ngIf="registerFromGroup.controls['passwordConfirmFormControl'].errors?.['missingSpecialChars']">Paswword must contain least one special character</p>
+                                <p *ngIf="registerFromGroup.controls['passwordConfirmFormControl'].errors?.['passwordMiscMatch']">Password fields must match</p>
                             </div>
                         </div>
-
                         <div class="form-group">
                             <div class="input-group">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="fas fa-birthday-cake" id="birthdate-icon"></i></span>
+                                    <span class="input-group-text"><i class="fas fa-birthday-cake"
+                                            id="birthdate-icon"></i></span>
                                 </div>
-                                <input type="date" class="form-control" id="birth_date" [(ngModel)]="birth_date" name="birth_date" (change)="validateBirthDate()" [ngClass]="{'is-valid': birthDateClass === 'is-valid', 'is-invalid': birthDateClass === 'is-invalid', 'dark-theme': isDarkMode, 'light-theme': !isDarkMode}"
-                                />
+                                <input type="date" class="form-control" id="birth_date"
+                                    formControlName="birthDateControl" name="birth_date"
+                                    [ngClass]="{'dark-theme': isDarkMode, 'light-theme': !isDarkMode}" />
                             </div>
-                            <div *ngIf="birthDateClass === 'is-invalid'" [ngClass]="birthDateClass" class="invalid-feedback">
-                                Please enter a valid birth date.
+                            <div
+                                *ngIf="registerFromGroup.controls['birthDateControl'].invalid && (registerFromGroup.controls['birthDateControl'].dirty || registerFromGroup.controls['birthDateControl'].touched)">
+                                <p *ngIf="registerFromGroup.controls['birthDateControl'].errors?.['required']">Please select a date</p>
+                                <p *ngIf="registerFromGroup.controls['birthDateControl'].errors?.['futureDate']">No future dates are allowed</p>
                             </div>
                         </div>
-
                         <div class="form-group">
                             <div class="picker">
-                                <span class="input-group-text"><i class="fa-solid fa-venus-mars" id="gender-icon"></i></span>
+                                <span class="input-group-text"><i class="fa-solid fa-venus-mars"
+                                        id="gender-icon"></i></span>
                                 <div class="form-check-inline" id="picker">
                                     <label class="form-check-label" id="pickGender">Gender</label>
                                 </div>
-
                                 <div class="form-check-inline">
-                                    <input class="form-check-input" type="radio" id="male" name="gender" [(ngModel)]="selectedGender" value="male" checked="checked">
+                                    <input class="form-check-input" type="radio" id="male" name="genderFormControl"
+                                        formControlName="genderFormControl" value="0" checked="checked">
                                     <label class="form-check-label" for="male">Male</label>
                                 </div>
                                 <div class="form-check-inline">
-                                    <input class="form-check-input" type="radio" id="female" name="gender" [(ngModel)]="selectedGender" value="female">
+                                    <input class="form-check-input" type="radio" id="female" name="genderFormControl"
+                                        formControlName="genderFormControl" value="1">
                                     <label class="form-check-label" for="female">Female</label>
                                 </div>
                                 <div class="form-check-inline">
-                                    <input class="form-check-input" type="radio" id="other" name="gender" [(ngModel)]="selectedGender" value="other">
+                                    <input class="form-check-input" type="radio" id="other" name="genderFormControl"
+                                        formControlName="genderFormControl" value="2">
                                     <label class="form-check-label" for="other">Other</label>
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary" [disabled]="!isFormValid()">Register</button>
+                        <div *ngIf="registerFromGroup.controls['genderFormControl'].invalid && (registerFromGroup.controls['genderFormControl'].dirty || registerFromGroup.controls['genderFormControl'].touched)">
+                            <p *ngIf="registerFromGroup.controls['genderFormControl'].errors?.['required']">Please select a gender</p>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Register</button>
                     </form>
                     <div class="haveLogin text-center">
                         <p>Have an account? <a routerLink="/login">Log in</a></p>

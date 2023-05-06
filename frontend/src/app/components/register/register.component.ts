@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { RegisterService } from '../../services/register/register.service';
 import { Register } from '../../models/register';
 import { AuthService } from '../../services/auth/auth.service';
+import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 
 
 @Component({
@@ -12,21 +13,20 @@ import { AuthService } from '../../services/auth/auth.service';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
-  username: string = '';
-  email: string = '';
-  password: string = '';
-  passwordConfirm: string = '';
-  selectedGender: string = '';
-  usernameClass: string = '';
-  emailClass: string = '';
-  passwordClass: string = '';
-  passwordConfirmClass: string = '';
-  birth_date: string = '';
-  birthDateClass: string = '';
+
   isDarkMode: boolean;
 
-  
-
+  public registerFromGroup = new FormGroup({
+    nameFormControl: new FormControl<string>('', Validators.compose([Validators.required, Validators.minLength(8),
+    Validators.maxLength(32), RegisterComponent.userNameCharsetValidator])),
+    emailFormControl: new FormControl<string>('', Validators.compose([Validators.required, Validators.email])),
+    passwordFormControl: new FormControl<string>('', Validators.compose([Validators.required, Validators.minLength(8),
+    Validators.maxLength(32), RegisterComponent.passwordCharsetValidator, RegisterComponent.passwordMatchValidator])),
+    passwordConfirmFormControl: new FormControl<string>('', Validators.compose([Validators.required, Validators.minLength(8),
+    Validators.maxLength(32), RegisterComponent.passwordCharsetValidator, RegisterComponent.passwordMatchValidator])),
+    genderFormControl: new FormControl<string>('', Validators.compose([Validators.required])),
+    birthDateControl: new FormControl<Date>(new Date(), Validators.compose([Validators.required, RegisterComponent.futureBirthValidator])),
+  });
 
   constructor(
     private titleService: Title,
@@ -35,124 +35,85 @@ export class RegisterComponent implements OnInit {
     private authService: AuthService
   ) {
     this.titleService.setTitle('VisualPosting - Register');
-    this.isDarkMode = authService.getIsDarkMode();
-  }
+    this.isDarkMode = this.authService.getIsDarkMode();
+  };
 
-  ngOnInit(): void {}
+  ngOnInit(): void { };
 
-  validateUsername() {
-    if (this.username.length >= 4 && this.username.length <= 15 && !/^[\W]/.test(this.username)) {
-      this.usernameClass = 'is-valid';
-    } else {
-      this.usernameClass = 'is-invalid';
+  static userNameCharsetValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+    let name = control.value
+    return /^[\W]/.test(name) ? { badCharacters: true } : null;
+  };
+
+  static passwordCharsetValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+    let password = control.value;
+    let errors: any = {};
+    let invalid: boolean = false;
+    if ((/^[\x00-\x7F]*$/.test(password?.value)) == false) {
+      invalid = true;
+      errors.notAscii = true;
+    };
+    if ((/[A-Z]/.test(password)) == false) {
+      invalid = true;
+      errors.missingUpperCase = true;
+    };
+    if ((/[a-z]/.test(password)) == false) {
+      invalid = true;
+      errors.missingLowerCase = true;
+    };
+    if ((/\d/.test(password)) == false) {
+      invalid = true;
+      errors.missingNumber = true;
+    };
+    if ((/[!@#$%^&*(),.?":{}|<>]/.test(password)) == false) {
+      invalid = true;
+      errors.missingSpecialChars = true;
     }
-  }
+    if (invalid) { return errors } else { return null };
+  };
 
-  validateEmail() {
-    const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if (emailRegex.test(this.email)) {
-      this.emailClass = "is-valid";
-    } else {
-      this.emailClass = "is-invalid";
-    }
-  }
+  static passwordMatchValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+    let password = control.get('passwordFormControl');
+    let repassword = control.get('passwordConfirmFormControl');
+    return password?.value === repassword?.value ? null : { passwordMiscMatch: true }
+  };
 
-  validatePassword() {
-    const asciiRegex = /^[\x00-\x7F]*$/;
-    const hasUppercase = /[A-Z]/.test(this.password);
-    const hasLowercase = /[a-z]/.test(this.password);
-    const hasNumber = /\d/.test(this.password);
-    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(this.password);
-  
-    if (
-      this.password.length >= 8 &&
-      this.password.length <= 32 &&
-      asciiRegex.test(this.password) &&
-      hasUppercase &&
-      hasLowercase &&
-      hasNumber &&
-      hasSpecialChar
-    ) {
-      this.passwordClass = 'is-valid';
-    } else {
-      this.passwordClass = 'is-invalid';
-    }
-  }
-  
-  
-  validatePasswordConfirm() {
-    if (this.password === this.passwordConfirm && this.passwordClass === 'is-valid') {
-      this.passwordConfirmClass = 'is-valid';
-    } else {
-      this.passwordConfirmClass = 'is-invalid';
-    }
-  }
-  
-  validateBirthDate() {
-    if (!this.birth_date) {
-      this.birthDateClass = 'is-invalid';
-      return false;
-    }
+  static futureBirthValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+    let birthdate = control.value;
+    return new Date(birthdate) < new Date() ? null : { futureDate: true }
+  };
 
-    const currentDate = new Date();
-    const birthDateObj = new Date(this.birth_date);
-    const isValid = birthDateObj <= currentDate;
+  onSubmit() {
+    console.log(this.registerFromGroup.controls)
 
-    this.birthDateClass = isValid ? 'is-valid' : 'is-invalid';
-    return isValid;}
-  
-    isFormValid() {
-      return (
-        this.usernameClass === 'is-valid' &&
-        this.emailClass === 'is-valid' &&
-        this.passwordClass === 'is-valid' &&
-        this.passwordConfirmClass === 'is-valid' &&
-        this.birthDateClass === 'is-valid'
-      );
-    }   
-
-  register() {
-    console.log('Register inputs:', {
-      username: this.username,
-      email: this.email,
-      password: this.password,
-      passwordConfirm: this.passwordConfirm,
-      selectedGender: this.selectedGender,
-      birth_date: this.birth_date
-    });
-    
-    if (this.isFormValid()) {
-      const genderValue = this.selectedGender === 'male' ? 0 : this.selectedGender === 'female' ? 1 : 2;
-      const birthDateObject = new Date(this.birth_date);
-      
-      if (birthDateObject >= new Date()) {
-        console.log('Error: Birth date cannot be in the future');
-        return;
-      }
-      const formatted_birth_date = `${birthDateObject.getFullYear()}-${(birthDateObject.getMonth() + 1).toString().padStart(2, '0')}-${birthDateObject.getDate().toString().padStart(2, '0')}`;
-
-      console.log('Formatted birth date:', formatted_birth_date);
-      const registerData = new Register(this.username, this.email, this.password, this.passwordConfirm, genderValue, formatted_birth_date);
-      
-      this.registerService.registerUser(registerData).subscribe(
-        (response) => {
+    if (this.registerFromGroup.valid) {
+      const registerData: Register = {
+        name: this.registerFromGroup.value.nameFormControl!,
+        email: this.registerFromGroup.value.emailFormControl!,
+        password: this.registerFromGroup.value.passwordFormControl!,
+        re_password: this.registerFromGroup.value.passwordConfirmFormControl!,
+        gender: Number(this.registerFromGroup.value.genderFormControl!),
+        birth_date: this.registerFromGroup.value.birthDateControl!,
+      };
+      this.registerService.registerUser(registerData).subscribe({
+        next: (response) => {
           console.log('Registration suuccessful', response);
           this.router.navigate(['/login']);
         },
-        (error) => {
+        error: (error) => {
           console.log('Registration failed');
           console.error('Error details:', error.error);
         }
-      );
+      });
+      console.log(registerData)
     } else {
       console.log('Form is invalid');
-    }
-  }
+    };
+  };
 
   onThemeSwitchChange(event: any) {
     const theme = event.target.checked ? 'dark-theme' : 'light-theme';
     document.documentElement.setAttribute('data-theme', theme);
-  }
-  
-}
+  };
+};
 
