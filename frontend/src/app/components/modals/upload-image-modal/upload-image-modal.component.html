@@ -1,29 +1,50 @@
 <div class="card" id="uploadForm">
     <div class="card-body">
-        <form [formGroup]="uploadFormGroup" (ngSumbit)="onSubmit()">
+        <form [formGroup]="uploadFormGroup" (ngSubmit)="onSubmit()">
             <div class="mb-3">
                 <label for="image" class="form-label">Select Image</label>
                 <input type="file" class="form-control" id="image" accept="image/*" (change)="onImageSelected($event)"
                     name="image">
-                <p *ngIf="image.errors?.['required']" class="text-danger">No Media File selected</p>
+                <div *ngIf="uploadFormGroup.controls['imageControl'].invalid && (uploadFormGroup.controls['imageControl'].dirty || uploadFormGroup.controls['imageControl'].touched)"
+                    class="alert">
+                    <p *ngIf="uploadFormGroup.controls['imageControl'].errors?.['required']" class="text-danger">No
+                        Media File selected</p>
+                </div>
             </div>
             <div class="mb-3">
                 <label for="description" class="form-label">Description</label>
                 <input type="text" class="form-control" id="description" placeholder="Enter a description"
                     formControlName="descriptionControl" name="descriptionControl" value="" required>
-                <p *ngIf="description.errors?['required']" class="text-danger">Must Provide a Description</p>
-                <p *ngIf="description.errors?['minLength']" class="text-danger">Description must be least 8 Characters long</p>
-                <p *ngIf="description.errors?['maxLength']" class="text-danger">Description cannot be longer than 300 Characters</p>
+                <div *ngIf="uploadFormGroup.controls['descriptionControl'].invalid && (uploadFormGroup.controls['descriptionControl'].dirty || uploadFormGroup.controls['descriptionControl'].touched)"
+                    class="alert">
+                    <p *ngIf="uploadFormGroup.controls['descriptionControl'].errors?.['required']" class="text-danger">
+                        Must
+                        Provide a Description</p>
+                    <p *ngIf="uploadFormGroup.controls['descriptionControl'].errors?.['minlength']" class="text-danger">
+                        Description must be least 8
+                        Characters long</p>
+                    <p *ngIf="uploadFormGroup.controls['descriptionControl'].errors?.['maxlength']" class="text-danger">
+                        Description cannot be longer than
+                        300 Characters</p>
+                </div>
             </div>
             <div class="mb-3">
                 <label for="placeholder" class="form-label">Placeholder Text</label>
                 <input type="text" class="form-control" id="placeholder" placeholder="Enter a placeholder"
                     formControlName="placeholderControl" name="placeholderControl" value="" required>
-                <p *ngIf="placeholder.errors?.['requried']" class="text-danger">Must Provide a Placeholder text</p>
-                <p *ngIf="placeholder.errors?.['minLength']" class="text-danger">Placeholder must be least 8 Characters
-                    long</p>
-                <p *ngIf="placeholder.errors?.['maxLength']" class="text-danger">Placeholder cannot be longer than 50
-                    Characters</p>
+                <div *ngIf="uploadFormGroup.controls['placeholderControl'].invalid && (uploadFormGroup.controls['placeholderControl'].dirty || uploadFormGroup.controls['placeholderControl'].touched)"
+                    class="alert">
+                    <p *ngIf="uploadFormGroup.controls['placeholderControl'].errors?.['required']" class="text-danger">
+                        Must Provide a Placeholder text</p>
+                    <p *ngIf="uploadFormGroup.controls['placeholderControl'].errors?.['minlength']" class="text-danger">
+                        Placeholder must be least 8
+                        Characters
+                        long</p>
+                    <p *ngIf="uploadFormGroup.controls['placeholderControl'].errors?.['maxlength']" class="text-danger">
+                        Placeholder cannot be longer than
+                        50
+                        Characters</p>
+                </div>
             </div>
             <div class="mb-3">
                 <p for="visibility" class="form-label">Visibility</p>
@@ -57,7 +78,7 @@
                         </button>
                     </mat-chip-row>
                 </mat-chip-grid>
-                <label for="tags_upload" class="form-label">Search by tags</label>
+                <label for="tags_upload" class="form-label">Add or remove Tags</label>
                 <input type="text" class="form-control" id="tags_upload" name="new_upload_tag_list"
                     placeholder="Add Tag to Media File" #tagNameInput [matChipInputFor]="tagChipGrid"
                     [matAutocomplete]="auto" [matChipInputSeparatorKeyCodes]="keycodes"
@@ -66,9 +87,13 @@
                     <mat-option *ngFor="let filteredTag of filteredTags | async;"
                         [value]="filteredTag">{{filteredTag.name}}</mat-option>
                 </mat-autocomplete>
-                <p *ngIf="" class="text-danger"></p>
+                <div *ngIf="uploadFormGroup.controls['tagIDArrayControl'].invalid && (uploadFormGroup.controls['tagIDArrayControl'].dirty || uploadFormGroup.controls['tagIDArrayControl'].touched)"
+                    class="alert">
+                    <p *ngIf="uploadFormGroup.controls['tagIDArrayControl'].errors?.['required']">Mo Tags selected</p>
+                </div>
             </div>
-            <button type="button" tpye="submit" class="btn btn-secondary">Submit</button>
+            <button tpye="submit" class="btn btn-secondary"
+                [disabled]="!uploadFormGroup.valid">Submit</button>
             <button type="button" id="cancelButton" class="btn btn-secondary" (click)="cancel()">Cancel</button>
         </form>
     </div>

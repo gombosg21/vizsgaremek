@@ -27,15 +27,16 @@ export class UploadImageModalComponent implements OnInit {
   public filteredTags: Observable<tag[]> = of([]);
   public uploadTags: tag[] = [];
   @Output() upload = new EventEmitter<upload>();
-  @Output() cancelUpload = new EventEmitter<void>();
+  @Output() close = new EventEmitter<void>();
   @ViewChild("tagNameInput") tagInput: ElementRef<HTMLInputElement>;
 
   private mediaTagsControl: FormControl = new FormControl();
   public uploadFormGroup = new FormGroup({
     placeholderControl: new FormControl<string>('', Validators.compose([Validators.required, Validators.minLength(8), Validators.maxLength(50)])),
     descriptionControl: new FormControl<string>('', Validators.compose([Validators.required, Validators.minLength(8), Validators.maxLength(500)])),
-    visibilityControl: new FormControl<number>(0, Validators.compose([Validators.min(0), Validators.max(3)])),
-    imageControl: new FormControl<Blob | null>(null, Validators.compose([Validators.required]))
+    visibilityControl: new FormControl<string>('', Validators.compose([Validators.min(0), Validators.max(3)])),
+    imageControl: new FormControl('', Validators.compose([Validators.required])),
+    tagIDArrayControl: new FormControl<number[]>([], Validators.compose([Validators.required]))
   });
 
   constructor(private MediaService: MediaService, private DBService: DbService, @Inject(MAT_DIALOG_DATA) public data: any, public dialogRef: MatDialogRef<UploadImageModalComponent>) {
@@ -58,21 +59,9 @@ export class UploadImageModalComponent implements OnInit {
     });
   };
 
-  get placeholder() {
-    return this.uploadFormGroup.get('placeholderControl');
-  };
-
-  get description() {
-    return this.uploadFormGroup.get('descriptionControl');
-  };
-
-  get image() {
-    return this.uploadFormGroup.get('imageControl');
-  };
-
   onImageSelected(event: any) {
     //TODO: input type validation
-    this.uploadFormGroup.value.imageControl = (event.target.files[0]) as Blob;
+    this.uploadFormGroup.controls['imageControl'].setValue(event.target.files[0]);
   };
 
   addTag(event: MatChipInputEvent): void {
@@ -80,7 +69,10 @@ export class UploadImageModalComponent implements OnInit {
     if (value) {
       for (let i = 0; i < this.validTags.length; i++) {
         if (this.validTags[i].name == value) {
-          this.uploadTags.push(this.validTags[i]);
+          if (!(this.uploadTags.includes(this.validTags[i]))) {
+            this.uploadTags.push(this.validTags[i]);
+            this.uploadFormGroup.controls['tagIDArrayControl'].setValue(this.uploadTags.map(Tag => Tag.ID));
+          };
         };
       };
     };
@@ -94,28 +86,34 @@ export class UploadImageModalComponent implements OnInit {
     const index = this.uploadTags.indexOf(tag);
     if (index > -1) {
       this.uploadTags.splice(index, 1);
+      this.uploadFormGroup.controls['tagIDArrayControl'].setValue(this.uploadTags.map(Tag => Tag.ID));
     };
   };
 
   selectedTag(event: MatAutocompleteSelectedEvent): void {
     for (let i = 0; i < this.validTags.length; i++) {
       if (this.validTags[i].name == event.option.viewValue)
-        this.uploadTags.push(this.validTags[i])
+        if (!(this.uploadTags.includes(this.validTags[i]))) {
+          this.uploadTags.push(this.validTags[i])
+          this.uploadFormGroup.controls['tagIDArrayControl'].setValue(this.uploadTags.map(Tag => Tag.ID));
+        };
     };
     this.tagInput.nativeElement.value = '';
     this.mediaTagsControl.setValue(null);
+    console.log(this.uploadFormGroup.controls)
   };
 
   onSubmit(): void {
-    if (this.uploadFormGroup.valid && this.uploadTags.length != 0) {
-      const tagIDs: number[] = this.uploadTags!.map(tag => tag.ID);
+    console.log(this.uploadFormGroup.valid)
+
+    if (this.uploadFormGroup.valid) {
       const uploadForm = new FormData();
 
       uploadForm.append("image", this.uploadFormGroup.value.imageControl!);
       uploadForm.append("placeholder_text", this.uploadFormGroup.value.placeholderControl!);
       uploadForm.append("description", this.uploadFormGroup.value.descriptionControl!);
       uploadForm.append("visibility", String(this.uploadFormGroup.value.visibilityControl!));
-      tagIDs.forEach(ID => {
+      this.uploadFormGroup.value.tagIDArrayControl!.forEach(ID => {
         uploadForm.append("tag_id_array[]", String(ID));
       });
 
@@ -128,7 +126,8 @@ export class UploadImageModalComponent implements OnInit {
         },
         complete: () => {
           console.log("done");
-          this.cancelUpload.emit();
+          this.close.emit();
+          this.dialogRef.close();
         }
       });
     } else {
@@ -137,7 +136,7 @@ export class UploadImageModalComponent implements OnInit {
   };
 
   cancel(): void {
-    this.cancelUpload.emit();
+    this.close.emit();
     this.dialogRef.close();
   };
 
