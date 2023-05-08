@@ -52,6 +52,8 @@ import { CarouselBuilderComponent } from './components/carousel-builder/carousel
 import { AdminBoardComponent } from './components/admin/admin-board/admin-board.component';
 import { AdminTagsComponent } from './components/admin/admin-tags/admin-tags.component';
 import { AdminReactionsComponent } from './components/admin/admin-reactions/admin-reactions.component';
+import { MediaThreadComponent } from './components/media-thread/media-thread.component';
+import { CarouselThreadComponent } from './components/carousel-thread/carousel-thread.component';
 
 
 
@@ -94,6 +96,8 @@ import { AdminReactionsComponent } from './components/admin/admin-reactions/admi
     AdminBoardComponent,
     AdminTagsComponent,
     AdminReactionsComponent,
+    MediaThreadComponent,
+    CarouselThreadComponent,
   ],
   imports: [
     BrowserModule,
