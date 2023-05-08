@@ -29,41 +29,6 @@ export class ImageComponent implements OnInit, OnDestroy {
   private mediaSub: Subscription;
 
   constructor(private MediaService: MediaService, private ReactionService: ReactionService, private Auth: AuthService) {
-    if (this.mediaID) {
-      this.MediaService.getOneByID(this.mediaID).subscribe({
-        next: (value) => {
-          if (value.hasOwnProperty('file_data')) {
-            this.media = value as media;
-          };
-          if (value.hasOwnProperty('error')) {
-            this.ErrorInstance = value as ErrorModel;
-          };
-        },
-        error: (err) => {
-          console.error(err);
-        },
-      });
-    };
-
-    if (this.iterator) {
-
-      this.mediaSub = this.MediaService.getLocalMediaList().subscribe({
-        next: (value) => {
-          const ListItem = value[this.iterator];
-          if (ListItem.hasOwnProperty('file_data')) {
-            this.media = ListItem as media;
-            if (this.media.reactions) {
-              this.ReactionService.setStoredInstanceList(this.media.reactions);
-            };
-          };
-          if (ListItem.hasOwnProperty('error')) {
-            this.ErrorInstance = ListItem as ErrorModel;
-          };
-        },
-        error: (err) => { console.error(err) },
-        complete: () => { }
-      });
-    };
   };
 
   ngOnDestroy(): void {
@@ -97,7 +62,7 @@ export class ImageComponent implements OnInit, OnDestroy {
         this.deleted.emit(this.media);
       },
       complete: () => { },
-      error: (err) => { console.log(err) }
+      error: (err) => { console.error(err) }
     });
   };
 
@@ -107,10 +72,61 @@ export class ImageComponent implements OnInit, OnDestroy {
       error: (err) => { console.error(err) },
       complete: () => { }
     });
+
+    if (this.mediaID) {
+      this.MediaService.getOneByID(this.mediaID).subscribe({
+        next: (value) => {
+          if (value.hasOwnProperty('file_data')) {
+            this.media = value as media;
+          };
+          if (value.hasOwnProperty('error')) {
+            this.ErrorInstance = value as ErrorModel;
+          };
+        },
+        error: (err) => {
+          console.error(err);
+        },
+      });
+    };
+
+    if (this.iterator) {
+      this.mediaSub = this.MediaService.getLocalMediaList().subscribe({
+        next: (value) => {
+          const ListItem = value[this.iterator];
+          if (ListItem.hasOwnProperty('file_data')) {
+            this.media = ListItem as media;
+            if (this.media.reactions) {
+              this.ReactionService.setStoredInstanceList(this.media.reactions);
+            };
+          };
+          if (ListItem.hasOwnProperty('error')) {
+            this.ErrorInstance = ListItem as ErrorModel;
+          };
+        },
+        error: (err) => { console.error(err) },
+        complete: () => { }
+      });
+    };
+
+    if(!this.data) {
+      this.MediaService.getLocalMediaInstance().subscribe({
+        next:(val)=> {if (
+          val.hasOwnProperty('file_data')) {
+          this.media = val as media;
+          if (this.media.reactions) {
+            this.ReactionService.setStoredInstanceList(this.media.reactions);
+          };
+        };
+        // if (val.hasOwnProperty('error')) {
+        //   this.ErrorInstance = val as ErrorModel;
+        // };
+      }
+      })
+    }
+
     if (this.data) {
       if (this.data.hasOwnProperty('file_data')) {
         this.media = this.data as media;
-        console.log(this.media.user!.ID, this.sessionId)
         if (this.media.reactions) {
           this.ReactionService.setStoredInstanceList(this.media.reactions);
         };
@@ -142,7 +158,6 @@ export class ImageComponent implements OnInit, OnDestroy {
   showModal(): void {
     this.showImageModal = true;
   };
-
 
   hideModal(): void {
     this.showImageModal = false;

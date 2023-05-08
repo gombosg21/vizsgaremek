@@ -35,7 +35,7 @@
             <app-tags *ngIf="media.tags" [tags]="media.tags"></app-tags>
         </div>
         <div *ngIf="media.threads">
-            <app-thread-short *ngFor="let thread of media.threads" [thread]="thread"></app-thread-short>
+            <app-thread-short [threads]="media.threads" [mediaID]="media.ID!"></app-thread-short>
         </div>
     </div>
     <div *ngIf="ErrorInstance">
