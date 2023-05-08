@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, EventEmitter, Input, Output } from '@angular/core';
-import { ThreadService } from '../../services/thread/thread.service'
 import { thread_short, thread } from 'src/app/models/thread';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-thread-short',
@@ -9,23 +9,14 @@ import { thread_short, thread } from 'src/app/models/thread';
 })
 export class ThreadShortComponent {
 
-  @Input() public thread: thread_short;
+  @Input() public threads: thread_short[];
+  @Input() public mediaID: number;
   @Output() threadGet = new EventEmitter<thread>();
 
 
-  constructor(private ThreadService: ThreadService) { }
+  constructor(private router: Router) { }
 
-  open(): void {
-    this.ThreadService.getThreadByID(this.thread.ID).subscribe({
-      error: (err) => { console.error(err); },
-      next: (value) => {
-        console.log(value);
-        this.threadGet.emit(value);
-      },
-      complete: () => {
-
-      },
-    });
+  open(ID:number): void {
+    this.router.navigate(['media/' + this.mediaID + '/thread/' + ID]);
   };
-
 };

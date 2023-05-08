@@ -1,4 +1,4 @@
-<div class="thread-card card mb-3">
+<div *ngFor="let thread of threads" class="thread-card card mb-3">
     <div class="card-body">
         <h5 class="card-title mb-0" id="alias">
             <i class="fa-solid fa-user" id="user-icon"></i>{{thread.user.profile.alias}}
@@ -7,7 +7,7 @@
             <p>Name: {{thread.name}}</p>
             <p>Status: {{thread.status}}</p>
         </div>
-        <button class="btn btn-secondary btn-sm" (click)="open()">Open</button>
+        <button class="btn btn-secondary btn-sm" (click)="open(thread.ID)">Open</button>
     </div>
     <div class="card-footer text-muted">
         <p><i class="far fa-calendar-alt"></i> Created: {{thread.created | date: 'yyyy. MM. dd. HH:mm'}}</p>
