@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, OnDestroy } from '@angular/core';
-import { Observable, Subscription, of } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription, of } from 'rxjs';
 import { enviroment } from 'src/enviroments/enviroment';
 import { ApiPaths } from '../../enums/api-paths';
 import { Router } from '@angular/router';
@@ -13,11 +13,11 @@ export class AuthService implements OnDestroy {
   constructor(private http: HttpClient, private router: Router,) {
     this.routerSub = this.router.events.subscribe({
       next: (value) => {
-        this.userID = of(getTokenUserID());
         if (getTokenUserID()) {
-          this.session = of(true);
+          this.userID.next(getTokenUserID());
+          this.session.next(true);
         } else {
-          this.session = of(false);
+          this.session.next(false);
         };
       },
       error: (err) => {
@@ -27,8 +27,8 @@ export class AuthService implements OnDestroy {
   };
 
   private routerSub: Subscription;
-  private userID: Observable<number | undefined>;
-  private session: Observable<boolean>;
+  private userID: BehaviorSubject<undefined | number> = new BehaviorSubject<undefined | number>(undefined);
+  private session: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public isDarkMode: boolean = JSON.parse(localStorage.getItem('isDarkMode') || 'false');
 
   getIsDarkMode(): boolean {
@@ -58,9 +58,9 @@ export class AuthService implements OnDestroy {
           throw new Error(err);
         },
         complete: () => {
-          this.session = of(true);
-          this.userID = of(getTokenUserID());
-          this.router.navigate(["/profile/" + getTokenUserID()])
+          this.session.next(true);
+          this.userID.next(getTokenUserID());
+          this.router.navigate(["/profile/" + this.userID]);
         }
       });
   };
@@ -70,7 +70,7 @@ export class AuthService implements OnDestroy {
     uriResult.subscribe(
       {
         next: (data) => {
-          this.session = of(false);
+          this.session.next(false);
           sessionStorage.removeItem("token");
         },
         error(err) {
@@ -79,7 +79,7 @@ export class AuthService implements OnDestroy {
         },
         complete: () => {
           this.router.navigate(["/login"]);
-          this.userID = of(undefined);
+          this.userID.next(undefined);
         }
       });
 

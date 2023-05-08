@@ -38,16 +38,15 @@ export class NavbarComponent implements OnInit, OnDestroy {
         });
         this.userSub = this.Auth.getUserID().subscribe({
           next: (value) => {
-            this.sessionID = value;
-
+            this.sessionID = value;            
+            this.userMediasLink = this.userMediasLinkBase + "/" + this.sessionID;
+            this.userProfileLink = this.userProfileLinkBase + "/" + this.sessionID;
+            this.userStoriesLink = this.userStoriesLinkBase + "/" + this.sessionID;
           },
           error: (err) => {
             console.error(err)
           },
           complete: () => {
-            this.userMediasLink = this.userMediasLinkBase + "/" + this.sessionID;
-            this.userProfileLink = this.userProfileLinkBase + "/" + this.sessionID;
-            this.userStoriesLink = this.userStoriesLinkBase + "/" + this.sessionID;
           }
         })
       },
