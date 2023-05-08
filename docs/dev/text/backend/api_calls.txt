@@ -86,6 +86,11 @@ Visszaadja az adott ID-jű user összes képét listaként base64-es kódolássa
 {uploader, file_data, uploaded, description, placeholder_text, last_edit, tags[name]},
 csak a file van base64-ben.
 
+DELETE /api/v/0.1/media/{ID}
+Belépés után elérhető...
+Eltöröl egy képet ID alapján, ha a média a felhasználóhoz tartozik.
+Siker esetén visszaadja az eltörölt kép ID-jét.
+
 POST /api/v/0.1/media
 Belépés után elérhető...
 Egy képet form/multipart-data-val feltölt.
@@ -169,6 +174,7 @@ Belépés után elérhető...
 Létrehoz egy új képtörténetet.
 JSON-ban kéri az alábbiakat : {name, visibility, description ,medias:[{ID}, {item_number}, {item_description}]}
 AZ ID és item_number  0-nál nagyobb egész szám kell hogy legyen.
+Az ID érvényes, felhasználó által feltöltött média ID kell hogy legyen.
 Az item_number nem lehet imsétlődő szám.
 A visibility 0 és 3 között lehet.
 Többi mező szöveges.
