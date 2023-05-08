@@ -10,7 +10,7 @@ import { ErrorModel } from 'src/app/models/error';
 @Injectable({
   providedIn: 'root'
 })
-export class StoryService implements OnInit , OnDestroy {
+export class StoryService implements OnInit, OnDestroy {
 
   constructor(private http: HttpClient, private Auth: AuthService) { }
 
@@ -38,18 +38,18 @@ export class StoryService implements OnInit , OnDestroy {
   };
 
   getAllStoriesFromUserID(userID: number): Observable<any> {
-    if(this.sessionID || userID) {
+    if (this.sessionID || userID) {
       const ID = userID ?? this.sessionID;
-          return this.http.get(this.ApiPath + "/" + ApiPaths.User + "/" + ID + "/all");
+      return this.http.get(this.ApiPath + "/" + ApiPaths.User + "/" + ID + "/all");
     }
-    return throwError(() => {new Error("called w/o userID or valid sessionID!")});
+    return throwError(() => { new Error("called w/o userID or valid sessionID!") });
   };
 
   postStory(story: carousel): Observable<any> {
     return this.http.post(this.ApiPath, story);
   };
 
-  getLocalStoryInstance():Observable<ErrorModel | carousel> {
+  getLocalStoryInstance(): Observable<ErrorModel | carousel> {
     return this.caruselInstance;
   };
 
@@ -63,5 +63,27 @@ export class StoryService implements OnInit , OnDestroy {
 
   setLocalStoryList(storyList: (ErrorModel | carousel)[]) {
     this.caruselList = of(storyList);
+  };
+
+  getQuery(name?: string, user_id?: number, media_ids?: number[], description?: string, created_start?: Date, created_end?: Date, edit_start?: Date, edit_end?: Date): Observable<(ErrorModel | carousel)[]> {
+    var queryString = '?';
+    if (name) { queryString += 'name=' + name + '&' };
+    if (user_id) { queryString += 'user_id=' + user_id + '&' };
+    if (media_ids) {
+      media_ids.forEach(ID => {
+        queryString += 'media_ids=' + ID + '&'
+      });
+    };
+    if (description) { queryString += 'description=' + description + '&' }
+    if (created_start) { queryString += 'created_start=' + created_start + '&' }
+    if (created_end) { queryString += 'created_end=' + created_end + '&' }
+    if (edit_start) { queryString += 'edit_start=' + edit_start + '&' }
+    if (edit_end) { queryString += 'edit_end=' + edit_end + '&' }
+    if (queryString = '?') {
+      throwError(() => { new Error('no query params where supplied!') });
+    };
+    const query = queryString.slice(0,-1);
+
+    return this.http.get<(ErrorModel | carousel)[]>(this.ApiPath + query);
   };
 };
