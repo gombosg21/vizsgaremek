@@ -29,7 +29,7 @@ export class CarouselTilesetComponent {
         next: (value) => {
           if (value[0] != undefined) {
             this.carousels = value ?? this.carousels;
-            this.CarouselService.setLocalStoryList(this.carousels);
+            this.CarouselService.setLocalStoryList = this.carousels;
           };
         },
         error: (err) => {

@@ -35,7 +35,7 @@ export class RegisterComponent implements OnInit {
     private authService: AuthService
   ) {
     this.titleService.setTitle('VisualPosting - Register');
-    this.isDarkMode = this.authService.getIsDarkMode();
+    this.isDarkMode = this.authService.getIsDarkMode;
   };
 
   ngOnInit(): void { };

@@ -67,7 +67,7 @@ export class ImageComponent implements OnInit, OnDestroy {
   };
 
   ngOnInit(): void {
-    this.userSub = this.Auth.getUserID().subscribe({
+    this.userSub = this.Auth.getUserID.subscribe({
       next: (value) => { this.sessionId = value},
       error: (err) => { console.error(err) },
       complete: () => { }

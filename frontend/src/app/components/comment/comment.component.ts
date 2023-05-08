@@ -29,7 +29,7 @@ export class CommentComponent implements OnInit, OnDestroy {
   private commentSub: Subscription;
 
   constructor(private CommentService: CommentService, private ReactionService: ReactionService, private Auth: AuthService) {
-    this.userSub = this.Auth.getUserID().subscribe({
+    this.userSub = this.Auth.getUserID.subscribe({
       next: (value) => {
         this.sessionID = value ?? -1;
       },

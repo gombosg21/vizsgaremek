@@ -32,7 +32,7 @@ export class EditProfileComponent implements OnInit, OnDestroy {
   };
 
   ngOnInit(): void {
-    this.userSub = this.Auth.getUserID().subscribe({
+    this.userSub = this.Auth.getUserID.subscribe({
       next: (value) => {
         this.userID = value ?? this.userID;
 

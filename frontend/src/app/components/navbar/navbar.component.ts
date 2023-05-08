@@ -28,7 +28,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   constructor(private Auth: AuthService, private router: Router) {
     this.router.events.subscribe({
       next: (value) => {
-        this.authSub = this.Auth.getSessionStatus().subscribe({
+        this.authSub = this.Auth.getSessionStatus.subscribe({
           next: (value) => {
             this.isSession = value;
           },
@@ -36,7 +36,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
             console.error(err);
           }
         });
-        this.userSub = this.Auth.getUserID().subscribe({
+        this.userSub = this.Auth.getUserID.subscribe({
           next: (value) => {
             this.sessionID = value;
             this.userMediasLink = this.userMediasLinkBase + "/" + this.sessionID;

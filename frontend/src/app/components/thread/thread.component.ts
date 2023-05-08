@@ -37,7 +37,7 @@ export class ThreadComponent implements OnInit, OnDestroy {
   };
 
   ngOnInit(): void {
-    this.userSub = this.Auth.getUserID().subscribe({
+    this.userSub = this.Auth.getUserID.subscribe({
       error: (err) => {
         console.error(err);
       },

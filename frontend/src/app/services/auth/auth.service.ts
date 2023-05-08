@@ -31,7 +31,7 @@ export class AuthService implements OnDestroy {
   private session: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public isDarkMode: boolean = JSON.parse(localStorage.getItem('isDarkMode') || 'false');
 
-  getIsDarkMode(): boolean {
+  public get getIsDarkMode(): boolean {
     return this.isDarkMode;
   }
 
@@ -39,15 +39,15 @@ export class AuthService implements OnDestroy {
     this.routerSub.unsubscribe();
   };
 
-  getUserID(): Observable<number | undefined> {
+  public get getUserID(): Observable<number | undefined> {
     return this.userID;
   };
 
-  getSessionStatus(): Observable<boolean> {
+  public get getSessionStatus(): Observable<boolean> {
     return this.session;
   };
 
-  login(username: string, password: string): void {
+  public login(username: string, password: string): void {
     this.http.post<any>(enviroment.baseUrl + ApiPaths.User + "/login", { name: username, password: password })
       .subscribe({
         next(data) {
@@ -65,7 +65,7 @@ export class AuthService implements OnDestroy {
       });
   };
 
-  logout(): Observable<any> {
+  public logout(): Observable<any> {
     const uriResult = this.http.delete<any>(enviroment.baseUrl + ApiPaths.User + "/logout")
     uriResult.subscribe(
       {

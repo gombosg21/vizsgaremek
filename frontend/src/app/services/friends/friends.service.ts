@@ -17,7 +17,7 @@ export class FriendsService implements OnDestroy, OnInit {
   private sessionID?: number;
 
   constructor(private http: HttpClient, private Auth: AuthService) {
-    this.userSub = this.Auth.getUserID().subscribe({
+    this.userSub = this.Auth.getUserID.subscribe({
       next: (value) => { this.sessionID = value },
       error: (error) => { console.error(error) },
       complete: () => { }

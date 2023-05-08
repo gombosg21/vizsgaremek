@@ -20,7 +20,7 @@ export class FriendsComponent implements OnDestroy, OnInit {
   private userSub: Subscription;
 
   constructor(private FriendsService: FriendsService, private Auth: AuthService) {
-    this.userSub = this.Auth.getUserID().subscribe({
+    this.userSub = this.Auth.getUserID.subscribe({
       next: (val) => {
         this.userID = this.userID ?? val;
       }

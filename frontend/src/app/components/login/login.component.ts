@@ -22,7 +22,7 @@ export class LoginComponent {
     private authService: AuthService,
   ) {
     this.titleService.setTitle('VisualPosting - Login');
-    this.isDarkMode = authService.getIsDarkMode();
+    this.isDarkMode = authService.getIsDarkMode;
   };
 
   login() {

@@ -36,7 +36,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
 
   ngOnInit(): void {
-    this.userSub = this.AuthService.getUserID().subscribe({
+    this.userSub = this.AuthService.getUserID.subscribe({
       next: (value) => {
         this.isSession = true;
         this.userID = value ?? this.userID;

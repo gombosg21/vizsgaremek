@@ -25,7 +25,7 @@ export class StoryService implements OnInit, OnDestroy {
   };
 
   ngOnInit(): void {
-    this.userSub = this.Auth.getUserID().subscribe({
+    this.userSub = this.Auth.getUserID.subscribe({
       next: (value) => { this.sessionID = value },
       error: (error) => { console.error(error) },
       complete: () => { }
@@ -49,19 +49,19 @@ export class StoryService implements OnInit, OnDestroy {
     return this.http.post(this.ApiPath, story);
   };
 
-  getLocalStoryInstance(): Observable<ErrorModel | carousel> {
+  public get getLocalStoryInstance(): Observable<ErrorModel | carousel> {
     return this.caruselInstance;
   };
 
-  setLocalStoryInstance(story: carousel | ErrorModel) {
+  public set setLocalStoryInstance(story: carousel | ErrorModel) {
     this.caruselInstance = of(story);
   };
 
-  getLocalStoryList(): Observable<(ErrorModel | carousel)[]> {
+  public get getLocalStoryList(): Observable<(ErrorModel | carousel)[]> {
     return this.caruselList;
   };
 
-  setLocalStoryList(storyList: (ErrorModel | carousel)[]) {
+  public set setLocalStoryList(storyList: (ErrorModel | carousel)[]) {
     this.caruselList = of(storyList);
   };
 
