@@ -45,7 +45,7 @@ exports.getThread = async (req, res, next) => {
             group: [col('thread_reactionlists.reaction_ID'), col('comments.comment_reactionlists.reaction_ID')]
         });
 
-        return res.status(200).json({ thread: threadData });
+        return res.status(200).json(threadData);
     } catch (error) {
         console.error(error);
         return res.status(500);
@@ -223,7 +223,7 @@ exports.searchThreads = async (req, res, next) => {
 
         const threadList = await thread.findAll(query);
 
-        return res.status(200).json({ results: threadList });
+        return res.status(200).json(threadList);
     } catch (error) {
         console.error(error);
         return res.status(500);
