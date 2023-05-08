@@ -16,9 +16,9 @@ export class ThreadShortComponent {
 
   constructor(private router: Router) { }
 
-  open(ID:number): void {
-    console.log(['open',this.mediaID,ID])
-
+  open(ID: number): void {
+    console.log(['open', this.mediaID, ID])
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     this.router.navigate(['media/' + this.mediaID + '/thread/' + ID]);
   };
 };
