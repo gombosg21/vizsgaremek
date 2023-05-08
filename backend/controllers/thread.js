@@ -15,7 +15,7 @@ exports.getThread = async (req, res, next) => {
     try {
         const threadData = await thread.findOne({
             where: { ID: threadID },
-            attributes: ['media_ID', 'name', 'created', 'last_activity'],
+            attributes: ['media_ID', 'name', 'created', 'last_activity','status'],
             include: [
                 {
                     model: comment,
