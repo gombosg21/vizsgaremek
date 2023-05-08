@@ -19,19 +19,19 @@ export class ThreadService {
 
   }
 
-  setLocalData(thread: thread): void {
+  public set setLocalData(thread: thread) {
     this.threadData = of(thread);
   };
 
-  getLocalData(): Observable<thread> {
+  public get getLocalData(): Observable<thread> {
     return this.threadData;
   };
 
-  setLocalDataList(threads: thread[]): void {
+  public set setLocalDataList(threads: thread[]) {
     this.threadList = of(threads);
   };
 
-  getLocalDataList(): Observable<thread[]> {
+  public get getLocalDataList(): Observable<thread[]> {
     return this.threadList;
   };
 

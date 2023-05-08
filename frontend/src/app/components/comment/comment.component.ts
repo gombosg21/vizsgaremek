@@ -40,7 +40,7 @@ export class CommentComponent implements OnInit, OnDestroy {
   };
 
   ngOnInit(): void {
-    this.CommentService.getLocalCommentList().subscribe({
+    this.commentSub = this.CommentService.getLocalCommentList.subscribe({
       next: (value) => {
         this.data = value[this.iterator];
         if (this.data.reactions) {

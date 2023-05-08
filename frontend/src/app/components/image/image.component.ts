@@ -74,7 +74,7 @@ export class ImageComponent implements OnInit, OnDestroy {
     });
 
     if (this.mediaID) {
-      this.MediaService.getOneByID(this.mediaID).subscribe({
+      this.mediaSub = this.MediaService.getOneByID(this.mediaID).subscribe({
         next: (value) => {
           if (value.hasOwnProperty('file_data')) {
             this.media = value as media;
@@ -90,7 +90,7 @@ export class ImageComponent implements OnInit, OnDestroy {
     };
 
     if (this.iterator) {
-      this.mediaSub = this.MediaService.getLocalMediaList().subscribe({
+      this.mediaSub = this.MediaService.getLocalMediaList.subscribe({
         next: (value) => {
           const ListItem = value[this.iterator];
           if (ListItem.hasOwnProperty('file_data')) {
@@ -109,7 +109,7 @@ export class ImageComponent implements OnInit, OnDestroy {
     };
 
     if(!this.data) {
-      this.MediaService.getLocalMediaInstance().subscribe({
+      this.MediaService.getLocalMediaInstance.subscribe({
         next:(val)=> {if (
           val.hasOwnProperty('file_data')) {
           this.media = val as media;
@@ -121,10 +121,8 @@ export class ImageComponent implements OnInit, OnDestroy {
         //   this.ErrorInstance = val as ErrorModel;
         // };
       }
-      })
-    }
-
-    if (this.data) {
+      });
+    } else {
       if (this.data.hasOwnProperty('file_data')) {
         this.media = this.data as media;
         if (this.media.reactions) {

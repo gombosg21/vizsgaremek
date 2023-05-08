@@ -4,7 +4,7 @@ import { comment } from '../../models/comment';
 import { thread } from '../../models/thread';
 import { CommentService } from '../../services/comment/comment.service';
 import { ReactionService } from 'src/app/services/reaction/reaction.service';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
@@ -17,8 +17,10 @@ export class ThreadComponent implements OnInit, OnDestroy {
   pageSize = 5;
   pageIndex = 0;
 
+  @Input() threadID: number;
   @Input() public iterator: number = 0;
-  @Input() public thread: thread;
+  @Input() public data: thread;
+
   public newReactionID: number;
 
   public threadStatus: string;
@@ -32,6 +34,9 @@ export class ThreadComponent implements OnInit, OnDestroy {
   public newName: string;
 
   constructor(private ThreadService: ThreadService, private CommenctService: CommentService, private ReactionService: ReactionService, private Auth: AuthService) {
+  };
+
+  ngOnInit(): void {
     this.userSub = this.Auth.getUserID().subscribe({
       error: (err) => {
         console.error(err);
@@ -41,32 +46,39 @@ export class ThreadComponent implements OnInit, OnDestroy {
         if (this.sessionId != -1) {
           this.showNewComment = true;
         }
-      }, complete: () => {
+      }, complete: () => { },
+    });
 
-      },
-    })
-  };
-
-  ngOnInit(): void {
-    if (!this.thread) {
-      this.ThreadService.getLocalData().subscribe({
+    if (this.threadID) {
+      this.threadSub = this.ThreadService.getThreadByID(this.threadID).subscribe({
         next: (val) => {
-          this.thread = val;
+          console.log('ID', val)
+          this.data = val ?? this.data;
+          this.CommenctService.setLocalCommentList = this.data.comments;
         },
-        error:(err) => {
+        error: (err) => {
           console.error(err)
         },
-        complete:()=> {}
+        complete: () => { }
       });
+    } else {
+      this.threadSub = this.ThreadService.getLocalData.subscribe({
+        next: (val) => {
+          console.log('local', val)
+          this.data = val ?? this.data;
+          this.CommenctService.setLocalCommentList = this.data.comments;
+        },
+        error: (err) => {
+          console.error(err)
+        },
+        complete: () => { }
+      });
+      if (this.data.reactions) {
+        this.ReactionService.setStoredInstanceList(this.data.reactions);
+      };
     };
 
-    if (this.thread.reactions) {
-      this.ReactionService.setStoredInstanceList(this.thread.reactions);
-    };
-
-    this.CommenctService.setLocalCommentList(this.thread.comments);
-
-    switch (this.thread.status) {
+    switch (this.data.status) {
       case 0:
         this.threadStatus = "open"
         break;
@@ -82,13 +94,13 @@ export class ThreadComponent implements OnInit, OnDestroy {
       default:
         this.threadStatus = "error"
         break;
-    }
-  }
+    };
+  };
 
   comment(): void {
-    this.CommenctService.postComment(this.newCommentContent, this.thread.ID).subscribe({
+    this.CommenctService.postComment(this.newCommentContent, this.data.ID).subscribe({
       next: (value) => {
-        this.thread.comments.push(value);
+        this.data.comments.push(value);
       }, error: (err) => {
         console.error(err);
       }, complete: () => {
@@ -97,20 +109,20 @@ export class ThreadComponent implements OnInit, OnDestroy {
   };
 
   removeComment(comment: comment): void {
-    this.thread.comments.splice(this.thread.comments.indexOf(comment), 1);
-    this.CommenctService.setLocalCommentList(this.thread.comments);
+    this.data.comments.splice(this.data.comments.indexOf(comment), 1);
+    this.CommenctService.setLocalCommentList = this.data.comments;
   };
 
   addReaction(reactionID: number): void {
-    if (this.thread.reactions) {
-      for (let i = 0; i < this.thread.reactions.length; i++) {
-        if (this.thread.reactions[i].ID == reactionID) {
-          this.thread.reactions[i].count++;
+    if (this.data.reactions) {
+      for (let i = 0; i < this.data.reactions.length; i++) {
+        if (this.data.reactions[i].ID == reactionID) {
+          this.data.reactions[i].count++;
         };
       };
     };
-    this.thread.reactions = [{ ID: reactionID, count: 1 }];
-    this.ReactionService.setStoredInstanceList(this.thread.reactions);
+    this.data.reactions = [{ ID: reactionID, count: 1 }];
+    this.ReactionService.setStoredInstanceList(this.data.reactions);
     this.newReactionID = reactionID;
   };
 
@@ -120,7 +132,7 @@ export class ThreadComponent implements OnInit, OnDestroy {
 
   edit(): void {
     this.showEdit = true;
-    this.newName = this.thread.name;
+    this.newName = this.data.name;
   };
 
   cancelEdit(): void {
@@ -129,9 +141,9 @@ export class ThreadComponent implements OnInit, OnDestroy {
 
   sendEdit(): void {
     this.showEdit = false;
-    this.ThreadService.patchThreadName(this.newName, this.thread.ID).subscribe({
+    this.ThreadService.patchThreadName(this.newName, this.data.ID).subscribe({
       next: (value) => {
-        this.thread.name = this.newName;
+        this.data.name = this.newName;
       },
       error: (err) => {
         console.error(err)

@@ -38,7 +38,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
         });
         this.userSub = this.Auth.getUserID().subscribe({
           next: (value) => {
-            this.sessionID = value;            
+            this.sessionID = value;
             this.userMediasLink = this.userMediasLinkBase + "/" + this.sessionID;
             this.userProfileLink = this.userProfileLinkBase + "/" + this.sessionID;
             this.userStoriesLink = this.userStoriesLinkBase + "/" + this.sessionID;
@@ -46,9 +46,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
           error: (err) => {
             console.error(err)
           },
-          complete: () => {
-          }
-        })
+          complete: () => { }
+        });
       },
       error: (err) => {
         console.error(err)
@@ -61,13 +60,13 @@ export class NavbarComponent implements OnInit, OnDestroy {
   };
 
   ngOnDestroy(): void {
-    this.authSub.unsubscribe();
-    this.userSub.unsubscribe();
+    if (this.authSub) {
+      this.authSub.unsubscribe();
+    };
+    if (this.userSub) {
+      this.userSub.unsubscribe();
+    };
   };
-
-
-
-
 
   logout(): void {
     this.Auth.logout().subscribe({
@@ -78,7 +77,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
       }
     });
   };
-
 
   toggleDarkMode(): void {
     this.isDarkMode = !this.isDarkMode;

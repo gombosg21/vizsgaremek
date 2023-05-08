@@ -85,7 +85,7 @@ export class MediaTilesetComponent implements OnInit {
         next: (value) => {
           if (value[0] != undefined) {
             this.medias = value ?? this.medias;
-            this.MediaService.setLocalMediaList(this.medias);
+            this.MediaService.setLocalMediaList = this.medias;
           }
         },
         error: (err) => {

@@ -13,28 +13,26 @@ export class CommentService {
 
   private ApiPathMain = enviroment.baseUrl + ApiPaths.Thread;
   private ApiPathSecondary = enviroment.baseUrl + ApiPaths.Comment;
-
   private comments: Observable<comment[]>;
-
   private comment: Observable<comment>;
 
   constructor(private http: HttpClient) {
   };
 
 
-  setLocalCommentList(comments: comment[]): void {
+  public set setLocalCommentList(comments: comment[]) {
     this.comments = of(comments);
   };
 
-  getLocalCommentList(): Observable<comment[]> {
+  public get getLocalCommentList(): Observable<comment[]> {
     return this.comments;
   };
 
-  getLocalCommentInstance(): Observable<comment> {
+  public get getLocalCommentInstance(): Observable<comment> {
     return this.comment;
   };
 
-  setLocalCommentInstance(comment: comment): void {
+  public set setLocalCommentInstance(comment: comment) {
     this.comment = of(comment);
   };
 

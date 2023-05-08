@@ -36,23 +36,23 @@ export class MediaService implements OnInit, OnDestroy {
 
   };
 
-  getLocalMediaList(): Observable<(media | ErrorModel)[]> {
+  public get getLocalMediaList(): Observable<(media | ErrorModel)[]> {
     return this.localMediaList;
   };
 
-  setLocalMediaList(mediaList: (media | ErrorModel)[]): void {
+  public set setLocalMediaList(mediaList: (media | ErrorModel)[]) {
     this.localMediaList = of(mediaList);
   };
 
-  setLocalMediaInstance(mediaInstance: media): void {
+  public set setLocalMediaInstance(mediaInstance: media) {
     this.localMedia = of(mediaInstance);
   };
 
-  getLocalMediaInstance(): Observable<media> {
+  public get getLocalMediaInstance(): Observable<media> {
     return this.localMedia;
   };
 
-  getAllMediaFromUserID(userID?: number): Observable<(media | ErrorModel)[]> {
+  public getAllMediaFromUserID(userID?: number): Observable<(media | ErrorModel)[]> {
     if (this.sessionID || userID) {
       const ID = userID ?? this.sessionID;
       return this.http.get<(media | ErrorModel)[]>(this.ApiPath + "/user/" + ID);
@@ -61,15 +61,15 @@ export class MediaService implements OnInit, OnDestroy {
     };
   };
 
-  getOneByID(ID: number): Observable<media | ErrorModel> {
+  public getOneByID(ID: number): Observable<media | ErrorModel> {
     return this.http.get<media | ErrorModel>(this.ApiPath + "/" + ID);
   };
 
-  postMedia(data: FormData): Observable<any> {
+  public postMedia(data: FormData): Observable<any> {
     return this.http.post<any>(this.ApiPath, data);
   };
 
-  getQueryMedia(tagids: number[]): Observable<(media | ErrorModel)[]> {
+  public getQueryMedia(tagids: number[]): Observable<(media | ErrorModel)[]> {
     var query = "";
 
     for (let i = 0; i < tagids.length; i++) {
@@ -83,7 +83,7 @@ export class MediaService implements OnInit, OnDestroy {
     return this.http.get<media[]>(this.ApiPath + "/search/tags?" + query);
   };
 
-  postUpdateMediaTags(ID: number, addTagIDArray?: number[], removeTagIDArray?: number[]): Observable<any> {
+  public postUpdateMediaTags(ID: number, addTagIDArray?: number[], removeTagIDArray?: number[]): Observable<any> {
     const dataObj: any = {};
 
     if (addTagIDArray) {
@@ -101,7 +101,7 @@ export class MediaService implements OnInit, OnDestroy {
     return this.http.post(this.ApiPath + "/" + ID + "/tags", dataObj);
   };
 
-  deleteDestroyByID(ID:number):Observable<any> {
+  public deleteDestroyByID(ID:number):Observable<any> {
     return this.http.delete(this.ApiPath + "/" + ID);
   };
 };

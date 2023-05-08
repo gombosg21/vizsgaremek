@@ -55,7 +55,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
             }
             this.UserProfileThread = data.profile.thread;
 
-            this.ThreadService.setLocalData(this.UserProfileThread);
+            this.ThreadService.setLocalData = this.UserProfileThread;
             if (this.UserProfile.reactions) {
               this.ReactionsService.setStoredInstanceList(this.UserProfile.reactions);
             };

@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col">
             <div class="d-flex align-items-center">
-                <h4 class="mb-0">{{thread.name}}</h4>
+                <h4 class="mb-0">{{data.name}}</h4>
                 <!-- <div *ngIf="thread.user.ID == sessionId" class="ms-2">
                     <button class="btn btn-secondary btn-sm" id="threadEditBtn" (click)="edit()"><i class="fa-solid fa-pen-to-square"></i>Edit</button>
                 </div> -->
@@ -22,10 +22,10 @@
             <div class="d-flex justify-content-between align-items-center">
                 <div>
                     <h5>
-                        <i class="far fa-calendar-alt"></i> Created at: {{thread.created | date: 'yyyy. MM. dd. HH:mm'}}
+                        <i class="far fa-calendar-alt"></i> Created at: {{data.created | date: 'yyyy. MM. dd. HH:mm'}}
                     </h5>
                     <h5>
-                        <i class="far fa-clock"></i> Last activity: {{thread.last_activity | date: 'yyyy. MM. dd. HH:mm'}}
+                        <i class="far fa-clock"></i> Last activity: {{data.last_activity | date: 'yyyy. MM. dd. HH:mm'}}
                     </h5>
                 </div>
                 <div>
@@ -37,10 +37,10 @@
             <button class="btn btn-secondary btn-sm small-screen-only" (click)="react()">
                 <i class="fas fa-thumbs-up"></i>
             </button>
-            <app-reactions *ngIf="thread.reactions" [newReaction]="newReactionID"></app-reactions>
+            <app-reactions *ngIf="data.reactions" [newReaction]="newReactionID"></app-reactions>
             <hr>
-            <ng-container *ngIf="thread.comments">
-                <app-comment *ngFor="let comment of thread.comments | slice:
+            <ng-container *ngIf="data.comments">
+                <app-comment *ngFor="let comment of data.comments | slice:
                 (paginator.pageIndex*paginator.pageSize):
                 ((paginator.pageIndex+1)*paginator.pageSize); let i = index" [iterator]="(paginator.pageIndex*paginator.pageSize) + i" (isDeleted)="removeComment($event)"></app-comment>
             </ng-container>
@@ -51,8 +51,8 @@
                     <i class="fas fa-paper-plane"></i> Submit
                 </button>
             </form>
-            <mat-paginator #paginator [length]="thread.comments.length" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 25, 50]"></mat-paginator>
+            <mat-paginator #paginator [length]="data.comments.length" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 25, 50]"></mat-paginator>
         </div>
     </div>
-    <app-reaction-modal *ngIf="showAddReactions" (close)="showAddReactions = false" parentType="thread" [parentID]="thread.ID" (reacted)="addReaction($event)"></app-reaction-modal>
+    <app-reaction-modal *ngIf="showAddReactions" (close)="showAddReactions = false" parentType="thread" [parentID]="data.ID" (reacted)="addReaction($event)"></app-reaction-modal>
 </div>
