@@ -47,6 +47,11 @@ import { ImagePickerModalComponent } from './components/modals/image-picker-moda
 import { AuthService } from './services/auth/auth.service';
 import { ThreadShortComponent } from './components/thread-short/thread-short.component';
 import { ThreadCreateModalComponent } from './components/modals/thread-create-modal/thread-create-modal.component';
+import { CarouselSearchComponent } from './components/carousel-search/carousel-search.component';
+import { CarouselBuilderComponent } from './components/carousel-builder/carousel-builder.component';
+import { AdminBoardComponent } from './components/admin/admin-board/admin-board.component';
+import { AdminTagsComponent } from './components/admin/admin-tags/admin-tags.component';
+import { AdminReactionsComponent } from './components/admin/admin-reactions/admin-reactions.component';
 
 
 
@@ -84,6 +89,11 @@ import { ThreadCreateModalComponent } from './components/modals/thread-create-mo
     ImagePickerModalComponent,
     ThreadShortComponent,
     ThreadCreateModalComponent,
+    CarouselSearchComponent,
+    CarouselBuilderComponent,
+    AdminBoardComponent,
+    AdminTagsComponent,
+    AdminReactionsComponent,
   ],
   imports: [
     BrowserModule,
