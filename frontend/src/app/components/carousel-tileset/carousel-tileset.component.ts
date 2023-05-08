@@ -1,8 +1,11 @@
 import { Component, Input } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { carousel } from 'src/app/models/carousel';
+import { ErrorModel } from 'src/app/models/error';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { StoryService } from 'src/app/services/story/story.service';
+import { CarouselBuilderComponent } from '../carousel-builder/carousel-builder.component';
 
 @Component({
   selector: 'app-carousel-tileset',
@@ -11,12 +14,14 @@ import { StoryService } from 'src/app/services/story/story.service';
 })
 export class CarouselTilesetComponent {
 
-  public carousels: carousel[];
+  public showCreateModal: boolean = false;
+  public foreign: boolean = false;
+  public carousels:  (carousel | ErrorModel)[];
   public cols: number = 1;
   private windowWidth: number = window.innerWidth;
   @Input() userID?: number;
 
-  constructor(private route: ActivatedRoute, private CarouselService: StoryService, private AuthService: AuthService) {
+  constructor( private DialogRef: MatDialog,private route: ActivatedRoute, private CarouselService: StoryService, private AuthService: AuthService) {
     this.userID = this.route.snapshot.params['id'] ?? this.userID;
 
     if (this.userID) {
@@ -63,8 +68,15 @@ export class CarouselTilesetComponent {
         default: {
           this.cols = 1;
           console.error({ error: "cannot acces display size, using default column counts" })
-        }
+        };
       };
     };
+  };
+
+  showModal(): void {
+    const dialogRef = this.DialogRef.open(CarouselBuilderComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+    });
   };
 };
