@@ -26,6 +26,9 @@ export class CarouselComponent implements OnInit {
   public carousel_components: any[];
 
   constructor(private CarouselService: StoryService, private ReactionsService: ReactionService) {
+  };
+
+  ngOnInit(): void {
     if (this.storyID) {
       this.CarouselService.getStoryByID(this.storyID).subscribe({
         error: (err) => {
@@ -43,20 +46,29 @@ export class CarouselComponent implements OnInit {
         },
       });
     };
+
+    if (this.data) {
+      if (this.data.hasOwnProperty('carousel_medialists')) {
+        this.carousel = this.data as carousel;
+      } else {
+        this.ErrorInstance = this.data as ErrorModel;
+      };
+    };
+
+
+    if (this.carousel) {
+      if (this.carousel.reactions) {
+        this.reactions = this.carousel.reactions;
+        this.ReactionsService.setStoredInstanceList(this.reactions);
+      };
+      if (this.carousel.carousel_medialists) {
+        console.log(this.carousel.carousel_medialists[0].media)
+        this.carousel_components = (this.carousel.carousel_medialists.sort((a, b) => b.item_number - a.item_number))
+          .map(item => ({ file_data: item.media[0].file_data, description: item.item_description, title: item.media[0].placeholder_text }));
+
+        console.log(this.carousel_components)
+      };
+    };
   };
 
-  ngOnInit(): void {
-
-    if (this.carousel.reactions) {
-      this.reactions = this.carousel.reactions;
-      this.ReactionsService.setStoredInstanceList(this.reactions);
-    };
-    if (this.carousel.carousel_medialists) {
-      console.log(this.carousel.carousel_medialists[0].media)
-      this.carousel_components = (this.carousel.carousel_medialists.sort((a, b) => b.item_number - a.item_number))
-        .map(item => ({ file_data: item.media[0].file_data, description: item.item_description, title: item.media[0].placeholder_text }));
-
-      console.log(this.carousel_components)
-    };
-  };
 };
