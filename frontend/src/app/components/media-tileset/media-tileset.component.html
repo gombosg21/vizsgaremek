@@ -1,16 +1,12 @@
 <div *ngIf="!foreign">
-    <div>
-        <div>
-            <button class="btn btn-primary btn-sm" (click)="showModal()">
-                <i class="fas fa-upload"></i> Upload
-            </button>
-        </div>
-    </div>
+    <button class="btn btn-primary btn-sm" (click)="showModal()">
+        <i class="fas fa-upload"></i> Upload
+    </button>
 </div>
 <div *ngIf="medias">
-    <mat-grid-list cols="cols">
+    <mat-grid-list [cols]="cols">
         <mat-grid-tile *ngFor="let media of medias; index as i;">
-            <app-image [data]="media" [iterator]="i"></app-image>
+            <app-image [data]="media" [iterator]="i" (deleted)="removed($event)"></app-image>
         </mat-grid-tile>
     </mat-grid-list>
 </div>

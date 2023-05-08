@@ -19,6 +19,9 @@
                                     'yyyy. MM. dd. HH:mm'}}</p>
                             </div>
                         </div>
+                        <div *ngIf="sessionId == media.user!.ID">
+                            <button class="bnt btn-danger" (click)="delete()">Delete</button>
+                        </div>
                         <app-reactions *ngIf="media.reactions && !ErrorInstance"
                             [reactionInstanceList]="media.reactions"></app-reactions>
                         <button class="btn btn-secondary btn-sm" (click)="react()">

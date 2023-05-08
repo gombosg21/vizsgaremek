@@ -17,16 +17,13 @@ export class MediaTilesetComponent implements OnInit {
 
   @Input() userID?: number;
   @Input() medias: (media | ErrorModel)[];
-
   public showUploadModal: boolean = false;
   public foreign: boolean = false;
-
   private windowWidth: number = window.innerWidth;
+  public cols:number;
 
-  public cols: number;
 
   constructor(private route: ActivatedRoute, private DialogRef: MatDialog, private MediaService: MediaService, private AuthService: AuthService) {
-
     this.userID = this.route.snapshot.params['id'] ?? this.userID;
     switch (true) {
       case (this.windowWidth > 2000): {
@@ -57,7 +54,7 @@ export class MediaTilesetComponent implements OnInit {
         this.cols = 1;
         console.error({ error: "cannot acces display size, using default column counts" })
       }
-    };
+    }
   };
 
   showModal(): void {
@@ -65,15 +62,22 @@ export class MediaTilesetComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
     });
-};
+  };
 
   hideModal() {
     this.showUploadModal = false;
   };
 
-setMedias(mediaList:(media | ErrorModel)[]):void {
-  this.medias = mediaList;
-}
+  setMedias(mediaList: (media | ErrorModel)[]): void {
+    this.medias = mediaList;
+  };
+
+  removed(media: media): void {
+    if (this.medias.indexOf(media) != -1) {
+      this.medias.splice(this.medias.indexOf(media), 1);
+      this.medias = [...this.medias];
+    };
+  };
 
   ngOnInit(): void {
     if (this.userID) {
@@ -92,5 +96,4 @@ setMedias(mediaList:(media | ErrorModel)[]):void {
       this.foreign = true;
     };
   };
-  
 };

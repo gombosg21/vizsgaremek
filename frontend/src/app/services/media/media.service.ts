@@ -100,4 +100,8 @@ export class MediaService implements OnInit, OnDestroy {
 
     return this.http.post(this.ApiPath + "/" + ID + "/tags", dataObj);
   };
+
+  deleteDestroyByID(ID:number):Observable<any> {
+    return this.http.delete(this.ApiPath + "/" + ID);
+  };
 };

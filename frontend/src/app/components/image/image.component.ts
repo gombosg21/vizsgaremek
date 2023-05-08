@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { MediaService } from '../../services/media/media.service';
 import { media } from '../../models/media';
 import { ReactionService } from 'src/app/services/reaction/reaction.service';
@@ -21,6 +21,7 @@ export class ImageComponent implements OnInit, OnDestroy {
   @Input() public media: media;
   @Input() public iterator: number = 0;
   @Input() public ErrorInstance: ErrorModel;
+  @Output() public deleted: EventEmitter<media> = new EventEmitter<media>()
   public sessionId?: number;
   private userSub: Subscription;
   public showAddReactions: boolean = false;
@@ -33,7 +34,6 @@ export class ImageComponent implements OnInit, OnDestroy {
         next: (value) => {
           if (value.hasOwnProperty('file_data')) {
             this.media = value as media;
-            console.log(this.media)
           };
           if (value.hasOwnProperty('error')) {
             this.ErrorInstance = value as ErrorModel;
@@ -43,11 +43,6 @@ export class ImageComponent implements OnInit, OnDestroy {
           console.error(err);
         },
       });
-      this.userSub = this.Auth.getUserID().subscribe({
-        next: (value) => { this.sessionId = value },
-        error: (err) => { console.error(err) },
-        complete: () => { }
-      })
     };
 
     if (this.iterator) {
@@ -96,10 +91,26 @@ export class ImageComponent implements OnInit, OnDestroy {
     };
   };
 
+  delete(): void {
+    this.MediaService.deleteDestroyByID(this.media.ID!).subscribe({
+      next: (val) => {
+        this.deleted.emit(this.media);
+      },
+      complete: () => { },
+      error: (err) => { console.log(err) }
+    });
+  };
+
   ngOnInit(): void {
+    this.userSub = this.Auth.getUserID().subscribe({
+      next: (value) => { this.sessionId = value},
+      error: (err) => { console.error(err) },
+      complete: () => { }
+    });
     if (this.data) {
       if (this.data.hasOwnProperty('file_data')) {
         this.media = this.data as media;
+        console.log(this.media.user!.ID, this.sessionId)
         if (this.media.reactions) {
           this.ReactionService.setStoredInstanceList(this.media.reactions);
         };
@@ -107,8 +118,7 @@ export class ImageComponent implements OnInit, OnDestroy {
       if (this.data.hasOwnProperty('error')) {
         this.ErrorInstance = this.data as ErrorModel;
       };
-
-    }
+    };
   };
 
   react(): void {
