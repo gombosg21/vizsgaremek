@@ -108,8 +108,8 @@ export class ImageComponent implements OnInit, OnDestroy {
       });
     };
 
-    if(!this.data) {
-      this.MediaService.getLocalMediaInstance.subscribe({
+    if(!this.data && !this.iterator && !this.mediaID) {
+      this.mediaSub = this.MediaService.getLocalMediaInstance.subscribe({
         next:(val)=> {if (
           val.hasOwnProperty('file_data')) {
           this.media = val as media;
@@ -124,7 +124,7 @@ export class ImageComponent implements OnInit, OnDestroy {
       });
     } else {
       if (this.data.hasOwnProperty('file_data')) {
-        this.media = this.data as media;
+        this.media = this.data as media ?? this.media;
         if (this.media.reactions) {
           this.ReactionService.setStoredInstanceList(this.media.reactions);
         };
