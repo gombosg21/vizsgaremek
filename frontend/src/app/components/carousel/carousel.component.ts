@@ -18,19 +18,26 @@ export class CarouselComponent implements OnInit {
   public reactions: reaction_short[];
 
   @ViewChild(NgxCarouselComponent) ngxCarousel: NgxCarouselComponent;
-  @Input() public carousel: carousel;
+  @Input() public data: carousel | ErrorModel;
   @Input() public iterator: number;
   @Input() public storyID: number;
+  @Input() public ErrorInstance: ErrorModel;
+  public carousel: carousel;
   public carousel_components: any[];
 
   constructor(private CarouselService: StoryService, private ReactionsService: ReactionService) {
     if (this.storyID) {
       this.CarouselService.getStoryByID(this.storyID).subscribe({
         error: (err) => {
-          console.error(err)
+          console.error(err);
         },
         next: (value) => {
-          this.carousel = value ?? this.carousel;
+          if (value.hasOwnProperty('carousel_medialists')) {
+            this.carousel = value as carousel ?? this.carousel;
+          };
+          if (value.hasOwnProperty('error')) {
+            this.ErrorInstance = value as ErrorModel;
+          };
         },
         complete: () => {
         },
@@ -39,7 +46,7 @@ export class CarouselComponent implements OnInit {
   };
 
   ngOnInit(): void {
-    
+
     if (this.carousel.reactions) {
       this.reactions = this.carousel.reactions;
       this.ReactionsService.setStoredInstanceList(this.reactions);
@@ -49,7 +56,7 @@ export class CarouselComponent implements OnInit {
       this.carousel_components = (this.carousel.carousel_medialists.sort((a, b) => b.item_number - a.item_number))
         .map(item => ({ file_data: item.media[0].file_data, description: item.item_description, title: item.media[0].placeholder_text }));
 
-        console.log(this.carousel_components)
+      console.log(this.carousel_components)
     };
   };
 };

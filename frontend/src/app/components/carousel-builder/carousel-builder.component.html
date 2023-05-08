@@ -1,0 +1,46 @@
+<div>
+    <form [formGroup]="storyNewFormGroup" (ngSubmit)="onSubmit()">
+        <div>
+            <div>
+                <label for="description">Carousel description</label>
+                <input type="text" id =description formControlName="descriptionFormControl" name="descriptionFormControl">
+            </div>
+            <div>
+                <label for="name">Carousel name</label>
+                <input type="text" name="nameFormControl" id="name" formControlName="nameFormControl">
+            </div>
+            <div>
+                <p></p>
+                <div>
+                    <label for=""></label>
+                    <input type="radio" name="" id="">
+                </div>
+                <div>
+                    <label for=""></label>
+                    <input type="radio" name="" id="">
+                </div>
+                <div>
+                    <label for=""></label>
+                    <input type="radio" name="" id="">
+                </div>
+                <div>
+                    <label for=""></label>
+                    <input type="radio" name="" id="">
+                </div>
+            </div>
+            <button (click)="addFormArrayGroupItem()">Add Slide</button>
+            <div>
+                <div *ngFor="let item of storyNewFormGroup.value.mediaArrayControl">
+                    <div>
+                        <label for="">Slide description</label>
+                        <input type="text">
+                    </div>
+                    <button (click)="removeFormArrayGroupItem(item)">Remove Slide</button>
+                </div>
+            </div>
+        </div>
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+<app-image-picker-modal *ngIf="displayModal" (close)="hideModal()"></app-image-picker-modal>
