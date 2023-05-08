@@ -1,16 +1,29 @@
-<div *ngFor="let thread of threads" class="thread-card card mb-3">
-    <div class="card-body">
-        <h5 class="card-title mb-0" id="alias">
-            <i class="fa-solid fa-user" id="user-icon"></i>{{thread.user.profile.alias}}
-        </h5>
-        <div class="thread-info mt-2">
-            <p>Name: {{thread.name}}</p>
-            <p>Status: {{thread.status}}</p>
+<mat-accordion>
+    <mat-expansion-panel hideToggle>
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                Threads
+            </mat-panel-title>
+            <mat-panel-description>
+                Count: {{threads.length}}
+            </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div *ngFor="let thread of threads" class="thread-card card mb-3">
+            <div class="card-body">
+                <h5 class="card-title mb-0" id="alias">
+                    <i class="fa-solid fa-user" id="user-icon"></i>{{thread.user.profile.alias}}
+                </h5>
+                <div class="thread-info mt-2">
+                    <p>Name: {{thread.name}}</p>
+                    <p>Status: {{thread.status}}</p>
+                </div>
+                <button class="btn btn-secondary btn-sm" (click)="open(thread.ID)">Open</button>
+            </div>
+            <div class="card-footer text-muted">
+                <p><i class="far fa-calendar-alt"></i> Created: {{thread.created | date: 'yyyy. MM. dd. HH:mm'}}</p>
+                <p><i class="far fa-clock"></i> Last activity: {{thread.last_activity | date: 'yyyy. MM. dd. HH:mm'}}
+                </p>
+            </div>
         </div>
-        <button class="btn btn-secondary btn-sm" (click)="open(thread.ID)">Open</button>
-    </div>
-    <div class="card-footer text-muted">
-        <p><i class="far fa-calendar-alt"></i> Created: {{thread.created | date: 'yyyy. MM. dd. HH:mm'}}</p>
-        <p><i class="far fa-clock"></i> Last activity: {{thread.last_activity | date: 'yyyy. MM. dd. HH:mm'}}</p>
-    </div>
-</div>
+    </mat-expansion-panel>
+</mat-accordion>

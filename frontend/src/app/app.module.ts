@@ -38,6 +38,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { CarouselModule } from 'ngx-bootstrap/carousel';
 import { EditProfileComponent } from './components/edit-profile/edit-profile.component';
 import { EditImageComponent } from './components/edit-image/edit-image.component';
@@ -112,6 +113,7 @@ import { CarouselThreadComponent } from './components/carousel-thread/carousel-t
     MatAutocompleteModule,
     MatChipsModule,
     MatIconModule,
+    MatExpansionModule,
     CarouselModule.forRoot()
   ],
   providers: [
