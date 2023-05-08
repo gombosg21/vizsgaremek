@@ -11,6 +11,11 @@ import { CarouselComponent } from './components/carousel/carousel.component';
 import { CarouselTilesetComponent } from './components/carousel-tileset/carousel-tileset.component';
 import { EditProfileComponent } from './components/edit-profile/edit-profile.component';
 import { FriendsComponent } from './components/friends/friends.component';
+import { AdminBoardComponent } from './components/admin/admin-board/admin-board.component';
+import { AdminReactionsComponent } from './components/admin/admin-reactions/admin-reactions.component';
+import { AdminTagsComponent } from './components/admin/admin-tags/admin-tags.component';
+import { MediaThreadComponent } from './components/media-thread/media-thread.component';
+import { CarouselThreadComponent } from './components/carousel-thread/carousel-thread.component';
 
 const routes: Routes = [
   {
@@ -72,6 +77,29 @@ const routes: Routes = [
   {
     path: 'friends',
     component: FriendsComponent
+  },
+  {
+    path: 'admin/tags',
+    component: AdminTagsComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'admin/reactions',
+    component: AdminReactionsComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'admin/dashboard',
+    component: AdminBoardComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'media/:mediaid/thread/:threadid',
+    component: MediaThreadComponent
+  }, 
+  {
+    path: 'carousel/:carouselid/tread/:threadid',
+    component: CarouselThreadComponent
   }
 ];
 
