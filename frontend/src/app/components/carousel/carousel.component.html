@@ -32,7 +32,7 @@
                             HH:mm'}}</p>
                         <p><i class="fas fa-pencil-alt"></i> Last edit: {{carousel.modified_date | date: 'yyyy. MM. dd.
                             HH:mm'}}</p>
-                            <button class="btn btn-sm" (click)="react()"><i class="fa fa-thumbs"> React</i></button>
+                            <button class="btn btn-secondary btn-sm" (click)="react()"><i class="fas fa-thumbs-up"> React</i></button>
                     </div>
                     <div>
                         <app-reaction *ngIf="carousel.reactions" [reactionInstanceList]="carousel.reactions"></app-reaction>

@@ -93,7 +93,7 @@ const routes: Routes = [
     component: MediaThreadComponent
   }, 
   {
-    path: 'carousel/:carouselid/tread/:threadid',
+    path: 'carousel/:carouselid/thread/:threadid',
     component: CarouselThreadComponent
   }
 ];
