@@ -108,10 +108,6 @@ exports.getStory = async (req, res, next) => {
                             ]
                     },
                     {
-                        model: carousel_reactionlist,
-                        attributes: [['reaction_ID', 'ID'], [fn('COUNT', 'carousel_reactionlists.reaction_ID'), 'reaction_count']]
-                    },
-                    {
                         model: thread,
                         attributes: ['ID', 'name', 'created', 'last_activity', 'status'],
                         include:
@@ -129,9 +125,16 @@ exports.getStory = async (req, res, next) => {
                                 }
                             ]
                     }
-                ],
-                group: ['carousel_reactionlists.reaction_ID']
+                ]
             });
+
+        const story_reactions = await carousel_reactionlist.findAll({
+            where: { carousel_ID: ID },
+            attributes: [['reaction_ID', 'ID',], 'carousel_ID', [fn('COUNT', 'reaction_ID'), 'count']],
+            group: ['reaction_ID']
+        });
+        Story.dataValues.reactions = story_reactions;
+
 
         var userID = -1
         if (req.user) {
