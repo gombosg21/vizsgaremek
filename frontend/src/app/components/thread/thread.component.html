@@ -28,15 +28,13 @@
                         <i class="far fa-clock"></i> Last activity: {{data.last_activity | date: 'yyyy. MM. dd. HH:mm'}}
                     </h5>
                 </div>
-                <div>
-                    <p>Status: <span [ngClass]="{'badge': true, 'bg-primary': threadStatus === 'open', 'bg-danger': threadStatus === 'locked', 'bg-secondary': threadStatus === 'archived', 'bg-warning': threadStatus === 'error'}">{{threadStatus}}</span>
-                    </p>
+                <div class="react-btn-container">
+                    <button (click)="react()" class="btn btn-secondary btn-sm react-btn large-screen-only"><i class="fas fa-thumbs-up"></i> React</button>
+                    <button class="btn btn-secondary btn-sm react-btn small-screen-only" (click)="react()">
+                        <i class="fas fa-thumbs-up"></i>
+                    </button>
                 </div>
             </div>
-            <button (click)="react()" class="btn btn-secondary btn-sm  large-screen-only"><i class="fas fa-thumbs-up"></i> React</button>
-            <button class="btn btn-secondary btn-sm small-screen-only" (click)="react()">
-                <i class="fas fa-thumbs-up"></i>
-            </button>
             <app-reactions *ngIf="data.reactions" [newReaction]="newReactionID"></app-reactions>
             <hr>
             <ng-container *ngIf="data.comments">
