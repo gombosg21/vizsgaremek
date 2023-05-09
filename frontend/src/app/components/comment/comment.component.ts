@@ -44,7 +44,7 @@ export class CommentComponent implements OnInit, OnDestroy {
       next: (value) => {
         this.data = value[this.iterator];
         if (this.data.reactions) {
-          this.ReactionService.setStoredInstanceList(this.data.reactions);
+          this.ReactionService.setStoredInstanceList = this.data.reactions;
         };
       },
       error: (err) => {
@@ -82,7 +82,7 @@ export class CommentComponent implements OnInit, OnDestroy {
       };
     };
     this.data.reactions = [{ ID: reactionID, count: 1 }];
-    this.ReactionService.setStoredInstanceList(this.data.reactions);
+    this.ReactionService.setStoredInstanceList = this.data.reactions;
     this.newReactionID = reactionID;
   };
 

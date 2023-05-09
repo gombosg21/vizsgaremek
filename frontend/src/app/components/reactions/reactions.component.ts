@@ -35,7 +35,7 @@ export class ReactionsComponent implements OnInit, OnDestroy, OnChanges {
 
 
   ngOnInit(): void {
-    this.reactionsSub = this.ReactionService.getStoredInstanceList().subscribe({
+    this.reactionsSub = this.ReactionService.getStoredInstanceList.subscribe({
       next: (value) => {
         this.reactionInstanceList = value ?? this.reactionInstanceList;
         const IDList: number[] = this.reactionInstanceList.map(reaction => reaction.ID);

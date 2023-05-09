@@ -74,7 +74,7 @@ export class ThreadComponent implements OnInit, OnDestroy {
         complete: () => { }
       });
       if (this.data.reactions) {
-        this.ReactionService.setStoredInstanceList(this.data.reactions);
+        this.ReactionService.setStoredInstanceList = this.data.reactions;
       };
     };
 
@@ -122,7 +122,7 @@ export class ThreadComponent implements OnInit, OnDestroy {
       };
     };
     this.data.reactions = [{ ID: reactionID, count: 1 }];
-    this.ReactionService.setStoredInstanceList(this.data.reactions);
+    this.ReactionService.setStoredInstanceList = this.data.reactions;
     this.newReactionID = reactionID;
   };
 

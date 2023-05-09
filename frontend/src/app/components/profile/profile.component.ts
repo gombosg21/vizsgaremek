@@ -57,7 +57,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
             this.ThreadService.setLocalData = this.UserProfileThread;
             if (this.UserProfile.reactions) {
-              this.ReactionsService.setStoredInstanceList(this.UserProfile.reactions);
+              this.ReactionsService.setStoredInstanceList = this.UserProfile.reactions;
             };
           },
           error: (err) => {
@@ -82,7 +82,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       };
     };
     this.UserProfile.reactions = [{ ID: reactionID, count: 1 }];
-    this.ReactionsService.setStoredInstanceList(this.UserProfile.reactions);
+    this.ReactionsService.setStoredInstanceList = this.UserProfile.reactions;
     this.newReactionID = reactionID;
   };
 

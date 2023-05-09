@@ -14,15 +14,13 @@ export class ReactionService {
 
   private reactionInstances: Observable<reaction_short[]>;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient) {};
 
-  }
-
-  getStoredInstanceList(): Observable<reaction_short[]> {
+  public get getStoredInstanceList(): Observable<reaction_short[]> {
     return this.reactionInstances;
   };
 
-  setStoredInstanceList(instanceList: reaction_short[]): void {
+  public set setStoredInstanceList(instanceList: reaction_short[]) {
     this.reactionInstances = of(instanceList);
   };
 

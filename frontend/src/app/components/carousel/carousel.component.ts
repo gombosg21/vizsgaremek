@@ -1,19 +1,17 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy ,Input, ViewChild } from '@angular/core';
 import { carousel } from 'src/app/models/carousel';
-import { media } from 'src/app/models/media';
 import { reaction_short } from 'src/app/models/reaction';
-import { MediaService } from 'src/app/services/media/media.service';
 import { ReactionService } from 'src/app/services/reaction/reaction.service';
 import { StoryService } from 'src/app/services/story/story.service';
-import { CarouselComponent as NgxCarouselComponent, SlideComponent } from 'ngx-bootstrap/carousel';
 import { ErrorModel } from 'src/app/models/error';
+import { CarouselComponent as NgxCarouselComponent, SlideComponent } from 'ngx-bootstrap/carousel';
 
 @Component({
   selector: 'app-carousel',
   templateUrl: './carousel.component.html',
   styleUrls: ['./carousel.component.css']
 })
-export class CarouselComponent implements OnInit {
+export class CarouselComponent implements OnInit, OnDestroy {
 
   public reactions: reaction_short[];
 
@@ -22,11 +20,13 @@ export class CarouselComponent implements OnInit {
   @Input() public iterator: number;
   @Input() public storyID: number;
   @Input() public ErrorInstance: ErrorModel;
+  public showAddReactions:boolean = false;
   public carousel: carousel;
   public carousel_components: any[];
 
   constructor(private CarouselService: StoryService, private ReactionsService: ReactionService) {
   };
+  ngOnDestroy(): void {};
 
   ngOnInit(): void {
     if (this.storyID) {
@@ -59,7 +59,7 @@ export class CarouselComponent implements OnInit {
     if (this.carousel) {
       if (this.carousel.reactions) {
         this.reactions = this.carousel.reactions;
-        this.ReactionsService.setStoredInstanceList(this.reactions);
+        this.ReactionsService.setStoredInstanceList = this.reactions;
       };
       if (this.carousel.carousel_medialists) {
         console.log(this.carousel.carousel_medialists[0].media)
@@ -68,6 +68,24 @@ export class CarouselComponent implements OnInit {
 
         console.log(this.carousel_components)
       };
+    };
+  };
+
+  react(): void {
+    this.showAddReactions = true;
+  };
+
+  addReaction(reactionID:number):void {
+    if (this.carousel) {
+      if (this.carousel.reactions) {
+        for (let i = 0; i < this.carousel.reactions.length; i++) {
+          if (this.carousel.reactions[i].ID == reactionID) {
+            this.carousel.reactions[i].count++;
+          };
+        };
+      };
+      this.carousel.reactions = [{ ID: reactionID, count: 1 }];
+      this.ReactionsService.setStoredInstanceList = this.carousel.reactions;
     };
   };
 
