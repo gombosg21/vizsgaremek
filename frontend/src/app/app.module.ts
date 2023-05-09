@@ -53,6 +53,7 @@ import { AdminTagsComponent } from './components/admin/admin-tags/admin-tags.com
 import { AdminReactionsComponent } from './components/admin/admin-reactions/admin-reactions.component';
 import { MediaThreadComponent } from './components/media-thread/media-thread.component';
 import { CarouselThreadComponent } from './components/carousel-thread/carousel-thread.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 
 
@@ -110,7 +111,8 @@ import { CarouselThreadComponent } from './components/carousel-thread/carousel-t
     MatChipsModule,
     MatIconModule,
     MatExpansionModule,
-    CarouselModule.forRoot()
+    CarouselModule.forRoot(),
+    DragDropModule
   ],
   providers: [
     {
