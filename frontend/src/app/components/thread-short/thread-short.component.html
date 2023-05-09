@@ -8,7 +8,7 @@
                 Count: {{threads.length}}
             </mat-panel-description>
         </mat-expansion-panel-header>
-        <div *ngFor="let thread of threads" class="thread-card card mb-3">
+        <div *ngFor="let thread of threads" class="thread-card comment-card mb-3">
             <div class="card-body">
                 <h5 class="card-title mb-0" id="alias">
                     <i class="fa-solid fa-user" id="user-icon"></i>{{thread.user.profile.alias}}
@@ -33,14 +33,10 @@
         <div>
             <label for="name">Thread Name</label>
             <input type="text" name="NameFormControl" id="name" formControlName="NameFormControl">
-            <div
-                *ngIf="NewThreadFormGroup.controls['NameFormControl'].invalid && (NewThreadFormGroup.controls['NameFormControl'].dirty || NewThreadFormGroup.controls['NameFormControl'].touched)">
-                <p *ngIf="NewThreadFormGroup.controls['NameFormControl'].errors?.['required']" class="text-danger">No
-                    Name given</p>
-                <p *ngIf="NewThreadFormGroup.controls['NameFormControl'].errors?.['minlength']" class="text-danger">Name
-                    must be least 8 characters long</p>
-                <p *ngIf="NewThreadFormGroup.controls['NameFormControl'].errors?.['maxlength']" class="text-danger">Name
-                    cannot be longer than 50 characters</p>
+            <div *ngIf="NewThreadFormGroup.controls['NameFormControl'].invalid && (NewThreadFormGroup.controls['NameFormControl'].dirty || NewThreadFormGroup.controls['NameFormControl'].touched)">
+                <p *ngIf="NewThreadFormGroup.controls['NameFormControl'].errors?.['required']" class="text-danger">No Name given</p>
+                <p *ngIf="NewThreadFormGroup.controls['NameFormControl'].errors?.['minlength']" class="text-danger">Name must be least 8 characters long</p>
+                <p *ngIf="NewThreadFormGroup.controls['NameFormControl'].errors?.['maxlength']" class="text-danger">Name cannot be longer than 50 characters</p>
             </div>
         </div>
         <button type="submit">Submit</button>

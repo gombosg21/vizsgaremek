@@ -1,7 +1,12 @@
 @import '~@fortawesome/fontawesome-free/css/all.css';
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
 .thread-card {
     border-radius: 10px;
     margin-bottom: 20px;
+    border-radius: 6px;
     background-color: var(--bg-color);
     color: var(--text-color);
     border: 1px solid #8484847c;
@@ -16,32 +21,107 @@
     margin-bottom: 0;
 }
 
-.thread-info {
-    font-size: 1rem;
-    line-height: 1.5;
-    margin-bottom: 1rem;
+.thread-card .card-title #user-icon {
+    font-size: 16px;
+    margin-right: 2px;
 }
 
-.thread-info p {
-    margin-bottom: 0.5rem;
+.thread-card .thread-info p {
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-bottom: 5px;
 }
 
 .card-footer {
     font-size: 0.8rem;
     background-color: rgba(133, 133, 133, 0.171);
     border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+    padding: 8px 16px;
 }
 
-.card-footer p {
+.btn-primary {
+    font-size: 14px;
+    font-weight: 500;
+    padding: 5px 10px;
+}
+
+.card-footer>p {
     margin-bottom: 0rem !important;
 }
 
-#user-icon {
-    font-size: 16px;
-    margin-right: 2px;
+createdAt {
+    margin-bottom: 0rem !important;
 }
 
-.btn-dark:focus {
+p {
+    margin-bottom: 0rem !important;
+}
+
+.mat-mdc-paginator {
+    background-color: var(--bg-color) !important;
+    color: var(--text-color) !important;
+}
+
+.form-control {
+    border-radius: 5px;
+    border: 1px solid #8484847c;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    padding: 0.375rem 0.75rem;
+}
+
+.form-control:focus {
     outline: none;
-    box-shadow: 0 0 0 0.25rem rgba(52, 58, 64, 0.25);
+    box-shadow: 0 0 0 0.25rem rgba(33, 37, 41, 0.25);
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border-color: #adadad7c;
+}
+
+.small-screen-only {
+    display: none;
+}
+
+.large-screen-only {
+    display: inline-block;
+}
+
+@media (max-width: 1200px) {
+    .small-screen-only {
+        display: inline-block;
+    }
+    .large-screen-only {
+        display: none;
+    }
+}
+
+.container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.form-label {
+    font-weight: 500;
+}
+
+.mat-expansion-panel {
+    background-color: var(--background-color);
+    color: --var(text-color);
+    border: 1px solid #8484847c;
+}
+
+.mat-expansion-panel-header-description ng-tns-c144-1 {
+    color: var(--text-color)
+}
+
+.mat-expansion-panel-header-description,
+.mat-expansion-indicator::after {
+    color: var(--text-color)
+}
+
+.mat-expansion-panel-header-title,
+.mat-expansion-panel-header-description {
+    color: var(--text-color)
 }
