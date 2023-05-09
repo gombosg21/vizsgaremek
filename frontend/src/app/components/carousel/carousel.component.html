@@ -37,10 +37,10 @@
                     <div>
                         <app-reaction *ngIf="carousel.reactions" [reactionInstanceList]="carousel.reactions"></app-reaction>
                     </div>
-                    <div *ngIf="carousel.threads">
-                        <app-thread-short [threads]="carousel.threads!" [carouselID]="carousel.ID!"></app-thread-short>
-                    </div>
                 </div>
+            </div>
+            <div *ngIf="carousel.threads && !ErrorInstance">
+                <app-thread-short [threads]="carousel.threads!" [carouselID]="carousel.ID!"></app-thread-short>
             </div>
         </div>
     </div>
