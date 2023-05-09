@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { pending_friend, verified_friend } from 'src/app/models/friend';
 import { AuthService } from 'src/app/services/auth/auth.service';
@@ -19,7 +20,7 @@ export class FriendsComponent implements OnDestroy, OnInit {
 
   private userSub: Subscription;
 
-  constructor(private FriendsService: FriendsService, private Auth: AuthService) {
+  constructor(private FriendsService: FriendsService, private Auth: AuthService, private router:Router) {
     this.userSub = this.Auth.getUserID.subscribe({
       next: (val) => {
         this.userID = this.userID ?? val;
@@ -63,10 +64,8 @@ export class FriendsComponent implements OnDestroy, OnInit {
       },
       error: (err) => {
         console.error(err);
-      }, complete: () => {
-
-      }
-    })
+      }, complete: () => { }
+    });
   };
 
   rejectRequest(friend: pending_friend): void {
@@ -98,15 +97,15 @@ export class FriendsComponent implements OnDestroy, OnInit {
   requestFriendShip(targetID: number): void {
     this.FriendsService.postRequestFriend(targetID).subscribe({
       next: (val) => { },
-      error: (err) => { 
-        console.error(err); 
+      error: (err) => {
+        console.error(err);
       },
       complete: () => { },
     });
   };
 
   visitProfile(friend: verified_friend | pending_friend): void {
-
+    this.router.navigate(['profile/' + friend.ID]);
   };
 
 };

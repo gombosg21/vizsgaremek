@@ -31,7 +31,7 @@
                     <a class="nav-link">Browse Stories</a>
                 </li>
                 <li *ngIf="isSession" class="nav-item">
-                    <a class="nav-link">My subscriptions</a>
+                    <a class="nav-link" routerLink="subscriptions">My subscriptions</a>
                 </li>
                 <div class="nav-item" (click)="toggleDarkMode()" id="themeSwitch">
                     <i *ngIf="!isDarkMode" class="fa fa-moon nav-link" aria-hidden="true"></i>

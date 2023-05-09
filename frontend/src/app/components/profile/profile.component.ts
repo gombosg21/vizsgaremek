@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UserService } from '../../services/user/user.service';
 import { profile } from '../../models/profile';
 import { thread } from '../../models/thread';
@@ -6,7 +6,8 @@ import { ThreadService } from '../../services/thread/thread.service';
 import { ReactionService } from 'src/app/services/reaction/reaction.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { Subscription } from 'rxjs';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import { FollowedService } from 'src/app/services/followed/followed.service';
 
 @Component({
   selector: 'app-profile',
@@ -19,57 +20,76 @@ export class ProfileComponent implements OnInit, OnDestroy {
   public UserProfileThread: thread;
   public showAddReactions: boolean = false;
   public isSession: boolean = false;
-  private userSub: Subscription;
-
-  @Input() public userID: number;
+  public sessionID?: number;
+  public userID: number;
   public newReactionID: number;
+  public subscriberCount: number = 0;
 
-  constructor(private router: Router, private AuthService: AuthService, private UserService: UserService, private ThreadService: ThreadService, private ReactionsService: ReactionService) {
-  };
+  private userSub: Subscription;
+  private sessionSub: Subscription;
 
+  constructor(private router: Router,
+    private ActiveRoute: ActivatedRoute,
+    private AuthService: AuthService,
+    private UserService: UserService,
+    private ThreadService: ThreadService,
+    private ReactionsService: ReactionService,
+    private SubscriberService: FollowedService) { };
 
   ngOnDestroy(): void {
     if (this.userSub) {
       this.userSub.unsubscribe();
     };
+    if (this.sessionSub) {
+      this.sessionSub.unsubscribe();
+    };
   };
 
-
   ngOnInit(): void {
-    this.userSub = this.AuthService.getUserID.subscribe({
-      next: (value) => {
-        this.isSession = true;
-        this.userID = value ?? this.userID;
+    this.userID = this.ActiveRoute.snapshot.params['id'];
+    this.UserService.getProfile(this.userID).subscribe({
+      next: (data) => {
+        this.UserProfile = {
+          birth_date: data.birth_date,
+          alias: data.profile.alias,
+          description: data.profile.description,
+          visibility: data.profile.visibility,
+          picture_ID: data.profile.picture_ID,
+          medium: data.profile.medium,
+          reactions: data.profile.reactions,
+          thread: data.profile.thread
+        }
+        this.UserProfileThread = data.profile.thread;
 
-        this.UserService.getProfile(this.userID).subscribe({
-          next: (data) => {
-            this.UserProfile = {
-              birth_date: data.birth_date,
-              alias: data.profile.alias,
-              description: data.profile.description,
-              visibility: data.profile.visibility,
-              picture_ID: data.profile.picture_ID,
-              medium: data.profile.medium,
-              reactions: data.profile.reactions,
-              thread: data.profile.thread
-            }
-            this.UserProfileThread = data.profile.thread;
-
-            this.ThreadService.setLocalData = this.UserProfileThread;
-            if (this.UserProfile.reactions) {
-              this.ReactionsService.setStoredInstanceList = this.UserProfile.reactions;
-            };
-          },
-          error: (err) => {
-            console.error(err);
-          }
-        });
+        this.ThreadService.setLocalData = this.UserProfileThread;
+        if (this.UserProfile.reactions) {
+          this.ReactionsService.setStoredInstanceList = this.UserProfile.reactions;
+        };
       },
       error: (err) => {
-        console.error(err)
+        console.error(err);
+      }
+    });
+    this.userSub = this.AuthService.getUserID.subscribe({
+      next: (val) => {
+        this.sessionID = val;
       },
-      complete: () => {
+      error: (err) => { console.error(err) },
+      complete: () => { },
+    });
+    this.sessionSub = this.AuthService.getSessionStatus.subscribe({
+      next: (val) => {
+        this.isSession = val;
       },
+      error: (err) => { console.error(err) },
+      complete: () => { },
+    });
+    this.SubscriberService.getSubCount(this.userID).subscribe({
+      next: (val) => {
+        this.subscriberCount = val;
+      },
+      error: (err) => { console.error(err) },
+      complete: () => { },
     });
   };
 
@@ -84,6 +104,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.UserProfile.reactions = [{ ID: reactionID, count: 1 }];
     this.ReactionsService.setStoredInstanceList = this.UserProfile.reactions;
     this.newReactionID = reactionID;
+  };
+
+  subscribe(): void {
+    this.SubscriberService.postSub(this.userID).subscribe({
+      next: (val) => { },
+      error: (err) => { console.error(err) },
+      complete: () => { },
+    });
   };
 
   editProfile(): void {
