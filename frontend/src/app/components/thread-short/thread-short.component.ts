@@ -15,6 +15,7 @@ export class ThreadShortComponent implements OnInit, OnDestroy {
 
   @Input() public threads: thread_short[];
   @Input() public mediaID: number;
+  @Input() public carouselID: number;
   @Output() threadGet = new EventEmitter<thread>();
   private sessionSub: Subscription;
   public isSession: boolean = false;
@@ -38,9 +39,16 @@ export class ThreadShortComponent implements OnInit, OnDestroy {
   };
 
   open(ID: number): void {
-    console.log(['open', this.mediaID, ID])
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+    if(this.mediaID) {
     this.router.navigate(['media/' + this.mediaID + '/thread/' + ID]);
+    };
+    if(this.carouselID) {
+      this.router.navigate(['carousel/' + this.carouselID + '/thread/' + ID]);
+    };
+    if(!this.carouselID && !this.mediaID) {
+      console.error("no target ID given!")
+    };
   };
 
   onSubmit(): void {
