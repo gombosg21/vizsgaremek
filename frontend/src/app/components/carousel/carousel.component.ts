@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy ,Input, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, ViewChild } from '@angular/core';
 import { carousel } from 'src/app/models/carousel';
 import { reaction_short } from 'src/app/models/reaction';
 import { ReactionService } from 'src/app/services/reaction/reaction.service';
@@ -20,23 +20,32 @@ export class CarouselComponent implements OnInit, OnDestroy {
   @Input() public iterator: number;
   @Input() public carouselID: number;
   @Input() public ErrorInstance: ErrorModel;
-  public showAddReactions:boolean = false;
+  public showAddReactions: boolean = false;
   public carousel: carousel;
   public carousel_components: any[];
 
   constructor(private CarouselService: StoryService, private ReactionsService: ReactionService) {
   };
-  ngOnDestroy(): void {};
+  ngOnDestroy(): void { };
 
   ngOnInit(): void {
-    if (this.carouselID) {
+    if (this.carouselID != undefined) {
       this.CarouselService.getStoryByID(this.carouselID).subscribe({
         error: (err) => {
           console.error(err);
         },
         next: (value) => {
           if (value.hasOwnProperty('carousel_medialists')) {
-            this.carousel = value as carousel ?? this.carousel;
+            
+            this.carousel = value as carousel;
+            if (this.carousel.reactions) {
+              this.reactions = this.carousel.reactions;
+              this.ReactionsService.setStoredInstanceList = this.reactions;
+            };
+            if (this.carousel.carousel_medialists) {
+              this.carousel_components = (this.carousel.carousel_medialists.sort((a, b) => b.item_number - a.item_number))
+                .map(item => ({ file_data: item.media[0].file_data, description: item.item_description, title: item.media[0].placeholder_text }));
+            };
           };
           if (value.hasOwnProperty('error')) {
             this.ErrorInstance = value as ErrorModel;
@@ -62,7 +71,6 @@ export class CarouselComponent implements OnInit, OnDestroy {
         this.ReactionsService.setStoredInstanceList = this.reactions;
       };
       if (this.carousel.carousel_medialists) {
-        console.log(this.carousel.carousel_medialists[0].media)
         this.carousel_components = (this.carousel.carousel_medialists.sort((a, b) => b.item_number - a.item_number))
           .map(item => ({ file_data: item.media[0].file_data, description: item.item_description, title: item.media[0].placeholder_text }));
       };
@@ -73,7 +81,7 @@ export class CarouselComponent implements OnInit, OnDestroy {
     this.showAddReactions = true;
   };
 
-  addReaction(reactionID:number):void {
+  addReaction(reactionID: number): void {
     if (this.carousel) {
       if (this.carousel.reactions) {
         for (let i = 0; i < this.carousel.reactions.length; i++) {
