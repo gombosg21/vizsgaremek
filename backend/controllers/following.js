@@ -11,7 +11,7 @@ exports.getFollowedList = async (req, res, next) => {
             return res.status(200).json({ followed_list: "user does not follow anyone" });
         };
 
-        return res.status(200).json({ followed_list: followedList });
+        return res.status(200).json(followedList);
     } catch (error) {
         console.error(error);
         return res.status(500);
@@ -23,7 +23,7 @@ exports.getFollowerCount = async (req, res, next) => {
     try {
         const followedCount = await followed.count({ where: { followed_ID: userID } });
 
-        return res.status(200).json({ followers: followedCount });
+        return res.status(200).json(followedCount);
     } catch (error) {
         console.error(error);
         return res.status(500);
@@ -56,7 +56,7 @@ exports.sub = async (req, res, next) => {
             followed_ID: subID
         });
 
-        return res.status(201).json({ subbed: { ID: newFollowing.followed_ID, date: newFollowing.date } });
+        return res.status(201).json({ ID: newFollowing.followed_ID, date: newFollowing.date });
     } catch (error) {
         console.error(error);
         return res.status(500);
@@ -80,7 +80,7 @@ exports.unSub = async (req, res, next) => {
 
         await deleteFollowing.destroy();
 
-        return res.status(200).json({ unsubbed: { ID: deleteFollowing.followed_ID } });
+        return res.status(200).json({ ID: deleteFollowing.followed_ID, date: deleteFollowing.date });
     } catch (error) {
         console.error(error);
         return res.status(500);
