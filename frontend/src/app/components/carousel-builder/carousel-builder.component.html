@@ -37,7 +37,8 @@
             <div cdkDropListGroup>
                 <div class="card">
                     <h2>My Uploads</h2>
-                    <div class="card-body" cdkDropList [cdkDropListData]="medias" (cdkDropListDropped)="drop($event)">
+                    <div class="card-body" cdkDropList [cdkDropListData]="medias"
+                        (cdkDropListDropped)="drop('medias',$event)">
                         <div *ngFor="let media of medias" cdkDrag>
                             <img src="data:image/jpeg;base64,{{media.file_data}}" [alt]="media.placeholder_text"
                                 [title]="media.placeholder_text">
@@ -46,7 +47,8 @@
                 </div>
                 <div class="card">
                     <h2>Carousel Items</h2>
-                    <div class="card-body" cdkDropList [cdkDropListData]="slides" (cdkDropListDropped)="drop($event)">
+                    <div class="card-body" cdkDropList [cdkDropListData]="slides"
+                        (cdkDropListDropped)="drop('slides',$event)">
                         <div *ngFor="let slide of slides" cdkDrag>
                             <img src="data:image/jpeg;base64,{{slide.media.file_data}}"
                                 [alt]="slide.media.placeholder_text" [title]="slide.media.placeholder_text">

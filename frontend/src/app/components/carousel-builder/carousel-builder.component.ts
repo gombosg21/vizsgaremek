@@ -4,7 +4,7 @@ import { media } from 'src/app/models/media';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { MediaService } from 'src/app/services/media/media.service';
 import { StoryService } from 'src/app/services/story/story.service';
-import { CdkDragDrop, moveItemInArray, copyArrayItem } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray, transferArrayItem, copyArrayItem } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-carousel-builder',
@@ -15,7 +15,7 @@ export class CarouselBuilderComponent implements OnInit {
 
   @Output() cancelled: EventEmitter<void> = new EventEmitter<void>();
   public medias: media[] = [];
-  public slides: { item_description: string, media: media }[]= [];
+  public slides: { item_description: string, media: media }[] = [];
 
   public storyNewFormGroup = new FormGroup({
     nameFormControl: new FormControl<string>('', Validators.compose([Validators.required])),
@@ -47,29 +47,28 @@ export class CarouselBuilderComponent implements OnInit {
     });
   };
 
-  drop(event: CdkDragDrop<any[]>) {
+  drop(dropListName: string, event: CdkDragDrop<any[]>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
-      var dragItem = event.previousContainer.data[event.previousIndex];
-      if(Object.hasOwn(dragItem,"item_description")) {
-        delete dragItem.item_description;
-        dragItem = dragItem.media as media;
-      } else {
-        dragItem = {
-          media: dragItem,
-          item_description: "",
-        }
-        dragItem = dragItem as { item_description: string, media: media };
-      };
       console.log(event)
-
-      copyArrayItem(
-        event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex,
-      );
+      if (dropListName === "slides") {
+        const slideItem:{ item_description: string, media: media }[] = [
+          {
+            item_description: "",
+            media: event.previousContainer.data[event.previousIndex] as unknown as media
+          }
+        ];
+        copyArrayItem<{ item_description: string, media: media }>(
+          slideItem,
+          event.container.data as unknown as { item_description: string, media: media }[],
+          event.previousIndex,
+          event.currentIndex
+        );
+      };
+      if (dropListName === "medias") {
+        event.previousContainer.data.splice(event.previousIndex, 1);
+      };
     };
   };
 
