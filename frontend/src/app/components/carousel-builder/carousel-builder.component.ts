@@ -32,8 +32,8 @@ export class CarouselBuilderComponent implements OnInit {
 
   addMediaID(mediaID: number): void {
     this.displayModal = false;
-    console.log( this.storyNewFormGroup.value.mediaArrayControl![this.selectedIndex].mediaItemFormGroup.value)
-    this.storyNewFormGroup.value.mediaArrayControl![this.selectedIndex].mediaItemFormGroup.value.mediaIDFormControl = mediaID;
+    console.log( 'a',this.storyNewFormGroup.value.mediaArrayControl![this.selectedIndex].value)
+    this.storyNewFormGroup.value.mediaArrayControl![this.selectedIndex].value.mediaIDFormControl = mediaID;
   };
 
   ngOnInit(): void { };
