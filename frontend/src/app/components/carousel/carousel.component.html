@@ -1,11 +1,12 @@
 <div class="container">
     <div class="row">
         <div class="col-12">
-            <div class="card">
+            <div class="card" *ngIf="!ErrorInstance">
                 <p>{{carousel.name}}</p>
                 <carousel [noPause]="true">
                     <slide *ngFor="let slide of carousel_components">
-                        <img src="data:image/jpeg;base64,{{slide.file_data}}" alt="{{slide.title}}" style="display: block; width: 100%;">
+                        <img src="data:image/jpeg;base64,{{slide.file_data}}" alt="{{slide.title}}"
+                            style="display: block; width: 100%;">
                         <div class="carousel-caption d-none d-md-block">
                             <h3>{{slide.title}}</h3>
                             <p>{{slide.description}}</p>
@@ -22,7 +23,6 @@
                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
                     <span class="visually-hidden">Next</span>
                 </a>
-
                 <div class="card-body">
                     <p>{{carousel.description}}</p>
                 </div>
@@ -32,12 +32,21 @@
                             HH:mm'}}</p>
                         <p><i class="fas fa-pencil-alt"></i> Last edit: {{carousel.modified_date | date: 'yyyy. MM. dd.
                             HH:mm'}}</p>
+                            <button class="btn btn-secondary btn-sm" (click)="react()"><i class="fas fa-thumbs-up"> React</i></button>
                     </div>
                     <div>
-                        <app-reaction [reactions]="reactions"></app-reaction>
+                        <app-reaction *ngIf="carousel.reactions" [reactionInstanceList]="carousel.reactions"></app-reaction>
                     </div>
                 </div>
+            </div>
+            <div *ngIf="carousel.threads && !ErrorInstance">
+                <app-thread-short [threads]="carousel.threads!" [carouselID]="carousel.ID!"></app-thread-short>
             </div>
         </div>
     </div>
 </div>
+<div *ngIf="ErrorInstance">
+    <p>{{ErrorInstance.error}}</p>
+</div>
+<app-reaction-modal *ngIf="showAddReactions && !ErrorInstance" (close)="showAddReactions = false" parentType="story"
+    [parentID]="carousel.ID!" (reacted)="addReaction($event)"></app-reaction-modal>

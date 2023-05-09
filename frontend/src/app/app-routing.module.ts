@@ -6,7 +6,6 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { AuthGuard } from './services/auth/auth-guard.service';
 import { MediaTilesetComponent } from './components/media-tileset/media-tileset.component';
 import { RegisterComponent } from './components/register/register.component';
-import { QueryComponent } from './components/query/query.component';
 import { CarouselComponent } from './components/carousel/carousel.component';
 import { CarouselTilesetComponent } from './components/carousel-tileset/carousel-tileset.component';
 import { EditProfileComponent } from './components/edit-profile/edit-profile.component';
@@ -44,10 +43,6 @@ const routes: Routes = [
   {
     path: 'feed',
     component: FeedComponent
-  },
-  {
-    path: 'query',
-    component: QueryComponent
   },
   {
     path: 'profile/:id',
@@ -98,7 +93,7 @@ const routes: Routes = [
     component: MediaThreadComponent
   }, 
   {
-    path: 'carousel/:carouselid/tread/:threadid',
+    path: 'carousel/:carouselid/thread/:threadid',
     component: CarouselThreadComponent
   }
 ];

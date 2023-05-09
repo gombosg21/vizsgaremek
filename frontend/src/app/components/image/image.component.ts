@@ -96,7 +96,7 @@ export class ImageComponent implements OnInit, OnDestroy {
           if (ListItem.hasOwnProperty('file_data')) {
             this.media = ListItem as media;
             if (this.media.reactions) {
-              this.ReactionService.setStoredInstanceList(this.media.reactions);
+              this.ReactionService.setStoredInstanceList = this.media.reactions;
             };
           };
           if (ListItem.hasOwnProperty('error')) {
@@ -114,7 +114,7 @@ export class ImageComponent implements OnInit, OnDestroy {
           val.hasOwnProperty('file_data')) {
           this.media = val as media;
           if (this.media.reactions) {
-            this.ReactionService.setStoredInstanceList(this.media.reactions);
+            this.ReactionService.setStoredInstanceList = this.media.reactions;
           };
         };
         // if (val.hasOwnProperty('error')) {
@@ -126,7 +126,7 @@ export class ImageComponent implements OnInit, OnDestroy {
       if (this.data.hasOwnProperty('file_data')) {
         this.media = this.data as media ?? this.media;
         if (this.media.reactions) {
-          this.ReactionService.setStoredInstanceList(this.media.reactions);
+          this.ReactionService.setStoredInstanceList = this.media.reactions;
         };
       };
       if (this.data.hasOwnProperty('error')) {
@@ -149,7 +149,7 @@ export class ImageComponent implements OnInit, OnDestroy {
         };
       };
       this.media.reactions = [{ ID: reactionID, count: 1 }];
-      this.ReactionService.setStoredInstanceList(this.media.reactions);
+      this.ReactionService.setStoredInstanceList = this.media.reactions;
     };
   };
 

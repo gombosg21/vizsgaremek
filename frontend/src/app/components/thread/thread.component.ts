@@ -52,9 +52,25 @@ export class ThreadComponent implements OnInit, OnDestroy {
     if (this.threadID) {
       this.threadSub = this.ThreadService.getThreadByID(this.threadID).subscribe({
         next: (val) => {
-          console.log('ID', val)
-          this.data = val ?? this.data;
+          this.data = val;
           this.CommenctService.setLocalCommentList = this.data.comments;
+          switch (this.data.status) {
+            case 0:
+              this.threadStatus = "open"
+              break;
+
+            case 1:
+              this.threadStatus = "locked"
+              break;
+
+            case 2:
+              this.threadStatus = "archived"
+              break;
+
+            default:
+              this.threadStatus = "error"
+              break;
+          };
         },
         error: (err) => {
           console.error(err)
@@ -64,36 +80,55 @@ export class ThreadComponent implements OnInit, OnDestroy {
     } else {
       this.threadSub = this.ThreadService.getLocalData.subscribe({
         next: (val) => {
-          console.log('local', val)
-          this.data = val ?? this.data;
+          this.data = val;
           this.CommenctService.setLocalCommentList = this.data.comments;
+          switch (this.data.status) {
+            case 0:
+              this.threadStatus = "open"
+              break;
+
+            case 1:
+              this.threadStatus = "locked"
+              break;
+
+            case 2:
+              this.threadStatus = "archived"
+              break;
+
+            default:
+              this.threadStatus = "error"
+              break;
+          };
         },
         error: (err) => {
           console.error(err)
         },
         complete: () => { }
       });
+
       if (this.data.reactions) {
-        this.ReactionService.setStoredInstanceList(this.data.reactions);
+        this.ReactionService.setStoredInstanceList = this.data.reactions;
       };
     };
 
-    switch (this.data.status) {
-      case 0:
-        this.threadStatus = "open"
-        break;
+    if (this.data) {
+      switch (this.data.status) {
+        case 0:
+          this.threadStatus = "open"
+          break;
 
-      case 1:
-        this.threadStatus = "locked"
-        break;
+        case 1:
+          this.threadStatus = "locked"
+          break;
 
-      case 2:
-        this.threadStatus = "archived"
-        break;
+        case 2:
+          this.threadStatus = "archived"
+          break;
 
-      default:
-        this.threadStatus = "error"
-        break;
+        default:
+          this.threadStatus = "error"
+          break;
+      };
     };
   };
 
@@ -122,7 +157,7 @@ export class ThreadComponent implements OnInit, OnDestroy {
       };
     };
     this.data.reactions = [{ ID: reactionID, count: 1 }];
-    this.ReactionService.setStoredInstanceList(this.data.reactions);
+    this.ReactionService.setStoredInstanceList = this.data.reactions;
     this.newReactionID = reactionID;
   };
 

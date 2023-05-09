@@ -71,22 +71,65 @@ exports.getStory = async (req, res, next) => {
                     {
                         model: user,
                         attributes: ['ID'],
-                        include: [{
-                            model: profile,
-                            attributes: ['alias']
-                        }]
+                        include: [
+                            {
+                                model: profile,
+                                attributes: ['alias']
+                            }
+                        ]
                     },
                     {
-                        model: media,
-                        attributes: { exclude: ["deletedAt"] },
-                        include: [
-                            { model: tag, attributes: ["name", "ID"] }
-                        ]
-                    }, {
-                        model: carousel_reactionlist, attributes: [['reaction_ID', 'ID'], [fn('COUNT', 'carousel_reactionlists.reaction_ID'), 'reaction_count']]
-                    }, {
-                        model: thread, attributes: ['ID', 'name', 'created', 'last_activity', 'status']
-                    }],
+                        model: carousel_medialist,
+                        attributes: { exclude: ["carousel_ID", "media_ID"] },
+                        include:
+                            [
+                                {
+                                    model: media,
+                                    attributes: ["ID", "file_data", "uploaded", "description", "placeholder_text", "visibility", "last_edit"],
+                                    include:
+                                        [
+                                            {
+                                                model: tag,
+                                                attributes: ['ID', 'name']
+                                            },
+                                            {
+                                                model: user,
+                                                attributes: ["ID"],
+                                                include:
+                                                    [
+                                                        {
+                                                            model: profile,
+                                                            attributes: ["alias"]
+                                                        }
+                                                    ]
+                                            }
+                                        ]
+                                }
+                            ]
+                    },
+                    {
+                        model: carousel_reactionlist,
+                        attributes: [['reaction_ID', 'ID'], [fn('COUNT', 'carousel_reactionlists.reaction_ID'), 'reaction_count']]
+                    },
+                    {
+                        model: thread,
+                        attributes: ['ID', 'name', 'created', 'last_activity', 'status'],
+                        include:
+                            [
+                                {
+                                    model: user,
+                                    attributes: ["ID"],
+                                    include:
+                                        [
+                                            {
+                                                model: profile,
+                                                attributes: ["alias"]
+                                            }
+                                        ]
+                                }
+                            ]
+                    }
+                ],
                 group: ['carousel_reactionlists.reaction_ID']
             });
 
@@ -124,7 +167,7 @@ exports.getStory = async (req, res, next) => {
 
         const result = await visibility.determineVisibility(userID, dataOwnerID, visibilityFlag, Story.dataValues);
 
-        return res.status(result.status).json({ carousel: result.data });
+        return res.status(result.status).json(result.data);
 
     } catch (error) {
         console.error(error);

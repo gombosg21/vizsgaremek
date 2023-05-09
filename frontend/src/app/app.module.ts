@@ -9,13 +9,11 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { UploadImageModalComponent } from './components/modals/upload-image-modal/upload-image-modal.component';
 import { ImageModalComponent } from './components/modals/image-modal/image-modal.component';
-import { QueryComponent } from './components/query/query.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { TokenInterceptor } from './auth/token.interceptor';
 import { ThreadComponent } from './components/thread/thread.component';
 import { CommentComponent } from './components/comment/comment.component';
-import { StoryComponent } from './components/story/story.component';
 import { FriendsComponent } from './components/friends/friends.component';
 import { TagsComponent } from './components/tags/tags.component';
 import { ReactionsComponent } from './components/reactions/reactions.component';
@@ -68,10 +66,8 @@ import { CarouselThreadComponent } from './components/carousel-thread/carousel-t
     NavbarComponent,
     UploadImageModalComponent,
     ImageModalComponent,
-    QueryComponent,
     ThreadComponent,
     CommentComponent,
-    StoryComponent,
     FriendsComponent,
     TagsComponent,
     ReactionsComponent,
