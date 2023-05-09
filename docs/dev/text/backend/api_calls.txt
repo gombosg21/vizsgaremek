@@ -117,6 +117,7 @@ A {tag_id_list_remove} eltávolít cédulákat a képről, a {tag_id_list_add} h
 Siker esetén visszadja a kép frissített cédulalistáját {ID, name} tömbösített json-ban.
 
 POST /api/v/0.1/media/{ID}/thread
+POST /api/v/0.1/story/{ID}/thread
 Belépés után elérhető...
 Media ID-re létrehoz egy beszédszálat.
 Body-ba kéri a {name} mezőt.
