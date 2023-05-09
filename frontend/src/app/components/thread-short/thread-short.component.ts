@@ -40,24 +40,38 @@ export class ThreadShortComponent implements OnInit, OnDestroy {
 
   open(ID: number): void {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-    if(this.mediaID) {
-    this.router.navigate(['media/' + this.mediaID + '/thread/' + ID]);
+    if (this.mediaID) {
+      this.router.navigate(['media/' + this.mediaID + '/thread/' + ID]);
     };
-    if(this.carouselID) {
+    if (this.carouselID) {
       this.router.navigate(['carousel/' + this.carouselID + '/thread/' + ID]);
     };
-    if(!this.carouselID && !this.mediaID) {
+    if (!this.carouselID && !this.mediaID) {
       console.error("no target ID given!")
     };
   };
 
   onSubmit(): void {
     if (this.NewThreadFormGroup.valid) {
-      this.ThreadService.postCreateThread(this.NewThreadFormGroup.value.NameFormControl!).subscribe({
-        next: (val) => { },
-        complete: () => { },
-        error: (err) => { console.error(err) }
-      });
+      var ID: number | undefined;
+      var targetType: string | undefined;
+      if (this.carouselID) {
+        ID = this.carouselID;
+        targetType = "story";
+      };
+      if (this.mediaID) {
+        ID = this.mediaID;
+        targetType = "media";
+      };
+      if (ID != undefined && targetType != undefined) {
+        this.ThreadService.postCreateThread(this.NewThreadFormGroup.value.NameFormControl!, targetType, ID).subscribe({
+          next: (val) => { },
+          complete: () => { },
+          error: (err) => { console.error(err) }
+        });
+      } else {
+        throw new Error("called w/o parent!")
+      }
     };
   };
 

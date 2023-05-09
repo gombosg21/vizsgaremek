@@ -39,8 +39,8 @@ export class ThreadService {
     return this.http.get<thread>(this.ApiPath + "/" + ID);
   };
 
-  postCreateThread(name: string): Observable<any> {
-    return this.http.post(this.ApiPath, { name: name });
+  postCreateThread(name: string, targetType: string, targetID: number): Observable<any> {
+    return this.http.post(enviroment.baseUrl + targetType + "/" + targetID + "/thread", { name: name });
   };
 
   patchThreadName(name: string, ID: number): Observable<any> {
