@@ -14,42 +14,51 @@
                 <p>Visibility</p>
                 <div>
                     <label for="private">Private</label>
-                    <input type="radio" name="visibilityFormControl" formControlName="visibilityFormControl" id="private" value="0">
+                    <input type="radio" name="visibilityFormControl" formControlName="visibilityFormControl"
+                        id="private" value="0">
                 </div>
                 <div>
                     <label for="friends_only">Friends Only</label>
-                    <input type="radio" name="visibilityFormControl" formControlName="visibilityFormControl" id="friends_only" value="1">
+                    <input type="radio" name="visibilityFormControl" formControlName="visibilityFormControl"
+                        id="friends_only" value="1">
                 </div>
                 <div>
                     <label for="registered_only">Registered Only</label>
-                    <input type="radio" name="visibilityFormControl" formControlName="visibilityFormControl" id="registered_only" value="2">
+                    <input type="radio" name="visibilityFormControl" formControlName="visibilityFormControl"
+                        id="registered_only" value="2">
                 </div>
                 <div>
                     <label for="public">Public</label>
-                    <input type="radio" name="visibilityFormControl" formControlName="visibilityFormControl" id="public" value="3">
+                    <input type="radio" name="visibilityFormControl" formControlName="visibilityFormControl" id="public"
+                        value="3">
                 </div>
             </div>
-            <button type="button" (click)="addFormArrayGroupItem()">Add Slide</button>
-            <div>
-                <div *ngFor="let item of storyNewFormGroup.value.mediaArrayControl; index as i;">
-                    <ng-container [formGroup]="item">
-                        <div>
-                            <label for="description">Slide description</label>
-                            <input type="text" id="description" formControlName="mediaDescriptionFormControl">
+
+            <div cdkDropListGroup>
+                <div class="card">
+                    <h2>My Uploads</h2>
+                    <div class="card-body" cdkDropList [cdkDropListData]="medias" (cdkDropListDropped)="drop($event)">
+                        <div *ngFor="let media of medias" cdkDrag>
+                            <img src="data:image/jpeg;base64,{{media.file_data}}" [alt]="media.placeholder_text"
+                                [title]="media.placeholder_text">
                         </div>
-                        <div>
-                            <label for=""></label>
-                            <button type="button" (click)="showModal(i)">Select Media</button>
+                    </div>
+                </div>
+                <div class="card">
+                    <h2>Carousel Items</h2>
+                    <div class="card-body" cdkDropList [cdkDropListData]="slides" (cdkDropListDropped)="drop($event)">
+                        <div *ngFor="let slide of slides" cdkDrag>
+                            <img src="data:image/jpeg;base64,{{slide.media.file_data}}"
+                                [alt]="slide.media.placeholder_text" [title]="slide.media.placeholder_text">
+                            <label for="description">Item Description</label>
+                            <input type="text" name="" id="description" [(ngModel)]="slide.item_description">
                         </div>
-                        <button type="button" (click)="removeFormArrayGroupItem(item)">Remove Slide</button>
-                    </ng-container>
+                    </div>
                 </div>
             </div>
+
         </div>
         <button type="submit">Submit</button>
-        <button (click)="cancelBuild()">Cancel</button>
     </form>
+    <button tpye="button" (click)="cancelBuild()">Cancel</button>
 </div>
-
-<app-image-picker-modal *ngIf="displayModal" (close)="hideModal()"
-    (mediaID)="addMediaID($event)"></app-image-picker-modal>
