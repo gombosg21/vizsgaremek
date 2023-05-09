@@ -54,6 +54,7 @@ import { AdminReactionsComponent } from './components/admin/admin-reactions/admi
 import { MediaThreadComponent } from './components/media-thread/media-thread.component';
 import { CarouselThreadComponent } from './components/carousel-thread/carousel-thread.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { SubscriptionsComponent } from './components/subscriptions/subscriptions.component';
 
 
 
@@ -96,6 +97,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     AdminReactionsComponent,
     MediaThreadComponent,
     CarouselThreadComponent,
+    SubscriptionsComponent,
   ],
   imports: [
     BrowserModule,
