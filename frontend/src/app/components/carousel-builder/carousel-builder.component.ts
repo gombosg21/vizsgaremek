@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { media } from 'src/app/models/media';
 import { StoryService } from 'src/app/services/story/story.service';
@@ -11,9 +11,9 @@ import { StoryService } from 'src/app/services/story/story.service';
 export class CarouselBuilderComponent implements OnInit {
 
   @Input() media: media;
-
+  @Output() cancelled: EventEmitter<void> = new EventEmitter<void>;
   public displayModal: boolean = false;
-  private selectedIndex:number;
+  private selectedIndex: number;
 
   public storyNewFormGroup = new FormGroup({
     nameFormControl: new FormControl<string>('', Validators.compose([Validators.required])),
@@ -23,22 +23,20 @@ export class CarouselBuilderComponent implements OnInit {
   });
 
   public mediaItemFormGroup = new FormGroup({
-    mediaIDFormControl: new FormControl<number>(-1, Validators.compose([Validators.required])),
-    mediaOrderNumberFormControl: new FormControl<number>(-1, Validators.compose([Validators.required])),
+    mediaIDFormControl: new FormControl<number>(-1, Validators.compose([Validators.required, Validators.min(0)])),
+    mediaOrderNumberFormControl: new FormControl<number>(-1, Validators.compose([Validators.required, Validators.min(0)])),
     mediaDescriptionFormControl: new FormControl<string>('', Validators.compose([Validators.required, Validators.minLength(8), Validators.maxLength(300)]))
   });
 
-  constructor(private StoryService: StoryService) { 
-
-  };
+  constructor(private StoryService: StoryService) { };
 
   addMediaID(mediaID: number): void {
+    this.displayModal = false;
+    console.log( this.storyNewFormGroup.value.mediaArrayControl![this.selectedIndex].mediaItemFormGroup.value)
     this.storyNewFormGroup.value.mediaArrayControl![this.selectedIndex].mediaItemFormGroup.value.mediaIDFormControl = mediaID;
   };
 
-  ngOnInit(): void {
-    throw new Error('Method not implemented.');
-  };
+  ngOnInit(): void { };
 
   addFormArrayGroupItem() {
     this.storyNewFormGroup.value.mediaArrayControl!.push(this.mediaItemFormGroup);
@@ -52,7 +50,7 @@ export class CarouselBuilderComponent implements OnInit {
     this.storyNewFormGroup.value.mediaArrayControl![index] = group;
   };
 
-  showModal(selectedIndex:number): void {
+  showModal(selectedIndex: number): void {
     this.selectedIndex = selectedIndex;
     this.displayModal = true;
   };
@@ -62,7 +60,11 @@ export class CarouselBuilderComponent implements OnInit {
   };
 
   onSubmit(): void {
-    console.log(this.storyNewFormGroup)
+    console.log(this.storyNewFormGroup.value)
+  };
+
+  cancelBuild(): void {
+    this.cancelled.emit();
   };
 
 };
