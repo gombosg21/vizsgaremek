@@ -18,7 +18,7 @@ export class CarouselComponent implements OnInit, OnDestroy {
   @ViewChild(NgxCarouselComponent) ngxCarousel: NgxCarouselComponent;
   @Input() public data: carousel | ErrorModel;
   @Input() public iterator: number;
-  @Input() public storyID: number;
+  @Input() public carouselID: number;
   @Input() public ErrorInstance: ErrorModel;
   public showAddReactions:boolean = false;
   public carousel: carousel;
@@ -29,8 +29,8 @@ export class CarouselComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {};
 
   ngOnInit(): void {
-    if (this.storyID) {
-      this.CarouselService.getStoryByID(this.storyID).subscribe({
+    if (this.carouselID) {
+      this.CarouselService.getStoryByID(this.carouselID).subscribe({
         error: (err) => {
           console.error(err);
         },
@@ -65,8 +65,6 @@ export class CarouselComponent implements OnInit, OnDestroy {
         console.log(this.carousel.carousel_medialists[0].media)
         this.carousel_components = (this.carousel.carousel_medialists.sort((a, b) => b.item_number - a.item_number))
           .map(item => ({ file_data: item.media[0].file_data, description: item.item_description, title: item.media[0].placeholder_text }));
-
-        console.log(this.carousel_components)
       };
     };
   };
