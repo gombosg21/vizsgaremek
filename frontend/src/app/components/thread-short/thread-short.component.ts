@@ -30,7 +30,7 @@ export class ThreadShortComponent implements OnInit, OnDestroy {
       next: (val) => { this.isSession = val },
       complete: () => { },
       error: (err) => { console.error(err) }
-    })
+    });
   };
   ngOnDestroy(): void {
     if (this.sessionSub) {
