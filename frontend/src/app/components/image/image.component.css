@@ -22,7 +22,6 @@ body {
 .container {
     margin-bottom: 10px;
     border-radius: 10px;
-    max-width: 850px;
 }
 
 .card-footer {
@@ -54,5 +53,22 @@ p {
 @media (max-width: 767.98px) {
     .card-footer {
         padding: 0.5rem;
+    }
+}
+
+.small-screen-only {
+    display: none;
+}
+
+.large-screen-only {
+    display: inline-block;
+}
+
+@media (max-width: 800px) {
+    .small-screen-only {
+        display: inline-block;
+    }
+    .large-screen-only {
+        display: none;
     }
 }

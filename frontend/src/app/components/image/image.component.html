@@ -2,8 +2,7 @@
     <div class="row" *ngIf="!ErrorInstance">
         <div class="col-12 col-lg-6" id="img">
             <div class="card">
-                <img src="data:image/jpeg;base64,{{media.file_data}}" [alt]="media.placeholder_text"
-                    [title]="media.placeholder_text" class="card-img-top" (click)="showModal()">
+                <img src="data:image/jpeg;base64,{{media.file_data}}" [alt]="media.placeholder_text" [title]="media.placeholder_text" class="card-img-top" (click)="showModal()">
                 <div class="card-body">
                     <p class="card-text">{{media.description}}</p>
                 </div>
@@ -11,21 +10,22 @@
                     <div class="d-flex justify-content-between align-items-center w-100">
                         <div class="d-flex flex-column">
                             <div class="d-flex align-items-center">
-                                <p id="createdAt"><i class="far fa-calendar-alt"></i> Created: {{media.uploaded | date:
-                                    'yyyy. MM. dd. HH:mm'}}</p>
+                                <p id="createdAt"><i class="far fa-calendar-alt"></i> Created: {{media.uploaded | date: 'yyyy. MM. dd. HH:mm'}}</p>
                             </div>
                             <div class="d-flex align-items-center">
-                                <p class="mb-1"><i class="fas fa-pencil-alt"></i> Last edit: {{media.last_edit | date:
-                                    'yyyy. MM. dd. HH:mm'}}</p>
+                                <p class="mb-1"><i class="fas fa-pencil-alt"></i> Last edit: {{media.last_edit | date: 'yyyy. MM. dd. HH:mm'}}</p>
                             </div>
                         </div>
                         <div *ngIf="sessionId == media.user!.ID">
-                            <button class="bnt btn-danger" (click)="delete()">Delete</button>
+                            <button class="btn btn-danger btn-sm large-screen-only" (click)="delete()">Delete</button>
+                            <button class="btn btn-danger btn-sm  small-screen-only" (click)="delete()"><i class="fas fa-trash"></i></button>
                         </div>
-                        <app-reactions *ngIf="media.reactions && !ErrorInstance"
-                            [reactionInstanceList]="media.reactions"></app-reactions>
-                        <button class="btn btn-secondary btn-sm" (click)="react()">
+                        <app-reactions *ngIf="media.reactions && !ErrorInstance" [reactionInstanceList]="media.reactions"></app-reactions>
+                        <button class="btn btn-secondary btn-sm large-screen-only" (click)="react()">
                             <i class="fas fa-thumbs-up"></i> React
+                        </button>
+                        <button class="btn btn-secondary btn-sm small-screen-only" (click)="react()">
+                            <i class="fas fa-thumbs-up"></i>
                         </button>
                     </div>
                 </div>
@@ -44,7 +44,5 @@
 </div>
 
 <app-image-modal *ngIf="showImageModal && !ErrorInstance" [media]="media" (close)="hideModal()"></app-image-modal>
-<app-image-edit-tags-modal *ngIf="sessionId && showEditTags && !ErrorInstance" [media]="media" (closed)="hideEditTags()"
-    (addedTags)="addTags($event)" (removedTags)="removeTags($event)"></app-image-edit-tags-modal>
-<app-reaction-modal *ngIf="showAddReactions && !ErrorInstance" (close)="showAddReactions = false" parentType="thread"
-    [parentID]="media.ID!" (reacted)="addReaction($event)"></app-reaction-modal>
+<app-image-edit-tags-modal *ngIf="sessionId && showEditTags && !ErrorInstance" [media]="media" (closed)="hideEditTags()" (addedTags)="addTags($event)" (removedTags)="removeTags($event)"></app-image-edit-tags-modal>
+<app-reaction-modal *ngIf="showAddReactions && !ErrorInstance" (close)="showAddReactions = false" parentType="thread" [parentID]="media.ID!" (reacted)="addReaction($event)"></app-reaction-modal>
