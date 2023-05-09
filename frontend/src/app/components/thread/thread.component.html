@@ -3,11 +3,12 @@
         <div class="col">
             <div class="d-flex align-items-center">
                 <h4 class="mb-0">{{data.name}}</h4>
-                <!-- <div *ngIf="thread.user.ID == sessionId" class="ms-2">
-                    <button class="btn btn-secondary btn-sm" id="threadEditBtn" (click)="edit()"><i class="fa-solid fa-pen-to-square"></i>Edit</button>
-                </div> -->
+                <div *ngIf="data.user.ID == sessionId && isProfile == false" class="ms-2">
+                    <button class="btn btn-secondary btn-sm" id="threadEditBtn" (click)="edit()"><i
+                            class="fa-solid fa-pen-to-square"></i>Edit</button>
+                </div>
             </div>
-            <!-- <form *ngIf="showEdit" class="mt-3">
+            <form *ngIf="showEdit" class="mt-3">
                 <div class="mb-3">
                     <label for="name" class="form-label">Edit Name</label>
                     <input type="text" id="name" [(ngModel)]="newName" name="name" class="form-control">
@@ -18,7 +19,7 @@
                 <button class="btn btn-secondary ms-2 sm btn-sm" (click)="cancelEdit()">
                     <i class="fas fa-times"></i> Cancel
                 </button>
-            </form> -->
+            </form>
             <div class="d-flex justify-content-between align-items-center">
                 <div>
                     <h5>
@@ -29,7 +30,8 @@
                     </h5>
                 </div>
                 <div class="react-btn-container">
-                    <button (click)="react()" class="btn btn-secondary btn-sm react-btn large-screen-only"><i class="fas fa-thumbs-up"></i> React</button>
+                    <button (click)="react()" class="btn btn-secondary btn-sm react-btn large-screen-only"><i
+                            class="fas fa-thumbs-up"></i> React</button>
                     <button class="btn btn-secondary btn-sm react-btn small-screen-only" (click)="react()">
                         <i class="fas fa-thumbs-up"></i>
                     </button>
@@ -40,17 +42,22 @@
             <ng-container *ngIf="data.comments">
                 <app-comment *ngFor="let comment of data.comments | slice:
                 (paginator.pageIndex*paginator.pageSize):
-                ((paginator.pageIndex+1)*paginator.pageSize); let i = index" [iterator]="(paginator.pageIndex*paginator.pageSize) + i" (isDeleted)="removeComment($event)"></app-comment>
+                ((paginator.pageIndex+1)*paginator.pageSize); let i = index"
+                    [iterator]="(paginator.pageIndex*paginator.pageSize) + i"
+                    (isDeleted)="removeComment($event)"></app-comment>
             </ng-container>
             <form *ngIf="showNewComment" class="mt-3">
                 <label for="commentContent">New Comment</label>
-                <textarea [(ngModel)]="newCommentContent" name="commentContent" id="commentContent" class="form-control" rows="3" placeholder="Write your comment here..."></textarea>
+                <textarea [(ngModel)]="newCommentContent" name="commentContent" id="commentContent" class="form-control"
+                    rows="3" placeholder="Write your comment here..."></textarea>
                 <button class="btn btn-secondary btn-sm mt-2" (click)="comment()">
                     <i class="fas fa-paper-plane"></i> Submit
                 </button>
             </form>
-            <mat-paginator #paginator [length]="data.comments.length" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 25, 50]"></mat-paginator>
+            <mat-paginator #paginator [length]="data.comments.length" [pageSize]="pageSize"
+                [pageSizeOptions]="[5, 10, 25, 50]"></mat-paginator>
         </div>
     </div>
-    <app-reaction-modal *ngIf="showAddReactions" (close)="showAddReactions = false" parentType="thread" [parentID]="data.ID" (reacted)="addReaction($event)"></app-reaction-modal>
+    <app-reaction-modal *ngIf="showAddReactions" (close)="showAddReactions = false" parentType="thread"
+        [parentID]="data.ID" (reacted)="addReaction($event)"></app-reaction-modal>
 </div>

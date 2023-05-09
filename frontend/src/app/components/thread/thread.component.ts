@@ -17,9 +17,10 @@ export class ThreadComponent implements OnInit, OnDestroy {
   pageSize = 5;
   pageIndex = 0;
 
-  @Input() threadID: number;
+  @Input() public threadID: number;
   @Input() public iterator: number = 0;
   @Input() public data: thread;
+  @Input() public isProfile:boolean = false;
 
   public newReactionID: number;
 

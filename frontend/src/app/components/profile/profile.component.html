@@ -44,7 +44,7 @@
         <app-reaction-modal *ngIf="showAddReactions" (close)="showAddReactions = false" parentType="user" [parentID]="userID" (reacted)="addReaction($event)"></app-reaction-modal>
 
         <ng-container *ngIf="UserProfileThread">
-            <app-thread [thread]="UserProfileThread"></app-thread>
+            <app-thread [isProfile]="true" [thread]="UserProfileThread"></app-thread>
         </ng-container>
     </ng-container>
 </div>
