@@ -29,7 +29,7 @@
                     <input type="radio" name="visibilityFormControl" formControlName="visibilityFormControl" id="public" value="3">
                 </div>
             </div>
-            <button (click)="addFormArrayGroupItem()">Add Slide</button>
+            <button type="button" (click)="addFormArrayGroupItem()">Add Slide</button>
             <div>
                 <div *ngFor="let item of storyNewFormGroup.value.mediaArrayControl; index as i;">
                     <ng-container [formGroup]="item">
@@ -39,14 +39,15 @@
                         </div>
                         <div>
                             <label for=""></label>
-                            <button (click)="showModal(i)">Select Media</button>
+                            <button type="button" (click)="showModal(i)">Select Media</button>
                         </div>
-                        <button (click)="removeFormArrayGroupItem(item)">Remove Slide</button>
+                        <button type="button" (click)="removeFormArrayGroupItem(item)">Remove Slide</button>
                     </ng-container>
                 </div>
             </div>
         </div>
         <button type="submit">Submit</button>
+        <button (click)="cancelBuild()">Cancel</button>
     </form>
 </div>
 
