@@ -1,0 +1,9 @@
+@import '~@fortawesome/fontawesome-free/css/all.css';
+.container {
+    max-width: 65%;
+    margin: 0 auto;
+}
+
+i.fas.fa-plus {
+    margin-left: 0.5rem;
+}

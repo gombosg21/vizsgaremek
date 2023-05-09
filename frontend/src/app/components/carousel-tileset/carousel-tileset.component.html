@@ -1,21 +1,24 @@
-<div *ngIf="!foreign">
-    <button (click)="showModal()">Create New Story
-        <i></i>
-    </button>
-</div>
+<div class="container">
+    <div *ngIf="!foreign">
+        <button class="btn btn-secondary btn-sm" (click)="showModal()">
+            Create New Story
+            <i class="fas fa-plus"></i>
+        </button>
+    </div>
 
-<div *ngIf="foreign">
-    <app-carousel-searc></app-carousel-searc>
-</div>
+    <div *ngIf="foreign">
+        <app-carousel-searc></app-carousel-searc>
+    </div>
 
-<div *ngIf="carousels">
-    <mat-grid-list cols="cols">
-        <mat-grid-tile *ngFor="let carousel of carousels; index as i;">
-            <app-carousel [data]="carousel" [iterator]="i"></app-carousel>
-        </mat-grid-tile>
-    </mat-grid-list>
-</div>
+    <div *ngIf="carousels" class="mt-4">
+        <mat-grid-list [cols]="cols" gutterSize="16px">
+            <mat-grid-tile *ngFor="let carousel of carousels; index as i;">
+                <app-carousel [data]="carousel" [iterator]="i"></app-carousel>
+            </mat-grid-tile>
+        </mat-grid-list>
+    </div>
 
-<div *ngIf="!carousels">
-    <p>Nothing here, but us chickens!</p>
+    <div *ngIf="!carousels" class="mt-4 text-center">
+        <p>Nothing here, but us chickens!</p>
+    </div>
 </div>
