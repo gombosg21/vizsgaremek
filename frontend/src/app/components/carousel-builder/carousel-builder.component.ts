@@ -13,6 +13,7 @@ export class CarouselBuilderComponent implements OnInit {
   @Input() media: media;
 
   public displayModal: boolean = false;
+  private selectedIndex:number;
 
   public storyNewFormGroup = new FormGroup({
     nameFormControl: new FormControl<string>('', Validators.compose([Validators.required])),
@@ -27,25 +28,32 @@ export class CarouselBuilderComponent implements OnInit {
     mediaDescriptionFormControl: new FormControl<string>('', Validators.compose([Validators.required, Validators.minLength(8), Validators.maxLength(300)]))
   });
 
-  constructor(private StoryService: StoryService) { }
+  constructor(private StoryService: StoryService) { 
+
+  };
+
+  addMediaID(mediaID: number): void {
+    this.storyNewFormGroup.value.mediaArrayControl![this.selectedIndex].mediaItemFormGroup.value.mediaIDFormControl = mediaID;
+  };
 
   ngOnInit(): void {
     throw new Error('Method not implemented.');
   };
 
   addFormArrayGroupItem() {
-    this.storyNewFormGroup.value.mediaArrayControl?.push(this.mediaItemFormGroup);
+    this.storyNewFormGroup.value.mediaArrayControl!.push(this.mediaItemFormGroup);
   };
 
   removeFormArrayGroupItem(group: FormGroup) {
-    this.storyNewFormGroup.value.mediaArrayControl?.splice(this.storyNewFormGroup.value.mediaArrayControl?.indexOf(group), 1);
+    this.storyNewFormGroup.value.mediaArrayControl!.splice(this.storyNewFormGroup.value.mediaArrayControl!.indexOf(group), 1);
   };
 
   editFormArrayGroupItem(group: FormGroup, index: number) {
     this.storyNewFormGroup.value.mediaArrayControl![index] = group;
   };
 
-  showModal(): void {
+  showModal(selectedIndex:number): void {
+    this.selectedIndex = selectedIndex;
     this.displayModal = true;
   };
 

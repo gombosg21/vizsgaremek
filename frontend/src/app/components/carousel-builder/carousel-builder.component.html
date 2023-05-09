@@ -3,39 +3,46 @@
         <div>
             <div>
                 <label for="description">Carousel description</label>
-                <input type="text" id =description formControlName="descriptionFormControl" name="descriptionFormControl">
+                <input type="text" id=description formControlName="descriptionFormControl"
+                    name="descriptionFormControl">
             </div>
             <div>
                 <label for="name">Carousel name</label>
                 <input type="text" name="nameFormControl" id="name" formControlName="nameFormControl">
             </div>
             <div>
-                <p></p>
+                <p>Visibility</p>
                 <div>
-                    <label for=""></label>
-                    <input type="radio" name="" id="">
+                    <label for="private">Private</label>
+                    <input type="radio" name="visibilityFormControl" formControlName="visibilityFormControl" id="private" value="0">
                 </div>
                 <div>
-                    <label for=""></label>
-                    <input type="radio" name="" id="">
+                    <label for="friends_only">Friends Only</label>
+                    <input type="radio" name="visibilityFormControl" formControlName="visibilityFormControl" id="friends_only" value="1">
                 </div>
                 <div>
-                    <label for=""></label>
-                    <input type="radio" name="" id="">
+                    <label for="registered_only">Registered Only</label>
+                    <input type="radio" name="visibilityFormControl" formControlName="visibilityFormControl" id="registered_only" value="2">
                 </div>
                 <div>
-                    <label for=""></label>
-                    <input type="radio" name="" id="">
+                    <label for="public">Public</label>
+                    <input type="radio" name="visibilityFormControl" formControlName="visibilityFormControl" id="public" value="3">
                 </div>
             </div>
             <button (click)="addFormArrayGroupItem()">Add Slide</button>
             <div>
-                <div *ngFor="let item of storyNewFormGroup.value.mediaArrayControl">
-                    <div>
-                        <label for="">Slide description</label>
-                        <input type="text">
-                    </div>
-                    <button (click)="removeFormArrayGroupItem(item)">Remove Slide</button>
+                <div *ngFor="let item of storyNewFormGroup.value.mediaArrayControl; index as i;">
+                    <ng-container [formGroup]="item">
+                        <div>
+                            <label for="description">Slide description</label>
+                            <input type="text" id="description" formControlName="mediaDescriptionFormControl">
+                        </div>
+                        <div>
+                            <label for=""></label>
+                            <button (click)="showModal(i)">Select Media</button>
+                        </div>
+                        <button (click)="removeFormArrayGroupItem(item)">Remove Slide</button>
+                    </ng-container>
                 </div>
             </div>
         </div>
@@ -43,4 +50,5 @@
     </form>
 </div>
 
-<app-image-picker-modal *ngIf="displayModal" (close)="hideModal()"></app-image-picker-modal>
+<app-image-picker-modal *ngIf="displayModal" (close)="hideModal()"
+    (mediaID)="addMediaID($event)"></app-image-picker-modal>
