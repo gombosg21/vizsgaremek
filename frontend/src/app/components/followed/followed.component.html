@@ -1,1 +1,9 @@
-<p>followed works!</p>
+<div>
+    <ul>
+        <li *ngFor="let sub of subs;">
+            <p>{{sub.profile.alias}}</p>
+            <button (click)="visit(sub.ID)">Visit Profile</button>
+            <button (click)="unsub(sub.ID)">Unsubscribe</button>
+        </li>
+    </ul>
+</div>

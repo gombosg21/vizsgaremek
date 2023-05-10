@@ -11,7 +11,7 @@ import { UploadImageModalComponent } from './components/modals/upload-image-moda
 import { ImageModalComponent } from './components/modals/image-modal/image-modal.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { TokenInterceptor } from './auth/token.interceptor';
+import { TokenInterceptor } from './interceptors/token.interceptor';
 import { ThreadComponent } from './components/thread/thread.component';
 import { CommentComponent } from './components/comment/comment.component';
 import { FriendsComponent } from './components/friends/friends.component';
@@ -54,6 +54,7 @@ import { AdminReactionsComponent } from './components/admin/admin-reactions/admi
 import { MediaThreadComponent } from './components/media-thread/media-thread.component';
 import { CarouselThreadComponent } from './components/carousel-thread/carousel-thread.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { SubscriptionsComponent } from './components/subscriptions/subscriptions.component';
 
 
 
@@ -96,6 +97,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     AdminReactionsComponent,
     MediaThreadComponent,
     CarouselThreadComponent,
+    SubscriptionsComponent,
   ],
   imports: [
     BrowserModule,

@@ -15,6 +15,7 @@ import { AdminReactionsComponent } from './components/admin/admin-reactions/admi
 import { AdminTagsComponent } from './components/admin/admin-tags/admin-tags.component';
 import { MediaThreadComponent } from './components/media-thread/media-thread.component';
 import { CarouselThreadComponent } from './components/carousel-thread/carousel-thread.component';
+import { SubscriptionsComponent } from './components/subscriptions/subscriptions.component';
 
 const routes: Routes = [
   {
@@ -28,11 +29,6 @@ const routes: Routes = [
   {
     path: 'profile/edit',
     component: EditProfileComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'profile',
-    component: ProfileComponent,
     canActivate: [AuthGuard]
   },
   {
@@ -95,6 +91,10 @@ const routes: Routes = [
   {
     path: 'carousel/:carouselid/thread/:threadid',
     component: CarouselThreadComponent
+  },
+  {
+    path: 'subscriptions',
+    component: SubscriptionsComponent
   }
 ];
 

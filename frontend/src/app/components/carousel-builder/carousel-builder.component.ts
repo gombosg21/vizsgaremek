@@ -50,24 +50,36 @@ export class CarouselBuilderComponent implements OnInit {
   drop(dropListName: string, event: CdkDragDrop<any[]>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+      if(dropListName === "slides") {
+        var dragItem = event.previousContainer.data as unknown as { item_description: string, media: media }[];
+      }
     } else {
       console.log(event)
       if (dropListName === "slides") {
-        const slideItem:{ item_description: string, media: media }[] = [
+        var slideItem: { item_description: string, media: media }[] = [
           {
             item_description: "",
             media: event.previousContainer.data[event.previousIndex] as unknown as media
           }
         ];
+
         copyArrayItem<{ item_description: string, media: media }>(
           slideItem,
           event.container.data as unknown as { item_description: string, media: media }[],
           event.previousIndex,
           event.currentIndex
         );
+        var mediaArrayItem = this.mediaItemFormGroup.setValue({ mediaIDFormControl: slideItem[0].media.ID!, mediaOrderNumberFormControl: event.currentIndex, mediaDescriptionFormControl: slideItem[0].item_description })
+        this.storyNewFormGroup.value.mediaArrayControl?.push(mediaArrayItem);
       };
       if (dropListName === "medias") {
         event.previousContainer.data.splice(event.previousIndex, 1);
+        var dragItem = event.previousContainer.data as unknown as { item_description: string, media: media }[]
+        this.storyNewFormGroup.value.mediaArrayControl?.forEach(group =>{
+          if (group.mediaIDFormControl.value == dragItem[0].media.ID) {
+            this.storyNewFormGroup.value.mediaArrayControl?.splice(this.storyNewFormGroup.value.mediaArrayControl?.indexOf(group),1)
+          };
+        });
       };
     };
   };

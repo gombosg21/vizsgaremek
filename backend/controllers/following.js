@@ -1,17 +1,36 @@
 const followed = require("../models").followed;
 const activity = require("../models").activity;
+const user = require("../models").user;
+const profile = require("../models").profile;
 const { Op } = require("sequelize");
 
 exports.getFollowedList = async (req, res, next) => {
     const userID = req.user.ID;
     try {
-        const followedList = await followed.findAll({ where: { user_ID: userID }, attributes: ['date', ['followed_ID', 'ID']] });
+        const followedList = await followed.findAll({ where: { user_ID: userID }, attributes: ['date', 'followed_ID'] });
 
         if (!followedList) {
             return res.status(200).json({ followed_list: "user does not follow anyone" });
         };
 
-        return res.status(200).json(followedList);
+        const followedIDs = followedList.map(followed => { followed.followed_ID })
+        const followedUsers = await user.findAll({
+            where: { ID: { [Op.in]: followedIDs } }, attributes: ['ID'],
+            include:
+                [
+                    { model: profile, attributes: ['alias'] }
+                ]
+        });
+
+        followedUsers.forEach(User => {
+            followedList.forEach(Followed => {
+                if (User.ID == Followed.followed_ID) {
+                    User.date = Followed.date;
+                };
+            });
+        });
+
+        return res.status(200).json(followedUsers);
     } catch (error) {
         console.error(error);
         return res.status(500);
@@ -56,7 +75,16 @@ exports.sub = async (req, res, next) => {
             followed_ID: subID
         });
 
-        return res.status(201).json({ ID: newFollowing.followed_ID, date: newFollowing.date });
+        const newFollowingInstance = await user.findByPk(newFollowing.followed_ID, {
+            attributes: ['ID'],
+            include:
+                [
+                    { model: profile, attributes: ['alias'] }
+                ]
+        });
+        newFollowingInstance.date = newFollowing.date;
+
+        return res.status(201).json(newFollowingInstance);
     } catch (error) {
         console.error(error);
         return res.status(500);
@@ -80,7 +108,7 @@ exports.unSub = async (req, res, next) => {
 
         await deleteFollowing.destroy();
 
-        return res.status(200).json({ ID: deleteFollowing.followed_ID, date: deleteFollowing.date });
+        return res.status(200).json(deleteFollowing.followed_ID);
     } catch (error) {
         console.error(error);
         return res.status(500);

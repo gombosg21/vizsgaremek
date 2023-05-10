@@ -33,34 +33,30 @@
                         value="3">
                 </div>
             </div>
-
-            <div cdkDropListGroup>
-                <div class="card">
-                    <h2>My Uploads</h2>
-                    <div class="card-body" cdkDropList [cdkDropListData]="medias"
-                        (cdkDropListDropped)="drop('medias',$event)">
-                        <div *ngFor="let media of medias" cdkDrag>
-                            <img src="data:image/jpeg;base64,{{media.file_data}}" [alt]="media.placeholder_text"
-                                [title]="media.placeholder_text">
-                        </div>
-                    </div>
-                </div>
-                <div class="card">
-                    <h2>Carousel Items</h2>
-                    <div class="card-body" cdkDropList [cdkDropListData]="slides"
-                        (cdkDropListDropped)="drop('slides',$event)">
-                        <div *ngFor="let slide of slides" cdkDrag>
-                            <img src="data:image/jpeg;base64,{{slide.media.file_data}}"
-                                [alt]="slide.media.placeholder_text" [title]="slide.media.placeholder_text">
-                            <label for="description">Item Description</label>
-                            <input type="text" name="" id="description" [(ngModel)]="slide.item_description">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
         </div>
         <button type="submit">Submit</button>
     </form>
+    <div cdkDropListGroup>
+        <div class="card">
+            <h2>My Uploads</h2>
+            <div class="card-body" cdkDropList [cdkDropListData]="medias" (cdkDropListDropped)="drop('medias',$event)">
+                <div *ngFor="let media of medias" cdkDrag>
+                    <img src="data:image/jpeg;base64,{{media.file_data}}" [alt]="media.placeholder_text"
+                        [title]="media.placeholder_text">
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <h2>Carousel Items</h2>
+            <div class="card-body" cdkDropList [cdkDropListData]="slides" (cdkDropListDropped)="drop('slides',$event)">
+                <div *ngFor="let slide of slides" cdkDrag>
+                    <img src="data:image/jpeg;base64,{{slide.media.file_data}}" [alt]="slide.media.placeholder_text"
+                        [title]="slide.media.placeholder_text">
+                    <label for="description">Item Description</label>
+                    <input type="text" name="" id="description" [(ngModel)]="slide.item_description">
+                </div>
+            </div>
+        </div>
+    </div>
     <button tpye="button" mat-dialog-close>Cancel</button>
 </div>

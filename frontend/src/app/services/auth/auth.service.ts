@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable, OnDestroy, OnInit } from '@angular/core';
 import { BehaviorSubject, Observable, Subscription, of } from 'rxjs';
 import { enviroment } from 'src/enviroments/enviroment';
 import { ApiPaths } from '../../enums/api-paths';
@@ -9,8 +9,10 @@ import { getTokenUserID } from '../../helpers/extractors/token';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService implements OnDestroy {
-  constructor(private http: HttpClient, private router: Router,) {
+export class AuthService implements OnDestroy, OnInit {
+  constructor(private http: HttpClient, private router: Router,) { };
+
+  ngOnInit(): void {
     this.routerSub = this.router.events.subscribe({
       next: (value) => {
         if (getTokenUserID()) {
@@ -25,6 +27,7 @@ export class AuthService implements OnDestroy {
       }
     });
   };
+
 
   private routerSub: Subscription;
   private userID: BehaviorSubject<undefined | number> = new BehaviorSubject<undefined | number>(undefined);
@@ -60,7 +63,7 @@ export class AuthService implements OnDestroy {
         complete: () => {
           this.session.next(true);
           this.userID.next(getTokenUserID());
-          this.router.navigate(["/profile/" + this.userID]);
+          this.router.navigate(["/profile/" + getTokenUserID()]);
         }
       });
   };

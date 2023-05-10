@@ -9,8 +9,7 @@ import { activeToken, destroyToken } from 'src/app/helpers/extractors/token';
 })
 export class AuthGuard implements CanActivate {
 
-  constructor(public Router: Router, public AuthService: AuthService) {
-  }
+  constructor(private Router: Router, private AuthService: AuthService) { }
 
   canActivate(route? :ActivatedRouteSnapshot, state?: RouterStateSnapshot): boolean | Promise<boolean> {
     if (!(activeToken())) {

@@ -27,9 +27,7 @@ export class UserService implements OnInit, OnDestroy {
     this.userSub.unsubscribe();
   };
 
-  ngOnInit(): void {
-
-  };
+  ngOnInit(): void { };
 
   getProfile(userID?: Number): Observable<user> {
     if (this.sessionID || userID) {

@@ -22,7 +22,11 @@ exports.requestFriend = async (req, res, next) => {
             pending: true
         });
 
-        return res.status(201).json({ ID: newFriend.friend_ID, pending: newFriend.pending, date: newFriend.date });
+        const PendingInstance = await user.findByPK(newFriend.friend_ID, { attributes: ['ID'], include: { model: profile, attributes: ['alias'] } });
+        PendingInstance.pending = newFriend.pending;
+        PendingInstance.date = newFriend.date;
+
+        return res.status(201).json(PendingInstance);
     } catch (error) {
         console.error(error);
         return res.status(500);
@@ -55,7 +59,7 @@ exports.getPendingFriends = async (req, res, next) => {
             pendingList.forEach(element => {
                 pendingListRaw.forEach(secondElement => {
                     if (element.ID == secondElement.user_ID) {
-                        result.push({ ID: element.ID, profile: { alias: element.profile.alias }, date: secondElement.date });
+                        result.push({ ID: element.ID, profile: { alias: element.profile.alias }, date: secondElement.date, pending: true });
                     };
                 });
             });
@@ -97,7 +101,10 @@ exports.verifyFriendRequest = async (req, res, next) => {
             friend_ID: userID
         });
 
-        return res.status(200).json({ friend: updateFriend });
+        const verifiedfriend = await user.findByPK(updateFriend.user_ID, { attributes: ['ID'], include: [{ model: profile, attributes: ['alias'] }] });
+        verifiedfriend.date = updateFriend.date;
+
+        return res.status(200).json(verifiedfriend);
 
     } catch (error) {
         console.error(error);
@@ -110,15 +117,19 @@ exports.rejectFriendRequest = async (req, res, next) => {
     const friendID = req.params.userID;
     try {
 
-        const rejectFriend = await friend.findOne({ where: { [Op.and]: [{ user_ID: friendID }, { friend_ID: userID }, { pending: true }] }, attributes: [['user_ID', 'ID'], 'date'] });
+        const rejectFriend = await friend.findOne({ where: { [Op.and]: [{ user_ID: friendID }, { friend_ID: userID }, { pending: true }] }, attributes: ['user_ID', 'date','pending'] });
 
         if (!rejectFriend) {
             return res.status(400).json({ error: `cannot reject, user has no pending friend request with id of  ${friendID}` });
         };
 
+        const rejectedFriend = await user.findByPK(rejectFriend.user_ID,{ attributes: ['ID'], include: [{ model: profile, attributes: ['alias'] }] });
+        rejectedFriend.date = rejectFriend.date;
+        rejectedFriend.pending = rejectFriend.pending;
+
         await rejectFriend.destroy();
 
-        return res.status(200).json({ deleted: { ID: rejectFriend.user_ID } });
+        return res.status(200).json(rejectedFriend);
 
     } catch (error) {
         console.error(error);
@@ -142,7 +153,7 @@ exports.removeFrined = async (req, res, next) => {
             if (activityInstanceTwo) {
                 await activityInstanceTwo.destroy();
             };
-            return res.status(200).json({ deleted: { ID: deleteFriend.user_ID } });
+            return res.status(200).json(deleteFriend.friend_ID);
         } else {
             const deleteFriend2 = await friend.findOne({ where: { [Op.and]: [{ user_ID: friendID }, { friend_ID: userID }] } });
             if (deleteFriend2) {
@@ -155,7 +166,7 @@ exports.removeFrined = async (req, res, next) => {
                 if (activityInstanceTwo) {
                     await activityInstanceTwo.destroy();
                 };
-                return res.status(200).json({ deleted: { ID: deleteFriend2.user_ID } });
+                return res.status(200).json(deleteFriend2.user_ID);
             } else {
                 return res.status(400).json({ error: `user has no friend with id of ${friendID}` });
             };
@@ -210,10 +221,10 @@ exports.getFriends = async (req, res, next) => {
             friendList.forEach(element => {
                 friendListPre.forEach(secondElement => {
                     if (element.ID == secondElement.user_ID) {
-                        result.push({ ID: element.ID, profile: { alias: element.profile.alias }, date: secondElement.date })
+                        result.push({ ID: element.ID, profile: { alias: element.profile.alias }, date: secondElement.date });
                     };
                     if (element.ID == secondElement.friend_ID) {
-                        result.push({ ID: element.ID, profile: { alias: element.profile.alias }, date: secondElement.date })
+                        result.push({ ID: element.ID, profile: { alias: element.profile.alias }, date: secondElement.date });
                     };
                 });
             });
