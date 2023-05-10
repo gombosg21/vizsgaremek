@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, OnInit, OnDestroy } from '@angular/core';
-import { Observable, Subscription, throwError, of } from 'rxjs';
+import { Observable, Subscription, throwError, Subject } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 import { ApiPaths } from 'src/app/enums/api-paths';
 import { enviroment } from 'src/enviroments/enviroment';
@@ -16,6 +16,8 @@ export class FollowedService implements OnInit, OnDestroy {
   private userSub: Subscription;
   private sessionId?: number;
 
+  private subList:Subject<followed[]> = new Subject<followed[]>();
+
   constructor(private http: HttpClient, private Auth: AuthService) {
     this.userSub = this.Auth.getUserID.subscribe({
       error: (err) => { console.error(err) },
@@ -24,6 +26,14 @@ export class FollowedService implements OnInit, OnDestroy {
       },
       complete: () => { }
     });
+  };
+
+  get getLocalSubsList() {
+    return this.subList;
+  };
+
+  set setLocalSubsList(subs:followed[]) {
+    this.subList.next(subs);
   };
 
   postSub(targetUserID: number): Observable<any> {
