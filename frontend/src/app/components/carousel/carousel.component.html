@@ -2,37 +2,32 @@
     <div class="row">
         <div class="col-12">
             <div class="card" *ngIf="!ErrorInstance">
-                <p>{{carousel.name}}</p>
+                <h6><i class="fas fa-user"></i> {{carousel.name}}</h6>
                 <carousel [noPause]="true">
                     <slide *ngFor="let slide of carousel_components">
-                        <img src="data:image/jpeg;base64,{{slide.file_data}}" alt="{{slide.title}}"
-                            style="display: block; width: 100%;">
+                        <img src="data:image/jpeg;base64,{{slide.file_data}}" alt="{{slide.title}}" style="display: block; width: 100%;">
                         <div class="carousel-caption d-none d-md-block">
-                            <h3>{{slide.title}}</h3>
+                            <h5>{{slide.title}}</h5>
                             <p>{{slide.description}}</p>
                         </div>
                     </slide>
                 </carousel>
-                <a class="carousel-control-prev" href="javascript:void(0);" role="button"
-                    (click)="ngxCarousel.previousSlide()">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
+                <a class="carousel-control-prev" href="javascript:void(0);" role="button" (click)="ngxCarousel.previousSlide()">
+
                 </a>
-                <a class="carousel-control-next" href="javascript:void(0);" role="button"
-                    (click)="ngxCarousel.nextSlide()">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
+                <a class="carousel-control-next" href="javascript:void(0);" role="button" (click)="ngxCarousel.nextSlide()">
+
                 </a>
                 <div class="card-body">
                     <p>{{carousel.description}}</p>
                 </div>
                 <div class="card-footer text-muted d-flex justify-content-between align-items-center">
                     <div>
-                        <p><i class="fas fa-calendar"></i> Created: {{carousel.created_date | date: 'yyyy. MM. dd.
-                            HH:mm'}}</p>
-                        <p><i class="fas fa-pencil-alt"></i> Last edit: {{carousel.modified_date | date: 'yyyy. MM. dd.
-                            HH:mm'}}</p>
-                            <button class="btn btn-secondary btn-sm" (click)="react()"><i class="fas fa-thumbs-up"> React</i></button>
+                        <p><i class="fas fa-calendar"></i> Created: {{carousel.created_date | date: 'yyyy. MM. dd. HH:mm'}}
+                        </p>
+                        <p><i class="fas fa-pencil-alt"></i> Last edit: {{carousel.modified_date | date: 'yyyy. MM. dd. HH:mm'}}
+                        </p>
+                        <!-- <button class="btn btn-secondary btn-sm" (click)="react()"><i class="fas fa-thumbs-up"> React</i></button> -->
                     </div>
                     <div>
                         <app-reaction *ngIf="carousel.reactions" [reactionInstanceList]="carousel.reactions"></app-reaction>
@@ -48,5 +43,4 @@
 <div *ngIf="ErrorInstance">
     <p>{{ErrorInstance.error}}</p>
 </div>
-<app-reaction-modal *ngIf="showAddReactions && !ErrorInstance" (close)="showAddReactions = false" parentType="story"
-    [parentID]="carousel.ID!" (reacted)="addReaction($event)"></app-reaction-modal>
+<app-reaction-modal *ngIf="showAddReactions && !ErrorInstance" (close)="showAddReactions = false" parentType="story" [parentID]="carousel.ID!" (reacted)="addReaction($event)"></app-reaction-modal>
