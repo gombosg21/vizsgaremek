@@ -16,16 +16,14 @@ export class FollowedService implements OnInit, OnDestroy {
   private userSub: Subscription;
   private sessionId?: number;
 
-  private subList: Observable<followed[]>;
-
-  constructor(private http: HttpClient, private Auth: AuthService) { };
-
-  get getLocalSubsList(): Observable<any> {
-    return this.subList;
-  };
-
-  set setLocalSubsList(sublist: followed[]) {
-    this.subList = of(sublist);
+  constructor(private http: HttpClient, private Auth: AuthService) {
+    this.userSub = this.Auth.getUserID.subscribe({
+      error: (err) => { console.error(err) },
+      next: (val) => {
+        this.sessionId = val;
+      },
+      complete: () => { }
+    });
   };
 
   postSub(targetUserID: number): Observable<any> {
