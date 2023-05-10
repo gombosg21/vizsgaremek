@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, OnDestroy, OnInit } from '@angular/core';
-import { Observable, Subscription, throwError } from 'rxjs'
+import { Observable, Subject, Subscription, throwError } from 'rxjs'
 import { ApiPaths } from 'src/app/enums/api-paths';
 import { enviroment } from 'src/enviroments/enviroment';
 import { AuthService } from '../auth/auth.service';
@@ -15,6 +15,8 @@ export class FriendsService implements OnDestroy, OnInit {
   private BaseUrl: string = enviroment.baseUrl + ApiPaths.Friends;
   private userSub: Subscription;
   private sessionID?: number;
+  private friendList:Subject<verified_friend[]> = new Subject<verified_friend[]>();
+  private pendingFriendList:Subject<pending_friend[]> = new Subject<pending_friend[]>();
 
   constructor(private http: HttpClient, private Auth: AuthService) {
     this.userSub = this.Auth.getUserID.subscribe({
@@ -24,11 +26,26 @@ export class FriendsService implements OnDestroy, OnInit {
     });
   };
 
-  ngOnInit(): void {
-  };
+  ngOnInit(): void { };
 
   ngOnDestroy(): void {
     this.userSub.unsubscribe();
+  };
+
+  public set setLocalFriendList (friends:verified_friend[]) {
+    this.friendList.next(friends);
+  };
+
+  public get getLocalFriendList() {
+    return this.friendList; 
+  };
+
+  public set setLocalPendingFriendList(pending_friends:pending_friend[]) {
+    this.pendingFriendList.next(pending_friends);
+  };
+
+  public get getLocalPendingFriendList() {
+    return this.pendingFriendList;
   };
 
   getFriendList(userID?: number): Observable<verified_friend[]> {
