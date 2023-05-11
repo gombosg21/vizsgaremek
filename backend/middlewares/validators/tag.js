@@ -3,17 +3,17 @@ const tag = require('../../models').tag;
 
 exports.tagRules = () => {
     return [
-        validator.body("tag_name").notEmpty().withMessage("tag must not be empty"),
-        validator.body("tag_name").isAlpha().withMessage("tag can only contain letters"),
-        validator.body("tag_name").isLength({ max: 50 }).withMessage("tag can only be 50 characters long max")
+        validator.body("name").notEmpty().withMessage("tag must not be empty"),
+        validator.body("name").isAlpha().withMessage("tag can only contain letters"),
+        validator.body("name").isLength({ max: 50 }).withMessage("tag can only be 50 characters long max")
     ]
 };
 
 exports.searchRules = () => {
     return [
-        validator.query("tag_name").notEmpty().withMessage("cannot process empty query"),
-        validator.query("tag_name").isAlpha().withMessage("tag can only contain letters"),
-        validator.query("tag_name").isLength({ max: 50 }).withMessage("tag can only be 50 characters long max")
+        validator.query("name").notEmpty().withMessage("cannot process empty query"),
+        validator.query("name").isAlpha().withMessage("tag can only contain letters"),
+        validator.query("name").isLength({ max: 50 }).withMessage("tag can only be 50 characters long max")
     ]
 };
 

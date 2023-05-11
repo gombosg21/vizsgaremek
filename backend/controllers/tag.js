@@ -65,7 +65,7 @@ exports.deleteTag = async (req, res, next) => {
 };
 
 exports.findTags = async (req, res, next) => {
-    const tagName = req.query.tag_name;
+    const tagName = req.query.name;
 
     try {
         const TagArray = await tag.findAll({ where: { name: { [Op.substring]: tagName } }, attributes: ['ID', 'name'] });
