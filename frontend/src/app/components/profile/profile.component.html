@@ -25,10 +25,10 @@
                     <p class="lead">{{UserProfile.description}}</p>
                 </div>
                 <div>
-                    <p>Followers: {{subscriberCount}}</p>
+                    <p>Followers: <b>{{subscriberCount}}</b></p>
                 </div>
                 <div>
-                    <button *ngIf="isSession && userID != sessionID" (click)="subscribe()">Subscribe</button>
+                    <button class="btn btn-secondary btn-sm" *ngIf="isSession && userID != sessionID" (click)="subscribe()">Subscribe</button>
                 </div>
             </div>
         </div>

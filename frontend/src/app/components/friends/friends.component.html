@@ -11,10 +11,10 @@
                     <button class="btn btn-success btn-sm me-2" title="Accept" (click)="acceptRequest(pending)">
                         <i class="fas fa-check"></i>
                     </button>
-                    <button class="btn btn-danger btn-sm" title="Reject" (click)="rejectRequest(pending)">
+                    <button class="btn btn-danger btn-sm me-2" title="Reject" (click)="rejectRequest(pending)">
                         <i class="fas fa-times"></i>
                     </button>
-                    <button (click)="visitProfile(pending)">Visit Profile</button>
+                    <button class="btn btn-primary btn-sm" (click)="visitProfile(pending)"><i class="fas fa-user"></i></button>
                 </div>
             </li>
         </ul>
@@ -27,10 +27,12 @@
                     <p class="mb-1">{{friend.profile.alias}}</p>
                     <small class="text-muted">Date: {{friend.date | date: 'yyyy. MM. dd. HH:mm'}}</small>
                 </div>
-                <button class="btn btn-secondary btn-sm" title="Unfriend" (click)="unFriend(friend)">
-                    <i class="fas fa-user-minus"></i>
-                </button>
-                <button (click)="visitProfile(friend)">Visit Profile</button>
+                <div>
+                    <button class="btn btn-danger btn-sm m-1" title="Unfriend" (click)="unFriend(friend)">
+                        <i class="fas fa-user-minus"></i>
+                    </button>
+                    <button class="btn btn-primary btn-sm m-1" title="Visit Profile" (click)="visitProfile(friend)"><i class="fas fa-user"></i></button>
+                </div>
             </li>
         </ul>
     </div>
