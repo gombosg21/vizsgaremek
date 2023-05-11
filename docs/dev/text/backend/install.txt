@@ -3,9 +3,9 @@ backend:
 install dependecies
 configure config/config.json if necessary
 start the mysql database service
-run the npm script "db-init"
-run sequelize-cli db:migrate
-run sequelize-cli db:seed:all for test data (skippable)
+run the npm script "init-db"
+run "npx sequelize-cli db:migrate"
+run "npx sequelize-cli db:seed:all" for test data (skippable)
 rename .env.example to .env, edit the values if necessary
-run the script jwt-keygen
+run the script "jwt-keygen"
 run the npm script "dev-start" to start the app in develpoment mode, else run "start"
