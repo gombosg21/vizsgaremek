@@ -1,0 +1,22 @@
+// followed id
+
+// followed name
+
+// followed -- media model // all
+
+// friend id
+
+// friend name
+
+// friend -- media model // all
+
+
+// static get friends only
+
+// static get followed only
+
+// get friend by id
+
+// get followed by id
+
+// get by date (range? friend(s?)? followed(s?)?)

@@ -1,0 +1,25 @@
+backend express
+frontend vuejs/react ?
+db sql inno/mariadb ?
+
+instagramm klón
+
+képek
+beszédszál
+post
+reakció
+barát
+profil
+követő
+story
+
+story lépetet képre, vissza gomb ugyanott visszaléptet ugyanarra a képre a storyban
+story saját beszédszállal, kép storyn belül saját beszédszállal
+
+helpers:
+
+pis --> jpeg
+
+video --> webm vp9 vorbis
+
+

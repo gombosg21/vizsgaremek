@@ -1,0 +1,15 @@
+// created date
+
+// creator user
+
+// name string
+
+// flagged for review ? yes : no
+
+// review reason string
+
+// locked ? yes : no
+
+// deleted ? yes : no
+
+// reactions reaction

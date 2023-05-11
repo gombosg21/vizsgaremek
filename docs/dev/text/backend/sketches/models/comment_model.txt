@@ -1,0 +1,30 @@
+// creator user
+
+// created date
+
+// reactions reaction
+
+// last edit date
+
+// thread_id id
+
+// quotes qutoe model / all
+
+// content blob
+
+// flagged for review ? yes : no
+
+// review reason string
+
+// deleted ? yes : no
+
+
+// static get quotes
+
+// post add comment
+
+// post edit comment
+
+// post delete comment
+
+

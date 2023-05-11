@@ -1,0 +1,7 @@
+// comment id
+
+// content
+
+// qoute model / self_id
+
+// user model / id

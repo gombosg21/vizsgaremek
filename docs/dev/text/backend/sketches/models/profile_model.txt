@@ -1,0 +1,13 @@
+// description string
+
+// deleted ? yes : no
+
+// restricted ? public : friends : private
+
+// avatar blob
+
+// user_id id
+
+// profile_thread_id id
+
+// reactions

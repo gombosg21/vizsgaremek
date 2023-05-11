@@ -1,0 +1,67 @@
+user:
+    name
+    email
+    birth_date
+    description
+    acces_level
+    type ? admin : mod : user
+
+profile:
+    avatar
+    description
+    acces_level
+    -belongs_to_user
+    -reaction
+    
+image:
+    img_data
+    uploaded_date
+    acces_level
+    - uploaded_by_user
+    - thread
+    - reaction
+
+carousel_story:
+    lenght?
+    data?
+    - created_by_user
+    - thread
+    - reaction
+    - image
+
+reaction:
+    type
+    - belongs_to_item
+    - done_by_user
+    
+friends:
+    request
+    acqusition_date
+    - user
+    - friendof_user
+
+followed:
+    acqusition_date
+    - user
+    - followed_user
+
+thread:
+    name
+    created_date
+    locked
+    last activity
+    - created_by_user
+    - contains_post
+    - reaction
+
+post:
+    post_data
+    created_date
+    - in_thread
+    - posted_by_user
+    - reaction
+    - quotes
+
+quotes:
+    data
+    - references post

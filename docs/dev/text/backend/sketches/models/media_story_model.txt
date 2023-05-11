@@ -1,0 +1,15 @@
+// creator user
+
+// item_count int
+
+// anim style style
+
+// reactions reaction
+
+// private ? yes :no
+
+// friends_only ? yes : no
+
+// age-restricted ? yes : no
+
+// deleted ? yes : no

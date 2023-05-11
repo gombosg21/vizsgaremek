@@ -1,0 +1,21 @@
+// type ? anim : static
+
+// has audio ? yes : no
+
+// lenght ? null : int
+
+// upload date
+
+// uploader user
+
+// reactions reaction
+
+// public ? yes : no
+
+// age-restricted ? yes : no
+
+// friends only ? yes : no
+
+// deleted ? yes : no
+
+
