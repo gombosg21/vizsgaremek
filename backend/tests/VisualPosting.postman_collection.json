@@ -1,0 +1,1478 @@
+{
+	"info": {
+		"_postman_id": "57c6e466-5aab-45c2-b0be-6707e8949f45",
+		"name": "VisualPosting",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24723342"
+	},
+	"item": [
+		{
+			"name": "get user by ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"userView code 200\",function () {\r",
+							"    pm.expect(pm.response.code).to.eql(200)\r",
+							"})\r",
+							"\r",
+							"pm.test(\"userView is JSON\", function () {\r",
+							"    const jsonData = pm.response.json()\r",
+							"    pm.expect(jsonData).to.be.an('object')\r",
+							"})\r",
+							"\r",
+							"pm.test(\"userView field alias exists\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property(\"alias\")\r",
+							"})\r",
+							"\r",
+							"pm.test(\"userView field register_date exists\",function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property(\"register_date\")\r",
+							"})\r",
+							"\r",
+							"pm.test(\"userView field gender exists\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property(\"gender\")\r",
+							"})\r",
+							"\r",
+							"pm.test(\"userView field birth_date exists\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property(\"birth_date\")\r",
+							"})\r",
+							"\r",
+							"pm.test(\"userView field profile_description exists\", function () {\r",
+							"    const jsonData = pm.response.json()\r",
+							"    pm.expect(jsonData).to.have.property(\"profile_description\")\r",
+							"})\r",
+							"\r",
+							"pm.test(\"userView field type exists\", function () {\r",
+							"    const jsonData = pm.response.json()\r",
+							"    pm.expect(jsonData).to.have.property(\"type\")\r",
+							"})\r",
+							"\r",
+							"pm.test(\"userView field alias is not empty stirng\", function () {\r",
+							"     const jsonData = pm.response.json()\r",
+							"     pm.expect(jsonData.alias).to.be.a(\"string\").and.not.be.empty\r",
+							"}) \r",
+							"\r",
+							"pm.test(\"userView field register_date is a valid date\",function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.register_date).not.be.empty\r",
+							"    try {\r",
+							"        const datetime = new Date(jsonData.register_date)\r",
+							"        pm.expect(datetime).to.be.a(\"date\")\r",
+							"    } catch (error) {\r",
+							"        console.log(error)\r",
+							"        }    \r",
+							"})\r",
+							"\r",
+							"pm.test(\"userView field gender is an integer\",function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.gender).to.be.a(\"number\")\r",
+							"})\r",
+							"\r",
+							"pm.test(\"userView field birth_date is a valid date\",function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.birth_date).not.be.empty\r",
+							"    try {\r",
+							"    const datetime = new Date(jsonData.birth_date)\r",
+							"    pm.expect(datetime).to.be.a(\"date\")\r",
+							"    } catch (error) {\r",
+							"        console.log(error)\r",
+							"    }\r",
+							"})\r",
+							"\r",
+							"pm.test(\"userView field profile_description is a not empty string\",function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.profile_description).to.be.a(\"string\")\r",
+							"})\r",
+							"\r",
+							"pm.test(\"userView field type is an integer\", function () {\r",
+							"    const jsonData = pm.response.json()\r",
+							"    pm.expect(jsonData.type).to.be.a(\"number\")\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3600/api/v/0.1/user/6",
+					"host": [
+						"localhost"
+					],
+					"port": "3600",
+					"path": [
+						"api",
+						"v",
+						"0.1",
+						"user",
+						"6"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "search user by query params",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"searchResults code 200\",function () {\r",
+							"    pm.expect(pm.response.code).to.eql(200)\r",
+							"})\r",
+							"\r",
+							"pm.test(\"searchResults is JSON\", function () {\r",
+							"    const jsonData = pm.response.json()\r",
+							"    pm.expect(jsonData).to.be.an('object')\r",
+							"})\r",
+							"\r",
+							"// pm.test(\"searchResults has an array\", function() {\r",
+							"\r",
+							"// })"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3600/api/v/0.1/user?alias=a",
+					"host": [
+						"localhost"
+					],
+					"port": "3600",
+					"path": [
+						"api",
+						"v",
+						"0.1",
+						"user"
+					],
+					"query": [
+						{
+							"key": "alias",
+							"value": "a"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get tags by query",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3600/api/v/0.1/tag?tag_name=c",
+					"host": [
+						"localhost"
+					],
+					"port": "3600",
+					"path": [
+						"api",
+						"v",
+						"0.1",
+						"tag"
+					],
+					"query": [
+						{
+							"key": "tag_name",
+							"value": "c"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all tags",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3600/api/v/0.1/tag/all",
+					"host": [
+						"localhost"
+					],
+					"port": "3600",
+					"path": [
+						"api",
+						"v",
+						"0.1",
+						"tag",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"test9\",\r\n    \"password\":\"a_La4gg-g35728aa\",\r\n    \"re_password\" : \"a_La4gg-g35728aa\",\r\n    \"birth_date\":\"2021-12-31\",\r\n    \"email\":\"test5@mymail.com\",\r\n    \"gender\": 0 \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3600/api/v/0.1/user/register/",
+					"host": [
+						"localhost"
+					],
+					"port": "3600",
+					"path": [
+						"api",
+						"v",
+						"0.1",
+						"user",
+						"register",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJson = pm.response.json();\r",
+							"var bodyToken = responseJson.token.split(\":\")[1];\r",
+							"pm.environment.set(\"token\", bodyToken);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"Winifred_Gleichner\",\r\n    \"password\":\"Epwp4VtfQ\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3600/api/v/0.1/user/login",
+					"host": [
+						"localhost"
+					],
+					"port": "3600",
+					"path": [
+						"api",
+						"v",
+						"0.1",
+						"user",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "edit user (needs login)",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"alias\": \"aaaa\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3600/api/v/0.1/user/",
+					"host": [
+						"localhost"
+					],
+					"port": "3600",
+					"path": [
+						"api",
+						"v",
+						"0.1",
+						"user",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "edit tag by ID (needs login)",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"tag_name\": \"aaaa\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3600/api/v/0.1/tag/3",
+					"host": [
+						"localhost"
+					],
+					"port": "3600",
+					"path": [
+						"api",
+						"v",
+						"0.1",
+						"tag",
+						"3"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete user (needs login)",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"test5\",\r\n    \"password\":\"a_La4gg-g35728aa\",\r\n    \"re_password\" : \"a_La4gg-g35728aa\",\r\n    \"birth_date\":\"2024-12-31\",\r\n    \"email\":\"test1@mymail.com\",\r\n    \"gender\": 0 \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3600/api/v/0.1/user/",
+					"host": [
+						"localhost"
+					],
+					"port": "3600",
+					"path": [
+						"api",
+						"v",
+						"0.1",
+						"user",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete tag by ID (needs login)",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"test5\",\r\n    \"password\":\"a_La4gg-g35728aa\",\r\n    \"re_password\" : \"a_La4gg-g35728aa\",\r\n    \"birth_date\":\"2024-12-31\",\r\n    \"email\":\"test1@mymail.com\",\r\n    \"gender\": 0 \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3600/api/v/0.1/tag/2",
+					"host": [
+						"localhost"
+					],
+					"port": "3600",
+					"path": [
+						"api",
+						"v",
+						"0.1",
+						"tag",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create new media (needs login)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "image",
+							"type": "file",
+							"src": "/C:/Users/smat3/Pictures/Screenshots/Képernyőfelvétel (1).png"
+						},
+						{
+							"key": "description",
+							"value": "asd",
+							"type": "text"
+						},
+						{
+							"key": "visibility",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "placeholder_text",
+							"value": "ffff",
+							"type": "text"
+						},
+						{
+							"key": "tag_id_array[]",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "tag_id_array[]",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "tag_id_array[]",
+							"value": "3",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:3600/api/v/0.1/media",
+					"host": [
+						"localhost"
+					],
+					"port": "3600",
+					"path": [
+						"api",
+						"v",
+						"0.1",
+						"media"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add tag (needs login)",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\" : \"kgb\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3600/api/v/0.1/tag",
+					"host": [
+						"localhost"
+					],
+					"port": "3600",
+					"path": [
+						"api",
+						"v",
+						"0.1",
+						"tag"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "edit media tagids by id (needs login)",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"tag_id_list_remove\":\r\n    [\r\n        1\r\n    ],\r\n    \"tag_id_list_add\":\r\n    [\r\n        2,\r\n        3\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3600/api/v/0.1/media/3/tags",
+					"host": [
+						"localhost"
+					],
+					"port": "3600",
+					"path": [
+						"api",
+						"v",
+						"0.1",
+						"media",
+						"3",
+						"tags"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create comment on threadID (needs login)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"content\":\"dshfbhdbavhbahbgzhwbzhubhvgfbwzhebzghbzhwbvzhqbzhbvczhbwzhbzh\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3600/api/v/0.1/thread/1/comment",
+					"host": [
+						"localhost"
+					],
+					"port": "3600",
+					"path": [
+						"api",
+						"v",
+						"0.1",
+						"thread",
+						"1",
+						"comment"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create thread on mediaID (needs login)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"efgk\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3600/api/v/0.1/media/1/thread",
+					"host": [
+						"localhost"
+					],
+					"port": "3600",
+					"path": [
+						"api",
+						"v",
+						"0.1",
+						"media",
+						"1",
+						"thread"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "edit comment contents by ID (needs login, must be owner of comment)",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"content\":\"dhsbcvgfagfvvqwgvfgv\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3600/api/v/0.1/comment/2248",
+					"host": [
+						"localhost"
+					],
+					"port": "3600",
+					"path": [
+						"api",
+						"v",
+						"0.1",
+						"comment",
+						"2248"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete comment by ID (needs login, must be owner of comment)",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"content\":\"dhsbcvgfagfvvqwgvfgv\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3600/api/v/0.1/comment/2248",
+					"host": [
+						"localhost"
+					],
+					"port": "3600",
+					"path": [
+						"api",
+						"v",
+						"0.1",
+						"comment",
+						"2248"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create new Carousel (needs login)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"aaa\",\r\n    \"description\":\"asafgavgf\",\r\n    \"medias\":[{\r\n        \"ID\":5,\r\n        \"item_number\":0\r\n    }]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3600/api/v/0.1/story",
+					"host": [
+						"localhost"
+					],
+					"port": "3600",
+					"path": [
+						"api",
+						"v",
+						"0.1",
+						"story"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "edit story by ID (needs login as owner)",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"remove_media_ids\" :[1,2,3],\r\n    \"add_medias\": [\r\n        {\"ID\":77},{\"ID\":78}\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3600/api/v/0.1/story/18",
+					"host": [
+						"localhost"
+					],
+					"port": "3600",
+					"path": [
+						"api",
+						"v",
+						"0.1",
+						"story",
+						"18"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add new reaction (needs login, future will need admin rights)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "image",
+							"type": "file",
+							"src": "/C:/Users/smat3/Pictures/Screenshots/Képernyőfelvétel (1).png"
+						},
+						{
+							"key": "name",
+							"value": "aaa",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:3600/api/v/0.1/reaction",
+					"host": [
+						"localhost"
+					],
+					"port": "3600",
+					"path": [
+						"api",
+						"v",
+						"0.1",
+						"reaction"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "react to profile ID with reaction IDs (needs login)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"reactions\" : [20]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3600/api/v/0.1/user/:userID/reaction",
+					"host": [
+						"localhost"
+					],
+					"port": "3600",
+					"path": [
+						"api",
+						"v",
+						"0.1",
+						"user",
+						":userID",
+						"reaction"
+					],
+					"variable": [
+						{
+							"key": "userID",
+							"value": "16"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete reaction instance by ID from user profile ID (needs login, must own the reaction instance)",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\":14\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3600/api/v/0.1/user/:userID/reaction",
+					"host": [
+						"localhost"
+					],
+					"port": "3600",
+					"path": [
+						"api",
+						"v",
+						"0.1",
+						"user",
+						":userID",
+						"reaction"
+					],
+					"variable": [
+						{
+							"key": "userID",
+							"value": "14"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete reaction type (needs login, will require admin rights later)",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:3600/api/v/0.1/reaction/:ID",
+					"host": [
+						"localhost"
+					],
+					"port": "3600",
+					"path": [
+						"api",
+						"v",
+						"0.1",
+						"reaction",
+						":ID"
+					],
+					"variable": [
+						{
+							"key": "ID",
+							"value": "11"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get pending friend requests (needs login)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3600/api/v/0.1/friends/pending",
+					"host": [
+						"localhost"
+					],
+					"port": "3600",
+					"path": [
+						"api",
+						"v",
+						"0.1",
+						"friends",
+						"pending"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "verify friend request by friend_ID (needs login)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:3600/api/v/0.1/friends/:userID/confirm",
+					"host": [
+						"localhost"
+					],
+					"port": "3600",
+					"path": [
+						"api",
+						"v",
+						"0.1",
+						"friends",
+						":userID",
+						"confirm"
+					],
+					"variable": [
+						{
+							"key": "userID",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "remove friend by friend_ID (needs login)",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:3600/api/v/0.1/friends/:userID",
+					"host": [
+						"localhost"
+					],
+					"port": "3600",
+					"path": [
+						"api",
+						"v",
+						"0.1",
+						"friends",
+						":userID"
+					],
+					"variable": [
+						{
+							"key": "userID",
+							"value": "5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create friend request by user_ID",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:3600/api/v/0.1/friends/:userID/add",
+					"host": [
+						"localhost"
+					],
+					"port": "3600",
+					"path": [
+						"api",
+						"v",
+						"0.1",
+						"friends",
+						":userID",
+						"add"
+					],
+					"variable": [
+						{
+							"key": "userID",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get followed IDs (needs login)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3600/api/v/0.1/following/all",
+					"host": [
+						"localhost"
+					],
+					"port": "3600",
+					"path": [
+						"api",
+						"v",
+						"0.1",
+						"following",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "sub to userID (needs login)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:3600/api/v/0.1/following/:userID",
+					"host": [
+						"localhost"
+					],
+					"port": "3600",
+					"path": [
+						"api",
+						"v",
+						"0.1",
+						"following",
+						":userID"
+					],
+					"variable": [
+						{
+							"key": "userID",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "unsub from userID (needs login)",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:3600/api/v/0.1/following/:userID",
+					"host": [
+						"localhost"
+					],
+					"port": "3600",
+					"path": [
+						"api",
+						"v",
+						"0.1",
+						"following",
+						":userID"
+					],
+					"variable": [
+						{
+							"key": "userID",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "reject friend request of userID (needs login)",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:3600/api/v/0.1/friends/:userID/confirm",
+					"host": [
+						"localhost"
+					],
+					"port": "3600",
+					"path": [
+						"api",
+						"v",
+						"0.1",
+						"friends",
+						":userID",
+						"confirm"
+					],
+					"variable": [
+						{
+							"key": "userID",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "list activity/feed of user (needs login)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3600/api/v/0.1/activity",
+					"host": [
+						"localhost"
+					],
+					"port": "3600",
+					"path": [
+						"api",
+						"v",
+						"0.1",
+						"activity"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "logout (needs login)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:3600/api/v/0.1/user/logout",
+					"host": [
+						"localhost"
+					],
+					"port": "3600",
+					"path": [
+						"api",
+						"v",
+						"0.1",
+						"user",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "search media by query array params",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3600/api/v/0.1/media/search/tags?tagids=12&tagids=13",
+					"host": [
+						"localhost"
+					],
+					"port": "3600",
+					"path": [
+						"api",
+						"v",
+						"0.1",
+						"media",
+						"search",
+						"tags"
+					],
+					"query": [
+						{
+							"key": "tagids",
+							"value": "12"
+						},
+						{
+							"key": "tagids",
+							"value": "13"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET media by ID as base64 w props",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3600/api/v/0.1/media/48",
+					"host": [
+						"localhost"
+					],
+					"port": "3600",
+					"path": [
+						"api",
+						"v",
+						"0.1",
+						"media",
+						"48"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET All media from user by ID as base64 w props",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3600/api/v/0.1/media/all/12",
+					"host": [
+						"localhost"
+					],
+					"port": "3600",
+					"path": [
+						"api",
+						"v",
+						"0.1",
+						"media",
+						"all",
+						"12"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all threads",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3600/api/v/0.1/thread/all",
+					"host": [
+						"localhost"
+					],
+					"port": "3600",
+					"path": [
+						"api",
+						"v",
+						"0.1",
+						"thread",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get thread by ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3600/api/v/0.1/thread/274",
+					"host": [
+						"localhost"
+					],
+					"port": "3600",
+					"path": [
+						"api",
+						"v",
+						"0.1",
+						"thread",
+						"274"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get comment by ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3600/api/v/0.1/comment/1",
+					"host": [
+						"localhost"
+					],
+					"port": "3600",
+					"path": [
+						"api",
+						"v",
+						"0.1",
+						"comment",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "search threads by query params",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3600/api/v/0.1/thread/search?content=a",
+					"host": [
+						"localhost"
+					],
+					"port": "3600",
+					"path": [
+						"api",
+						"v",
+						"0.1",
+						"thread",
+						"search"
+					],
+					"query": [
+						{
+							"key": "content",
+							"value": "a"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get carousel by ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3600/api/v/0.1/story/18",
+					"host": [
+						"localhost"
+					],
+					"port": "3600",
+					"path": [
+						"api",
+						"v",
+						"0.1",
+						"story",
+						"18"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all carousels from userID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3600/api/v/0.1/story/user/12/all",
+					"host": [
+						"localhost"
+					],
+					"port": "3600",
+					"path": [
+						"api",
+						"v",
+						"0.1",
+						"story",
+						"user",
+						"12",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "seacrh carousel by query params",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3600/api/v/0.1/story?name=a",
+					"host": [
+						"localhost"
+					],
+					"port": "3600",
+					"path": [
+						"api",
+						"v",
+						"0.1",
+						"story"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "a"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "list all reactions",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3600/api/v/0.1/reaction",
+					"host": [
+						"localhost"
+					],
+					"port": "3600",
+					"path": [
+						"api",
+						"v",
+						"0.1",
+						"reaction"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all friends of userID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3600/api/v/0.1/friends/:userID",
+					"host": [
+						"localhost"
+					],
+					"port": "3600",
+					"path": [
+						"api",
+						"v",
+						"0.1",
+						"friends",
+						":userID"
+					],
+					"variable": [
+						{
+							"key": "userID",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get follower count of userID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3600/api/v/0.1/following/count/:userID",
+					"host": [
+						"localhost"
+					],
+					"port": "3600",
+					"path": [
+						"api",
+						"v",
+						"0.1",
+						"following",
+						"count",
+						":userID"
+					],
+					"variable": [
+						{
+							"key": "userID",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
