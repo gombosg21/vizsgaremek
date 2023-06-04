@@ -42,8 +42,7 @@ exports.getPendingFriends = async (req, res, next) => {
             attributes: ['date', 'user_ID'],
         });
 
-        const pendingIDs = pendingListRaw.map(item => item.friend_ID);
-
+        const pendingIDs = pendingListRaw.map(item => item.user_ID);
 
         if (pendingIDs.length != 0) {
             const pendingList = await user.findAll({
@@ -79,6 +78,8 @@ exports.verifyFriendRequest = async (req, res, next) => {
     const userID = req.user.ID;
     const friendID = req.params.userID;
 
+    console.log(userID)
+
     try {
         const updateFriend = await friend.findOne({ where: { [Op.and]: [{ user_ID: friendID }, { friend_ID: userID }, { pending: true }] }, attributes: [['user_ID', 'ID'], 'date'] });
 
@@ -101,8 +102,8 @@ exports.verifyFriendRequest = async (req, res, next) => {
             friend_ID: userID
         });
 
-        const verifiedfriend = await user.findByPK(updateFriend.user_ID, { attributes: ['ID'], include: [{ model: profile, attributes: ['alias'] }] });
-        verifiedfriend.date = updateFriend.date;
+        const verifiedfriend = await user.findByPk(updateFriend.dataValues.ID, { attributes: ['ID'], include: [{ model: profile, attributes: ['alias'] }] });
+        verifiedfriend.dataValues.date = updateFriend.dataValues.date;
 
         return res.status(200).json(verifiedfriend);
 
@@ -117,13 +118,13 @@ exports.rejectFriendRequest = async (req, res, next) => {
     const friendID = req.params.userID;
     try {
 
-        const rejectFriend = await friend.findOne({ where: { [Op.and]: [{ user_ID: friendID }, { friend_ID: userID }, { pending: true }] }, attributes: ['user_ID', 'date','pending'] });
+        const rejectFriend = await friend.findOne({ where: { [Op.and]: [{ user_ID: friendID }, { friend_ID: userID }, { pending: true }] }, attributes: ['user_ID', 'date', 'pending'] });
 
         if (!rejectFriend) {
             return res.status(400).json({ error: `cannot reject, user has no pending friend request with id of  ${friendID}` });
         };
 
-        const rejectedFriend = await user.findByPK(rejectFriend.user_ID,{ attributes: ['ID'], include: [{ model: profile, attributes: ['alias'] }] });
+        const rejectedFriend = await user.findByPk(rejectFriend.user_ID, { attributes: ['ID'], include: [{ model: profile, attributes: ['alias'] }] });
         rejectedFriend.date = rejectFriend.date;
         rejectedFriend.pending = rejectFriend.pending;
 
